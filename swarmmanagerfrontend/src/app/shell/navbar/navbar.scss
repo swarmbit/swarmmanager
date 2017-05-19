@@ -1,0 +1,43 @@
+@import "../../../assets/common";
+
+.navbar {
+  padding-top: 2rem;
+}
+
+.navbar div {
+  line-height: 3.5rem;
+  cursor: pointer;
+  cursor: hand;
+  color: #616161;
+  outline: none;
+}
+
+.navbar div:hover {
+  background-color: #e0e0e0;
+}
+
+.navbar div.active {
+  background-color: #bdbdbd;
+}
+
+.icon {
+  margin-left: 4rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.text {
+  vertical-align: middle;
+}
+
+@media (max-width: $min-With-media-query)
+{
+  .icon {
+    margin-left: 3rem;
+  }
+
+  .text {
+    display: none;
+    @include media-transitions;
+  }
+}

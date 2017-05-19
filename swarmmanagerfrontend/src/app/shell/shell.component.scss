@@ -1,0 +1,40 @@
+@import '../../assets/common';
+
+.top-container {
+  display: flex;
+}
+
+.user-area {
+  height: 14rem;
+  background-color: #eeeeee;
+  border-bottom: solid 0.09rem;
+  border-color: #bdbdbd;
+}
+
+.side {
+  min-width: 18rem;
+  min-height: 100vh;
+  background-color: #fafafa;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+main div.page {
+  margin-top: 2.5rem;
+  margin-left: 5rem;
+  max-width: 85%;
+}
+
+
+@media (max-width: $min-With-media-query)
+{
+  .side {
+    min-width: 7.5rem;
+    @include media-transitions;
+  }
+}

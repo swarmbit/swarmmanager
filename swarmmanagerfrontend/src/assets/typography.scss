@@ -1,0 +1,57 @@
+$font-med: 16px;
+$font-big: 40px;
+$space: 20px;
+$letter-spacing: 0.08rem;
+
+div, p, h1, h2, h3, h4, h5, h6, a, input, label, header, aside, menu, body {
+  font-family: 'Titillium Web', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1em*0.8;
+  line-height: 130%;
+}
+
+p {
+  margin-bottom: $space;
+}
+
+h1 {
+  font-size: $font-big;
+  letter-spacing: $letter-spacing;
+}
+
+h2 {
+  font-size: $font-big*0.85;
+  letter-spacing: $letter-spacing*0.8;
+}
+
+h3 {
+  font-size: $font-big*0.7;
+  letter-spacing: $letter-spacing*0.7;
+}
+
+h4 {
+  font-size: $font-big*0.62;
+  letter-spacing: $letter-spacing*0.6;
+}
+
+h5 {
+  font-size: $font-big*0.52;
+  letter-spacing: $letter-spacing*0.5;
+}
+
+h6 {
+  font-size: $font-big*0.45;
+  letter-spacing: $letter-spacing*0.4;
+}
+
+p, a {
+  font-size: $font-med;
+  letter-spacing: $letter-spacing*0.3;
+}
+
+.subtitle {
+  font-style: italic;
+  letter-spacing: $letter-spacing;
+}
