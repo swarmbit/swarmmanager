@@ -1,4 +1,4 @@
-package com.swarmmanager.webapi;
+package com.swarmmanager.api;
 
 import com.swarmmanager.docker.api.common.json.SwarmJson;
 import com.swarmmanager.docker.api.swarm.SwarmApi;

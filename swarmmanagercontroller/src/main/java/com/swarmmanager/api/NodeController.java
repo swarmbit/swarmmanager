@@ -1,4 +1,4 @@
-package com.swarmmanager.webapi;
+package com.swarmmanager.api;
 
 import com.swarmmanager.docker.api.nodes.NodesApi;
 import com.swarmmanager.docker.api.nodes.parameters.NodesListParameters;
