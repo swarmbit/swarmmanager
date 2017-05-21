@@ -1,0 +1,19 @@
+//Create container
+docker run --name swarm-manager-mongo -v /home/$USER/swarmmanager/data:/data/db -d -p 27017:27017  mongo:3.4.4 --auth
+
+docker exec -it swarm-manager-mongo mongo admin
+
+> use admin
+//Create admin user
+> db.createUser({ user: 'admin', pwd: 'swarmmanager', roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });
+
+mongo -u admin -p swarmmanager --authenticationDatabase admin
+
+> use swarmmanager
+//create swarm manager user
+> db.createUser({ user: 'swarmmanager', pwd: 'swarmmanager', roles: [ { role: "readWrite", db: "swarmmanager" } ] });
+
+//swarm manager login
+> mongo -u swarmmanager -p swarmmanager --authenticationDatabase swarmmanager
+//users collection
+> db.createCollection("users")

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/secrets")
+@RequestMapping("/api/secrets")
 public class SecretController {
 
     @Autowired

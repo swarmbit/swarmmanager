@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { RoutingService } from '../routing/routing.service';
-import { NavigationItem } from './navigation.item';
-import {Router} from '@angular/router';
+import {AuthService} from '../auth/auth.service';
 
 @Component({
   selector: 'app-shell',
@@ -9,4 +7,19 @@ import {Router} from '@angular/router';
   templateUrl: 'shell.component.html'
 })
 export class ShellComponent {
+
+  constructor(private authService: AuthService) {
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  getPageClass() {
+    if (this.authService.isAuthenticated()) {
+      return 'page';
+    } else {
+      return '';
+    }
+  }
 }
