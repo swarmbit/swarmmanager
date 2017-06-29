@@ -1,4 +1,4 @@
-package com.swarmmanager.auth.mongo;
+/*package com.swarmmanager.auth.mongo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,4 +20,4 @@ public class UserService implements UserDetailsService {
         }
         throw new UsernameNotFoundException("User not found");
     }
-}
+}*/

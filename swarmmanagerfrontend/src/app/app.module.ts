@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import {ChangeDetectorRef, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from './material/material.module';
@@ -18,7 +18,7 @@ import { SecretsComponent } from './secrets/secrets.component';
 import { RegistriesComponent } from './registries/registries.component';
 import { AuditComponent } from './audit/audit.component';
 import { UserManagementComponent } from './user-management/user.management.component';
-import { RoutingService } from './routing/routing.service';
+import { HeaderService } from './shell/header/header-service/header.service';
 import { ServicesService } from './services/services-service/services.service';
 import { CleanServiceImagePipe } from './services/pipes/clean.service.image.pipe';
 import { ServicesDetailsComponent } from './services/service-details/services.details.component';
@@ -30,7 +30,6 @@ import { AuthService } from './auth/auth.service';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'services', component: ServicesComponent },
   { path: 'services/create', component: ServicesDetailsComponent },
@@ -71,7 +70,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     MaterialModule
   ],
-  providers: [RoutingService, ServicesService, AuthService],
+  providers: [HeaderService, ServicesService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

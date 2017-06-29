@@ -1,9 +1,10 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RoutingService } from '../routing/routing.service';
+import { HeaderService } from '../shell/header/header-service/header.service';
 import { ServicesService } from './services-service/services.service';
 import { ServiceSummary } from './model/service.summary';
 import { Observable, Subscription } from 'rxjs/Rx';
+import {HeaderInfo} from '../shell/header/header-service/header.info';
 
 @Component({
   selector: 'app-services',
@@ -12,22 +13,24 @@ import { Observable, Subscription } from 'rxjs/Rx';
 })
 export class ServicesComponent implements OnInit, OnDestroy {
 
-  routingService: RoutingService;
+  headerService: HeaderService;
   serviceService: ServicesService;
   errorMessage: string;
   servicesSummary: ServiceSummary[];
   subscription: Subscription;
   filter: string;
 
-  constructor(serviceService: ServicesService, routingService: RoutingService) {
-    this.routingService = routingService;
+  constructor(serviceService: ServicesService, headerService: HeaderService) {
+    this.headerService = headerService;
+    const headerInfo = new HeaderInfo();
+    headerInfo.currentViewName = 'Services';
+    this.headerService.setHeaderInfo(headerInfo);
     this.serviceService = serviceService;
     this.servicesSummary = [];
     this.filter = '';
   }
 
   ngOnInit(): void {
-    this.routingService.setHeaderName('Services');
     this.executeServiceLs();
     this.subscription = Observable
       .interval(5000)

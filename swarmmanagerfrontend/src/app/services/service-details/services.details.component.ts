@@ -1,10 +1,11 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RoutingService } from '../../routing/routing.service';
+import { HeaderService } from '../../shell/header/header-service/header.service';
 import { ServicesService } from '../services-service/services.service';
-import { BackArrow } from '../../routing/back.arrow';
+import { BackArrow } from '../../shell/header/header-service/back.arrow';
 import { Service } from '../model/service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {HeaderInfo} from '../../shell/header/header-service/header.info';
 
 @Component({
   selector: 'app-services-details',
@@ -19,15 +20,15 @@ export class ServicesDetailsComponent implements OnInit, OnDestroy {
   isEditable: boolean;
   id: number;
   errorMessage: string;
+  headerInfo: HeaderInfo;
 
   private sub: any;
 
 
   constructor(private serviceService: ServicesService,
-              private routingService: RoutingService,
+              private headerService: HeaderService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.routingService = routingService;
     this.serviceService = serviceService;
     this.service = new Service();
     this.isCreateService = this.router.isActive('/services/create', false);
@@ -37,11 +38,14 @@ export class ServicesDetailsComponent implements OnInit, OnDestroy {
     } else {
       this.title = 'Service Details';
     }
+    this.headerService = headerService;
+    this.headerInfo = new HeaderInfo();
+    this.headerInfo.currentViewName = this.title;
+    this.headerInfo.backArrow = new BackArrow(true, '/services');
+    this.headerService.setHeaderInfo(this.headerInfo);
   }
 
   ngOnInit(): void {
-    this.routingService.setHeaderName(this.title);
-    this.routingService.setBackArrow(new BackArrow(true, '/services'));
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       if (this.id) {
@@ -73,7 +77,8 @@ export class ServicesDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.routingService.setBackArrow(new BackArrow(false, ''));
+    this.headerInfo.backArrow = new BackArrow(false, '');
+    this.headerService.setHeaderInfo(this.headerInfo);
     this.sub.unsubscribe();
   }
 

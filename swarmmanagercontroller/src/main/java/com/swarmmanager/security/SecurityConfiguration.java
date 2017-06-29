@@ -1,3 +1,4 @@
+/*
 package com.swarmmanager.security;
 
 import com.swarmmanager.auth.mongo.UserService;
@@ -32,3 +33,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 }
+*/

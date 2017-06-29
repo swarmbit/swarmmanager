@@ -1,5 +1,7 @@
 # Swarmmanagerfrontend
 
+Use proxy.conf.json to proxy api request to localhost:8080: ng serve --proxy-config proxy.conf.json
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
 
 ## Development server

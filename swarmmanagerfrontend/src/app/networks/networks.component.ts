@@ -1,21 +1,20 @@
 
-import { Component, OnInit } from '@angular/core';
-import { RoutingService } from '../routing/routing.service';
+import { Component } from '@angular/core';
+import { HeaderService } from '../shell/header/header-service/header.service';
+import { HeaderInfo } from '../shell/header/header-service/header.info';
 
 @Component({
   selector: 'app-networks',
   templateUrl: 'networks.component.html'
 })
-export class NetworksComponent implements OnInit {
+export class NetworksComponent {
 
-  routingService: RoutingService;
+  headerService: HeaderService;
 
-  constructor(routingService: RoutingService) {
-    this.routingService = routingService;
+  constructor(headerService: HeaderService) {
+    this.headerService = headerService;
+    const headerInfo = new HeaderInfo();
+    headerInfo.currentViewName = 'Audit';
+    this.headerService.setHeaderInfo(headerInfo);
   }
-
-  ngOnInit(): void {
-    this.routingService.setHeaderName('Networks');
-  }
-
 }

@@ -1,3 +1,4 @@
+/*
 package com.swarmmanager.auth.mongo;
 
 import org.springframework.data.annotation.Id;
@@ -110,3 +111,4 @@ public class User implements UserDetails {
         return authorities;
     }
 }
+*/

@@ -17,3 +17,7 @@ mongo -u admin -p swarmmanager --authenticationDatabase admin
 > mongo -u swarmmanager -p swarmmanager --authenticationDatabase swarmmanager
 //users collection
 > db.createCollection("users")
+
+
+//if database already created just start the container
+docker start swarm-manager-mongo
