@@ -5,10 +5,17 @@
 }
 
 .user-area {
-  height: 14rem;
+  display: flex;
+  align-items: center;
+  height: 11rem;
   background-color: #eeeeee;
   border-bottom: solid 0.09rem;
   border-color: #bdbdbd;
+}
+
+.user-area .user {
+  width: 100%;
+  text-align: center;
 }
 
 .side {

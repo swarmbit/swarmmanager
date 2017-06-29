@@ -1,11 +1,16 @@
+
 <div class="top-container">
-  <div class="side">
-    <div class="user-area"></div>
+  <div class="side"  *ngIf="isAuthenticated()">
+    <div class="user-area">
+      <div class="user">
+        <app-user></app-user>
+      </div>
+    </div>
     <app-navbar></app-navbar>
   </div>
   <main>
-    <app-header></app-header>
-    <div class="page">
+    <app-header *ngIf="isAuthenticated()"></app-header>
+    <div [ngClass]="getPageClass()">
       <router-outlet></router-outlet>
     </div>
   </main>

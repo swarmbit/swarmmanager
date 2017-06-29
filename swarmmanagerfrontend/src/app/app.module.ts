@@ -25,9 +25,12 @@ import { ServicesDetailsComponent } from './services/service-details/services.de
 import { HeaderComponent } from './shell/header/header.component';
 import { SidenavComponent } from './shell/navbar/navbar.component';
 import 'hammerjs';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './auth/auth.service';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'services', component: ServicesComponent },
   { path: 'services/create', component: ServicesDetailsComponent },
@@ -57,7 +60,8 @@ const appRoutes: Routes = [
     UserManagementComponent,
     CleanServiceImagePipe,
     HeaderComponent,
-    SidenavComponent
+    SidenavComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +71,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     MaterialModule
   ],
-  providers: [RoutingService, ServicesService],
+  providers: [RoutingService, ServicesService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
