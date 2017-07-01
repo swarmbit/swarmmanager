@@ -205,7 +205,7 @@ public class ContainerSpecJson implements DockerRemoteApiJson {
         final StringBuilder sb = new StringBuilder("ContainerSpecJson{");
         sb.append("image='").append(image).append('\'');
         sb.append(", labels=").append(labels);
-        sb.append(", command=").append(Arrays.toString(command));
+        sb.append(", cli=").append(Arrays.toString(command));
         sb.append(", args=").append(Arrays.toString(args));
         sb.append(", hostname='").append(hostname).append('\'');
         sb.append(", env=").append(Arrays.toString(env));

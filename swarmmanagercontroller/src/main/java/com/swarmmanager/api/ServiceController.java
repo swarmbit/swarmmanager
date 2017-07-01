@@ -1,11 +1,11 @@
 package com.swarmmanager.api;
 
 
-import com.swarmmanager.docker.command.ServiceCommand;
-import com.swarmmanager.docker.command.model.LogLine;
-import com.swarmmanager.docker.command.model.Service;
-import com.swarmmanager.docker.command.model.ServiceState;
-import com.swarmmanager.docker.command.model.ServiceSummary;
+import com.swarmmanager.docker.cli.ServiceCli;
+import com.swarmmanager.docker.cli.model.LogLine;
+import com.swarmmanager.docker.cli.model.Service;
+import com.swarmmanager.docker.cli.model.ServiceState;
+import com.swarmmanager.docker.cli.model.ServiceSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,40 +17,40 @@ import java.util.List;
 public class ServiceController {
 
     @Autowired
-    private ServiceCommand serviceCommand;
+    private ServiceCli serviceCli;
 
     @RequestMapping(method = RequestMethod.GET, value = "{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Service inspectService(@PathVariable String serviceId) {
-        return serviceCommand.inspectService(serviceId);
+        return serviceCli.inspectService(serviceId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ServiceSummary> serviceLs() {
-        return serviceCommand.serviceLs();
+        return serviceCli.serviceLs();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "ps/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ServiceState servicePs(@PathVariable String serviceId) {
-        return serviceCommand.servicePs(serviceId);
+        return serviceCli.servicePs(serviceId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "logs/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<LogLine> serviceLogs(@PathVariable String serviceId) {
-        return serviceCommand.serviceLogs(serviceId);
+        return serviceCli.serviceLogs(serviceId);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "rm/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void serviceRm(@PathVariable String serviceId) {
-        serviceCommand.serviceRm(serviceId);
+        serviceCli.serviceRm(serviceId);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "create", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Service serviceCreate(@RequestBody Service service) {
-        return serviceCommand.serviceCreate(service);
+        return serviceCli.serviceCreate(service);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "update/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void serviceUpdate(@PathVariable String serviceId, @RequestBody Service service) {
-        serviceCommand.serviceUpdate(serviceId, service);
+        serviceCli.serviceUpdate(serviceId, service);
     }
 }

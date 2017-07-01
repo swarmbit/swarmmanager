@@ -1,32 +1,48 @@
 package com.swarmmanager.docker.api.secrets.parameters;
 
+import com.swarmmanager.docker.api.common.QueryParameters;
+import com.swarmmanager.docker.api.common.RequestBodyParameter;
+import com.swarmmanager.docker.api.common.json.SecretSpecJson;
 import com.swarmmanager.rest.QueryParam;
 
-public class SecretUpdateParameters {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SecretUpdateParameters implements RequestBodyParameter, QueryParameters {
 
     private static final String VERSION_NAME = "version";
 
-    private String id;
+    private SecretSpecJson secret;
 
     private QueryParam versionQueryParam;
 
     public SecretUpdateParameters() {
-        this.versionQueryParam = new QueryParam(VERSION_NAME, 0L);
+        secret = new SecretSpecJson();
+        versionQueryParam = new QueryParam(VERSION_NAME, 0L);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public SecretUpdateParameters setSecrect(SecretSpecJson secrect) {
+        this.secret = secrect;
+        return this;
     }
 
     public QueryParam getVersionQueryParam() {
         return versionQueryParam;
     }
 
-    public void setVersionQueryParam(QueryParam versionQueryParam) {
+    public SecretUpdateParameters setVersionQueryParam(QueryParam versionQueryParam) {
         this.versionQueryParam = versionQueryParam;
+        return this;
+    }
+    @Override
+    public List<QueryParam> getQueryParams() {
+        List<QueryParam> queryParams = new ArrayList<>();
+        queryParams.add(versionQueryParam);
+        return queryParams;
+    }
+
+    @Override
+    public Object getRequestBody() {
+        return secret;
     }
 }

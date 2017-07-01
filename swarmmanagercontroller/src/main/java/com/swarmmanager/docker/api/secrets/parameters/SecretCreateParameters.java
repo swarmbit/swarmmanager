@@ -1,8 +1,9 @@
 package com.swarmmanager.docker.api.secrets.parameters;
 
+import com.swarmmanager.docker.api.common.RequestBodyParameter;
 import com.swarmmanager.docker.api.common.json.SecretSpecJson;
 
-public class SecretCreateParameters {
+public class SecretCreateParameters implements RequestBodyParameter {
 
     private SecretSpecJson secret;
 
@@ -10,11 +11,13 @@ public class SecretCreateParameters {
         secret = new SecretSpecJson();
     }
 
-    public SecretSpecJson getSecret() {
-        return secret;
+    public SecretCreateParameters setSecret(SecretSpecJson secret) {
+        this.secret = secret;
+        return this;
     }
 
-    public void setSecret(SecretSpecJson secret) {
-        this.secret = secret;
+    @Override
+    public Object getRequestBody() {
+        return secret;
     }
 }

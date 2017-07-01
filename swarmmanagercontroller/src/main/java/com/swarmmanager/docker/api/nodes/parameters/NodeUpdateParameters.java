@@ -1,13 +1,16 @@
 package com.swarmmanager.docker.api.nodes.parameters;
 
+import com.swarmmanager.docker.api.common.QueryParameters;
+import com.swarmmanager.docker.api.common.RequestBodyParameter;
 import com.swarmmanager.docker.api.common.json.NodeSpecJson;
 import com.swarmmanager.rest.QueryParam;
 
-public class NodeUpdateParameters {
+import java.util.ArrayList;
+import java.util.List;
+
+public class NodeUpdateParameters implements RequestBodyParameter, QueryParameters {
 
     private static final String VERSION_NAME = "version";
-
-    private String id;
 
     private QueryParam versionQueryParam;
 
@@ -18,27 +21,26 @@ public class NodeUpdateParameters {
         versionQueryParam = new QueryParam(VERSION_NAME, 0L);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public QueryParam getVersionQueryParam() {
-        return versionQueryParam;
-    }
-
-    public void setVersionQueryParam(long versionValue) {
+    public NodeUpdateParameters setVersionQueryParam(long versionValue) {
         this.versionQueryParam = new QueryParam(VERSION_NAME, versionValue);
+        return this;
     }
 
-    public NodeSpecJson getNode() {
+    public NodeUpdateParameters setNode(NodeSpecJson node) {
+        this.node = node;
+        return this;
+    }
+
+    @Override
+    public Object getRequestBody() {
         return node;
     }
 
-    public void setNode(NodeSpecJson node) {
-        this.node = node;
+    @Override
+    public List<QueryParam> getQueryParams() {
+        List<QueryParam> queryParams = new ArrayList<>();
+        queryParams.add(versionQueryParam);
+        return queryParams;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.swarmmanager.docker.command.model;
+package com.swarmmanager.docker.cli.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

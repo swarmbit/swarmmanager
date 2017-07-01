@@ -5,10 +5,8 @@ import com.swarmmanager.docker.api.common.json.SecretJson;
 import com.swarmmanager.docker.api.common.json.SecretSpecJson;
 import com.swarmmanager.docker.api.secrets.SecretsApi;
 import com.swarmmanager.docker.api.secrets.parameters.SecretCreateParameters;
-import com.swarmmanager.docker.api.secrets.parameters.SecretDeleteParameters;
-import com.swarmmanager.docker.api.secrets.parameters.SecretInspectParameters;
 import com.swarmmanager.docker.api.secrets.parameters.SecretUpdateParameters;
-import com.swarmmanager.docker.api.secrets.parameters.SecretsListParameters;
+import com.swarmmanager.docker.api.secrets.parameters.SecretsFiltersParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +26,7 @@ public class SecretController {
 
     @RequestMapping(method = RequestMethod.GET, value = "list", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<SecretJson> listSecrets() {
-        return secretsApi.listSecrets(new SecretsListParameters());
+        return secretsApi.listSecrets(new SecretsFiltersParameters());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "create", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -40,21 +38,16 @@ public class SecretController {
 
     @RequestMapping(method = RequestMethod.GET, value = "inspect/{secretId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public SecretJson inspectSecret(@PathVariable String secretId) {
-        SecretInspectParameters parameters = new SecretInspectParameters();
-        parameters.setId(secretId);
-        return secretsApi.inspectSecret(parameters);
+        return secretsApi.inspectSecret(secretId);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "delete/{secretId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void deleteSecret(@PathVariable String secretId) {
-        SecretDeleteParameters parameters = new SecretDeleteParameters();
-        parameters.setId(secretId);
-        secretsApi.deleteSecret(parameters);
+        secretsApi.deleteSecret(secretId);
     }
     @RequestMapping(method = RequestMethod.PUT, value = "update/{secretId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void updateSecret(@PathVariable String secretId) {
         SecretUpdateParameters parameters = new SecretUpdateParameters();
-        parameters.setId(secretId);
-        secretsApi.updateSecret(parameters);
+        secretsApi.updateSecret(secretId, parameters);
     }
 }

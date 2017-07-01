@@ -1,9 +1,14 @@
 package com.swarmmanager.docker.api.swarm.parameters;
 
+import com.swarmmanager.docker.api.common.QueryParameters;
+import com.swarmmanager.docker.api.common.RequestBodyParameter;
 import com.swarmmanager.docker.api.common.json.SwarmSpecJson;
 import com.swarmmanager.rest.QueryParam;
 
-public class SwarmUpdateParameters {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SwarmUpdateParameters implements RequestBodyParameter, QueryParameters {
 
     private static final String VERSION_NAME = "version";
 
@@ -35,39 +40,43 @@ public class SwarmUpdateParameters {
         return versionQueryParam;
     }
 
-    public void setVersionQueryParam(long versionValue) {
+    public SwarmUpdateParameters setVersionQueryParam(long versionValue) {
         this.versionQueryParam = new QueryParam(VERSION_NAME, versionValue);
+        return this;
     }
 
-    public SwarmSpecJson getSpec() {
+    public SwarmUpdateParameters setSpec(SwarmSpecJson spec) {
+        this.spec = spec;
+        return this;
+    }
+
+    public SwarmUpdateParameters setRotateWorkerTokenQueryParam(boolean rotateWorkerTokenValue) {
+        this.rotateWorkerTokenQueryParam = new QueryParam(ROTATE_WORKER_TOKEN_NAME, rotateWorkerTokenValue);
+        return this;
+    }
+
+    public SwarmUpdateParameters setRotateManagerTokenQueryParam(boolean rotateManagerTokenValue) {
+        this.rotateManagerTokenQueryParam = new QueryParam(ROTATE_MANAGER_TOKEN_NAME, rotateManagerTokenValue);
+        return this;
+    }
+
+    public SwarmUpdateParameters setRotateManagerUnlockKeyQueryParam(boolean rotateManagerUnlockKeyValue) {
+        this.rotateManagerUnlockKeyQueryParam = new QueryParam(ROTATE_MANAGER_UNLOCK_KEY_NAME, rotateManagerUnlockKeyValue);
+        return this;
+    }
+
+    @Override
+    public Object getRequestBody() {
         return spec;
     }
 
-    public void setSpec(SwarmSpecJson spec) {
-        this.spec = spec;
-    }
-
-    public QueryParam getRotateWorkerTokenQueryParam() {
-        return rotateWorkerTokenQueryParam;
-    }
-
-    public void setRotateWorkerTokenQueryParam(boolean rotateWorkerTokenValue) {
-        this.rotateWorkerTokenQueryParam = new QueryParam(ROTATE_WORKER_TOKEN_NAME, rotateWorkerTokenValue);
-    }
-
-    public QueryParam getRotateManagerTokenQueryParam() {
-        return rotateManagerTokenQueryParam;
-    }
-
-    public void setRotateManagerTokenQueryParam(boolean rotateManagerTokenValue) {
-        this.rotateManagerTokenQueryParam = new QueryParam(ROTATE_MANAGER_TOKEN_NAME, rotateManagerTokenValue);
-    }
-
-    public QueryParam getRotateManagerUnlockKeyQueryParam() {
-        return rotateManagerUnlockKeyQueryParam;
-    }
-
-    public void setRotateManagerUnlockKeyQueryParam(boolean rotateManagerUnlockKeyValue) {
-        this.rotateManagerUnlockKeyQueryParam = new QueryParam(ROTATE_MANAGER_UNLOCK_KEY_NAME, rotateManagerUnlockKeyValue);
+    @Override
+    public List<QueryParam> getQueryParams() {
+        List<QueryParam> queryParams = new ArrayList<>();
+        queryParams.add(versionQueryParam);
+        queryParams.add(rotateWorkerTokenQueryParam);
+        queryParams.add(rotateManagerTokenQueryParam);
+        queryParams.add(rotateManagerUnlockKeyQueryParam);
+        return queryParams;
     }
 }

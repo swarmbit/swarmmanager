@@ -1,44 +1,26 @@
 package com.swarmmanager.docker.api.tasks;
 
-import com.swarmmanager.docker.api.tasks.parameters.TaskInspectParameters;
-import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
-import com.swarmmanager.docker.api.common.client.DockerWebClient;
+import com.swarmmanager.docker.api.common.AbstractApiImpl;
+import com.swarmmanager.docker.api.tasks.parameters.TasksFiltersParameters;
 import com.swarmmanager.docker.api.common.json.TaskJson;
-import com.swarmmanager.rest.RestExecutorFactory;
-import com.swarmmanager.rest.RestMethod;
-import com.swarmmanager.rest.RestParameters;
-import com.swarmmanager.rest.RestResponseType;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.swarmmanager.rest.*;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class TasksApiImpl implements TasksApi {
+public class TasksApiImpl extends AbstractApiImpl implements TasksApi {
 
     private static final String TASKS_PATH = "/tasks";
 
-    @Autowired
-    private DockerWebClient dockerWebClient;
-
     @Override
-    public List<TaskJson> listTasks(TasksListParameters parameters) {
-        if (parameters != null) {
-            RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource())
-                    .setPath(TASKS_PATH);
-            if (parameters.getFilters().isPresent()) {
-                restParameters.addQueryParam(parameters.getFilters().get());
-            }
-            return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, new RestResponseType<List<TaskJson>>() {});
-        }
-        return new ArrayList<>();
+    public List<TaskJson> listTasks(TasksFiltersParameters parameters) {
+        return listObjects(TASKS_PATH, new RestResponseType<List<TaskJson>>() {}, parameters);
     }
 
     @Override
-    public TaskJson inspectTask(TaskInspectParameters parameters) {
-        RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource())
-                .setPath(TASKS_PATH + "/" + parameters.getId());
-       return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, new RestResponseType<TaskJson>() {});
+    public TaskJson inspectTask(String id) {
+       return inspectObject(TASKS_PATH, new RestResponseType<TaskJson>() {}, id);
     }
+
 }

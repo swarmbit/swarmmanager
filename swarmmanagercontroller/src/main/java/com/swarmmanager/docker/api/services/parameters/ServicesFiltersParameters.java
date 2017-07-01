@@ -1,5 +1,6 @@
 package com.swarmmanager.docker.api.services.parameters;
 
+import com.swarmmanager.docker.api.common.FiltersParameters;
 import com.swarmmanager.rest.QueryParam;
 
 import java.util.Optional;
@@ -7,13 +8,13 @@ import java.util.Optional;
 import static com.swarmmanager.docker.api.common.util.JsonEncoder.encodeJson;
 import static com.swarmmanager.docker.api.common.util.JsonEncoder.toDockerJsonFilters;
 
-public class ServicesListParameters {
+public class ServicesFiltersParameters implements FiltersParameters {
 
     private static final String FILTERS_NAME = "filters";
 
     private Optional<QueryParam> filters;
 
-    public ServicesListParameters() {
+    public ServicesFiltersParameters() {
         filters = Optional.empty();
     }
 
@@ -21,9 +22,10 @@ public class ServicesListParameters {
         return filters;
     }
 
-    public void setFilters(ServicesFilters filtersValue) {
+    public ServicesFiltersParameters setFilters(ServicesFilters filtersValue) {
         if (filtersValue != null) {
             filters = Optional.of(new QueryParam(FILTERS_NAME, encodeJson(toDockerJsonFilters(filtersValue))));
         }
+        return this;
     }
 }

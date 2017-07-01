@@ -1,7 +1,7 @@
 package com.swarmmanager.api;
 
 import com.swarmmanager.docker.api.nodes.NodesApi;
-import com.swarmmanager.docker.api.nodes.parameters.NodesListParameters;
+import com.swarmmanager.docker.api.nodes.parameters.NodesFiltersParameters;
 import com.swarmmanager.docker.api.common.json.NodeJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +20,6 @@ public class NodeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "list", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<NodeJson> listNodes() {
-        return nodesApi.listNodes(new NodesListParameters());
+        return nodesApi.listNodes(new NodesFiltersParameters());
     }
 }

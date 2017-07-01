@@ -1,13 +1,13 @@
-package com.swarmmanager.docker.command;
+package com.swarmmanager.docker.cli;
 
-import com.swarmmanager.docker.command.model.LogLine;
-import com.swarmmanager.docker.command.model.Service;
-import com.swarmmanager.docker.command.model.ServiceState;
-import com.swarmmanager.docker.command.model.ServiceSummary;
+import com.swarmmanager.docker.cli.model.LogLine;
+import com.swarmmanager.docker.cli.model.Service;
+import com.swarmmanager.docker.cli.model.ServiceState;
+import com.swarmmanager.docker.cli.model.ServiceSummary;
 
 import java.util.List;
 
-public interface ServiceCommand {
+public interface ServiceCli {
 
     Service inspectService(String serviceId);
 

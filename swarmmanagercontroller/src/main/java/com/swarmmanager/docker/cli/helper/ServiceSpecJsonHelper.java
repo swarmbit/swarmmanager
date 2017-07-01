@@ -1,8 +1,8 @@
-package com.swarmmanager.docker.command.helper;
+package com.swarmmanager.docker.cli.helper;
 
 import com.swarmmanager.docker.api.common.json.ServiceSpecJson;
 import com.swarmmanager.docker.api.common.json.inner.*;
-import com.swarmmanager.docker.command.model.Port;
+import com.swarmmanager.docker.cli.model.Port;
 
 import java.util.List;
 

@@ -3,22 +3,20 @@ package com.swarmmanager.docker.api.secrets;
 import com.swarmmanager.docker.api.common.json.SecretCreateResponseJson;
 import com.swarmmanager.docker.api.common.json.SecretJson;
 import com.swarmmanager.docker.api.secrets.parameters.SecretCreateParameters;
-import com.swarmmanager.docker.api.secrets.parameters.SecretDeleteParameters;
-import com.swarmmanager.docker.api.secrets.parameters.SecretInspectParameters;
 import com.swarmmanager.docker.api.secrets.parameters.SecretUpdateParameters;
-import com.swarmmanager.docker.api.secrets.parameters.SecretsListParameters;
+import com.swarmmanager.docker.api.secrets.parameters.SecretsFiltersParameters;
 
 import java.util.List;
 
 public interface SecretsApi {
 
-    List<SecretJson> listSecrets(SecretsListParameters parameters);
+    List<SecretJson> listSecrets(SecretsFiltersParameters parameters);
+
+    SecretJson inspectSecret(String id);
 
     SecretCreateResponseJson createSecret(SecretCreateParameters parameters);
 
-    SecretJson inspectSecret(SecretInspectParameters parameters);
+    void deleteSecret(String id);
 
-    void deleteSecret(SecretDeleteParameters parameters);
-
-    void updateSecret(SecretUpdateParameters parameters);
+    void updateSecret(String id, SecretUpdateParameters parameters);
 }

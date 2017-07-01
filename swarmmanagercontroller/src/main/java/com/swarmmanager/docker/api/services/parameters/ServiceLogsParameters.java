@@ -40,47 +40,53 @@ public class ServiceLogsParameters {
         return id;
     }
 
-    public void setId(String id) {
+    public ServiceLogsParameters setId(String id) {
         this.id = id;
+        return this;
     }
 
     public QueryParam getStdoutQueryParam() {
         return stdoutQueryParam;
     }
 
-    public void setStdoutQueryParam(boolean stdoutValue) {
+    public ServiceLogsParameters setStdoutQueryParam(boolean stdoutValue) {
         this.stdoutQueryParam = new QueryParam(STDOUT_NAME, stdoutValue);
+        return this;
     }
 
     public QueryParam getStderrQueryParam() {
         return stderrQueryParam;
     }
 
-    public void setStderrQueryParam(boolean stderrValue) {
+    public ServiceLogsParameters setStderrQueryParam(boolean stderrValue) {
         this.stderrQueryParam = new QueryParam(STDERR_NAME, stderrValue);
+        return this;
     }
 
     public QueryParam getSinceQueryParam() {
         return sinceQueryParam;
     }
 
-    public void setSinceQueryParam(long sinceValue) {
+    public ServiceLogsParameters setSinceQueryParam(long sinceValue) {
         this.sinceQueryParam = new QueryParam(SINCE_NAME, sinceValue);
+        return this;
     }
 
     public QueryParam getTimestampQueryParam() {
         return timestampQueryParam;
     }
 
-    public void setTimestampQueryParam(boolean timestampValue) {
+    public ServiceLogsParameters setTimestampQueryParam(boolean timestampValue) {
         this.timestampQueryParam = new QueryParam(TIMESTAMP_NAME, timestampValue);
+        return this;
     }
 
     public Optional<QueryParam> getTailQueryParam() {
         return tailQueryParam;
     }
 
-    public void setTailQueryParam(int tailValue) {
+    public ServiceLogsParameters setTailQueryParam(int tailValue) {
         this.tailQueryParam = Optional.of(new QueryParam(TAIL_NAME, tailValue));
+        return this;
     }
 }

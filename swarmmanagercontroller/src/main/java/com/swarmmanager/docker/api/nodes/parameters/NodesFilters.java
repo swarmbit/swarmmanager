@@ -16,39 +16,44 @@ public class NodesFilters {
         return id;
     }
 
-    public void setId(String id) {
+    public NodesFilters setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public void setLabel(String label) {
+    public NodesFilters setLabel(String label) {
         this.label = label;
+        return this;
     }
 
     public NodeMembership getMembership() {
         return membership;
     }
 
-    public void setMembership(NodeMembership membership) {
+    public NodesFilters setMembership(NodeMembership membership) {
         this.membership = membership;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public NodesFilters setName(String name) {
         this.name = name;
+        return this;
     }
 
     public NodeRole getRole() {
         return role;
     }
 
-    public void setRole(NodeRole role) {
+    public NodesFilters setRole(NodeRole role) {
         this.role = role;
+        return this;
     }
 }

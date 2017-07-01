@@ -1,22 +1,21 @@
-package com.swarmmanager.docker.command;
+package com.swarmmanager.docker.cli;
 
 import com.swarmmanager.docker.api.common.json.*;
 import com.swarmmanager.docker.api.common.json.inner.*;
 import com.swarmmanager.docker.api.nodes.NodesApi;
-import com.swarmmanager.docker.api.nodes.parameters.NodeInspectParameters;
 import com.swarmmanager.docker.api.services.ServicesApi;
 import com.swarmmanager.docker.api.services.parameters.*;
 import com.swarmmanager.docker.api.tasks.TasksApi;
 import com.swarmmanager.docker.api.tasks.parameters.TasksFilters;
-import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
-import com.swarmmanager.docker.command.helper.ServiceSpecJsonHelper;
-import com.swarmmanager.docker.command.model.LogLine;
-import com.swarmmanager.docker.command.model.Port;
-import com.swarmmanager.docker.command.model.Replica;
-import com.swarmmanager.docker.command.model.Service;
-import com.swarmmanager.docker.command.model.ServiceState;
-import com.swarmmanager.docker.command.model.ServiceSummary;
-import com.swarmmanager.docker.command.model.Task;
+import com.swarmmanager.docker.api.tasks.parameters.TasksFiltersParameters;
+import com.swarmmanager.docker.cli.helper.ServiceSpecJsonHelper;
+import com.swarmmanager.docker.cli.model.LogLine;
+import com.swarmmanager.docker.cli.model.Port;
+import com.swarmmanager.docker.cli.model.Replica;
+import com.swarmmanager.docker.cli.model.Service;
+import com.swarmmanager.docker.cli.model.ServiceState;
+import com.swarmmanager.docker.cli.model.ServiceSummary;
+import com.swarmmanager.docker.cli.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,8 @@ import java.util.*;
 import static com.swarmmanager.docker.api.common.util.DockerDateFormatter.fromDateStringToDuration;
 
 @Component
-public class ServiceCommandImpl implements ServiceCommand {
-    private final Logger LOGGER = LoggerFactory.getLogger(ServiceCommandImpl.class.getName());
+public class ServiceCliImpl implements ServiceCli {
+    private final Logger LOGGER = LoggerFactory.getLogger(ServiceCliImpl.class.getName());
 
     @Autowired
     private ServicesApi servicesApi;
@@ -42,9 +41,7 @@ public class ServiceCommandImpl implements ServiceCommand {
 
     @Override
     public Service inspectService(String serviceId) {
-        ServiceInspectParameters parameters = new ServiceInspectParameters();
-        parameters.setId(serviceId);
-        ServiceJson serviceJson = this.servicesApi.inspectService(parameters);
+        ServiceJson serviceJson = this.servicesApi.inspectService(serviceId);
         Service service = new Service();
         service.setId(serviceJson.getId());
         service.setName(serviceJson.getSpec().getName());
@@ -54,7 +51,7 @@ public class ServiceCommandImpl implements ServiceCommand {
 
     @Override
     public List<ServiceSummary> serviceLs() {
-        List<ServiceJson> services = servicesApi.listServices(new ServicesListParameters());
+        List<ServiceJson> services = servicesApi.listServices(new ServicesFiltersParameters());
         List<ServiceSummary> servicesSummary = new ArrayList<>();
         for (ServiceJson service : services) {
             ServiceSummary serviceSummary = new ServiceSummary();
@@ -65,7 +62,7 @@ public class ServiceCommandImpl implements ServiceCommand {
             if (replicated != null) {
                 serviceSummary.setReplicas(replicated.getReplicas());
 
-                TasksListParameters tasksListParameters = new TasksListParameters();
+                TasksFiltersParameters tasksListParameters = new TasksFiltersParameters();
                 TasksFilters filters = new TasksFilters();
                 filters.setService(serviceSummary.getId());
                 filters.setDesiredState(TasksFilters.RUNNING_STATE);
@@ -103,15 +100,13 @@ public class ServiceCommandImpl implements ServiceCommand {
 
     @Override
     public ServiceState servicePs(String serviceId) {
-        ServiceInspectParameters serviceInspectParameters = new ServiceInspectParameters();
-        serviceInspectParameters.setId(serviceId);
-        ServiceJson service = servicesApi.inspectService(serviceInspectParameters);
+        ServiceJson service = servicesApi.inspectService(serviceId);
         ServiceState serviceState =  new ServiceState();
         if (service != null) {
             serviceState.setId(serviceId);
             serviceState.setName(service.getSpec().getName());
 
-            TasksListParameters tasksListParameters = new TasksListParameters();
+            TasksFiltersParameters tasksListParameters = new TasksFiltersParameters();
             TasksFilters filters = new TasksFilters();
             filters.setService(serviceId);
             tasksListParameters.setFilters(filters);
@@ -165,9 +160,7 @@ public class ServiceCommandImpl implements ServiceCommand {
                 String nodeId = taskJson.getNodeId();
                 task.setNodeId(nodeId);
 
-                NodeInspectParameters nodeInspectParameters = new NodeInspectParameters();
-                nodeInspectParameters.setId(nodeId);
-                NodeJson node = nodesApi.inspectNode(nodeInspectParameters);
+                NodeJson node = nodesApi.inspectNode(nodeId);
                 if (node != null) {
                     NodeDescriptionJson description = node.getDescription();
                     if (description != null) {
@@ -208,13 +201,10 @@ public class ServiceCommandImpl implements ServiceCommand {
 
     @Override
     public void serviceUpdate(String serviceId, Service service) {
-        ServiceInspectParameters inspectParameters = new ServiceInspectParameters();
-        inspectParameters.setId(serviceId);
 
         ServiceUpdateParameters updateParameters = new ServiceUpdateParameters();
-        updateParameters.setId(serviceId);
 
-        ServiceJson serviceJson = servicesApi.inspectService(inspectParameters);
+        ServiceJson serviceJson = servicesApi.inspectService(serviceId);
         VersionJson versionJson = serviceJson.getVersion();
         updateParameters.setVersionQueryParam(versionJson.getIndex());
 
@@ -225,14 +215,12 @@ public class ServiceCommandImpl implements ServiceCommand {
                 .getServiceSpecJson();
 
         updateParameters.setService(serviceSpecJson);
-        servicesApi.updateService(updateParameters);
+        servicesApi.updateService(serviceId, updateParameters);
     }
 
     @Override
     public void serviceRm(String serviceId) {
-        ServiceDeleteParameters parameters = new ServiceDeleteParameters();
-        parameters.setId(serviceId);
-        servicesApi.deleteService(parameters);
+        servicesApi.deleteService(serviceId);
     }
 
     @Override
