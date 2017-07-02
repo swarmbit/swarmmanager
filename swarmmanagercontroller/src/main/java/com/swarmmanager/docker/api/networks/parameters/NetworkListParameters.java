@@ -1,4 +1,4 @@
-package com.swarmmanager.docker.api.nodes.parameters;
+package com.swarmmanager.docker.api.networks.parameters;
 
 import com.swarmmanager.docker.api.common.parameters.FiltersParameters;
 import com.swarmmanager.rest.QueryParam;
@@ -7,17 +7,17 @@ import java.util.Optional;
 
 import static com.swarmmanager.docker.api.common.util.EncoderDecoder.jsonUrlEncode;
 
-public class NodesListParameters implements FiltersParameters {
+public class NetworkListParameters implements FiltersParameters {
 
     private static final String FILTERS_NAME = "filters";
 
     private Optional<QueryParam> filters;
 
-    public NodesListParameters() {
+    public NetworkListParameters() {
         filters = Optional.empty();
     }
 
-    public NodesListParameters setFilters(NodesFilters filters) {
+    public NetworkListParameters setFilters(NetworkFilters filters) {
         if (filters != null) {
             this.filters = Optional.of(new QueryParam(FILTERS_NAME, jsonUrlEncode(filters.getJson())));
         }

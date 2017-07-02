@@ -1,6 +1,6 @@
 package com.swarmmanager.docker.api.secrets.parameters;
 
-import com.swarmmanager.docker.api.common.FiltersParameters;
+import com.swarmmanager.docker.api.common.parameters.FiltersParameters;
 import com.swarmmanager.rest.QueryParam;
 
 import java.util.Optional;

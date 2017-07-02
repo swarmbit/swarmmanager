@@ -1,4 +1,4 @@
-package com.swarmmanager.docker.api.common;
+package com.swarmmanager.docker.api.common.parameters;
 
 import com.swarmmanager.rest.HeaderParam;
 

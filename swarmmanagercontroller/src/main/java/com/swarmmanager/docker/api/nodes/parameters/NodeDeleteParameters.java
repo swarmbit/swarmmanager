@@ -1,6 +1,6 @@
 package com.swarmmanager.docker.api.nodes.parameters;
 
-import com.swarmmanager.docker.api.common.QueryParameters;
+import com.swarmmanager.docker.api.common.parameters.QueryParameters;
 import com.swarmmanager.rest.QueryParam;
 
 import java.util.ArrayList;

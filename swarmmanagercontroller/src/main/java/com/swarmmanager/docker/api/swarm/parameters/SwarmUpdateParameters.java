@@ -1,7 +1,7 @@
 package com.swarmmanager.docker.api.swarm.parameters;
 
-import com.swarmmanager.docker.api.common.QueryParameters;
-import com.swarmmanager.docker.api.common.RequestBodyParameter;
+import com.swarmmanager.docker.api.common.parameters.QueryParameters;
+import com.swarmmanager.docker.api.common.parameters.RequestBodyParameter;
 import com.swarmmanager.docker.api.common.json.SwarmSpecJson;
 import com.swarmmanager.rest.QueryParam;
 

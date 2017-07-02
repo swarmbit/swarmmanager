@@ -1,7 +1,7 @@
 package com.swarmmanager.docker.api.services.parameters;
 
-import com.swarmmanager.docker.api.common.HeaderParameters;
-import com.swarmmanager.docker.api.common.RequestBodyParameter;
+import com.swarmmanager.docker.api.common.parameters.HeaderParameters;
+import com.swarmmanager.docker.api.common.parameters.RequestBodyParameter;
 import com.swarmmanager.docker.api.common.json.ServiceSpecJson;
 import com.swarmmanager.rest.HeaderParam;
 

@@ -1,13 +1,17 @@
 package com.swarmmanager.docker.api.common;
 
 import com.swarmmanager.docker.api.common.client.DockerWebClient;
+import com.swarmmanager.docker.api.common.parameters.FiltersParameters;
+import com.swarmmanager.docker.api.common.parameters.HeaderParameters;
+import com.swarmmanager.docker.api.common.parameters.QueryParameters;
+import com.swarmmanager.docker.api.common.parameters.RequestBodyParameter;
 import com.swarmmanager.rest.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbstractApiImpl {
+public abstract class AbstractApiImpl {
 
     @Autowired
     protected DockerWebClient dockerWebClient;

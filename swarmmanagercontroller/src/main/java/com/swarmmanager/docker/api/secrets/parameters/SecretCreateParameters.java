@@ -1,6 +1,6 @@
 package com.swarmmanager.docker.api.secrets.parameters;
 
-import com.swarmmanager.docker.api.common.RequestBodyParameter;
+import com.swarmmanager.docker.api.common.parameters.RequestBodyParameter;
 import com.swarmmanager.docker.api.common.json.SecretSpecJson;
 
 public class SecretCreateParameters implements RequestBodyParameter {
