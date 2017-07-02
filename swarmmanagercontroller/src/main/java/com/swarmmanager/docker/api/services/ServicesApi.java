@@ -5,13 +5,13 @@ import com.swarmmanager.docker.api.common.json.ServiceJson;
 import com.swarmmanager.docker.api.services.parameters.ServiceCreateParameters;
 import com.swarmmanager.docker.api.services.parameters.ServiceLogsParameters;
 import com.swarmmanager.docker.api.services.parameters.ServiceUpdateParameters;
-import com.swarmmanager.docker.api.services.parameters.ServicesFiltersParameters;
+import com.swarmmanager.docker.api.services.parameters.ServicesListParameters;
 
 import java.util.List;
 
 public interface ServicesApi {
 
-    List<ServiceJson> listServices(ServicesFiltersParameters parameters);
+    List<ServiceJson> listServices(ServicesListParameters parameters);
 
     ServiceJson inspectService(String id);
 

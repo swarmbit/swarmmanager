@@ -1,59 +1,65 @@
 package com.swarmmanager.docker.api.nodes.parameters;
 
+import com.swarmmanager.docker.api.common.FilterParameter;
+import com.swarmmanager.docker.api.common.FilterParameterValue;
+
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
 public class NodesFilters {
 
-    private String id;
+    private FilterParameter id;
 
-    private String label;
+    private FilterParameter label;
 
-    private NodeMembership membership;
+    private FilterParameter membership;
 
-    private String name;
+    private FilterParameter name;
 
-    private NodeRole role;
-
-    public String getId() {
-        return id;
-    }
+    private FilterParameter role;
 
     public NodesFilters setId(String id) {
-        this.id = id;
+        this.id = new FilterParameter("id").addValue(new FilterParameterValue(id));
         return this;
-    }
-
-    public String getLabel() {
-        return label;
     }
 
     public NodesFilters setLabel(String label) {
-        this.label = label;
+        this.label = new FilterParameter("label").addValue(new FilterParameterValue(label));
         return this;
-    }
-
-    public NodeMembership getMembership() {
-        return membership;
     }
 
     public NodesFilters setMembership(NodeMembership membership) {
-        this.membership = membership;
+        this.membership = new FilterParameter("membership").addValue(new FilterParameterValue(membership.toString()));
         return this;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public NodesFilters setName(String name) {
-        this.name = name;
+        this.name = new FilterParameter("name").addValue(new FilterParameterValue(name));
         return this;
-    }
-
-    public NodeRole getRole() {
-        return role;
     }
 
     public NodesFilters setRole(NodeRole role) {
-        this.role = role;
+        this.role = new FilterParameter("role").addValue(new FilterParameterValue(role.toString()));
         return this;
+    }
+
+    public String getJson() {
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        if (id != null) {
+            id.addFilterJson(jsonObjectBuilder);
+        }
+        if (label != null) {
+            label.addFilterJson(jsonObjectBuilder);
+        }
+        if (membership != null) {
+            membership.addFilterJson(jsonObjectBuilder);
+        }
+        if (name != null) {
+            name.addFilterJson(jsonObjectBuilder);
+        }
+        if (role != null) {
+            role.addFilterJson(jsonObjectBuilder);
+        }
+        return jsonObjectBuilder.build().toString();
     }
 }

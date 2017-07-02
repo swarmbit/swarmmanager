@@ -21,8 +21,8 @@ public class SecretUpdateParameters implements RequestBodyParameter, QueryParame
         versionQueryParam = new QueryParam(VERSION_NAME, 0L);
     }
 
-    public SecretUpdateParameters setSecrect(SecretSpecJson secrect) {
-        this.secret = secrect;
+    public SecretUpdateParameters setSecrect(SecretSpecJson secret) {
+        this.secret = secret;
         return this;
     }
 

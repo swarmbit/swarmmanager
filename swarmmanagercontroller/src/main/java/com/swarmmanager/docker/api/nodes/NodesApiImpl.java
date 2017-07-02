@@ -3,7 +3,7 @@ package com.swarmmanager.docker.api.nodes;
 import com.swarmmanager.docker.api.common.AbstractApiImpl;
 import com.swarmmanager.docker.api.nodes.parameters.NodeDeleteParameters;
 import com.swarmmanager.docker.api.nodes.parameters.NodeUpdateParameters;
-import com.swarmmanager.docker.api.nodes.parameters.NodesFiltersParameters;
+import com.swarmmanager.docker.api.nodes.parameters.NodesListParameters;
 import com.swarmmanager.docker.api.common.json.NodeJson;
 import com.swarmmanager.rest.*;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class NodesApiImpl extends AbstractApiImpl implements NodesApi {
     private static final String UPDATE_PATH = "/update";
 
     @Override
-    public List<NodeJson> listNodes(NodesFiltersParameters parameters) {
+    public List<NodeJson> listNodes(NodesListParameters parameters) {
         return listObjects(NODES_PATH, new RestResponseType<List<NodeJson>>() {}, parameters);
     }
 
@@ -29,7 +29,7 @@ public class NodesApiImpl extends AbstractApiImpl implements NodesApi {
 
     @Override
     public void updateNode(String id, NodeUpdateParameters parameters) {
-        updateObject(NODES_PATH + "/" + id + "/" + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
+        updateObject(NODES_PATH + "/" + id + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
     }
 
     @Override

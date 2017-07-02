@@ -20,6 +20,6 @@ public class SwarmApiImpl  extends AbstractApiImpl implements SwarmApi {
 
     @Override
     public void updateSwarm(SwarmUpdateParameters parameters) {
-        updateObject(SWARM_PATH + "/" + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
+        updateObject(SWARM_PATH + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
     }
 }

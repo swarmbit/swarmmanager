@@ -7,7 +7,7 @@ import com.swarmmanager.docker.api.services.ServicesApi;
 import com.swarmmanager.docker.api.services.parameters.*;
 import com.swarmmanager.docker.api.tasks.TasksApi;
 import com.swarmmanager.docker.api.tasks.parameters.TasksFilters;
-import com.swarmmanager.docker.api.tasks.parameters.TasksFiltersParameters;
+import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
 import com.swarmmanager.docker.cli.helper.ServiceSpecJsonHelper;
 import com.swarmmanager.docker.cli.model.LogLine;
 import com.swarmmanager.docker.cli.model.Port;
@@ -51,7 +51,7 @@ public class ServiceCliImpl implements ServiceCli {
 
     @Override
     public List<ServiceSummary> serviceLs() {
-        List<ServiceJson> services = servicesApi.listServices(new ServicesFiltersParameters());
+        List<ServiceJson> services = servicesApi.listServices(new ServicesListParameters());
         List<ServiceSummary> servicesSummary = new ArrayList<>();
         for (ServiceJson service : services) {
             ServiceSummary serviceSummary = new ServiceSummary();
@@ -62,7 +62,7 @@ public class ServiceCliImpl implements ServiceCli {
             if (replicated != null) {
                 serviceSummary.setReplicas(replicated.getReplicas());
 
-                TasksFiltersParameters tasksListParameters = new TasksFiltersParameters();
+                TasksListParameters tasksListParameters = new TasksListParameters();
                 TasksFilters filters = new TasksFilters();
                 filters.setService(serviceSummary.getId());
                 filters.setDesiredState(TasksFilters.RUNNING_STATE);
@@ -106,7 +106,7 @@ public class ServiceCliImpl implements ServiceCli {
             serviceState.setId(serviceId);
             serviceState.setName(service.getSpec().getName());
 
-            TasksFiltersParameters tasksListParameters = new TasksFiltersParameters();
+            TasksListParameters tasksListParameters = new TasksListParameters();
             TasksFilters filters = new TasksFilters();
             filters.setService(serviceId);
             tasksListParameters.setFilters(filters);

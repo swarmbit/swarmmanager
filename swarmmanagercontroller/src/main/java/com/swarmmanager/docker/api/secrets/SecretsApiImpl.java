@@ -5,7 +5,7 @@ import com.swarmmanager.docker.api.common.json.SecretCreateResponseJson;
 import com.swarmmanager.docker.api.common.json.SecretJson;
 import com.swarmmanager.docker.api.secrets.parameters.SecretCreateParameters;
 import com.swarmmanager.docker.api.secrets.parameters.SecretUpdateParameters;
-import com.swarmmanager.docker.api.secrets.parameters.SecretsFiltersParameters;
+import com.swarmmanager.docker.api.secrets.parameters.SecretsListParameters;
 import com.swarmmanager.rest.RestResponseType;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class SecretsApiImpl extends AbstractApiImpl implements SecretsApi {
     private static final String UPDATE_PATH = "/update";
 
     @Override
-    public List<SecretJson> listSecrets(SecretsFiltersParameters parameters) {
+    public List<SecretJson> listSecrets(SecretsListParameters parameters) {
         return listObjects(SECRETS_PATH, new RestResponseType<List<SecretJson>>() {}, parameters);
     }
 
@@ -32,7 +32,7 @@ public class SecretsApiImpl extends AbstractApiImpl implements SecretsApi {
 
     @Override
     public SecretCreateResponseJson createSecret(SecretCreateParameters parameters) {
-        return createObject(SECRETS_PATH + "/" + CREATE_PATH, new RestResponseType<SecretCreateResponseJson>() {}, parameters);
+        return createObject(SECRETS_PATH + CREATE_PATH, new RestResponseType<SecretCreateResponseJson>() {}, parameters);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class SecretsApiImpl extends AbstractApiImpl implements SecretsApi {
 
     @Override
     public void updateSecret(String id, SecretUpdateParameters parameters) {
-        updateObject(SECRETS_PATH + "/" + id + "/" + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
+        updateObject(SECRETS_PATH + "/" + id + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
     }
 }

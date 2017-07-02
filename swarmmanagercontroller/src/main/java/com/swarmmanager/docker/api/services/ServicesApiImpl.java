@@ -5,7 +5,7 @@ import com.swarmmanager.docker.api.services.parameters.ServiceUpdateParameters;
 import com.swarmmanager.docker.api.common.json.ServiceGeneralResponseJson;
 import com.swarmmanager.docker.api.common.json.ServiceJson;
 import com.swarmmanager.docker.api.services.parameters.ServiceLogsParameters;
-import com.swarmmanager.docker.api.services.parameters.ServicesFiltersParameters;
+import com.swarmmanager.docker.api.services.parameters.ServicesListParameters;
 import com.swarmmanager.rest.RestExecutorFactory;
 import com.swarmmanager.rest.RestMethod;
 import com.swarmmanager.rest.RestParameters;
@@ -27,7 +27,7 @@ public class ServicesApiImpl extends AbstractApiImpl implements ServicesApi {
     private static final String LOGS_PATH = "/logs";
 
     @Override
-    public List<ServiceJson> listServices(ServicesFiltersParameters parameters) {
+    public List<ServiceJson> listServices(ServicesListParameters parameters) {
         return listObjects(SERVICES_PATH, new RestResponseType<List<ServiceJson>>() {}, parameters);
     }
 
@@ -38,7 +38,7 @@ public class ServicesApiImpl extends AbstractApiImpl implements ServicesApi {
 
     @Override
     public ServiceGeneralResponseJson createService(ServiceCreateParameters parameters) {
-        return createObject(SERVICES_PATH + "/" + CREATE_PATH, new RestResponseType<ServiceGeneralResponseJson>() {},
+        return createObject(SERVICES_PATH + CREATE_PATH, new RestResponseType<ServiceGeneralResponseJson>() {},
             parameters, parameters);
     }
 

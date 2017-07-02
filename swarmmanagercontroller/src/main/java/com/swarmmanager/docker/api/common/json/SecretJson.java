@@ -18,7 +18,7 @@ public class SecretJson {
     private String updatedAt;
 
     @JsonProperty("Spec")
-    private NodeSpecJson spec;
+    private SecretSpecJson spec;
 
     public String getId() {
         return id;
@@ -52,11 +52,11 @@ public class SecretJson {
         this.updatedAt = updatedAt;
     }
 
-    public NodeSpecJson getSpec() {
+    public SecretSpecJson getSpec() {
         return spec;
     }
 
-    public void setSpec(NodeSpecJson spec) {
+    public void setSpec(SecretSpecJson spec) {
         this.spec = spec;
     }
 }

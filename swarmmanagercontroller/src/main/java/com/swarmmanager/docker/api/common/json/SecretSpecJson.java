@@ -3,6 +3,7 @@ package com.swarmmanager.docker.api.common.json;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
+import com.swarmmanager.docker.api.common.util.EncoderDecoder;
 
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class SecretSpecJson implements DockerRemoteApiJson {
     private Map<String, String> labels;
 
     @JsonProperty("Data")
-    private byte[] data;
+    private String data;
 
     public String getName() {
         return name;
@@ -35,11 +36,11 @@ public class SecretSpecJson implements DockerRemoteApiJson {
         this.labels = labels;
     }
 
-    public byte[] getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(byte[] data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
