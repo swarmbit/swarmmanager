@@ -2,14 +2,13 @@ package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
-import com.swarmmanager.docker.api.common.util.EncoderDecoder;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class SecretSpecJson implements DockerRemoteApiJson {
+@DockerRemoteApiMinVersion("v1.25")
+public class SecretSpecJson {
 
     @JsonProperty("Name")
     private String name;
@@ -42,5 +41,15 @@ public class SecretSpecJson implements DockerRemoteApiJson {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SecretSpecJson{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", labels=").append(labels);
+        sb.append(", data='").append(data).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.json.inner.EndpointSpecJson;
 import com.swarmmanager.docker.api.common.json.inner.TaskSpecJson;
 import com.swarmmanager.docker.api.common.json.inner.UpdateConfigJson;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 import com.swarmmanager.docker.api.common.json.inner.NetworkAttachmentConfigJson;
 import com.swarmmanager.docker.api.common.json.inner.ServiceModeJson;
 
@@ -13,8 +13,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class ServiceSpecJson implements DockerRemoteApiJson {
+public class ServiceSpecJson {
 
     @JsonProperty("Name")
     private String name;
@@ -31,6 +30,7 @@ public class ServiceSpecJson implements DockerRemoteApiJson {
     @JsonProperty("UpdateConfig")
     private UpdateConfigJson updateConfig;
 
+    @DockerRemoteApiMinVersion("v1.28")
     @JsonProperty("RollbackConfig")
     private UpdateConfigJson rollbackConfig;
 

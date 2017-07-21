@@ -1,5 +1,6 @@
 package com.swarmmanager.docker.api.tasks;
 
+import com.swarmmanager.docker.api.services.parameters.ServiceLogsParameters;
 import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
 import com.swarmmanager.docker.api.common.json.TaskJson;
 
@@ -10,4 +11,7 @@ public interface TasksApi {
     List<TaskJson> listTasks(TasksListParameters parameters);
 
     TaskJson inspectTask(String id);
+
+    byte[] getTaskLogs(String id, ServiceLogsParameters parameters);
+
 }

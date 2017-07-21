@@ -2,16 +2,15 @@ package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
 import com.swarmmanager.docker.api.common.json.inner.NetworkAttachmentConfigJson;
 import com.swarmmanager.docker.api.common.json.inner.TaskStatusJson;
 import com.swarmmanager.docker.api.common.json.inner.VersionJson;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class TaskJson implements DockerRemoteApiJson {
+public class TaskJson {
 
     @JsonProperty("ID")
     private String id;
@@ -121,5 +120,22 @@ public class TaskJson implements DockerRemoteApiJson {
 
     public void setNetworksAttachments(NetworkAttachmentConfigJson[] networksAttachments) {
         this.networksAttachments = networksAttachments;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("TaskJson{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", version=").append(version);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", labels=").append(labels);
+        sb.append(", serviceId='").append(serviceId).append('\'');
+        sb.append(", slot=").append(slot);
+        sb.append(", nodeId='").append(nodeId).append('\'');
+        sb.append(", status=").append(status);
+        sb.append(", desiredState='").append(desiredState).append('\'');
+        sb.append(", networksAttachments=").append(Arrays.toString(networksAttachments));
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -2,14 +2,12 @@ package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
-import com.swarmmanager.docker.api.common.json.DockerRemoteApiJson;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class HealthConfigJson implements DockerRemoteApiJson {
+public class HealthConfigJson {
 
     @JsonProperty("Test")
     private String[] test;
@@ -22,6 +20,10 @@ public class HealthConfigJson implements DockerRemoteApiJson {
 
     @JsonProperty("Retries")
     private int retries;
+
+    @DockerRemoteApiMinVersion("v1.29")
+    @JsonProperty("StartPeriod")
+    private int startPeriod;
 
     public String[] getTest() {
         return test;
@@ -55,13 +57,22 @@ public class HealthConfigJson implements DockerRemoteApiJson {
         this.retries = retries;
     }
 
+    public int getStartPeriod() {
+        return startPeriod;
+    }
+
+    public void setStartPeriod(int startPeriod) {
+        this.startPeriod = startPeriod;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("HealthConfigJson{");
         sb.append("test=").append(Arrays.toString(test));
-        sb.append(", interval=").append(interval);
-        sb.append(", timeout=").append(timeout);
+        sb.append(", interval='").append(interval).append('\'');
+        sb.append(", timeout='").append(timeout).append('\'');
         sb.append(", retries=").append(retries);
+        sb.append(", startPeriod=").append(startPeriod);
         sb.append('}');
         return sb.toString();
     }

@@ -2,12 +2,10 @@ package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
-import com.swarmmanager.docker.api.common.json.DockerRemoteApiJson;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class MountJson implements DockerRemoteApiJson {
+public class MountJson {
 
     @JsonProperty("Type")
     private String type;
@@ -18,6 +16,7 @@ public class MountJson implements DockerRemoteApiJson {
     @JsonProperty("Target")
     private String target;
 
+    @DockerRemoteApiMinVersion(version = "v1.28")
     @JsonProperty("ReadOnly")
     private boolean readOnly;
 

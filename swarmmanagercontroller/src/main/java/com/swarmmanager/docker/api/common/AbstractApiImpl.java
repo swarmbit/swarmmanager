@@ -85,4 +85,9 @@ public abstract class AbstractApiImpl {
         return restParameters;
     }
 
+    public byte[] getObjectLogs(String apiPath, QueryParameters queryParameters) {
+        RestParameters restParameters = createRestParameters(apiPath, null, null, queryParameters);
+        return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, new RestResponseType<byte[]>(){});
+    }
+
 }

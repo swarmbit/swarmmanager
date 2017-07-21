@@ -55,19 +55,7 @@ public class ServicesApiImpl extends AbstractApiImpl implements ServicesApi {
     }
 
     @Override
-    public byte[] getServiceLogs(ServiceLogsParameters parameters) {
-        if (parameters != null) {
-            RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource())
-                    .setPath(SERVICES_PATH + "/" + parameters.getId() + LOGS_PATH)
-                    .addQueryParam(parameters.getStdoutQueryParam())
-                    .addQueryParam(parameters.getStderrQueryParam())
-                    .addQueryParam(parameters.getSinceQueryParam())
-                    .addQueryParam(parameters.getTimestampQueryParam());
-            if (parameters.getTailQueryParam().isPresent()) {
-                restParameters.addQueryParam(parameters.getTailQueryParam().get());
-            }
-            return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, new RestResponseType<byte[]>(){});
-        }
-        return new byte[]{};
+    public byte[] getServiceLogs(String id, ServiceLogsParameters parameters) {
+        return getObjectLogs(SERVICES_PATH + "/" + id + LOGS_PATH, parameters);
     }
 }

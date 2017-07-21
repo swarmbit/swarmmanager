@@ -226,12 +226,11 @@ public class ServiceCliImpl implements ServiceCli {
     @Override
     public List<LogLine> serviceLogs(String serviceId) {
         ServiceLogsParameters parameters = new ServiceLogsParameters();
-        parameters.setId(serviceId);
         parameters.setStderrQueryParam(true);
         parameters.setStdoutQueryParam(true);
         parameters.setTimestampQueryParam(true);
         //TODO parse task id and replica number when docker service logs fixed
-        byte[] logBuf = servicesApi.getServiceLogs(parameters);
+        byte[] logBuf = servicesApi.getServiceLogs(serviceId, parameters);
         List<LogLine> logLines = new ArrayList<>();
         ByteArrayInputStream inputStream = new ByteArrayInputStream(logBuf);
         try {

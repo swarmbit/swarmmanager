@@ -1,5 +1,6 @@
 package com.swarmmanager.docker.api.services;
 
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 import com.swarmmanager.docker.api.common.json.ServiceGeneralResponseJson;
 import com.swarmmanager.docker.api.common.json.ServiceJson;
 import com.swarmmanager.docker.api.services.parameters.ServiceCreateParameters;
@@ -21,6 +22,7 @@ public interface ServicesApi {
 
     void deleteService(String id);
 
-    byte[] getServiceLogs(ServiceLogsParameters parameters);
+    @DockerRemoteApiMinVersion("v1.29")
+    byte[] getServiceLogs(String id, ServiceLogsParameters parameters);
 
 }

@@ -1,8 +1,12 @@
 package com.swarmmanager.docker.api.common.json;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 import com.swarmmanager.docker.api.common.json.inner.VersionJson;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@DockerRemoteApiMinVersion("v1.25")
 public class SecretJson {
 
     @JsonProperty("ID")
@@ -58,5 +62,17 @@ public class SecretJson {
 
     public void setSpec(SecretSpecJson spec) {
         this.spec = spec;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SecretJson{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", version=").append(version);
+        sb.append(", createdAt='").append(createdAt).append('\'');
+        sb.append(", updatedAt='").append(updatedAt).append('\'');
+        sb.append(", spec=").append(spec);
+        sb.append('}');
+        return sb.toString();
     }
 }

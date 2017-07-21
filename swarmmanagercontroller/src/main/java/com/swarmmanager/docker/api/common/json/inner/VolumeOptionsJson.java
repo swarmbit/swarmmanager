@@ -2,14 +2,11 @@ package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
-import com.swarmmanager.docker.api.common.json.DockerRemoteApiJson;
 
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class VolumeOptionsJson implements DockerRemoteApiJson {
+public class VolumeOptionsJson {
 
     @JsonProperty("NoCopy")
     private boolean noCopy;

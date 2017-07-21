@@ -2,12 +2,10 @@ package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
-import com.swarmmanager.docker.api.common.json.DockerRemoteApiJson;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class NodeStatusJson implements DockerRemoteApiJson {
+public class NodeStatusJson {
 
     @JsonProperty("State")
     private String state;
@@ -15,6 +13,7 @@ public class NodeStatusJson implements DockerRemoteApiJson {
     @JsonProperty("Message")
     private String message;
 
+    @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("Addr")
     private String addr;
 

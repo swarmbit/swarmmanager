@@ -2,12 +2,10 @@ package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
-import com.swarmmanager.docker.api.common.json.DockerRemoteApiJson;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class UpdateConfigJson implements DockerRemoteApiJson {
+public class UpdateConfigJson {
 
     @JsonProperty("Parallelism")
     private long parallelism;
@@ -15,12 +13,14 @@ public class UpdateConfigJson implements DockerRemoteApiJson {
     @JsonProperty("Delay")
     private String delay;
 
+    @DockerRemoteApiMinVersion(version = "v1.28", comment = "rollback option")
     @JsonProperty("FailureAction")
     private String failureAction;
 
     @JsonProperty("Monitor")
     private String monitor;
 
+    @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("MaxFailureRatio")
     private float maxFailureRatio;
 

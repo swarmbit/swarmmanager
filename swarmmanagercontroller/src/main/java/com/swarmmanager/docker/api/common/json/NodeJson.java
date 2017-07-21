@@ -2,15 +2,11 @@ package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.json.inner.ManagerStatusJson;
-import com.swarmmanager.docker.api.common.json.inner.NodeDescriptionJson;
-import com.swarmmanager.docker.api.common.json.inner.NodeStatusJson;
-import com.swarmmanager.docker.api.common.json.inner.VersionJson;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
+import com.swarmmanager.docker.api.common.json.inner.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class NodeJson implements DockerRemoteApiJson {
+public class NodeJson {
 
     @JsonProperty("ID")
     private String id;
@@ -35,6 +31,10 @@ public class NodeJson implements DockerRemoteApiJson {
 
     @JsonProperty("ManagerStatus")
     private ManagerStatusJson managerStatus;
+
+    @DockerRemoteApiMinVersion("v1.30")
+    @JsonProperty("TLSInfo")
+    private TLSInfoJson tlsInfo;
 
     public String getId() {
         return id;
@@ -98,5 +98,29 @@ public class NodeJson implements DockerRemoteApiJson {
 
     public void setManagerStatus(ManagerStatusJson managerStatus) {
         this.managerStatus = managerStatus;
+    }
+
+    public TLSInfoJson getTlsInfo() {
+        return tlsInfo;
+    }
+
+    public void setTlsInfo(TLSInfoJson tlsInfo) {
+        this.tlsInfo = tlsInfo;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("NodeJson{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", version=").append(version);
+        sb.append(", createdAt='").append(createdAt).append('\'');
+        sb.append(", updatedAt='").append(updatedAt).append('\'');
+        sb.append(", spec=").append(spec);
+        sb.append(", description=").append(description);
+        sb.append(", status=").append(status);
+        sb.append(", managerStatus=").append(managerStatus);
+        sb.append(", tlsInfo=").append(tlsInfo);
+        sb.append('}');
+        return sb.toString();
     }
 }

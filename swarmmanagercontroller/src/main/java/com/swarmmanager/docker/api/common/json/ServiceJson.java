@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.json.inner.EndpointJson;
 import com.swarmmanager.docker.api.common.json.inner.UpdateStatusJson;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
 import com.swarmmanager.docker.api.common.json.inner.VersionJson;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class ServiceJson implements DockerRemoteApiJson {
+public class ServiceJson {
 
     @JsonProperty("ID")
     private String id;
