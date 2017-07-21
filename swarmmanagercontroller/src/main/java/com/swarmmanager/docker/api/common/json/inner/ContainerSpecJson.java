@@ -2,16 +2,13 @@ package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
-import com.swarmmanager.docker.api.common.json.DockerRemoteApiJson;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class ContainerSpecJson implements DockerRemoteApiJson {
+public class ContainerSpecJson {
 
     @JsonProperty("Image")
     private String image;
@@ -40,6 +37,7 @@ public class ContainerSpecJson implements DockerRemoteApiJson {
     @JsonProperty("Groups")
     private String[] groups;
 
+    @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("TTY")
     private boolean tty;
 
@@ -58,6 +56,7 @@ public class ContainerSpecJson implements DockerRemoteApiJson {
     @JsonProperty("Hosts")
     private String[] hosts;
 
+    @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("DNSConfig")
     private DNSConfigJson dnsConfig;
 

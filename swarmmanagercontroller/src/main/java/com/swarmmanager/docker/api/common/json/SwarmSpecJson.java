@@ -8,13 +8,11 @@ import com.swarmmanager.docker.api.common.json.inner.EncryptionConfigJson;
 import com.swarmmanager.docker.api.common.json.inner.OrchestrationConfigJson;
 import com.swarmmanager.docker.api.common.json.inner.RaftConfigJson;
 import com.swarmmanager.docker.api.common.json.inner.TasksDefaultsJson;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
 
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
-public class SwarmSpecJson implements DockerRemoteApiJson {
+public class SwarmSpecJson {
 
     @JsonProperty("Name")
     private String name;
@@ -102,5 +100,20 @@ public class SwarmSpecJson implements DockerRemoteApiJson {
 
     public void setEncryptionConfig(EncryptionConfigJson encryptionConfig) {
         this.encryptionConfig = encryptionConfig;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SwarmSpecJson{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", labels=").append(labels);
+        sb.append(", orchestration=").append(orchestration);
+        sb.append(", raft=").append(raft);
+        sb.append(", dispatcher=").append(dispatcher);
+        sb.append(", caConfig=").append(caConfig);
+        sb.append(", tasksDefaults=").append(tasksDefaults);
+        sb.append(", encryptionConfig=").append(encryptionConfig);
+        sb.append('}');
+        return sb.toString();
     }
 }

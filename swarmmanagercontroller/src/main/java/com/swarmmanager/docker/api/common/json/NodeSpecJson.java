@@ -2,12 +2,10 @@ package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
 
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
 public class NodeSpecJson {
 
     @JsonProperty("Name")
@@ -54,4 +52,14 @@ public class NodeSpecJson {
         this.availability = availability;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("NodeSpecJson{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", labels=").append(labels);
+        sb.append(", role='").append(role).append('\'');
+        sb.append(", availability='").append(availability).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

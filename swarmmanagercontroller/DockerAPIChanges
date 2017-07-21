@@ -1,0 +1,56 @@
+v1.24 API changes
+
+  Nodes added. - done
+  Swarm added. - done
+  Services added. - done
+  Tasks added. - done
+
+v1.25 API changes
+
+  Secrets added.
+  POST /services/(id or name)/update now accepts service name or prefix of service id as a parameter. - done
+  POST /services/create and POST /services/(id or name)/update now accept the TTY parameter, which allocate a pseudo-TTY in container. - done
+  POST /services/create and POST /services/(id or name)/update now accept the DNSConfig parameter, which specifies DNS related configurations in resolver configuration file (resolv.conf) through Nameservers, Search, and Options. - done
+  POST /services/create and POST /services/(id or name)/update now accept Monitor and MaxFailureRatio parameters, which control the response to failures during service updates. - done
+  POST /services/(id or name)/update now accepts a ForceUpdate parameter inside the TaskTemplate, which causes the service to be updated even if there are no changes which would ordinarily trigger an update. - done
+  POST /services/create and POST /services/(id or name)/update now return a Warnings array. - done
+  POST /node/(id or name)/update now accepts both id or name to identify the node to update. - done
+  GET /nodes and GET /node/(id or name) now return Addr as part of a node’s Status, which is the address that that node connects to the manager from. - done
+  GET /networks/(id or name) now includes IP and name of all peers nodes for swarm mode overlay networks. - done
+  GET /networks/ endpoint now correctly returns a list of all networks, instead of the default network if a trailing slash is provided, but no name or id. - done
+  GET /networks/(name) now returns field Created in response to show network created time. - done
+
+v1.26 API changes
+
+  No relevant changes.
+
+v1.27 API changes
+
+  No relevant changes.
+
+v1.28 API changes
+
+  POST /services/create and POST /services/(id or name)/update placement preferences added - done
+  POST /services/create and POST /services/(id or name)/update now accept the ReadOnly parameter, which mounts the container’s root filesystem as read only. - done
+  POST /services/create and POST /services/(id or name)/update now accept a rollback value for FailureAction. - done
+  POST /services/create and POST /services/(id or name)/update now accept an optional RollbackConfig object which specifies rollback options. - done
+  GET /services now supports a mode filter to filter services based on the service mode (either global or replicated). - done
+  GET /networks is optimised only to return list of all networks and network specific information. List of all containers attached to a specific network is removed from this API and is only available using the network specific `GET /networks/{network-id}.
+  Optional query parameter verbose for GET /networks/(id or name) will now list all services with all the tasks, including the non-local tasks on the given network.
+
+v1.29 API changes
+
+  Service logs added.
+  GET /services/(id) now accepts an insertDefaults query-parameter to merge default values into the service inspect output.
+  POST /containers/create, POST /service/create and POST /services/(id or name)/update now takes the field StartPeriod as a part of the HealthConfig allowing for specification of a period during which the container should not be considered unhealthy even if health checks do not pass. - done
+  DELETE /networks/(name) now allows to remove the ingress network, the one used to provide the routing-mesh.
+  POST /networks/create now supports creating the ingress network, by specifying an Ingress boolean field. As of now this is supported only when using the overlay network driver.
+  GET /networks/(name) now returns an Ingress field showing whether the network is the ingress one.
+  GET /networks/ now supports a scope filter to filter networks based on the network mode (swarm, global, or local). - done
+
+v1.30 API changes
+
+  GET /info and GET /swarm now returns the cluster-wide swarm CA info if the node is in a swarm: the cluster root CA certificate, and the cluster TLS leaf certificate issuer’s subject and public key. It also displays the desired CA signing certificate, if any was provided as part of the spec. - done
+  GET /nodes and GET /nodes/{id} now returns additional information about swarm TLS info if the node is part of a swarm: the trusted root CA, and the issuer’s subject and public key.  - done
+  POST /swarm/update now accepts 3 additional parameters as part of the swarm spec’s CA configuration; the desired CA certificate for the swarm, the desired CA key for the swarm (if not using an external certificate), and an optional parameter to force swarm to generate and rotate to a new CA certificate/key pair. - done
+  POST /service/create and POST /services/(id or name)/update now take the field Platforms as part of the service Placement, allowing to specify platforms supported by the service. - done

@@ -1,10 +1,13 @@
 package com.swarmmanager.docker.api.services.parameters;
 
+import com.swarmmanager.docker.api.common.parameters.QueryParameters;
 import com.swarmmanager.rest.QueryParam;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class ServiceLogsParameters {
+public class ServiceLogsParameters implements QueryParameters {
 
     private static final String STDOUT_NAME = "stdout";
 
@@ -15,8 +18,6 @@ public class ServiceLogsParameters {
     private static final String TIMESTAMP_NAME = "timestamp";
 
     private static final String TAIL_NAME = "tail";
-
-    private String id;
 
     private QueryParam stdoutQueryParam;
 
@@ -34,15 +35,6 @@ public class ServiceLogsParameters {
         sinceQueryParam = new QueryParam(SINCE_NAME, 0);
         timestampQueryParam = new QueryParam(TIMESTAMP_NAME, false);
         tailQueryParam = Optional.empty();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public ServiceLogsParameters setId(String id) {
-        this.id = id;
-        return this;
     }
 
     public QueryParam getStdoutQueryParam() {
@@ -88,5 +80,16 @@ public class ServiceLogsParameters {
     public ServiceLogsParameters setTailQueryParam(int tailValue) {
         this.tailQueryParam = Optional.of(new QueryParam(TAIL_NAME, tailValue));
         return this;
+    }
+
+    @Override
+    public List<QueryParam> getQueryParams() {
+        List<QueryParam> queryParams = new ArrayList<>();
+        queryParams.add(stdoutQueryParam);
+        queryParams.add(stderrQueryParam);
+        queryParams.add(sinceQueryParam);
+        queryParams.add(timestampQueryParam);
+        tailQueryParam.ifPresent(queryParams::add);
+        return queryParams;
     }
 }

@@ -2,13 +2,12 @@ package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiVersions;
+import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 import com.swarmmanager.docker.api.common.json.inner.IPAMJson;
 
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@DockerRemoteApiVersions(versions = "v1.28")
 public class NetworkJson {
 
     @JsonProperty("Name")
@@ -23,6 +22,7 @@ public class NetworkJson {
     @JsonProperty("Options")
     private Map<String, String> options;
 
+    @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("CreatedAt")
     private String createdAt;
 
@@ -41,6 +41,7 @@ public class NetworkJson {
     @JsonProperty("CheckDuplicate")
     private boolean checkDuplicate;
 
+    @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("IPAM")
     private IPAMJson ipam;
 
@@ -130,5 +131,23 @@ public class NetworkJson {
 
     public void setIpam(IPAMJson ipam) {
         this.ipam = ipam;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("NetworkJson{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", id='").append(id).append('\'');
+        sb.append(", labels=").append(labels);
+        sb.append(", options=").append(options);
+        sb.append(", createdAt='").append(createdAt).append('\'');
+        sb.append(", scope='").append(scope).append('\'');
+        sb.append(", driver='").append(driver).append('\'');
+        sb.append(", attachable=").append(attachable);
+        sb.append(", enableIPv6=").append(enableIPv6);
+        sb.append(", checkDuplicate=").append(checkDuplicate);
+        sb.append(", ipam=").append(ipam);
+        sb.append('}');
+        return sb.toString();
     }
 }
