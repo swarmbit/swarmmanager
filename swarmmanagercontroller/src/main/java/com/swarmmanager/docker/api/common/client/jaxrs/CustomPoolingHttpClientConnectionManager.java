@@ -1,17 +1,17 @@
 package com.swarmmanager.docker.api.common.client.jaxrs;
 
-import com.swarmmanager.docker.api.common.client.DockerWebClientProperties;
+import com.swarmmanager.docker.config.DockerClientConfig;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 public class CustomPoolingHttpClientConnectionManager extends PoolingHttpClientConnectionManager {
 
-    public CustomPoolingHttpClientConnectionManager(DockerWebClientProperties properties, org.apache.http.config.Registry registry) {
+    public CustomPoolingHttpClientConnectionManager(DockerClientConfig config, org.apache.http.config.Registry registry) {
         super(registry);
-        if (properties.getDockerApiMaxTotalConnections().isPresent()) {
-            this.setMaxTotal(properties.getDockerApiMaxTotalConnections().get());
+        if (config.getMaxTotalConnections().isPresent()) {
+            this.setMaxTotal(config.getMaxTotalConnections().get());
         }
-        if (properties.getDockerApiMaxTotalConnections().isPresent()) {
-            this.setMaxTotal(properties.getDockerApiMaxTotalConnections().get());
+        if (config.getMaxTotalConnections().isPresent()) {
+            this.setMaxTotal(config.getMaxTotalConnections().get());
         }
     }
     @Override

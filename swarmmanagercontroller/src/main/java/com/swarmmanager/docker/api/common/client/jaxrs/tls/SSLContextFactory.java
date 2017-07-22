@@ -1,6 +1,6 @@
 package com.swarmmanager.docker.api.common.client.jaxrs.tls;
 
-import com.swarmmanager.docker.api.common.client.DockerWebClientProperties;
+import com.swarmmanager.docker.config.DockerClientConfig;
 import com.swarmmanager.exception.UnsupportedConfiguration;
 import org.apache.log4j.Logger;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
@@ -33,19 +33,19 @@ public class SSLContextFactory {
     private SSLContextFactory() {
     }
 
-    public static SSLContext createSSLContext(DockerWebClientProperties properties) {
+    public static SSLContext createSSLContext(DockerClientConfig config) {
         try {
-            TLSAuth tlsAuth = TLSAuth.getTLSMode(properties);
+            TLSAuth tlsAuth = TLSAuth.getTLSMode(config);
             Security.addProvider(new BouncyCastleProvider());
             switch (tlsAuth) {
                 case TLS_AUTHENTICATE_CLIENT:
-                    return createAuthClientSSLContext(properties.getDockerApiTlsCert().get(), properties.getDockerApiTlsKey().get());
+                    return createAuthClientSSLContext(config.getTlsCert().get(), config.getTlsKey().get());
                 case TLS_AUTHENTICATE_SERVER:
-                    return createAuthServerSSLContext(properties.getDockerApiTlsCacert().get());
+                    return createAuthServerSSLContext(config.getTlsCacert().get());
                 case TLS_AUTHENTICATE_SERVER_CLIENT:
-                    return createAuthServerClientSSLContext(properties.getDockerApiTlsCert().get(),
-                            properties.getDockerApiTlsKey().get(),
-                            properties.getDockerApiTlsCacert().get());
+                    return createAuthServerClientSSLContext(config.getTlsCert().get(),
+                            config.getTlsKey().get(),
+                            config.getTlsCacert().get());
             }
             return SSLContext.getDefault();
         } catch (Exception e) {

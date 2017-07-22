@@ -14,7 +14,7 @@ public class IPAMJson {
     @JsonProperty("Options")
     private Map<String, String> Options;
 
-    @JsonProperty("Config")
+    @JsonProperty("DockerConfig")
     private IPAMConfigJson[] config;
 
     public String getDriver() {

@@ -250,7 +250,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
         final long id = aid.incrementAndGet();
         final StringBuilder b = new StringBuilder();
 
-        printRequestLine(b, "Server has received a request", id, context.getMethod(), context.getUriInfo()
+        printRequestLine(b, "Swarm has received a request", id, context.getMethod(), context.getUriInfo()
                 .getRequestUri());
         printPrefixedHeaders(b, id, REQUEST_PREFIX, context.getHeaders());
 
@@ -267,7 +267,7 @@ public class LoggingFilter implements ContainerRequestFilter, ClientRequestFilte
         final long id = aid.incrementAndGet();
         final StringBuilder b = new StringBuilder();
 
-        printResponseLine(b, "Server responded with a response", id, responseContext.getStatus());
+        printResponseLine(b, "Swarm responded with a response", id, responseContext.getStatus());
         printPrefixedHeaders(b, id, RESPONSE_PREFIX, responseContext.getStringHeaders());
 
         if (printEntity && responseContext.hasEntity()) {

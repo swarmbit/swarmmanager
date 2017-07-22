@@ -3,6 +3,7 @@ package com.swarmmanager.docker.api.common.client;
 import com.swarmmanager.docker.api.common.client.jaxrs.CustomPoolingHttpClientConnectionManager;
 import com.swarmmanager.docker.api.common.client.jaxrs.tls.SSLContextFactory;
 import com.swarmmanager.docker.api.common.client.jaxrs.unixsocket.UnixConnectionSocketFactory;
+import com.swarmmanager.docker.config.DockerClientConfig;
 import com.swarmmanager.exception.UnsupportedConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.config.RegistryBuilder;
@@ -22,37 +23,37 @@ import java.util.List;
 public enum DockerWebClientProtocol {
     UNIX, HTTP, HTTPS;
 
-    public void setProtocolSpecificConfiguration(ClientConfig clientConfig, DockerWebClientProperties properties) {
+    public void setProtocolSpecificConfiguration(ClientConfig clientConfig, DockerClientConfig config) {
         switch (this) {
             case HTTP:
-                configureProxy(clientConfig, properties, "http");
+                configureProxy(clientConfig, config, "http");
                 break;
             case HTTPS:
-                configureProxy(clientConfig, properties, "https");
+                configureProxy(clientConfig, config, "https");
                 break;
         }
     }
 
-    public PoolingHttpClientConnectionManager getConnectionManagerForProtocol(DockerWebClientProperties properties) {
+    public PoolingHttpClientConnectionManager getConnectionManagerForProtocol(DockerClientConfig config) {
         switch (this) {
             case UNIX:
-                return new CustomPoolingHttpClientConnectionManager(properties, getUnixSchemeRegistry(properties));
+                return new CustomPoolingHttpClientConnectionManager(config, getUnixSchemeRegistry(config));
             case HTTP:
-                return new CustomPoolingHttpClientConnectionManager(properties, getHttpSchemeRegistry());
+                return new CustomPoolingHttpClientConnectionManager(config, getHttpSchemeRegistry());
             case HTTPS:
-                return new CustomPoolingHttpClientConnectionManager(properties, getHttpsSchemeRegistry(properties));
+                return new CustomPoolingHttpClientConnectionManager(config, getHttpsSchemeRegistry(config));
         }
         return null;
     }
 
-    public String getUrlForProtocol(DockerWebClientProperties properties) {
+    public String getUrlForProtocol(DockerClientConfig config) {
         switch (this) {
             case UNIX:
                 return "unix://localhost:80";
             case HTTP:
-                return getUrl(properties, "http");
+                return getUrl(config, "http");
             case HTTPS:
-                return getUrl(properties, "https");
+                return getUrl(config, "https");
         }
         return null;
     }
@@ -79,25 +80,21 @@ public enum DockerWebClientProtocol {
         return registryBuilder.build();
     }
 
-    private org.apache.http.config.Registry<ConnectionSocketFactory> getHttpsSchemeRegistry(DockerWebClientProperties properties) {
+    private org.apache.http.config.Registry<ConnectionSocketFactory> getHttpsSchemeRegistry(DockerClientConfig config) {
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
-        registryBuilder.register("https", new SSLConnectionSocketFactory(SSLContextFactory.createSSLContext(properties)));
+        registryBuilder.register("https", new SSLConnectionSocketFactory(SSLContextFactory.createSSLContext(config)));
         return registryBuilder.build();
     }
 
-    private org.apache.http.config.Registry<ConnectionSocketFactory> getUnixSchemeRegistry(DockerWebClientProperties properties) {
-        if (!properties.getDockerApiUnixSocketPath().isPresent()) {
-            throw new UnsupportedConfiguration("Socket Path not defined for UNIX protocol");
-        }
-
-        String socketPath = properties.getDockerApiUnixSocketPath().get();
+    private org.apache.http.config.Registry<ConnectionSocketFactory> getUnixSchemeRegistry(DockerClientConfig config) {
+        String socketPath = config.getUnixSocketPath();
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
         registryBuilder.register("unix", new UnixConnectionSocketFactory(socketPath));
         return registryBuilder.build();
     }
 
-    private void configureProxy(ClientConfig clientConfig, DockerWebClientProperties properties, String protocol) {
-        String address = getUrl(properties, protocol);
+    private void configureProxy(ClientConfig clientConfig, DockerClientConfig config, String protocol) {
+        String address = getUrl(config, protocol);
         List<Proxy> proxies = ProxySelector.getDefault().select(URI.create(address));
         for (Proxy proxy : proxies) {
             InetSocketAddress inetSocketaddress = (InetSocketAddress) proxy.address();
@@ -119,12 +116,12 @@ public enum DockerWebClientProtocol {
         }
     }
 
-    private String getUrl(DockerWebClientProperties properties, String protocol) {
-        if(!properties.getDockerApiAddress().isPresent()) {
+    private String getUrl(DockerClientConfig config, String protocol) {
+        if(!config.getAddress().isPresent()) {
             throw new UnsupportedConfiguration("Remote API address not defined for " + protocol + " protocol");
         }
 
-        String address = properties.getDockerApiAddress().get();
+        String address = config.getAddress().get();
         return protocol + "://" + address;
     }
 }

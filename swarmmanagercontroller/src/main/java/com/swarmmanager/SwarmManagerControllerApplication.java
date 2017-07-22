@@ -1,13 +1,15 @@
 package com.swarmmanager;
 
-import com.swarmmanager.docker.api.common.client.DockerWebClientProperties;
+import com.swarmmanager.docker.config.DockerConfig;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 
-@EnableConfigurationProperties(DockerWebClientProperties.class)
-@PropertySource("classpath:docker.properties")
+@EnableConfigurationProperties({DockerConfig.class})
 @SpringBootApplication
 public class SwarmManagerControllerApplication {
 
@@ -15,4 +17,12 @@ public class SwarmManagerControllerApplication {
         SpringApplication.run(SwarmManagerControllerApplication.class, args);
     }
 
+    @Bean
+    public PropertySourcesPlaceholderConfigurer properties() {
+        PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+        YamlPropertiesFactoryBean factoryBean = new YamlPropertiesFactoryBean();
+        factoryBean.setResources(new ClassPathResource("docker.config.yml"));
+        propertySourcesPlaceholderConfigurer.setProperties(factoryBean.getObject());
+        return propertySourcesPlaceholderConfigurer;
+    }
 }
