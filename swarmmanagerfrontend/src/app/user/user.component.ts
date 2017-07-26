@@ -13,7 +13,7 @@ export class UserComponent implements OnInit {
 
   user: User;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -22,7 +22,6 @@ export class UserComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(['login']);
     this.authService.logout();
   }
 

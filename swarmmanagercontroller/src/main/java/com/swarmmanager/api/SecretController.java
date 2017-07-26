@@ -3,7 +3,7 @@ package com.swarmmanager.api;
 import com.swarmmanager.docker.api.common.json.SecretCreateResponseJson;
 import com.swarmmanager.docker.api.common.json.SecretJson;
 import com.swarmmanager.docker.api.common.json.SecretSpecJson;
-import com.swarmmanager.docker.api.common.util.EncoderDecoder;
+import com.swarmmanager.util.EncoderDecoder;
 import com.swarmmanager.docker.api.secrets.SecretsApi;
 import com.swarmmanager.docker.api.secrets.parameters.SecretCreateParameters;
 import com.swarmmanager.docker.api.secrets.parameters.SecretUpdateParameters;

@@ -1,40 +1,35 @@
-/*
 package com.swarmmanager.auth.mongo;
 
+import com.swarmmanager.integration.IntegrationTest;
+import com.swarmmanager.integration.IntegrationTestCategory;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserRepositoryTest {
+public class UserRepositoryTest extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
 
     private static final String USERNAME = "test";
 
-    @Before
-    public void setUp() throws Exception {
-        User user = new User();
-        user.setUsername(USERNAME);
-        user.setPassword("test");
-        assertNull(user.getId());
-        userRepository.save(user);
-        assertNotNull(user.getId());
-    }
 
     @Test
-    public void testFetchData(){
-        User user = userRepository.findByUsername(USERNAME);
+    public void testUserRepository() throws Exception {
+        User user = new User();
+        user.setUsername(USERNAME);
+        userRepository.save(user);
+        user = userRepository.findByUsername(USERNAME);
         assertNotNull(user);
+        assertNotNull(user.getUsername());
     }
 
     @After
@@ -43,4 +38,4 @@ public class UserRepositoryTest {
         this.userRepository.delete(user);
     }
 
-}*/
+}

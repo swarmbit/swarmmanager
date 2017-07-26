@@ -1,0 +1,8 @@
+FROM mongo:3.4.4
+
+COPY createSwarmManagerDB.js /scripts/createSwarmManagerDB.js
+
+RUN mkdir /data/swarmmanager
+RUN mongod --fork --logpath /var/log/mongod.log --port 27017 --dbpath /data/swarmmanager && mongo /scripts/createSwarmManagerDB.js
+
+ENTRYPOINT mongod --auth --port 27017 --dbpath /data/swarmmanager

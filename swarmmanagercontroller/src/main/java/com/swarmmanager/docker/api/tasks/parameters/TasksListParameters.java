@@ -1,7 +1,7 @@
 package com.swarmmanager.docker.api.tasks.parameters;
 
 import com.swarmmanager.docker.api.common.parameters.FiltersParameters;
-import com.swarmmanager.docker.api.common.util.EncoderDecoder;
+import com.swarmmanager.util.EncoderDecoder;
 import com.swarmmanager.rest.QueryParam;
 
 import java.util.Optional;

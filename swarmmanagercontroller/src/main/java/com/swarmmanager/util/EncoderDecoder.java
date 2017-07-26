@@ -1,4 +1,4 @@
-package com.swarmmanager.docker.api.common.util;
+package com.swarmmanager.util;
 
 import org.apache.log4j.Logger;
 
@@ -29,6 +29,13 @@ public class EncoderDecoder {
     public static String base64URLDecode(String data) {
         if (data != null) {
             return new String(Base64.getUrlDecoder().decode(data.getBytes()));
+        }
+        return "";
+    }
+
+    public static String base64Decode(String data) {
+        if (data != null) {
+            return new String(Base64.getDecoder().decode(data.getBytes()));
         }
         return "";
     }

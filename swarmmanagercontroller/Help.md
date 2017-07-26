@@ -1,3 +1,7 @@
+To run db execute:
+	cd mongo && docker-build.sh
+	docker run --name swarm-manager-db -p 27017:27017 swarmmanager/db
+
 Create service options: 
 
      --constraint list                  Placement constraints (default [])

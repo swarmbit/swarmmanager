@@ -3,11 +3,11 @@
     <md-card-title class="login-title">Login</md-card-title>
     <md-card-content class="login-content">
       <md-input-container>
-        <input class="login-input" mdInput placeholder="Username" type="text">
+        <input class="login-input" mdInput placeholder="Username" type="text" [(ngModel)]="username">
       </md-input-container>
       <br>
       <md-input-container>
-        <input class="login-input" mdInput placeholder="Password" type="password">
+        <input class="login-input" mdInput placeholder="Password" type="password" [(ngModel)]="password">
       </md-input-container>
     </md-card-content>
     <md-card-actions  class="login-button" >

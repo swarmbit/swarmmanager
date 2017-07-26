@@ -1,4 +1,3 @@
-/*
 package com.swarmmanager.auth.mongo;
 
 import org.springframework.data.annotation.Id;
@@ -8,35 +7,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 @Document(collection = "users")
 public class User implements UserDetails {
 
     @Id
-    private String id;
-
     private String username;
 
     private String password;
 
-    private boolean accountNonExpired;
-
-    private boolean accountNonLocked;
-
-    private boolean credentialsNonExpired;
-
-    private boolean enabled;
-
     private String[] roles;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private byte[][] secret;
 
     @Override
     public String getUsername() {
@@ -56,48 +40,20 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public String[] getRoles() {
         return roles;
     }
 
     public void setRoles(String[] roles) {
         this.roles = roles;
+    }
+
+    public byte[][] getSecret() {
+        return secret;
+    }
+
+    public void setSecret(byte[][] secret) {
+        this.secret = secret;
     }
 
     @Override
@@ -110,5 +66,35 @@ public class User implements UserDetails {
         }
         return authorities;
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("username='").append(username).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", roles=").append(Arrays.toString(roles));
+        sb.append(", secret=").append(Arrays.toString(secret));
+        sb.append('}');
+        return sb.toString();
+    }
 }
-*/

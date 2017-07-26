@@ -5,7 +5,7 @@ import com.swarmmanager.rest.QueryParam;
 
 import java.util.Optional;
 
-import static com.swarmmanager.docker.api.common.util.EncoderDecoder.jsonUrlEncode;
+import static com.swarmmanager.util.EncoderDecoder.jsonUrlEncode;
 
 public class ServicesListParameters implements FiltersParameters {
 
