@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavigationItem} from '../navigation.item';
+import { NavigationItem } from '../navigation.item';
 
 @Component({
   selector: 'app-navbar',
