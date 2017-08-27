@@ -1,82 +1,51 @@
-<div class="wrapper">
-  <div class="first-row-first-column">
+<div class="filter-container">
+  <div class="filter">
     <md-input-container class="input-small-width">
-      <span md-placeholder class="label-text">Services Filter</span>
-      <input mdInput id="filter" type="text" [(ngModel)]="filter" value="{{filter}}">
+      <span md-placeholder class="label-text">Service Name Filter</span>
+      <input mdInput id="filter" [(ngModel)]="filter" value="{{filter}}">
     </md-input-container>
-    <br>
-    <button md-raised-button color="accent" (click)="clearFilter()">Clear</button>
+    <button class="filter-clear" md-raised-button color="accent" (click)="clearFilter()">Clear</button>
   </div>
-  <div class="first-row-second-column">
-    <div class="add">
-      <span>Create new service</span>
-      <button color="accent"md-fab routerLink="/services/create"><md-icon>add</md-icon></button>
-    </div>
-  </div>
-  <div class="second-row mat-elevation-z2">
-    <!--<md-card class="table">
-      <md-card-content>
-        <table>
-          <thead>
-            <tr>
-              <th width="15%">Id</th>
-              <th width="15%">Name</th>
-              <th width="15%">Replicas</th>
-              <th width="15%">Image</th>
-              <th width="15%">Ports</th>
-              <th width="15%"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let serviceSummary of servicesSummaryFiltered()">
-              <td>{{serviceSummary.id}}</td>
-              <td>{{serviceSummary.name}}</td>
-              <td>{{serviceSummary.runningReplicas}}/{{serviceSummary.replicas}}</td>
-              <td>{{serviceSummary.image | cleanServiceImagePipe}}</td>
-              <td *ngIf="serviceSummary.ports && serviceSummary.ports.length > 0; else elseTemplate">
-                <p *ngFor="let port of serviceSummary.ports">{{port.protocol}}: {{port.published}} -> {{port.target}}</p>
-              </td>
-              <ng-template #elseTemplate>
-                <td>None</td>
-              </ng-template>
-              <td>
-                <button md-raised-button color="accent" routerLindocker-servicesices/details/{{serviceSummary.id}}">Details</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </md-card-content>
-    </md-card>-->
-    <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
-
-    <!-- ID Column -->
-    <md-table #table [dataSource]="dataSource">
-      <ng-container cdkColumnDef="userId">
-        <md-header-cell *cdkHeaderCellDef> ID </md-header-cell>
-        <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
-      </ng-container>
-
-      <!-- Progress Column -->
-      <ng-container cdkColumnDef="progress">
-        <md-header-cell *cdkHeaderCellDef> Progress </md-header-cell>
-        <md-cell *cdkCellDef="let row"> {{row.progress}}% </md-cell>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container cdkColumnDef="userName">
-        <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
-        <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
-      </ng-container>
-
-      <!-- Color Column -->
-      <ng-container cdkColumnDef="color">
-        <md-header-cell *cdkHeaderCellDef>Color</md-header-cell>
-        <md-cell *cdkCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>
-      </ng-container>
-
-      <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-      <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
-    </md-table>
+  <div class="add">
+    <span>Create new service</span>
+    <button color="accent" md-fab routerLink="/services/create"><md-icon>add</md-icon></button>
   </div>
 </div>
+<md-card class="table">
+  <md-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th width="15%">Id</th>
+          <th width="15%">Name</th>
+          <th width="15%">Replicas</th>
+          <th width="15%">Image</th>
+          <th width="15%">Ports</th>
+          <th width="15%"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let serviceSummary of servicesSummaryFiltered()">
+          <td>{{serviceSummary.id}}</td>
+          <td>{{serviceSummary.name}}</td>
+          <td>{{serviceSummary.runningReplicas}}/{{serviceSummary.replicas}}</td>
+          <td>{{serviceSummary.image | cleanServiceImagePipe}}</td>
+          <td *ngIf="serviceSummary.ports && serviceSummary.ports.length > 0; else elseTemplate">
+            <p *ngFor="let port of serviceSummary.ports">{{port.protocol}}: {{port.published}} -> {{port.target}}</p>
+          </td>
+          <ng-template #elseTemplate>
+            <td>None</td>
+          </ng-template>
+          <td>
+            <button md-raised-button color="accent" routerLink="/services/details/{{serviceSummary.id}}">Details</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </md-card-content>
+</md-card>
+<!--- Note that these columns can be defined in any order.
+    The actual rendered columns are set as a property on the row definition" -->
+
+<!-- ID Column -->
+<!--<sm-table [smTableContent]="serviceTableContent"></sm-table>-->

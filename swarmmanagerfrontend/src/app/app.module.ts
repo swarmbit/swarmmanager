@@ -20,13 +20,14 @@ import { AuditView } from './views/audit/audit.view';
 import { UserManagementView } from './views/user-management/user.management.view';
 import { HeaderService } from './services/header/header.service';
 import { ServicesService } from './services/docker-services/docker.services.service';
-import { CleanServiceImagePipe } from './services/docker-services/pipes/clean.service.image.pipe';
+import { CleanServiceImagePipe } from './views/docker-services/pipes/clean.service.image.pipe';
 import { DockerServicesDetailsView } from './views/docker-services/service-details/docker.services.details.view';
 import { HeaderComponent } from './shell/header/header.component';
 import { SidenavComponent } from './shell/navbar/navbar.component';
 import { AuthService } from './services/auth/auth.service';
 import { UserComponent } from './components/user/user.component';
 import { LoginView } from './views/login/login.view';
+import { SmTableComponent } from './components/sm-table/sm.table.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -60,6 +61,7 @@ const appRoutes: Routes = [
     CleanServiceImagePipe,
     HeaderComponent,
     SidenavComponent,
+    SmTableComponent,
     LoginView
   ],
   imports: [

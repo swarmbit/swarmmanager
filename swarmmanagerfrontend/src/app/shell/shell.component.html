@@ -10,7 +10,9 @@
   <main>
     <app-header></app-header>
     <div [ngClass]="getPageClass()">
-      <router-outlet></router-outlet>
+      <div *ngIf="isAuthenticated()" class="page-inner-container">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </main>
 </div>

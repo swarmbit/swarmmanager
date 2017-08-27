@@ -7,10 +7,11 @@ $app-accent:  mat-palette($mat-red);
 $app-warn:    mat-palette($mat-deep-orange);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
+
 @include angular-material-theme($app-theme);
 
 /* mixin and variables*/
-$min-With-media-query: 600px;
+$min-With-media-query: 1200px;
 
 @mixin media-transitions {
   -webkit-transition: all .2s ease;

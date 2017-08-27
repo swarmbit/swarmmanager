@@ -1,6 +1,8 @@
 <div class="navbar">
-  <div routerLink="{{navigationItem.link}}" *ngFor="let navigationItem of navigationItems" routerLinkActive="active">
-    <i class="material-icons icon">{{navigationItem.icon}}</i>
-    <span class="text">{{navigationItem.name}}</span>
+  <div class="navbar-option" routerLink="{{navigationItem.link}}" *ngFor="let navigationItem of navigationItems" routerLinkActive="active">
+    <div class="navbar-option-text">
+      <i class="material-icons icon">{{navigationItem.icon}}</i>
+      <span class="text">{{navigationItem.name}}</span>
+    </div>
   </div>
 </div>

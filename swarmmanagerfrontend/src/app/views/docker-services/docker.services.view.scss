@@ -1,31 +1,24 @@
-.wrapper {
-  margin-top: 2rem;
-  display: grid;
-  grid-template-columns: repeat(2, 50%);
-  grid-gap: 2rem;
+.filter-container {
+  width: 100%;
+  margin-bottom: 3rem;
+  font-size: 0;
 }
 
-.wrapper .first-row-first-column {
-  grid-row: 1;
-  grid-column: 1;
+.filter {
+  font-size: 1rem;
+  width: 66%;
+  display: inline-block;
 }
 
-.wrapper .first-row-second-column {
-  grid-row: 1;
-  grid-column: 2;
-  position: relative;
-}
-
-.wrapper .second-row {
-  grid-column: 1 / 2;
-  grid-row: 2;
-  width: 85rem;
+.filter-clear {
+  vertical-align: bottom;
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
 }
 
 .add {
-  position: absolute;
-  bottom: 0;
-  right: 10%;
+  width: 34%;
+  display: inline-block;
 }
 
 .add span {
