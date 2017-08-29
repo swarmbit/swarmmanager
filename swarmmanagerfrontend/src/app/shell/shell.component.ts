@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-shell',
@@ -7,19 +6,4 @@ import { AuthService } from '../services/auth/auth.service';
   templateUrl: 'shell.component.html'
 })
 export class ShellComponent {
-
-  constructor(private authService: AuthService) {
-  }
-
-  isAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
-  }
-
-  getPageClass() {
-    if (this.authService.isAuthenticated()) {
-      return 'page';
-    } else {
-      return '';
-    }
-  }
 }

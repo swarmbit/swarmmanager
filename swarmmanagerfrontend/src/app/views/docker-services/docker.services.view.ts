@@ -2,12 +2,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ServicesService } from '../../services/docker-services/docker.services.service';
 import { ServiceSummary } from '../../services/docker-services/model/service.summary';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
-import { DataSource } from '@angular/cdk';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { HeaderInfo } from '../../services/header/header.info';
 import { HeaderService } from '../../services/header/header.service';
-import { SmTableContent } from '../../components/sm-table/sm.table.content';
-import { ServiceSummaryRows } from './service.summary.rows';
 
 @Component({
   selector: 'app-services',
@@ -22,7 +19,6 @@ export class DockerServicesView implements OnInit, OnDestroy {
   servicesSummary: ServiceSummary[];
   subscription: Subscription;
   filter: string;
-  //sserviceTableContent: SmTableContent;
 
   constructor(serviceService: ServicesService, headerService: HeaderService) {
     this.headerService = headerService;
@@ -32,15 +28,6 @@ export class DockerServicesView implements OnInit, OnDestroy {
     this.serviceService = serviceService;
     this.servicesSummary = [];
     this.filter = '';
-    /*
-    this.serviceTableContent = new SmTableContent();
-    let columns = new Map();
-    columns.set('Id', 'id');
-    columns.set('Name', 'name');
-    columns.set('Replicas', 'replicas');
-    columns.set('Image', 'image');
-    columns.set('Ports', 'ports');
-    this.serviceTableContent.columns = columns;*/
   }
 
   ngOnInit(): void {
@@ -55,8 +42,6 @@ export class DockerServicesView implements OnInit, OnDestroy {
       .subscribe(
         servicesSummary => {
           this.servicesSummary = servicesSummary;
-          // Create table component using angular material table
-          // this.serviceTableContent.database.replaceData(new ServiceSummaryRows(this.servicesSummary).rows);
         },
         error =>  this.errorMessage = <any>error);
   }

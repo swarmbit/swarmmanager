@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { MaterialModule } from './modules/material/material.module';
 import 'hammerjs';
 
@@ -28,6 +27,8 @@ import { AuthService } from './services/auth/auth.service';
 import { UserComponent } from './components/user/user.component';
 import { LoginView } from './views/login/login.view';
 import { SmTableComponent } from './components/sm-table/sm.table.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './services/auth/auth.interceptor';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -68,11 +69,20 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes),
     MaterialModule
   ],
-  providers: [HeaderService, ServicesService, AuthService],
+  providers: [
+    HeaderService,
+    ServicesService,
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

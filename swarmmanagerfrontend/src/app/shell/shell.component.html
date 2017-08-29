@@ -1,4 +1,4 @@
-<div class="top-container" *ngIf="isAuthenticated()">
+<div class="top-container">
   <div class="side">
     <div class="user-area">
       <div class="user">
@@ -9,13 +9,11 @@
   </div>
   <main>
     <app-header></app-header>
-    <div [ngClass]="getPageClass()">
-      <div *ngIf="isAuthenticated()" class="page-inner-container">
+    <div class="page">
+      <div class="page-inner-container">
         <router-outlet></router-outlet>
       </div>
     </div>
   </main>
 </div>
-<div *ngIf="!isAuthenticated()">
-  <app-login></app-login>
-</div>
+
