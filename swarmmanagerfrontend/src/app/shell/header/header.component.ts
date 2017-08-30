@@ -1,9 +1,9 @@
 
-import {Component, OnDestroy} from '@angular/core';
-import { HeaderService } from './header-service/header.service';
+import { Component, OnDestroy } from '@angular/core';
+import { HeaderService } from '../../services/header/header.service';
 import { Router } from '@angular/router';
-import {HeaderInfo} from './header-service/header.info';
-import {Subscription} from 'rxjs/Subscription';
+import { HeaderInfo } from '../../services/header/header.info';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-header',

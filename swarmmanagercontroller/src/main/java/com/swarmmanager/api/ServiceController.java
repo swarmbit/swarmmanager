@@ -46,7 +46,7 @@ public class ServiceController {
     }
 
     @Secured(Role.USER)
-    @RequestMapping(method = RequestMethod.DELETE, value = "rm/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.DELETE, value = "{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void serviceRm(@PathVariable String serviceId) {
         serviceCli.serviceRm(serviceId);
     }
@@ -58,7 +58,7 @@ public class ServiceController {
     }
 
     @Secured(Role.USER)
-    @RequestMapping(method = RequestMethod.PUT, value = "update/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.PUT, value = "{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void serviceUpdate(@PathVariable String serviceId, @RequestBody Service service) {
         serviceCli.serviceUpdate(serviceId, service);
     }

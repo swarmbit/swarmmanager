@@ -1,0 +1,33 @@
+.filter-container {
+  width: 100%;
+  margin-bottom: 3rem;
+  font-size: 0;
+}
+
+.filter {
+  font-size: 1rem;
+  width: 66%;
+  display: inline-block;
+}
+
+.filter-clear {
+  vertical-align: bottom;
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.add {
+  width: 34%;
+  display: inline-block;
+}
+
+.add span {
+  font-size: 2rem;
+  vertical-align: middle;
+  margin-right: 1.5rem;
+}
+
+.add button {
+  vertical-align: middle;
+}
+

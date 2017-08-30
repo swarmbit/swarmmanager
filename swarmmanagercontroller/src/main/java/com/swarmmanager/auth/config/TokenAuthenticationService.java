@@ -70,7 +70,7 @@ public class TokenAuthenticationService {
                         .getBody()
                         .getSubject();
                 return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
-            } catch (SignatureException e) {
+            } catch (SignatureException | ExpiredJwtException e) {
                 return null;
             } catch (IllegalArgumentException e) {
                 if (!StringUtils.equals(e.getMessage(), "A signing key must be specified if the specified JWT is digitally signed.")) {

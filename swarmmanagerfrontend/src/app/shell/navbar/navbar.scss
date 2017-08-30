@@ -12,18 +12,22 @@
   outline: none;
 }
 
-.navbar div:hover {
+.navbar div.navbar-option:hover {
   background-color: #e0e0e0;
 }
 
-.navbar div.active {
+.navbar div.navbar-option.active {
   background-color: #bdbdbd;
 }
 
+.navbar-option-text {
+  width: 10rem;
+  margin: 0 auto;
+}
+
 .icon {
-  margin-left: 4rem;
-  margin-right: 0.5rem;
   vertical-align: middle;
+  margin: 0.2rem;
 }
 
 .text {
@@ -32,12 +36,13 @@
 
 @media (max-width: $min-With-media-query)
 {
-  .icon {
-    margin-left: 3rem;
-  }
-
   .text {
     display: none;
     @include media-transitions;
+  }
+
+  .navbar-option-text {
+    width: 2rem;
+    margin: 0 auto;
   }
 }

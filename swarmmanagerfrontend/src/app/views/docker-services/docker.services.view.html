@@ -1,0 +1,56 @@
+<div class="filter-container">
+  <div class="filter">
+    <md-input-container class="input-small-width">
+      <span md-placeholder class="label-text">Service Name Filter</span>
+      <input mdInput id="filter" [(ngModel)]="filter" value="{{filter}}">
+    </md-input-container>
+    <button class="filter-clear" md-raised-button color="accent" (click)="clearFilter()">Clear</button>
+  </div>
+  <div class="add">
+    <span>Create new service</span>
+    <button color="accent" md-fab routerLink="/service"><md-icon>add</md-icon></button>
+  </div>
+</div>
+<md-card class="table">
+  <md-card-content>
+    <table>
+      <thead>
+        <tr>
+          <th width="14%">Id</th>
+          <th width="14%">Name</th>
+          <th width="14%">Mode</th>
+          <th width="14%">Replicas</th>
+          <th width="14%">Image</th>
+          <th width="14%">Ports</th>
+          <th width="14%"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let serviceSummary of servicesSummaryFiltered()">
+          <td>{{serviceSummary.id}}</td>
+          <td>{{serviceSummary.name}}</td>
+          <td>{{getModeText(serviceSummary)}}</td>
+          <td *ngIf="!serviceSummary.global; else globalTemplate">{{serviceSummary.runningReplicas}}/{{serviceSummary.replicas}}</td>
+          <ng-template #globalTemplate>
+            <td>None</td>
+          </ng-template>
+          <td>{{serviceSummary.image | cleanServiceImagePipe}}</td>
+          <td *ngIf="serviceSummary.ports && serviceSummary.ports.length > 0; else elseTemplate">
+            <p *ngFor="let port of serviceSummary.ports">{{port.protocol}}: {{port.published}} -> {{port.target}}</p>
+          </td>
+          <ng-template #elseTemplate>
+            <td>None</td>
+          </ng-template>
+          <td>
+            <button md-raised-button color="accent" routerLink="/service/{{serviceSummary.id}}">More</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </md-card-content>
+</md-card>
+<!--- Note that these columns can be defined in any order.
+    The actual rendered columns are set as a property on the row definition" -->
+
+<!-- ID Column -->
+<!--<sm-table [smTableContent]="serviceTableContent"></sm-table>-->

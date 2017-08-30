@@ -2,6 +2,8 @@
 
 .top-container {
   display: flex;
+  width: 100vw;
+  height: 100vh;
 }
 
 .user-area {
@@ -19,29 +21,37 @@
 }
 
 .side {
-  min-width: 18rem;
-  min-height: 100vh;
+  min-width: 8rem;
+  min-height: 100%;
+  width: 15%;
   background-color: #fafafa;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  overflow-y: auto;
 }
 
 main {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  max-width: calc(100vw - 8rem);
+  width: 85%;
 }
 
 main div.page {
-  margin-top: 2.5rem;
-  margin-left: 5rem;
-  max-width: 85%;
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+}
+
+main div.page div.page-inner-container {
+  padding: 2.5rem 4.5rem;
+  min-width: 50rem;
 }
 
 
 @media (max-width: $min-With-media-query)
 {
   .side {
-    min-width: 7.5rem;
     @include media-transitions;
   }
+
 }

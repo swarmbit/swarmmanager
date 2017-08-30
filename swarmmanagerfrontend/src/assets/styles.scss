@@ -6,8 +6,32 @@ body {
   margin: 0;
 }
 
+.form-field {
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-button {
+  line-height: 8rem;
+}
+
+.form-field .mat-input-element {
+  margin-top: 1rem;
+}
+
+md-radio-button {
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+}
+
 .label-text {
   font-size: 1.5rem;
+}
+
+.input-micro-width {
+  width: 5rem;
 }
 
 .input-small-width {
@@ -15,18 +39,17 @@ body {
 }
 
 .input-medium-width {
-  width: 50rem;
+  width: 40rem;
 }
 
 .input-large-width {
-  width: 75rem;
+  width: 50rem;
 }
 
 table {
   border-collapse: collapse;
   text-align: left;
   width: 100%;
-  table-layout:fixed;
 }
 
 table td, table th {
@@ -39,4 +62,8 @@ table thead th {
 
 table tbody tr:nth-child(even) {
   background-color: #fafafa;
+}
+
+md-card.table {
+  padding: 0;
 }
