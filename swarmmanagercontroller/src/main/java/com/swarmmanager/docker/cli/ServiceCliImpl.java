@@ -45,6 +45,10 @@ public class ServiceCliImpl implements ServiceCli {
         Service service = new Service();
         service.setId(serviceJson.getId());
         service.setName(serviceJson.getSpec().getName());
+        service.setGlobal(serviceJson.getSpec().getMode().getGlobal() != null);
+        if (!service.isGlobal()) {
+            service.setReplicas(serviceJson.getSpec().getMode().getReplicated().getReplicas());
+        }
         service.setImage(serviceJson.getSpec().getTaskTemplate().getContainerSpec().getImage());
         return service;
     }
@@ -191,7 +195,7 @@ public class ServiceCliImpl implements ServiceCli {
                 .setName(service.getName())
                 .setPorts(service.getPorts())
                 .setImage(service.getImage())
-                .setMode(service.isGlobal(), service.getNumberOfReplicas())
+                .setMode(service.isGlobal(), service.getReplicas())
                 .getServiceSpecJson();
         createParameters.setService(serviceSpecJson);
         ServiceGeneralResponseJson responseJson = servicesApi.createService(createParameters);
@@ -211,7 +215,7 @@ public class ServiceCliImpl implements ServiceCli {
         ServiceSpecJson serviceSpecJson = ServiceSpecJsonHelper.createNewHelper(serviceJson.getSpec())
                 .setImage(service.getImage())
                 .setPorts(service.getPorts())
-                .setNumberOfReplicas(service.getNumberOfReplicas())
+                .setReplicas(service.getReplicas())
                 .getServiceSpecJson();
 
         updateParameters.setService(serviceSpecJson);

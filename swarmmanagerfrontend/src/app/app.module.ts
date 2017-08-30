@@ -18,9 +18,9 @@ import { RegistriesComponent } from './views/registries/registries.view';
 import { AuditView } from './views/audit/audit.view';
 import { UserManagementView } from './views/user-management/user.management.view';
 import { HeaderService } from './services/header/header.service';
-import { ServicesService } from './services/docker-services/docker.services.service';
+import { DockerServicesService } from './services/docker-services/docker.services.service';
 import { CleanServiceImagePipe } from './views/docker-services/pipes/clean.service.image.pipe';
-import { DockerServicesDetailsView } from './views/docker-services/service-details/docker.services.details.view';
+import { DockerServiceView } from './views/docker-services/docker-service/docker.service.view';
 import { HeaderComponent } from './shell/header/header.component';
 import { SidenavComponent } from './shell/navbar/navbar.component';
 import { AuthService } from './services/auth/auth.service';
@@ -31,11 +31,11 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/services', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardView },
   { path: 'services', component: DockerServicesView },
-  { path: 'services/create', component: DockerServicesDetailsView },
-  { path: 'services/details/:id', component: DockerServicesDetailsView },
+  { path: 'service', component: DockerServiceView },
+  { path: 'service/:id', component: DockerServiceView },
   { path: 'swarm', component: SwarmView },
   { path: 'nodes', component: NodesView },
   { path: 'networks', component: NetworksView },
@@ -49,7 +49,7 @@ const appRoutes: Routes = [
     AppComponent,
     ShellComponent,
     DockerServicesView,
-    DockerServicesDetailsView,
+    DockerServiceView,
     UserComponent,
     DashboardView,
     SwarmView,
@@ -75,7 +75,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     HeaderService,
-    ServicesService,
+    DockerServicesService,
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,

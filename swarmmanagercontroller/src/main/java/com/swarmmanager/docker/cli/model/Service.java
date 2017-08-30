@@ -15,7 +15,7 @@ public class Service {
 
     private String name;
 
-    private Integer numberOfReplicas;
+    private Long replicas;
 
     private List<Port> ports;
 
@@ -51,12 +51,12 @@ public class Service {
         this.name = name;
     }
 
-    public Integer getNumberOfReplicas() {
-        return numberOfReplicas;
+    public long getReplicas() {
+        return replicas;
     }
 
-    public void setNumberOfReplicas(Integer numberOfReplicas) {
-        this.numberOfReplicas = numberOfReplicas;
+    public void setReplicas(Long replicas) {
+        this.replicas = replicas;
     }
 
     public List<Port> getPorts() {

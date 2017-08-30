@@ -1,7 +1,7 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ServicesService } from '../../services/docker-services/docker.services.service';
-import { ServiceSummary } from '../../services/docker-services/model/service.summary';
+import { DockerServicesService } from '../../services/docker-services/docker.services.service';
+import { DockerServiceSummary } from '../../services/docker-services/model/docker.service.summary';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { HeaderInfo } from '../../services/header/header.info';
 import { HeaderService } from '../../services/header/header.service';
@@ -14,13 +14,13 @@ import { HeaderService } from '../../services/header/header.service';
 export class DockerServicesView implements OnInit, OnDestroy {
 
   headerService: HeaderService;
-  serviceService: ServicesService;
+  serviceService: DockerServicesService;
   errorMessage: string;
-  servicesSummary: ServiceSummary[];
+  servicesSummary: DockerServiceSummary[];
   subscription: Subscription;
   filter: string;
 
-  constructor(serviceService: ServicesService, headerService: HeaderService) {
+  constructor(serviceService: DockerServicesService, headerService: HeaderService) {
     this.headerService = headerService;
     const headerInfo = new HeaderInfo();
     headerInfo.currentViewName = 'Services';
@@ -54,15 +54,22 @@ export class DockerServicesView implements OnInit, OnDestroy {
     this.filter = '';
   }
 
-  servicesSummaryFiltered(): ServiceSummary[] {
+  servicesSummaryFiltered(): DockerServiceSummary[] {
     const servicesSummaryFiltered = [];
     for (const serviceSummary of this.servicesSummary) {
-      if (serviceSummary.name.indexOf(this.filter.toLowerCase()) > -1 ||
-            serviceSummary.id.indexOf(this.filter.toLowerCase()) > -1) {
+      if (serviceSummary.name.indexOf(this.filter.toLowerCase()) > -1) {
         servicesSummaryFiltered.push(serviceSummary);
       }
     }
     return servicesSummaryFiltered;
+  }
+
+  getModeText(serviceSummary: DockerServiceSummary): string {
+    let text = 'Replicated';
+    if (serviceSummary.global) {
+      text = 'Global';
+    }
+    return text;
   }
 
 }

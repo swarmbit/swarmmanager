@@ -1,11 +1,11 @@
-import { ServiceSummary } from '../../services/docker-services/model/service.summary';
+import { DockerServiceSummary } from '../../services/docker-services/model/docker.service.summary';
 import { CleanServiceImagePipe } from './pipes/clean.service.image.pipe';
 
 export class ServiceSummaryRows {
 
   rows: ServiceSummaryRow[];
 
-  constructor(servicesSummary: ServiceSummary[]) {
+  constructor(servicesSummary: DockerServiceSummary[]) {
     this.rows = [];
     servicesSummary.forEach( serviceSummary => {
       this.rows.push(new ServiceSummaryRow(serviceSummary))
@@ -26,7 +26,7 @@ export class ServiceSummaryRow {
 
   ports: string;
 
-  constructor(serviceSummary: ServiceSummary) {
+  constructor(serviceSummary: DockerServiceSummary) {
     this.id = serviceSummary.id;
     this.name = serviceSummary.name;
     this.replicas = serviceSummary.replicas + '/' + serviceSummary.runningReplicas;

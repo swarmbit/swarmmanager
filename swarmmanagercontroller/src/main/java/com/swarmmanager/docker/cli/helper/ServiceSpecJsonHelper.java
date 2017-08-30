@@ -32,7 +32,7 @@ public class ServiceSpecJsonHelper {
         return setMode(isGlobal, null);
     }
 
-    public ServiceSpecJsonHelper setMode(boolean isGlobal, Integer numberOfReplicas) {
+    public ServiceSpecJsonHelper setMode(boolean isGlobal, Long replicas) {
         if (serviceSpecJson.getMode() == null) {
             ServiceModeJson serviceModeJson = new ServiceModeJson();
             if (isGlobal) {
@@ -40,8 +40,8 @@ public class ServiceSpecJsonHelper {
                 serviceModeJson.setGlobal(globalServiceJson);
             } else {
                 ReplicatedServiceJson replicatedServiceJson = new ReplicatedServiceJson();
-                if (numberOfReplicas != null) {
-                    replicatedServiceJson.setReplicas(numberOfReplicas);
+                if (replicas != null) {
+                    replicatedServiceJson.setReplicas(replicas);
                 } else {
                     replicatedServiceJson.setReplicas(1);
                 }
@@ -52,7 +52,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setNumberOfReplicas(Integer numberOfReplicas) {
+    public ServiceSpecJsonHelper setReplicas(Long numberOfReplicas) {
         if (serviceSpecJson.getMode().getReplicated() != null && numberOfReplicas != null) {
             ReplicatedServiceJson replicatedServiceJson = new ReplicatedServiceJson();
             replicatedServiceJson.setReplicas(numberOfReplicas);

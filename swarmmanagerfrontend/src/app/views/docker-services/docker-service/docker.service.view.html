@@ -1,0 +1,44 @@
+<div class="form-field" *ngIf="!isCreateService">
+  <md-form-field class="input-medium-width">
+    <span class="label-text">Service Id</span>
+    <input mdInput id="id" type="text" value="{{id}}" disabled>
+  </md-form-field>
+</div>
+<div class="form-field">
+  <md-form-field class="input-medium-width">
+    <span class="label-text">Service Name</span>
+    <input mdInput id="name" type="text" [(ngModel)]="service.name" [disabled] = "!isCreateService">
+  </md-form-field>
+</div>
+<div class="form-field">
+  <md-radio-group class="input-medium-width" [disabled] = "!isCreateService" [(ngModel)]="selectedMode">
+    <div class="label-text">Mode</div>
+    <md-radio-button [value]="'replicated'">Replicated</md-radio-button>
+    <md-radio-button [value]="'global'">Global</md-radio-button>
+  </md-radio-group>
+</div>
+<div class="form-field replicas-field-margin" *ngIf="selectedMode === 'replicated'">
+  <span class="label-text">Replicas</span>
+  <div>
+    <md-slider [disabled] = "!isEditable" class="input-small-width" [min]="0" [max]="10" [(ngModel)]="service.replicas"></md-slider>
+    <md-form-field class="input-micro-width align-slider-input">
+      <input [disabled] = "!isEditable" mdInput min="0" type="number" placeholder="Value" [(ngModel)]="service.replicas">
+    </md-form-field>
+  </div>
+</div>
+<div class="form-field">
+  <md-form-field class="input-medium-width">
+    <span class="label-text">Image</span>
+    <input mdInput id="image" type="text" [(ngModel)]="service.image" [disabled] = "!isEditable">
+  </md-form-field>
+</div>
+<div class="form-button">
+  <button *ngIf="isCreateService" md-raised-button color="accent" (click)="submitService()">Create</button>
+  <button *ngIf="!isCreateService && !isEditable" md-raised-button color="accent" (click)="setEditable()">Edit</button>
+  <button *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="saveChanges()">Save</button>
+  <button style="margin-left: 1rem" *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="deleteService()">Delete</button>
+</div>
+
+
+
+

@@ -1,6 +1,6 @@
 import { Port } from './port';
 
-export class ServiceSummary {
+export class DockerServiceSummary {
 
   id: string;
 

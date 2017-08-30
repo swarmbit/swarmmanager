@@ -1,10 +1,79 @@
-import { NgModule } from '@angular/core';
-import { MdButtonModule, MdInputModule, MdSliderModule, MdCardModule, MdIconModule, MdMenuModule, MdTableModule } from '@angular/material';
-import { CdkTableModule } from '@angular/cdk';
 
+import { NgModule } from '@angular/core';
+import {
+  MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdCheckboxModule, MdCardModule,
+  MdChipsModule, MdCoreModule, MdDialogModule, MdDatepickerModule, MdExpansionModule, MdGridListModule, MdIconModule,
+  MdInputModule, MdListModule, MdMenuModule, MdNativeDateModule, MdPaginatorModule, MdProgressBarModule,
+  MdProgressSpinnerModule, MdRadioModule, MdRippleModule, MdSelectModule, MdSidenavModule, MdSliderModule,
+  MdSlideToggleModule, MdSnackBarModule, MdSortModule, MdTableModule, MdTabsModule, MdToolbarModule, MdTooltipModule
+} from '@angular/material';
 @NgModule({
-  imports: [MdButtonModule, MdSliderModule, MdInputModule, MdCardModule, MdIconModule, MdMenuModule, MdTableModule, CdkTableModule],
-  exports: [MdButtonModule, MdSliderModule, MdInputModule, MdCardModule, MdIconModule, MdMenuModule, MdTableModule, CdkTableModule]
+  imports: [
+    MdAutocompleteModule,
+    MdButtonModule,
+    MdButtonToggleModule,
+    MdCardModule,
+    MdCheckboxModule,
+    MdChipsModule,
+    MdCoreModule,
+    MdDatepickerModule,
+    MdDialogModule,
+    MdExpansionModule,
+    MdGridListModule,
+    MdIconModule,
+    MdInputModule,
+    MdListModule,
+    MdMenuModule,
+    MdNativeDateModule,
+    MdPaginatorModule,
+    MdProgressBarModule,
+    MdProgressSpinnerModule,
+    MdRadioModule,
+    MdRippleModule,
+    MdSelectModule,
+    MdSidenavModule,
+    MdSliderModule,
+    MdSlideToggleModule,
+    MdSnackBarModule,
+    MdSortModule,
+    MdTableModule,
+    MdTabsModule,
+    MdToolbarModule,
+    MdTooltipModule,
+  ],
+  exports: [
+    MdAutocompleteModule,
+    MdButtonModule,
+    MdButtonToggleModule,
+    MdCardModule,
+    MdCheckboxModule,
+    MdChipsModule,
+    MdCoreModule,
+    MdDatepickerModule,
+    MdDialogModule,
+    MdExpansionModule,
+    MdGridListModule,
+    MdIconModule,
+    MdInputModule,
+    MdListModule,
+    MdMenuModule,
+    MdNativeDateModule,
+    MdPaginatorModule,
+    MdProgressBarModule,
+    MdProgressSpinnerModule,
+    MdRadioModule,
+    MdRippleModule,
+    MdSelectModule,
+    MdSidenavModule,
+    MdSliderModule,
+    MdSlideToggleModule,
+    MdSnackBarModule,
+    MdSortModule,
+    MdTableModule,
+    MdTabsModule,
+    MdToolbarModule,
+    MdTooltipModule,
+  ]
 })
 export class MaterialModule {
 }
