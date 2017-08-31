@@ -10,6 +10,10 @@
   display: inline-block;
 }
 
+.filter input {
+  line-height: 1rem;
+}
+
 .filter-clear {
   vertical-align: bottom;
   margin-bottom: 1.5rem;
@@ -22,7 +26,7 @@
 }
 
 .add span {
-  font-size: 2rem;
+  font-size: 1.5rem;
   vertical-align: middle;
   margin-right: 1.5rem;
 }

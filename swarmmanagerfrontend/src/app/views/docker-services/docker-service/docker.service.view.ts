@@ -5,6 +5,7 @@ import { DockerService } from '../../../services/docker-services/model/docker.se
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderService } from '../../../services/header/header.service';
 import { BaseView } from '../../base.view';
+import { CleanServiceImagePipe } from '../pipes/clean.service.image.pipe';
 
 @Component({
   selector: 'app-services-details',
@@ -14,20 +15,23 @@ import { BaseView } from '../../base.view';
 export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
 
   service: DockerService;
-  selectedMode: string;
   isCreateService: boolean;
   isEditable: boolean;
   id: number;
   errorMessage: string;
   title: string;
-
+  cleanServiceImagePipe: CleanServiceImagePipe;
   private sub: any;
+
+  selectedMode: string;
+  image: string;
 
   constructor(private dockerServicesService: DockerServicesService,
               private router: Router,
               private route: ActivatedRoute,
               headerService: HeaderService) {
     super(headerService);
+    this.cleanServiceImagePipe = new CleanServiceImagePipe();
     this.service = new DockerService();
     this.isCreateService = this.router.isActive('/service', true);
     this.title = '';
@@ -56,6 +60,7 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
 
   saveChanges() {
     this.isEditable = false;
+    this.service.image = this.image;
     this.dockerServicesService.updateService(this.id, this.service).subscribe();
   }
 
@@ -63,6 +68,7 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
     if (this.selectedMode === 'global') {
       this.service.global = true;
     }
+    this.service.image = this.image;
     this.dockerServicesService.createService(this.service).subscribe();
     this.router.navigate(['/services']);
   }
@@ -72,6 +78,7 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
       .subscribe(
         service => {
           this.service = service;
+          this.image = this.cleanServiceImagePipe.transform(this.service.image);
           this.setViewName(this.title + ' ' + this.service.name);
           if (this.service.global) {
             this.selectedMode = 'global';

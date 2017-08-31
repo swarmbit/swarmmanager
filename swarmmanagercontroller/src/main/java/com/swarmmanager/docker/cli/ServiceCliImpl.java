@@ -50,6 +50,7 @@ public class ServiceCliImpl implements ServiceCli {
             service.setReplicas(serviceJson.getSpec().getMode().getReplicated().getReplicas());
         }
         service.setImage(serviceJson.getSpec().getTaskTemplate().getContainerSpec().getImage());
+        System.out.println(service.getReplicas());
         return service;
     }
 
@@ -219,6 +220,7 @@ public class ServiceCliImpl implements ServiceCli {
                 .getServiceSpecJson();
 
         updateParameters.setService(serviceSpecJson);
+        System.out.println(serviceSpecJson);
         servicesApi.updateService(serviceId, updateParameters);
     }
 
