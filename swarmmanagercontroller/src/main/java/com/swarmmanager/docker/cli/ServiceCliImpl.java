@@ -49,8 +49,22 @@ public class ServiceCliImpl implements ServiceCli {
         if (!service.isGlobal()) {
             service.setReplicas(serviceJson.getSpec().getMode().getReplicated().getReplicas());
         }
+        EndpointSpecJson endpointSpecJson = serviceJson.getSpec().getEndpointSpec();
+        if (endpointSpecJson != null) {
+            PortConfigJson[] portConfigs = endpointSpecJson.getPorts();
+            List<Port> ports = new ArrayList<>();
+            if (portConfigs != null) {
+                for (PortConfigJson portConfig : portConfigs) {
+                    Port port = new Port();
+                    port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
+                    port.setPublished(portConfig.getPublishedPort());
+                    port.setTarget(portConfig.getTargetPort());
+                    ports.add(port);
+                }
+            }
+            service.setPorts(ports);
+        }
         service.setImage(serviceJson.getSpec().getTaskTemplate().getContainerSpec().getImage());
-        System.out.println(service.getReplicas());
         return service;
     }
 

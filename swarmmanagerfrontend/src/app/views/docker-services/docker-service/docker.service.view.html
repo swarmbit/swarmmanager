@@ -32,6 +32,22 @@
     <input mdInput id="image" type="text" [(ngModel)]="image" [disabled] = "!isEditable">
   </md-form-field>
 </div>
+<div class="form-field">
+  <span class="label-text">Port</span>
+  <div>
+    <md-select placeholder="Protocol" style="margin-right: 1rem" [(ngModel)]="port.protocol" [disabled] = "!isEditable">
+      <md-option *ngFor="let protocol of portProtocols" [value]="protocol">
+        {{ protocol }}
+      </md-option>
+    </md-select>
+    <md-form-field class="input-micro-width" style="margin-right: 1rem">
+      <input placeholder="Published" mdInput id="published" type="number" min="0" type="text" [(ngModel)]="port.published" [disabled] = "!isEditable">
+    </md-form-field>
+    <md-form-field class="input-micro-width">
+      <input placeholder="Target" mdInput id="target" type="number" min="0" [(ngModel)]="port.target" [disabled] = "!isEditable">
+    </md-form-field>
+  </div>
+</div>
 <div class="form-button">
   <button *ngIf="isCreateService" md-raised-button color="accent" (click)="submitService()">Create</button>
   <button *ngIf="!isCreateService && !isEditable" md-raised-button color="accent" (click)="setEditable()">Edit</button>

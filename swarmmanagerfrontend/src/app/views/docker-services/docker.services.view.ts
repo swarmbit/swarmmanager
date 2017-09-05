@@ -39,11 +39,12 @@ export class DockerServicesView implements OnInit, OnDestroy {
 
   executeServiceLs() {
     this.serviceService.executeServiceLs()
-      .subscribe(
-        servicesSummary => {
+      .then(servicesSummary => {
           this.servicesSummary = servicesSummary;
-        },
-        error =>  this.errorMessage = <any>error);
+        })
+      .catch(error =>  {
+        this.errorMessage = <any>error;
+      });
   }
 
   ngOnDestroy(): void {

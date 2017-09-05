@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { DockerServiceSummary } from './model/docker.service.summary';
 import { DockerService } from './model/docker.service';
 import { HttpClient } from '@angular/common/http';
@@ -15,24 +14,24 @@ export class DockerServicesService {
 
   constructor (private http: HttpClient) {}
 
-  executeServiceLs(): Observable<DockerServiceSummary[]> {
-    return this.http.get(this.serviceLs);
+  executeServiceLs(): Promise<DockerServiceSummary[]> {
+    return this.http.get(this.serviceLs).toPromise();
   }
 
-  createService(service: DockerService): Observable<DockerServiceSummary[]> {
-    return this.http.post(this.serviceCreate, service);
+  createService(service: DockerService): Promise<DockerServiceSummary[]> {
+    return this.http.post(this.serviceCreate, service).toPromise();
   }
 
-  getService(id: string): Observable<DockerService> {
-    return this.http.get(this.service + '/' + id);
+  getService(id: string): Promise<DockerService> {
+    return this.http.get(this.service + '/' + id).toPromise();
   }
 
-  updateService(id: string, service: DockerService): Observable<DockerService> {
-    return this.http.put(this.service + '/' + id, service);
+  updateService(id: string, service: DockerService): Promise<DockerService> {
+    return this.http.put(this.service + '/' + id, service).toPromise();
   }
 
-  deleteService(id: string): Observable<VoidFunction> {
-    return this.http.delete(this.service + '/' + id);
+  deleteService(id: string): Promise<VoidFunction> {
+    return this.http.delete(this.service + '/' + id).toPromise();
   }
 
 }

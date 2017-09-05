@@ -8,6 +8,7 @@ import { BaseView } from '../../base.view';
 import { CleanServiceImagePipe } from '../pipes/clean.service.image.pipe';
 import { MdSnackBar } from '@angular/material';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA} from '@angular/material';
+import { Port } from '../../../services/docker-services/model/port';
 
 @Component({
   selector: 'app-services-details',
@@ -20,9 +21,11 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
   isCreateService: boolean;
   isEditable: boolean;
   id: string;
-  errorMessage: string;
   title: string;
   cleanServiceImagePipe: CleanServiceImagePipe;
+  port: Port;
+  portProtocols: string[] = ['tcp', 'udp'];
+
   private sub: any;
 
   selectedMode: string;
@@ -64,6 +67,8 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
         this.getService(this.id);
       }
     });
+    this.port = new Port();
+    this.port.protocol = this.portProtocols[0];
   }
 
   setEditable() {
@@ -73,10 +78,20 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
   saveChanges() {
     this.isEditable = false;
     this.service.image = this.image;
-    this.snackBar.open('Service ' + this.service.name + ' was successfully saved!', 'Service saved', {
-      duration: 2000,
-    });
-    this.dockerServicesService.updateService(this.id, this.service).subscribe();
+    this.service.ports = [];
+    this.service.ports.push(this.port);
+    this.dockerServicesService.updateService(this.id, this.service)
+      .then(() => {
+        this.snackBar.open('Service ' + this.service.name + ' was successfully saved!', 'Service saved', {
+          duration: 2000
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.snackBar.open('There was a problem updating service ' + this.service.name + '!', 'Update error', {
+          duration: 2000
+        });
+      });
   }
 
   submitService() {
@@ -84,16 +99,24 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
       this.service.global = true;
     }
     this.service.image = this.image;
-    this.dockerServicesService.createService(this.service).subscribe();
-    this.snackBar.open('Service ' + this.service.name + ' was successfully created!', 'Service created', {
-      duration: 2000,
+    this.service.ports = [];
+    this.service.ports.push(this.port);
+    this.dockerServicesService.createService(this.service).then(() => {
+      this.snackBar.open('Service ' + this.service.name + ' was successfully created!', 'Service created', {
+        duration: 2000,
+      });
+      this.router.navigate(['/services']);
+    }).catch((error) => {
+      console.log(error);
+      this.snackBar.open('There was a problem creating service ' + this.service.name + '!', 'Create error', {
+        duration: 2000,
+      });
     });
-    this.router.navigate(['/services']);
   }
 
   getService(id: string) {
     this.dockerServicesService.getService(id)
-      .subscribe(
+      .then(
         service => {
           this.service = service;
           this.image = this.cleanServiceImagePipe.transform(this.service.image);
@@ -103,8 +126,12 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
           } else {
             this.selectedMode = 'replicated';
           }
-        },
-        error =>  this.errorMessage = <any>error);
+        }).catch((error) =>  {
+          console.log(error);
+          this.snackBar.open('There was a problem fetching service ' + this.service.name + '!', 'Fetch error', {
+            duration: 2000,
+          });
+    });
   }
 
   removeService(): void {
@@ -118,6 +145,11 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.disableBackArrow();
     this.sub.unsubscribe();
+  }
+
+  selectPortProtocol(protocol: string): void {
+  console.log(protocol);
+    this.port.protocol = protocol;
   }
 
 }
@@ -137,7 +169,12 @@ export class DockerServiceRemoveDialog {
   }
 
   onYesClick(id: string, name: string): void {
-    this.dockerServicesService.deleteService(id).subscribe();
+    this.dockerServicesService.deleteService(id)
+      .catch(() => {
+        this.snackBar.open('There was a problem removing service ' + name + '!', 'Remove error', {
+          duration: 2000,
+        });
+      });
     this.router.navigate(['/services']);
     this.snackBar.open('Service ' + name + ' was successfully removed!', 'Service Removed', {
       duration: 2000,

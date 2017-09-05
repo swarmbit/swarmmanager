@@ -33,6 +33,10 @@ public class Port {
         this.protocol = protocol.toString().toLowerCase();
     }
 
+    public void setProtocol(String protocol) {
+        this.protocol = Protocol.getProtocol(protocol).toString().toLowerCase();
+    }
+
     public int getPublished() {
         return published;
     }
