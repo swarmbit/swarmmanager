@@ -23,15 +23,15 @@ export class DockerServicesService {
     return this.http.post(this.serviceCreate, service);
   }
 
-  getService(id: number): Observable<DockerService> {
+  getService(id: string): Observable<DockerService> {
     return this.http.get(this.service + '/' + id);
   }
 
-  updateService(id: number, service: DockerService): Observable<DockerService> {
+  updateService(id: string, service: DockerService): Observable<DockerService> {
     return this.http.put(this.service + '/' + id, service);
   }
 
-  deleteService(id: number): Observable<VoidFunction> {
+  deleteService(id: string): Observable<VoidFunction> {
     return this.http.delete(this.service + '/' + id);
   }
 

@@ -22,7 +22,7 @@
   <div>
     <md-slider [disabled] = "!isEditable" class="input-small-width" [min]="0" [max]="10" [(ngModel)]="service.replicas"></md-slider>
     <md-form-field class="input-micro-width align-slider-input">
-      <input [disabled] = "!isEditable" mdInput min="0" type="number" placeholder="Value" [(ngModel)]="service.replicas">
+      <input [disabled] = "!isEditable" mdInput min="0" step="0" type="number" placeholder="Value" [(ngModel)]="service.replicas">
     </md-form-field>
   </div>
 </div>
@@ -35,8 +35,9 @@
 <div class="form-button">
   <button *ngIf="isCreateService" md-raised-button color="accent" (click)="submitService()">Create</button>
   <button *ngIf="!isCreateService && !isEditable" md-raised-button color="accent" (click)="setEditable()">Edit</button>
+  <button style="margin-left: 1rem" *ngIf="!isCreateService && !isEditable" md-raised-button color="accent" (click)="removeService()">Remove</button>
   <button *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="saveChanges()">Save</button>
-  <button style="margin-left: 1rem" *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="deleteService()">Delete</button>
+  <button style="margin-left: 1rem" *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="cancelEdit()">Cancel</button>
 </div>
 
 

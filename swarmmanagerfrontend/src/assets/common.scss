@@ -7,7 +7,7 @@ $app-accent:  mat-palette($mat-red);
 $app-warn:    mat-palette($mat-deep-orange);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 $custom-typography: mat-typography-config(
-  $font-family: 'Titillium Web'
+  $font-family: 'Titillium Web, sans-serif'
 );
 
 @include angular-material-typography($custom-typography);

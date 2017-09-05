@@ -20,7 +20,7 @@ import { UserManagementView } from './views/user-management/user.management.view
 import { HeaderService } from './services/header/header.service';
 import { DockerServicesService } from './services/docker-services/docker.services.service';
 import { CleanServiceImagePipe } from './views/docker-services/pipes/clean.service.image.pipe';
-import { DockerServiceView } from './views/docker-services/docker-service/docker.service.view';
+import { DockerServiceRemoveDialog, DockerServiceView } from './views/docker-services/docker-service/docker.service.view';
 import { HeaderComponent } from './shell/header/header.component';
 import { SidenavComponent } from './shell/navbar/navbar.component';
 import { AuthService } from './services/auth/auth.service';
@@ -63,7 +63,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     SidenavComponent,
     SmTableComponent,
-    LoginView
+    LoginView,
+    DockerServiceRemoveDialog
   ],
   imports: [
     BrowserModule,
@@ -83,6 +84,9 @@ const appRoutes: Routes = [
       multi: true
     }
     ],
+  entryComponents: [
+    DockerServiceRemoveDialog
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
