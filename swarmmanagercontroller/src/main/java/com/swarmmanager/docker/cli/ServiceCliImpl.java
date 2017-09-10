@@ -2,6 +2,7 @@ package com.swarmmanager.docker.cli;
 
 import com.swarmmanager.docker.api.common.json.*;
 import com.swarmmanager.docker.api.common.json.inner.*;
+import com.swarmmanager.docker.api.common.util.DockerDateFormatter;
 import com.swarmmanager.docker.api.nodes.NodesApi;
 import com.swarmmanager.docker.api.services.ServicesApi;
 import com.swarmmanager.docker.api.services.parameters.*;
@@ -9,19 +10,14 @@ import com.swarmmanager.docker.api.tasks.TasksApi;
 import com.swarmmanager.docker.api.tasks.parameters.TasksFilters;
 import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
 import com.swarmmanager.docker.cli.helper.ServiceSpecJsonHelper;
-import com.swarmmanager.docker.cli.model.LogLine;
-import com.swarmmanager.docker.cli.model.Port;
-import com.swarmmanager.docker.cli.model.Replica;
-import com.swarmmanager.docker.cli.model.Service;
-import com.swarmmanager.docker.cli.model.ServiceState;
-import com.swarmmanager.docker.cli.model.ServiceSummary;
-import com.swarmmanager.docker.cli.model.Task;
+import com.swarmmanager.docker.cli.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.swarmmanager.docker.api.common.util.DockerDateFormatter.fromDateStringToDuration;
@@ -29,6 +25,12 @@ import static com.swarmmanager.docker.api.common.util.DockerDateFormatter.fromDa
 @Component
 public class ServiceCliImpl implements ServiceCli {
     private final Logger LOGGER = LoggerFactory.getLogger(ServiceCliImpl.class.getName());
+
+    private static final String NODE_DETAIL = "com.docker.swarm.node.id";
+
+    private static final String TASK_DETAIL = "com.docker.swarm.task.id";
+
+    private static final int MAX_LOGS = 10000;
 
     @Autowired
     private ServicesApi servicesApi;
@@ -38,6 +40,7 @@ public class ServiceCliImpl implements ServiceCli {
 
     @Autowired
     private NodesApi nodesApi;
+
 
     @Override
     public Service inspectService(String serviceId) {
@@ -78,24 +81,20 @@ public class ServiceCliImpl implements ServiceCli {
             serviceSummary.setName(service.getSpec().getName());
             serviceSummary.setImage(service.getSpec().getTaskTemplate().getContainerSpec().getImage());
             ReplicatedServiceJson replicated = service.getSpec().getMode().getReplicated();
+            TasksListParameters tasksListParameters = new TasksListParameters();
+            TasksFilters filters = new TasksFilters();
+            filters.setService(serviceSummary.getId());
+            filters.setDesiredState(TasksFilters.RUNNING_STATE);
+            tasksListParameters.setFilters(filters);
+            List<TaskJson> tasks = tasksApi.listTasks(tasksListParameters);
             if (replicated != null) {
                 serviceSummary.setReplicas(replicated.getReplicas());
-
-                TasksListParameters tasksListParameters = new TasksListParameters();
-                TasksFilters filters = new TasksFilters();
-                filters.setService(serviceSummary.getId());
-                filters.setDesiredState(TasksFilters.RUNNING_STATE);
-                tasksListParameters.setFilters(filters);
-                List<TaskJson> tasks = tasksApi.listTasks(tasksListParameters);
-                tasks.removeIf(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState()));
-                serviceSummary.setRunningReplicas(tasks.size());
             } else {
-                GlobalServiceJson global = service.getSpec().getMode().getGlobal();
-                if (global != null) {
-                    serviceSummary.setGlobal(true);
-                }
+                serviceSummary.setGlobal(true);
+                serviceSummary.setReplicas(tasks.stream().filter(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState())).count());
             }
-
+            tasks.removeIf(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState()));
+            serviceSummary.setRunningReplicas(tasks.size());
             EndpointSpecJson endpointSpecJson = service.getSpec().getEndpointSpec();
             if (endpointSpecJson != null) {
                 PortConfigJson[] portConfigs = endpointSpecJson.getPorts();
@@ -234,7 +233,6 @@ public class ServiceCliImpl implements ServiceCli {
                 .getServiceSpecJson();
 
         updateParameters.setService(serviceSpecJson);
-        System.out.println(serviceSpecJson);
         servicesApi.updateService(serviceId, updateParameters);
     }
 
@@ -244,25 +242,74 @@ public class ServiceCliImpl implements ServiceCli {
     }
 
     @Override
-    public List<LogLine> serviceLogs(String serviceId) {
+    public Logs serviceLogs(String serviceId) {
         ServiceLogsParameters parameters = new ServiceLogsParameters();
         parameters.setStderrQueryParam(true);
         parameters.setStdoutQueryParam(true);
-        parameters.setTimestampQueryParam(true);
-        //TODO parse task id and replica number when docker service logs fixed
-        byte[] logBuf = servicesApi.getServiceLogs(serviceId, parameters);
+        parameters.setTimestampsQueryParam(true);
+        parameters.setDetailsQueryParam(true);
+        parameters.setTailQueryParam(MAX_LOGS);
         List<LogLine> logLines = new ArrayList<>();
+        Set<LogFilter> logFilters = new TreeSet<>((filter1, filter2) -> {
+            if (filter1.getReplica() != filter2.getReplica()) {
+                return filter1.getReplica() - filter2.getReplica();
+            }
+            return filter1.getTaskId().compareTo(filter2.getTaskId());
+        });
+        Logs logs = new Logs();
+        Map<String, TaskJson> tasksById = new HashMap<>();
+        List<TaskJson> tasks = tasksApi.listTasks(new TasksListParameters());
+        tasks.forEach(task -> tasksById.put(task.getId(), task));
+
+        byte[] logBuf = servicesApi.getServiceLogs(serviceId, parameters);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(logBuf);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"));
             String entry;
             while ((entry = reader.readLine()) != null) {
-                logLines.add(new LogLine(-1, "", entry));
+                LogLine logLine = convertLogString(serviceId, tasksById, entry);
+                logLines.add(logLine);
+                logFilters.add(new LogFilter(logLine.getTaskId(), logLine.getReplica(), logLine.getServiceId(), logLine.getNodeId()));
             }
         } catch (IOException e) {
             LOGGER.error("Error parsing logs", e);
         }
-        return logLines;
+        logLines.sort(Comparator.comparingLong(LogLine::getTimestamp));
+        logs.setLogLines(logLines);
+        logs.setLogFilters(logFilters);
+        return logs;
+    }
+
+    private LogLine convertLogString(String serviceId, Map<String, TaskJson> tasksById, String logString) {
+        //remove 8 bytes padding padding
+        String log = logString.substring(8);
+        String[] parts = log.split(" ");
+        if (parts.length > 2) {
+            String timestampStr = parts[0];
+            ZonedDateTime timestamp = DockerDateFormatter.fromDateStringToZonedDateTime(timestampStr);
+            String detailsStr = parts[1];
+            String nodeId = "";
+            String tasKId = "";
+            int replica = 0;
+            String[] details = detailsStr.split(",");
+            for (String detail : details) {
+                if (detail.startsWith(NODE_DETAIL)) {
+                    nodeId = detail.substring(NODE_DETAIL.length() + 1);
+                }
+                if (detail.startsWith(TASK_DETAIL)) {
+                    tasKId = detail.substring(TASK_DETAIL.length() + 1);
+                    replica = tasksById.get(tasKId).getSlot();
+                }
+            }
+            StringBuilder messageBuilder = new StringBuilder(parts[2]);
+            for (int i = 3; i < parts.length; i++) {
+                messageBuilder.append(" " + parts[i]);
+            }
+            String message = messageBuilder.toString();
+            return new LogLine(serviceId, nodeId, tasKId, replica, message, timestamp.toInstant().toEpochMilli());
+        }
+        return null;
     }
 
 }
+

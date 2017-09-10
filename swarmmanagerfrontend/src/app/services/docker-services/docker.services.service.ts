@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DockerServiceSummary } from './model/docker.service.summary';
 import { DockerService } from './model/docker.service';
 import { HttpClient } from '@angular/common/http';
+import { Logs } from './model/logs';
 
 @Injectable()
 export class DockerServicesService {
@@ -11,6 +12,9 @@ export class DockerServicesService {
   private serviceCreate = '/api/service/create';
 
   private service = '/api/service';
+
+  private serviceLogs = '/api/service/logs';
+
 
   constructor (private http: HttpClient) {}
 
@@ -28,6 +32,10 @@ export class DockerServicesService {
 
   updateService(id: string, service: DockerService): Promise<DockerService> {
     return this.http.put(this.service + '/' + id, service).toPromise();
+  }
+
+  getServiceLogs(id: string): Promise<Logs> {
+    return this.http.get(this.serviceLogs + '/' + id).toPromise();
   }
 
   deleteService(id: string): Promise<VoidFunction> {

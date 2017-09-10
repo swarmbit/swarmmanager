@@ -1,14 +1,14 @@
 
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { DockerServicesService } from '../../../services/docker-services/docker.services.service';
-import { DockerService } from '../../../services/docker-services/model/docker.service';
+import { DockerServicesService } from '../../../../services/docker-services/docker.services.service';
+import { DockerService } from '../../../../services/docker-services/model/docker.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HeaderService } from '../../../services/header/header.service';
-import { BaseView } from '../../base.view';
-import { CleanServiceImagePipe } from '../pipes/clean.service.image.pipe';
+import { HeaderService } from '../../../../services/header/header.service';
+import { BaseView } from '../../../base.view';
+import { CleanServiceImagePipe } from '../../pipes/clean.service.image.pipe';
 import { MdSnackBar } from '@angular/material';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA} from '@angular/material';
-import { Port } from '../../../services/docker-services/model/port';
+import { Port } from '../../../../services/docker-services/model/port';
 
 @Component({
   selector: 'app-services-details',
@@ -120,6 +120,9 @@ export class DockerServiceView extends BaseView implements OnInit, OnDestroy {
         service => {
           this.service = service;
           this.image = this.cleanServiceImagePipe.transform(this.service.image);
+          if (this.service.ports && this.service.ports.length > 0) {
+            this.port = this.service.ports[0];
+          }
           this.setViewName(this.title + ' ' + this.service.name);
           if (this.service.global) {
             this.selectedMode = 'global';

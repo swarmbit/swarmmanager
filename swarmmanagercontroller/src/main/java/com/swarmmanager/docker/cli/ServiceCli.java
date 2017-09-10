@@ -1,9 +1,6 @@
 package com.swarmmanager.docker.cli;
 
-import com.swarmmanager.docker.cli.model.LogLine;
-import com.swarmmanager.docker.cli.model.Service;
-import com.swarmmanager.docker.cli.model.ServiceState;
-import com.swarmmanager.docker.cli.model.ServiceSummary;
+import com.swarmmanager.docker.cli.model.*;
 
 import java.util.List;
 
@@ -21,6 +18,6 @@ public interface ServiceCli {
 
     void serviceRm(String serviceId);
 
-    List<LogLine> serviceLogs(String serviceId);
+    Logs serviceLogs(String serviceId);
 
 }

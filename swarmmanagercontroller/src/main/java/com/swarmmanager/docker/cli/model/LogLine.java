@@ -5,29 +5,48 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LogLine {
 
-    private int replicaNumber;
+    private String serviceId;
+
+    private String nodeId;
 
     private String taskId;
 
-    private String line;
+    private int replica;
 
-    public LogLine(int replicaNumber, String taskId, String line) {
-        this.replicaNumber = replicaNumber;
+    private String message;
+
+    private long timestamp;
+
+    public LogLine(String serviceId, String nodeId, String taskId, int replica, String message, long timestamp) {
+        this.serviceId = serviceId;
+        this.nodeId = nodeId;
         this.taskId = taskId;
-        this.line = line;
+        this.replica = replica;
+        this.message = message;
+        this.timestamp = timestamp;
     }
 
-    public int getReplicaNumber() {
-        return replicaNumber;
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public String getNodeId() {
+        return nodeId;
     }
 
     public String getTaskId() {
         return taskId;
     }
 
-    public String getLine() {
-        return line;
+    public int getReplica() {
+        return replica;
     }
 
+    public String getMessage() {
+        return message;
+    }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
 }
