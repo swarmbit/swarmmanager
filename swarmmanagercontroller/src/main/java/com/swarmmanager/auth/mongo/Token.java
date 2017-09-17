@@ -11,6 +11,11 @@ public class Token {
 
     private Date expiration;
 
+    public Token(String token, Date expiration) {
+        this.token = token;
+        this.expiration = expiration;
+    }
+
     public String getToken() {
         return token;
     }
