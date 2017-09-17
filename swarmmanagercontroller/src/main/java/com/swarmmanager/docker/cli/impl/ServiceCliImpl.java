@@ -25,6 +25,7 @@ import static com.swarmmanager.docker.api.common.util.DockerDateFormatter.fromDa
 
 @Component
 public class ServiceCliImpl implements ServiceCli {
+
     private final Logger LOGGER = LoggerFactory.getLogger(ServiceCliImpl.class.getName());
 
     private static final String NODE_DETAIL = "com.docker.swarm.node.id";
@@ -48,24 +49,18 @@ public class ServiceCliImpl implements ServiceCli {
         ServiceJson serviceJson = this.servicesApi.inspectService(serviceId);
         Service service = new Service();
         service.setId(serviceJson.getId());
+        ZonedDateTime createdAt = DockerDateFormatter.fromDateStringToZonedDateTime(serviceJson.getCreatedAt());
+        ZonedDateTime updatedAt = DockerDateFormatter.fromDateStringToZonedDateTime(serviceJson.getUpdatedAt());
+        service.setCreatedAt(createdAt.toInstant().toEpochMilli());
+        service.setUpdatedAt(updatedAt.toInstant().toEpochMilli());
         service.setName(serviceJson.getSpec().getName());
         service.setGlobal(serviceJson.getSpec().getMode().getGlobal() != null);
         if (!service.isGlobal()) {
             service.setReplicas(serviceJson.getSpec().getMode().getReplicated().getReplicas());
         }
         EndpointSpecJson endpointSpecJson = serviceJson.getSpec().getEndpointSpec();
-        if (endpointSpecJson != null) {
-            PortConfigJson[] portConfigs = endpointSpecJson.getPorts();
-            List<Port> ports = new ArrayList<>();
-            if (portConfigs != null) {
-                for (PortConfigJson portConfig : portConfigs) {
-                    Port port = new Port();
-                    port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
-                    port.setPublished(portConfig.getPublishedPort());
-                    port.setTarget(portConfig.getTargetPort());
-                    ports.add(port);
-                }
-            }
+        List<Port> ports = getPorts(endpointSpecJson);
+        if (!ports.isEmpty()) {
             service.setPorts(ports);
         }
         service.setImage(serviceJson.getSpec().getTaskTemplate().getContainerSpec().getImage());
@@ -97,21 +92,10 @@ public class ServiceCliImpl implements ServiceCli {
             tasks.removeIf(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState()));
             serviceSummary.setRunningReplicas(tasks.size());
             EndpointSpecJson endpointSpecJson = service.getSpec().getEndpointSpec();
-            if (endpointSpecJson != null) {
-                PortConfigJson[] portConfigs = endpointSpecJson.getPorts();
-                List<Port> ports = new ArrayList<>();
-                if (portConfigs != null) {
-                    for (PortConfigJson portConfig : portConfigs) {
-                        Port port = new Port();
-                        port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
-                        port.setPublished(portConfig.getPublishedPort());
-                        port.setTarget(portConfig.getTargetPort());
-                        ports.add(port);
-                    }
-                }
+            List<Port> ports = getPorts(endpointSpecJson);
+            if (!ports.isEmpty()) {
                 serviceSummary.setPorts(ports);
             }
-
             servicesSummary.add(serviceSummary);
         }
         return servicesSummary;
@@ -220,19 +204,15 @@ public class ServiceCliImpl implements ServiceCli {
 
     @Override
     public void serviceUpdate(String serviceId, Service service) {
-
         ServiceUpdateParameters updateParameters = new ServiceUpdateParameters();
-
         ServiceJson serviceJson = servicesApi.inspectService(serviceId);
         VersionJson versionJson = serviceJson.getVersion();
         updateParameters.setVersionQueryParam(versionJson.getIndex());
-
         ServiceSpecJson serviceSpecJson = ServiceSpecJsonHelper.createNewHelper(serviceJson.getSpec())
                 .setImage(service.getImage())
                 .setPorts(service.getPorts())
                 .setReplicas(service.getReplicas())
                 .getServiceSpecJson();
-
         updateParameters.setService(serviceSpecJson);
         servicesApi.updateService(serviceId, updateParameters);
     }
@@ -310,6 +290,24 @@ public class ServiceCliImpl implements ServiceCli {
             return new LogLine(serviceId, nodeId, tasKId, replica, message, timestamp.toInstant().toEpochMilli());
         }
         return null;
+    }
+
+
+    private List<Port> getPorts(EndpointSpecJson endpointSpecJson) {
+        List<Port> ports = new ArrayList<>();
+        if (endpointSpecJson != null) {
+            PortConfigJson[] portConfigs = endpointSpecJson.getPorts();
+            if (portConfigs != null) {
+                for (PortConfigJson portConfig : portConfigs) {
+                    Port port = new Port();
+                    port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
+                    port.setPublished(portConfig.getPublishedPort());
+                    port.setTarget(portConfig.getTargetPort());
+                    ports.add(port);
+                }
+            }
+        }
+        return ports;
     }
 
 }

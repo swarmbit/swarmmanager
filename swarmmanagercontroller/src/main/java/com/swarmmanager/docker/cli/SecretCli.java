@@ -5,7 +5,7 @@ import com.swarmmanager.docker.cli.model.Secret;
 import java.util.List;
 
 public interface SecretCli {
-    //secretJson.setData(EncoderDecoder.base64URLEncode(secretJson.getData()));
+
     Secret create(Secret secret);
 
     void rm(String secretId);
@@ -13,5 +13,7 @@ public interface SecretCli {
     List<Secret> ls();
 
     Secret inspect(String secretId);
+
+    void update(String secretId, Secret secret);
 
 }

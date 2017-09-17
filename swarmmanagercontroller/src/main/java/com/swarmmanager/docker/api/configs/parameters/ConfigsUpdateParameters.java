@@ -1,28 +1,29 @@
-package com.swarmmanager.docker.api.secrets.parameters;
+package com.swarmmanager.docker.api.configs.parameters;
 
+import com.swarmmanager.docker.api.common.json.ConfigSpecJson;
 import com.swarmmanager.docker.api.common.parameters.QueryParameters;
 import com.swarmmanager.docker.api.common.parameters.RequestBodyParameter;
-import com.swarmmanager.docker.api.common.json.SecretSpecJson;
+import com.swarmmanager.docker.api.secrets.parameters.SecretUpdateParameters;
 import com.swarmmanager.rest.QueryParam;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SecretUpdateParameters implements RequestBodyParameter, QueryParameters {
+public class ConfigsUpdateParameters implements RequestBodyParameter, QueryParameters {
 
     private static final String VERSION_NAME = "version";
 
-    private SecretSpecJson secret;
+    private ConfigSpecJson config;
 
     private QueryParam versionQueryParam;
 
-    public SecretUpdateParameters() {
-        secret = new SecretSpecJson();
+    public ConfigsUpdateParameters() {
+        config = new ConfigSpecJson();
         versionQueryParam = new QueryParam(VERSION_NAME, 0L);
     }
 
-    public SecretUpdateParameters setSecrect(SecretSpecJson secret) {
-        this.secret = secret;
+    public ConfigsUpdateParameters setConfig(ConfigSpecJson config) {
+        this.config = config;
         return this;
     }
 
@@ -30,7 +31,7 @@ public class SecretUpdateParameters implements RequestBodyParameter, QueryParame
         return versionQueryParam;
     }
 
-    public SecretUpdateParameters setVersionQueryParam(long versionValue) {
+    public ConfigsUpdateParameters setVersionQueryParam(long versionValue) {
         this.versionQueryParam = new QueryParam(VERSION_NAME, versionValue);
         return this;
     }
@@ -44,6 +45,6 @@ public class SecretUpdateParameters implements RequestBodyParameter, QueryParame
 
     @Override
     public Object getRequestBody() {
-        return secret;
+        return config;
     }
 }

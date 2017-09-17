@@ -1,6 +1,7 @@
 package com.swarmmanager.docker.cli.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -8,6 +9,10 @@ import java.util.List;
 public class Service {
 
     private String id;
+
+    private long createdAt;
+
+    private long updatedAt;
 
     private String image;
 
@@ -25,6 +30,22 @@ public class Service {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(long updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getImage() {

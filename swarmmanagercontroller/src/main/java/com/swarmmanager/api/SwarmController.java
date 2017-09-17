@@ -3,6 +3,7 @@ package com.swarmmanager.api;
 import com.swarmmanager.auth.Role;
 import com.swarmmanager.docker.cli.SwarmCli;
 import com.swarmmanager.docker.cli.model.Swarm;
+import com.swarmmanager.docker.cli.model.Unlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -28,5 +29,17 @@ public class SwarmController {
     @RequestMapping(method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void swarmUpdate(@RequestBody Swarm swarm) {
         swarmCli.update(swarm);
+    }
+
+    @Secured(Role.ADMIN)
+    @RequestMapping(method = RequestMethod.PUT, value = "unlock", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Unlock unlock() {
+        return swarmCli.unlock();
+    }
+
+    @Secured(Role.ADMIN)
+    @RequestMapping(method = RequestMethod.PUT, value = "rotate", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void rotate() {
+        swarmCli.rotate();
     }
 }
