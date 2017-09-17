@@ -1,4 +1,4 @@
-package com.swarmmanager.docker.cli.helper;
+package com.swarmmanager.docker.cli.impl.helper;
 
 import com.swarmmanager.docker.api.common.json.ServiceSpecJson;
 import com.swarmmanager.docker.api.common.json.inner.*;

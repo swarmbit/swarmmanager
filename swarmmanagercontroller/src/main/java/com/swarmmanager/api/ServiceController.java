@@ -1,6 +1,5 @@
 package com.swarmmanager.api;
 
-
 import com.swarmmanager.auth.Role;
 import com.swarmmanager.docker.cli.ServiceCli;
 import com.swarmmanager.docker.cli.model.*;
@@ -20,7 +19,7 @@ public class ServiceController {
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Service inspectService(@PathVariable String serviceId) {
+    public Service serviceInspect(@PathVariable String serviceId) {
         return serviceCli.inspectService(serviceId);
     }
 
@@ -31,13 +30,13 @@ public class ServiceController {
     }
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ps/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, value = "{serviceId}/ps", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ServiceState servicePs(@PathVariable String serviceId) {
         return serviceCli.servicePs(serviceId);
     }
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "logs/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, value = "{serviceId}/logs", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Logs serviceLogs(@PathVariable String serviceId) {
         return serviceCli.serviceLogs(serviceId);
     }
@@ -49,7 +48,7 @@ public class ServiceController {
     }
 
     @Secured(Role.USER)
-    @RequestMapping(method = RequestMethod.POST, value = "create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Service serviceCreate(@RequestBody Service service) {
         return serviceCli.serviceCreate(service);
     }

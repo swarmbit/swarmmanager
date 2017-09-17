@@ -1,4 +1,4 @@
-package com.swarmmanager.docker.cli;
+package com.swarmmanager.docker.cli.impl;
 
 import com.swarmmanager.docker.api.common.json.*;
 import com.swarmmanager.docker.api.common.json.inner.*;
@@ -9,7 +9,8 @@ import com.swarmmanager.docker.api.services.parameters.*;
 import com.swarmmanager.docker.api.tasks.TasksApi;
 import com.swarmmanager.docker.api.tasks.parameters.TasksFilters;
 import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
-import com.swarmmanager.docker.cli.helper.ServiceSpecJsonHelper;
+import com.swarmmanager.docker.cli.ServiceCli;
+import com.swarmmanager.docker.cli.impl.helper.ServiceSpecJsonHelper;
 import com.swarmmanager.docker.cli.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
