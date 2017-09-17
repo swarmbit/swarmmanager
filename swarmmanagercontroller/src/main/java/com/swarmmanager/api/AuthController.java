@@ -1,10 +1,10 @@
 package com.swarmmanager.api;
 
-import com.swarmmanager.auth.mongo.User;
-import com.swarmmanager.auth.mongo.UserRepository;
+import com.swarmmanager.auth.mongo.Token;
+import com.swarmmanager.auth.mongo.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,15 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
+    private TokenRepository tokenRepository;
 
     @RequestMapping(method = RequestMethod.POST, value = "logout", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void logout(@RequestBody User user) {
-        user = userRepository.findByUsername(user.getUsername());
-        if (user != null) {
-            user.setSecret(null);
-            userRepository.save(user);
-        }
+    public void logout(@RequestHeader Token token) {
+            tokenRepository.insert(token);
     }
 
 }

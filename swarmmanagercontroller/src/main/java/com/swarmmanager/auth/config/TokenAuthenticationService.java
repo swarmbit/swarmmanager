@@ -1,10 +1,11 @@
 package com.swarmmanager.auth.config;
 
-import static java.util.Collections.emptyList;
-
+import com.swarmmanager.auth.mongo.TokenRepository;
 import com.swarmmanager.auth.mongo.User;
 import com.swarmmanager.auth.mongo.UserRepository;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,10 +17,15 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.*;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
+
+import static java.util.Collections.emptyList;
 
 @Service
 public class TokenAuthenticationService {
@@ -33,6 +39,9 @@ public class TokenAuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    TokenRepository tokenRepository;
 
     void addAuthentication(HttpServletResponse res, String username)  {
         User user = userRepository.findByUsername(username);
@@ -63,6 +72,11 @@ public class TokenAuthenticationService {
 
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
+
+            if (tokenRepository.findFirstByToken(token) != null){
+                return null;
+            }
+
             try {
                 String user = Jwts.parser()
                         .setSigningKeyResolver(new JWTSigningKeyResolver(userRepository))
