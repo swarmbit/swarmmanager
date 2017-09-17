@@ -63,9 +63,6 @@ public class ConfigCliImpl implements ConfigCli {
         if (config.getLabels() != null) {
             configJson.getSpec().setLabels(config.getLabels());
         }
-        if (config.getData() != null) {
-            configJson.getSpec().setData(config.getData());
-        }
         parameters.setConfig(configJson.getSpec());
         configsApi.updateConfig(configId, parameters);
     }

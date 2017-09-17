@@ -2,6 +2,7 @@ package com.swarmmanager.api;
 
 import com.swarmmanager.auth.Role;
 import com.swarmmanager.docker.cli.SecretCli;
+import com.swarmmanager.docker.cli.model.Config;
 import com.swarmmanager.docker.cli.model.Secret;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -39,6 +40,11 @@ public class SecretController {
         return secretCli.inspect(secretId);
     }
 
+    @Secured(Role.USER)
+    @RequestMapping(method = RequestMethod.PUT, value = "{secretId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void secretUpdate(@PathVariable String secretId, @RequestBody Secret secret) {
+        secretCli.update(secretId, secret);
+    }
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.DELETE, value = "{secretId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void secretRm(@PathVariable String secretId) {

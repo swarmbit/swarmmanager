@@ -29,6 +29,12 @@ public class ConfigController {
         return configCli.create(config);
     }
 
+    @Secured(Role.USER)
+    @RequestMapping(method = RequestMethod.PUT, value = "{configId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void configUpdate(@PathVariable String configId, @RequestBody Config config) {
+        configCli.update(configId, config);
+    }
+
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{configId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Config configInspect(@PathVariable String configId) {

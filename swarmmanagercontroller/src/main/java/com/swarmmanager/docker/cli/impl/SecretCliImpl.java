@@ -65,9 +65,6 @@ public class SecretCliImpl implements SecretCli {
         if (secret.getLabels() != null) {
             secretJson.getSpec().setLabels(secret.getLabels());
         }
-        if (secret.getData() != null) {
-            secretJson.getSpec().setData(secret.getData());
-        }
         parameters.setSecrect(secretJson.getSpec());
         secretsApi.updateSecret(secretId, parameters);
     }
