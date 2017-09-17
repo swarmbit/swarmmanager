@@ -20,7 +20,7 @@ import { UserManagementView } from './views/user-management/user.management.view
 import { HeaderService } from './services/header/header.service';
 import { DockerServicesService } from './services/docker-services/docker.services.service';
 import { CleanServiceImagePipe } from './views/docker-services/pipes/clean.service.image.pipe';
-import { DockerServiceView } from './views/docker-services/docker-service/docker.service.view';
+import { DockerServiceRemoveDialog, DockerServiceView } from './views/docker-services/docker-service/edit/docker.service.view';
 import { HeaderComponent } from './shell/header/header.component';
 import { SidenavComponent } from './shell/navbar/navbar.component';
 import { AuthService } from './services/auth/auth.service';
@@ -29,6 +29,7 @@ import { LoginView } from './views/login/login.view';
 import { SmTableComponent } from './components/sm-table/sm.table.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
+import { DockerServiceLogsView } from './views/docker-services/docker-service/logs/docker.service.logs.view';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/services', pathMatch: 'full' },
@@ -36,6 +37,7 @@ const appRoutes: Routes = [
   { path: 'services', component: DockerServicesView },
   { path: 'service', component: DockerServiceView },
   { path: 'service/:id', component: DockerServiceView },
+  { path: 'service/logs/:id', component: DockerServiceLogsView },
   { path: 'swarm', component: SwarmView },
   { path: 'nodes', component: NodesView },
   { path: 'networks', component: NetworksView },
@@ -63,7 +65,9 @@ const appRoutes: Routes = [
     HeaderComponent,
     SidenavComponent,
     SmTableComponent,
-    LoginView
+    LoginView,
+    DockerServiceLogsView,
+    DockerServiceRemoveDialog
   ],
   imports: [
     BrowserModule,
@@ -83,6 +87,9 @@ const appRoutes: Routes = [
       multi: true
     }
     ],
+  entryComponents: [
+    DockerServiceRemoveDialog
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

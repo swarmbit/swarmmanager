@@ -10,13 +10,13 @@ public class RestartPolicyJson {
     private String condition;
 
     @JsonProperty("Delay")
-    private String delay;
+    private long delay;
 
     @JsonProperty("MaxAttempts")
     private long maxAttempts;
 
     @JsonProperty("Window")
-    private String windows;
+    private long window;
 
     public String getCondition() {
         return condition;
@@ -26,11 +26,11 @@ public class RestartPolicyJson {
         this.condition = condition;
     }
 
-    public String getDelay() {
+    public long getDelay() {
         return delay;
     }
 
-    public void setDelay(String delay) {
+    public void setDelay(long delay) {
         this.delay = delay;
     }
 
@@ -42,12 +42,12 @@ public class RestartPolicyJson {
         this.maxAttempts = maxAttempts;
     }
 
-    public String getWindows() {
-        return windows;
+    public long getWindow() {
+        return window;
     }
 
-    public void setWindows(String windows) {
-        this.windows = windows;
+    public void setWindow(long windows) {
+        this.window = window;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RestartPolicyJson {
         sb.append("condition=").append(condition);
         sb.append(", delay=").append(delay);
         sb.append(", maxAttempts=").append(maxAttempts);
-        sb.append(", windows=").append(windows);
+        sb.append(", window=").append(window);
         sb.append('}');
         return sb.toString();
     }

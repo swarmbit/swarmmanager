@@ -3,6 +3,6 @@ export class DockerService {
   name: string;
   image: string;
   global: boolean;
-  replicas = 1;
+  replicas: number;
   ports: Port[];
 }

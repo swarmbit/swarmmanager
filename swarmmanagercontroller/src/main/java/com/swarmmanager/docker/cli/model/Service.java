@@ -51,7 +51,7 @@ public class Service {
         this.name = name;
     }
 
-    public long getReplicas() {
+    public Long getReplicas() {
         return replicas;
     }
 

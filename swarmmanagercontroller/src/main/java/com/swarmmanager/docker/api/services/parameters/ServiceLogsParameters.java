@@ -15,25 +15,30 @@ public class ServiceLogsParameters implements QueryParameters {
 
     private static final String SINCE_NAME = "since";
 
-    private static final String TIMESTAMP_NAME = "timestamp";
+    private static final String TIMESTAMPS_NAME = "timestamps";
 
     private static final String TAIL_NAME = "tail";
+
+    private static final String DETAILS_NAME = "details";
 
     private QueryParam stdoutQueryParam;
 
     private QueryParam stderrQueryParam;
 
-    private QueryParam sinceQueryParam;
+    private QueryParam timestampsQueryParam;
 
-    private QueryParam timestampQueryParam;
+    private QueryParam detailsQueryParam;
+
+    private Optional<QueryParam> sinceQueryParam;
 
     private Optional<QueryParam> tailQueryParam;
 
     public ServiceLogsParameters() {
         stdoutQueryParam = new QueryParam(STDOUT_NAME, false);
         stderrQueryParam = new QueryParam(STDERR_NAME, false);
-        sinceQueryParam = new QueryParam(SINCE_NAME, 0);
-        timestampQueryParam = new QueryParam(TIMESTAMP_NAME, false);
+        timestampsQueryParam = new QueryParam(TIMESTAMPS_NAME, false);
+        detailsQueryParam = new QueryParam(DETAILS_NAME, false);
+        sinceQueryParam = Optional.empty();
         tailQueryParam = Optional.empty();
     }
 
@@ -55,21 +60,21 @@ public class ServiceLogsParameters implements QueryParameters {
         return this;
     }
 
-    public QueryParam getSinceQueryParam() {
-        return sinceQueryParam;
+    public QueryParam getDetailsQueryParam() {
+        return timestampsQueryParam;
     }
 
-    public ServiceLogsParameters setSinceQueryParam(long sinceValue) {
-        this.sinceQueryParam = new QueryParam(SINCE_NAME, sinceValue);
+    public ServiceLogsParameters setDetailsQueryParam(boolean details) {
+        this.detailsQueryParam = new QueryParam(DETAILS_NAME, details);
         return this;
     }
 
-    public QueryParam getTimestampQueryParam() {
-        return timestampQueryParam;
+    public QueryParam getTimestampsQueryParam() {
+        return timestampsQueryParam;
     }
 
-    public ServiceLogsParameters setTimestampQueryParam(boolean timestampValue) {
-        this.timestampQueryParam = new QueryParam(TIMESTAMP_NAME, timestampValue);
+    public ServiceLogsParameters setTimestampsQueryParam(boolean timestampValue) {
+        this.timestampsQueryParam = new QueryParam(TIMESTAMPS_NAME, timestampValue);
         return this;
     }
 
@@ -82,13 +87,23 @@ public class ServiceLogsParameters implements QueryParameters {
         return this;
     }
 
+    public Optional<QueryParam> getSinceQueryParam() {
+        return sinceQueryParam;
+    }
+
+    public ServiceLogsParameters setSinceQueryParam(long sinceValue) {
+        this.sinceQueryParam = Optional.of(new QueryParam(SINCE_NAME, sinceValue));
+        return this;
+    }
+
     @Override
     public List<QueryParam> getQueryParams() {
         List<QueryParam> queryParams = new ArrayList<>();
         queryParams.add(stdoutQueryParam);
         queryParams.add(stderrQueryParam);
-        queryParams.add(sinceQueryParam);
-        queryParams.add(timestampQueryParam);
+        queryParams.add(detailsQueryParam);
+        queryParams.add(timestampsQueryParam);
+        sinceQueryParam.ifPresent(queryParams::add);
         tailQueryParam.ifPresent(queryParams::add);
         return queryParams;
     }

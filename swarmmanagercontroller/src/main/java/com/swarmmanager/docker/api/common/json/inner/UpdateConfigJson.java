@@ -11,7 +11,7 @@ public class UpdateConfigJson {
     private long parallelism;
 
     @JsonProperty("Delay")
-    private String delay;
+    private long delay;
 
     @DockerRemoteApiMinVersion(version = "v1.28", comment = "rollback option")
     @JsonProperty("FailureAction")
@@ -32,11 +32,11 @@ public class UpdateConfigJson {
         this.parallelism = parallelism;
     }
 
-    public String getDelay() {
+    public long getDelay() {
         return delay;
     }
 
-    public void setDelay(String delay) {
+    public void setDelay(long delay) {
         this.delay = delay;
     }
 

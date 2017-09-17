@@ -3,10 +3,7 @@ package com.swarmmanager.api;
 
 import com.swarmmanager.auth.Role;
 import com.swarmmanager.docker.cli.ServiceCli;
-import com.swarmmanager.docker.cli.model.LogLine;
-import com.swarmmanager.docker.cli.model.Service;
-import com.swarmmanager.docker.cli.model.ServiceState;
-import com.swarmmanager.docker.cli.model.ServiceSummary;
+import com.swarmmanager.docker.cli.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -41,7 +38,7 @@ public class ServiceController {
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "logs/{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<LogLine> serviceLogs(@PathVariable String serviceId) {
+    public Logs serviceLogs(@PathVariable String serviceId) {
         return serviceCli.serviceLogs(serviceId);
     }
 

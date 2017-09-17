@@ -1,0 +1,17 @@
+<div class="log-filters">
+  <div class="label-text">Filters</div>
+  <div class="log-filters-content">
+    <div class="log-filter-item" *ngFor="let filter of logFilters">
+    <md-checkbox (click)="toggleFilter(filter)">{{filter.replica + '.' + filter.taskId}}</md-checkbox>
+    </div>
+  </div>
+</div>
+<div class="log-refresh">
+  <button md-raised-button color="accent" (click)="getServiceLogs(id)">Refresh</button>
+</div>
+<div style="clear: both"></div>
+<div class="log-window" #logWindow>
+  <div *ngFor="let log of getLogLines()" class="log-line"><span class="log-line-info">{{id + '.' + log.replica + '.' + log.taskId}}</span> | {{log.message}}</div>
+</div>
+
+

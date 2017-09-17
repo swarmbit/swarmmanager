@@ -9,6 +9,13 @@
   width: 66%;
   display: inline-block;
 }
+.filter .mat-input-element {
+  margin-top: 1rem;
+}
+
+.filter input {
+  line-height: 1rem;
+}
 
 .filter-clear {
   vertical-align: bottom;
@@ -22,7 +29,7 @@
 }
 
 .add span {
-  font-size: 2rem;
+  font-size: 1.5rem;
   vertical-align: middle;
   margin-right: 1.5rem;
 }

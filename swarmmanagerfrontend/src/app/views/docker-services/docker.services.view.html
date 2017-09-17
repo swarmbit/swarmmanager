@@ -22,7 +22,8 @@
           <th width="14%">Replicas</th>
           <th width="14%">Image</th>
           <th width="14%">Ports</th>
-          <th width="14%"></th>
+          <th width="7%"></th>
+          <th width="7%"></th>
         </tr>
       </thead>
       <tbody>
@@ -30,19 +31,19 @@
           <td>{{serviceSummary.id}}</td>
           <td>{{serviceSummary.name}}</td>
           <td>{{getModeText(serviceSummary)}}</td>
-          <td *ngIf="!serviceSummary.global; else globalTemplate">{{serviceSummary.runningReplicas}}/{{serviceSummary.replicas}}</td>
-          <ng-template #globalTemplate>
-            <td>None</td>
-          </ng-template>
+          <td>{{serviceSummary.runningReplicas}}/{{serviceSummary.replicas}}</td>
           <td>{{serviceSummary.image | cleanServiceImagePipe}}</td>
           <td *ngIf="serviceSummary.ports && serviceSummary.ports.length > 0; else elseTemplate">
-            <p *ngFor="let port of serviceSummary.ports">{{port.protocol}}: {{port.published}} -> {{port.target}}</p>
+            <p *ngFor="let port of serviceSummary.ports">*:{{port.published}} -> {{port.target}}/{{port.protocol}}</p>
           </td>
           <ng-template #elseTemplate>
             <td>None</td>
           </ng-template>
           <td>
-            <button md-raised-button color="accent" routerLink="/service/{{serviceSummary.id}}">More</button>
+            <button md-raised-button color="accent" routerLink="/service/logs/{{serviceSummary.name}}">Logs</button>
+          </td>
+          <td>
+            <button md-raised-button color="accent" routerLink="/service/{{serviceSummary.name}}">More</button>
           </td>
         </tr>
       </tbody>

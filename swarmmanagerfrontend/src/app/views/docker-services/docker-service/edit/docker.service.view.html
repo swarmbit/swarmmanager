@@ -22,21 +22,38 @@
   <div>
     <md-slider [disabled] = "!isEditable" class="input-small-width" [min]="0" [max]="10" [(ngModel)]="service.replicas"></md-slider>
     <md-form-field class="input-micro-width align-slider-input">
-      <input [disabled] = "!isEditable" mdInput min="0" type="number" placeholder="Value" [(ngModel)]="service.replicas">
+      <input [disabled] = "!isEditable" mdInput min="0" step="0" type="number" placeholder="Value" [(ngModel)]="service.replicas">
     </md-form-field>
   </div>
 </div>
 <div class="form-field">
   <md-form-field class="input-medium-width">
     <span class="label-text">Image</span>
-    <input mdInput id="image" type="text" [(ngModel)]="service.image" [disabled] = "!isEditable">
+    <input mdInput id="image" type="text" [(ngModel)]="image" [disabled] = "!isEditable">
   </md-form-field>
+</div>
+<div class="form-field">
+  <span class="label-text">Port</span>
+  <div>
+    <md-select placeholder="Protocol" style="margin-right: 1rem" [(ngModel)]="port.protocol" [disabled] = "!isEditable">
+      <md-option *ngFor="let protocol of portProtocols" [value]="protocol">
+        {{ protocol }}
+      </md-option>
+    </md-select>
+    <md-form-field class="input-micro-width" style="margin-right: 1rem">
+      <input placeholder="Published" mdInput id="published" type="number" min="0" type="text" [(ngModel)]="port.published" [disabled] = "!isEditable">
+    </md-form-field>
+    <md-form-field class="input-micro-width">
+      <input placeholder="Target" mdInput id="target" type="number" min="0" [(ngModel)]="port.target" [disabled] = "!isEditable">
+    </md-form-field>
+  </div>
 </div>
 <div class="form-button">
   <button *ngIf="isCreateService" md-raised-button color="accent" (click)="submitService()">Create</button>
   <button *ngIf="!isCreateService && !isEditable" md-raised-button color="accent" (click)="setEditable()">Edit</button>
+  <button style="margin-left: 1rem" *ngIf="!isCreateService && !isEditable" md-raised-button color="accent" (click)="removeService()">Remove</button>
   <button *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="saveChanges()">Save</button>
-  <button style="margin-left: 1rem" *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="deleteService()">Delete</button>
+  <button style="margin-left: 1rem" *ngIf="!isCreateService && isEditable" md-raised-button color="accent" (click)="cancelEdit()">Cancel</button>
 </div>
 
 
