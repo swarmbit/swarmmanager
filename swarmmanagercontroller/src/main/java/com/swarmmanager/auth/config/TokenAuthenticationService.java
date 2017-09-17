@@ -3,6 +3,7 @@ package com.swarmmanager.auth.config;
 import com.swarmmanager.auth.mongo.TokenRepository;
 import com.swarmmanager.auth.mongo.User;
 import com.swarmmanager.auth.mongo.UserRepository;
+import com.swarmmanager.auth.util.TokenExtractor;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -41,7 +42,10 @@ public class TokenAuthenticationService {
     private UserRepository userRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private TokenExtractor tokenExtractor;
 
     void addAuthentication(HttpServletResponse res, String username)  {
         User user = userRepository.findByUsername(username);
@@ -70,19 +74,15 @@ public class TokenAuthenticationService {
 
     Authentication getAuthentication(HttpServletRequest request) {
 
-        String token = request.getHeader(HEADER_STRING);
-        if (token != null) {
+        String tokenString = request.getHeader(HEADER_STRING);
+        if (tokenString != null) {
 
-            if (tokenRepository.findFirstByToken(token) != null){
+            if (tokenRepository.findFirstByToken(tokenString) != null){
                 return null;
             }
 
             try {
-                String user = Jwts.parser()
-                        .setSigningKeyResolver(new JWTSigningKeyResolver(userRepository))
-                        .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                        .getBody()
-                        .getSubject();
+                String user = tokenExtractor.getUser(tokenString);
                 return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
             } catch (SignatureException | ExpiredJwtException e) {
                 return null;
