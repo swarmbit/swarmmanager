@@ -11,6 +11,7 @@ import com.swarmmanager.docker.api.tasks.parameters.TasksFilters;
 import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
 import com.swarmmanager.docker.cli.ServiceCli;
 import com.swarmmanager.docker.cli.impl.helper.ServiceSpecJsonHelper;
+import com.swarmmanager.docker.cli.impl.helper.TaskJsonHelper;
 import com.swarmmanager.docker.cli.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,6 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.*;
-
-import static com.swarmmanager.docker.api.common.util.DockerDateFormatter.fromDateStringToDuration;
 
 @Component
 public class ServiceCliImpl implements ServiceCli {
@@ -102,89 +101,33 @@ public class ServiceCliImpl implements ServiceCli {
     }
 
     @Override
-    public ServiceState servicePs(String serviceId) {
+    public State servicePs(String serviceId) {
         ServiceJson service = servicesApi.inspectService(serviceId);
-        ServiceState serviceState =  new ServiceState();
+        State state =  new State();
         if (service != null) {
-            serviceState.setId(serviceId);
-            serviceState.setName(service.getSpec().getName());
-
             TasksListParameters tasksListParameters = new TasksListParameters();
             TasksFilters filters = new TasksFilters();
             filters.setService(serviceId);
             tasksListParameters.setFilters(filters);
-            Map<Integer, Set<Task>> taskByReplica = new HashMap<>();
-
-            tasksApi.listTasks(tasksListParameters).forEach( taskJson -> {
-                int replicaNumber = taskJson.getSlot();
-                Set<Task> tasks = taskByReplica.get(replicaNumber);
-                if (tasks == null) {
-                    tasks = new TreeSet<>(Comparator.comparing(Task::getLastStateChange));
-                    taskByReplica.put(replicaNumber, tasks);
-                }
-                Task task = new Task();
-                task.setId(taskJson.getId());
-                task.setDesiredState(taskJson.getDesiredState());
-
-                TaskStatusJson status = taskJson.getStatus();
-                if (status != null) {
-                    String err = status.getErr();
-                    if (err != null) {
-                        task.setErrorMessage(status.getErr());
-                    } else {
-                        task.setErrorMessage("");
-                    }
-                    task.setState(status.getTaskState());
-
-                    String timestamp = status.getTimestamp();
-                    task.setLastStateChange(fromDateStringToDuration(timestamp));
-
-                    PortStatusJson portStatus = status.getPortStatus();
-                    if (portStatus != null) {
-                        PortConfigJson[] portConfigs = portStatus.getPorts();
-                        if (portConfigs != null) {
-                            List<Port> ports = new ArrayList<>();
-                            for (PortConfigJson portConfig : portConfigs) {
-                                Port port = new Port();
-                                port.setPublished(portConfig.getPublishedPort());
-                                port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
-                                port.setTarget(portConfig.getTargetPort());
-                                ports.add(port);
-                            }
-                            task.setPorts(ports);
-                        } else {
-                            task.setPorts(new ArrayList<>());
-                        }
-                    } else {
-                        task.setPorts(new ArrayList<>());
-                    }
-                }
-
-                String nodeId = taskJson.getNodeId();
-                task.setNodeId(nodeId);
-
-                NodeJson node = nodesApi.inspectNode(nodeId);
-                if (node != null) {
-                    NodeDescriptionJson description = node.getDescription();
-                    if (description != null) {
-                        task.setNodeHostname(description.getHostname());
-                    }
-                }
-
-                tasks.add(task);
+            List<Task> tasks = TaskJsonHelper.getTasks(tasksApi.listTasks(tasksListParameters));
+            Map<String, List<Task>> tasksByService = new HashMap<>();
+            tasks.forEach(task -> {
+                task.setServiceName(service.getSpec().getName());
+                List<Task> tasksAux = tasksByService.computeIfAbsent(task.getNodeId(), k -> new ArrayList<>());
+                tasksAux.add(task);
             });
-
-            List<Replica> replicas = new ArrayList<>();
-            taskByReplica.forEach( (k, v) -> {
-                Replica replica = new Replica();
-                replica.setNumber(k);
-                replica.setTasks(v);
-                replicas.add(replica);
-            });
-
-            serviceState.setReplicas(replicas);
+            for (Map.Entry<String, List<Task>> entry : tasksByService.entrySet()) {
+                NodeJson nodeJson = nodesApi.inspectNode(entry.getKey());
+                if (nodeJson != null) {
+                    for (Task task : entry.getValue()) {
+                        task.setNodeHostname(nodeJson.getDescription().getHostname());
+                    }
+                }
+            }
+            TaskJsonHelper.sortTasks(tasks);
+            state.setTasks(tasks);
         }
-        return serviceState;
+        return state;
     }
 
     @Override

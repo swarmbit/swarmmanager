@@ -3,13 +3,14 @@ package com.swarmmanager.api;
 import com.swarmmanager.auth.Role;
 import com.swarmmanager.docker.cli.NodeCli;
 import com.swarmmanager.docker.cli.model.Node;
-import com.swarmmanager.docker.cli.model.NodeState;
 import com.swarmmanager.docker.cli.model.NodeSummary;
+import com.swarmmanager.docker.cli.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -33,19 +34,19 @@ public class NodeController {
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void nodeInspect(@PathVariable String nodeId) {
-        nodeCli.inspect(nodeId);
+    public Node nodeInspect(@PathVariable String nodeId) {
+        return nodeCli.inspect(nodeId);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.DELETE, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void nodeRm(@PathVariable String nodeId) {
-        nodeCli.rm(nodeId);
+    public void nodeRm(@PathVariable String nodeId, @QueryParam("force") boolean force) {
+        nodeCli.rm(nodeId, force);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.GET, value = "{nodeId}/ps", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public NodeState nodePs(@PathVariable String nodeId) {
+    public State nodePs(@PathVariable String nodeId) {
         return nodeCli.ps(nodeId);
     }
 

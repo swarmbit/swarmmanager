@@ -4,12 +4,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Task {
 
     private String id;
+
+    private int replica;
+
+    private String serviceId;
+
+    private String serviceName;
+
+    private String image;
 
     private String nodeId;
 
@@ -31,6 +38,38 @@ public class Task {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getReplica() {
+        return replica;
+    }
+
+    public void setReplica(int replica) {
+        this.replica = replica;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getNodeId() {
@@ -89,16 +128,4 @@ public class Task {
         this.ports = ports;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

@@ -3,6 +3,7 @@ package com.swarmmanager.docker.api.common.json;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.json.inner.NetworkAttachmentConfigJson;
+import com.swarmmanager.docker.api.common.json.inner.TaskSpecJson;
 import com.swarmmanager.docker.api.common.json.inner.TaskStatusJson;
 import com.swarmmanager.docker.api.common.json.inner.VersionJson;
 
@@ -23,6 +24,9 @@ public class TaskJson {
 
     @JsonProperty("Labels")
     private Map<String, String> labels;
+
+    @JsonProperty("Spec")
+    private TaskSpecJson spec;
 
     @JsonProperty("ServiceID")
     private String serviceId;
@@ -72,6 +76,14 @@ public class TaskJson {
 
     public void setLabels(Map<String, String> labels) {
         this.labels = labels;
+    }
+
+    public TaskSpecJson getSpec() {
+        return spec;
+    }
+
+    public void setSpec(TaskSpecJson spec) {
+        this.spec = spec;
     }
 
     public String getServiceId() {
@@ -129,6 +141,7 @@ public class TaskJson {
         sb.append(", version=").append(version);
         sb.append(", name='").append(name).append('\'');
         sb.append(", labels=").append(labels);
+        sb.append(", spec=").append(spec);
         sb.append(", serviceId='").append(serviceId).append('\'');
         sb.append(", slot=").append(slot);
         sb.append(", nodeId='").append(nodeId).append('\'');

@@ -31,7 +31,7 @@ public class ServiceController {
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{serviceId}/ps", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ServiceState servicePs(@PathVariable String serviceId) {
+    public State servicePs(@PathVariable String serviceId) {
         return serviceCli.servicePs(serviceId);
     }
 
