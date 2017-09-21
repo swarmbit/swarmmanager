@@ -1,17 +1,14 @@
 package com.swarmmanager.docker.cli.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import java.util.List;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ServiceState {
+public class NetworkSummary {
 
     private String id;
 
     private String name;
 
-    private List<Replica> replicas;
+    private String driver;
+
+    private String scope;
 
     public String getId() {
         return id;
@@ -29,11 +26,19 @@ public class ServiceState {
         this.name = name;
     }
 
-    public List<Replica> getReplicas() {
-        return replicas;
+    public String getDriver() {
+        return driver;
     }
 
-    public void setReplicas(List<Replica> replicas) {
-        this.replicas = replicas;
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 }

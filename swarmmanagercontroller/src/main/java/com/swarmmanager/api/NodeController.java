@@ -1,29 +1,53 @@
 package com.swarmmanager.api;
 
-import com.swarmmanager.docker.api.nodes.NodesApi;
-import com.swarmmanager.docker.api.nodes.parameters.NodeMembership;
-import com.swarmmanager.docker.api.nodes.parameters.NodesFilters;
-import com.swarmmanager.docker.api.nodes.parameters.NodesListParameters;
-import com.swarmmanager.docker.api.common.json.NodeJson;
+import com.swarmmanager.auth.Role;
+import com.swarmmanager.docker.cli.NodeCli;
+import com.swarmmanager.docker.cli.model.Node;
+import com.swarmmanager.docker.cli.model.NodeSummary;
+import com.swarmmanager.docker.cli.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/nodes")
+@RequestMapping("/api/node")
 public class NodeController {
 
     @Autowired
-    private NodesApi nodesApi;
+    private NodeCli nodeCli;
 
-    @RequestMapping(method = RequestMethod.GET, value = "list", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<NodeJson> listNodes() {
-        return nodesApi.listNodes(new NodesListParameters()
-                .setFilters(new NodesFilters()
-                .setMembership(NodeMembership.ACCEPTED)));
+    @Secured(Role.VISITOR)
+    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<NodeSummary> nodeLs() {
+        return nodeCli.ls();
     }
+
+    @Secured(Role.USER)
+    @RequestMapping(method = RequestMethod.PUT, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void nodeUpdate(@PathVariable String nodeId, @RequestBody Node node) {
+        nodeCli.update(nodeId, node);
+    }
+
+    @Secured(Role.VISITOR)
+    @RequestMapping(method = RequestMethod.GET, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Node nodeInspect(@PathVariable String nodeId) {
+        return nodeCli.inspect(nodeId);
+    }
+
+    @Secured(Role.USER)
+    @RequestMapping(method = RequestMethod.DELETE, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void nodeRm(@PathVariable String nodeId, @QueryParam("force") boolean force) {
+        nodeCli.rm(nodeId, force);
+    }
+
+    @Secured(Role.USER)
+    @RequestMapping(method = RequestMethod.GET, value = "{nodeId}/ps", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public State nodePs(@PathVariable String nodeId) {
+        return nodeCli.ps(nodeId);
+    }
+
 }

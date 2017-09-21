@@ -10,7 +10,7 @@ public interface ServiceCli {
 
     List<ServiceSummary> serviceLs();
 
-    ServiceState servicePs(String serviceId);
+    State servicePs(String serviceId);
 
     Service serviceCreate(Service service);
 

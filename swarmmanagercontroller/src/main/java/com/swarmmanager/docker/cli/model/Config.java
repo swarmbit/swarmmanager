@@ -1,12 +1,11 @@
 package com.swarmmanager.docker.cli.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Service {
+public class Config {
 
     private String id;
 
@@ -14,15 +13,11 @@ public class Service {
 
     private long updatedAt;
 
-    private String image;
-
-    private boolean global;
-
     private String name;
 
-    private Long replicas;
+    private Map<String, String> labels;
 
-    private List<Port> ports;
+    private String data;
 
     public String getId() {
         return id;
@@ -48,22 +43,6 @@ public class Service {
         this.updatedAt = updatedAt;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public boolean isGlobal() {
-        return global;
-    }
-
-    public void setGlobal(boolean global) {
-        this.global = global;
-    }
-
     public String getName() {
         return name;
     }
@@ -72,19 +51,19 @@ public class Service {
         this.name = name;
     }
 
-    public Long getReplicas() {
-        return replicas;
+    public Map<String, String> getLabels() {
+        return labels;
     }
 
-    public void setReplicas(Long replicas) {
-        this.replicas = replicas;
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
     }
 
-    public List<Port> getPorts() {
-        return ports;
+    public String getData() {
+        return data;
     }
 
-    public void setPorts(List<Port> ports) {
-        this.ports = ports;
+    public void setData(String data) {
+        this.data = data;
     }
 }

@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DispatcherConfigJson {
 
     @JsonProperty("HeartbeatPeriod")
-    private String heartbeatPeriod;
+    private long heartbeatPeriod;
 
-    public String getHeartbeatPeriod() {
+    public long getHeartbeatPeriod() {
         return heartbeatPeriod;
     }
 
-    public void setHeartbeatPeriod(String heartbeatPeriod) {
+    public void setHeartbeatPeriod(long heartbeatPeriod) {
         this.heartbeatPeriod = heartbeatPeriod;
     }
 }

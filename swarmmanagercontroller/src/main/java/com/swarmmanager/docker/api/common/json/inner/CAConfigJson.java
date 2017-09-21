@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class CAConfigJson {
 
     @JsonProperty("NodeCertExpiry")
-    private String nodeCertExpiry;
+    private long nodeCertExpiry;
 
     @JsonProperty("ExternalCAs")
     private ExternalCAJson[] externalCAs;
@@ -27,11 +27,11 @@ public class CAConfigJson {
     @JsonProperty("ForceRotate")
     private int forceRotate;
 
-    public String getNodeCertExpiry() {
+    public long getNodeCertExpiry() {
         return nodeCertExpiry;
     }
 
-    public void setNodeCertExpiry(String nodeCertExpiry) {
+    public void setNodeCertExpiry(long nodeCertExpiry) {
         this.nodeCertExpiry = nodeCertExpiry;
     }
 
