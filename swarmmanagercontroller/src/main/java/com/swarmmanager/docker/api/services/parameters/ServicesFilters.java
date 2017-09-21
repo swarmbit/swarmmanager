@@ -11,7 +11,7 @@ public class ServicesFilters extends AbstractFilters implements Filters {
 
         @Override
         public String toString() {
-            return this.toString().toLowerCase();
+            return super.toString().toLowerCase();
         }
     }
     public ServicesFilters setId(String id) {

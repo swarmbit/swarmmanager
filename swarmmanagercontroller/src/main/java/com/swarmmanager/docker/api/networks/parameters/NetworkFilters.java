@@ -22,7 +22,7 @@ public class NetworkFilters extends AbstractFilters {
 
         @Override
         public String toString() {
-            return this.toString().toLowerCase();
+            return super.toString().toLowerCase();
         }
     }
 
@@ -52,8 +52,8 @@ public class NetworkFilters extends AbstractFilters {
     }
 
     @DockerRemoteApiMinVersion("v1.29")
-    public NetworkFilters setScope(Scope type) {
-        addFilter("type", type.toString());
+    public NetworkFilters setScope(Scope scope) {
+        addFilter("scope", scope.toString());
         return this;
     }
 

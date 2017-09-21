@@ -23,8 +23,8 @@ public class NetworkJson {
     private Map<String, String> options;
 
     @DockerRemoteApiMinVersion("v1.25")
-    @JsonProperty("CreatedAt")
-    private String createdAt;
+    @JsonProperty("Created")
+    private String created;
 
     @JsonProperty("Scope")
     private String scope;
@@ -34,6 +34,9 @@ public class NetworkJson {
 
     @JsonProperty("Attachable")
     private boolean attachable;
+
+    @JsonProperty("Internal")
+    private boolean internal;
 
     @JsonProperty("EnableIPv6")
     private boolean enableIPv6;
@@ -77,12 +80,12 @@ public class NetworkJson {
         this.options = options;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getCreated() {
+        return created;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated(String created) {
+        this.created = created;
     }
 
     public String getScope() {
@@ -107,6 +110,14 @@ public class NetworkJson {
 
     public void setAttachable(boolean attachable) {
         this.attachable = attachable;
+    }
+
+    public boolean isInternal() {
+        return internal;
+    }
+
+    public void setInternal(boolean internal) {
+        this.internal = internal;
     }
 
     public boolean isEnableIPv6() {
@@ -140,10 +151,11 @@ public class NetworkJson {
         sb.append(", id='").append(id).append('\'');
         sb.append(", labels=").append(labels);
         sb.append(", options=").append(options);
-        sb.append(", createdAt='").append(createdAt).append('\'');
+        sb.append(", created='").append(created).append('\'');
         sb.append(", scope='").append(scope).append('\'');
         sb.append(", driver='").append(driver).append('\'');
         sb.append(", attachable=").append(attachable);
+        sb.append(", internal=").append(internal);
         sb.append(", enableIPv6=").append(enableIPv6);
         sb.append(", checkDuplicate=").append(checkDuplicate);
         sb.append(", ipam=").append(ipam);
