@@ -31,7 +31,7 @@ public class ContainerSpecJson {
     @JsonProperty("Dir")
     private String dir;
 
-    @JsonProperty("User")
+    @JsonProperty("Registry")
     private String user;
 
     @JsonProperty("Groups")
