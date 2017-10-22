@@ -5,12 +5,12 @@ import com.swarmmanager.docker.cli.model.Unlock;
 
 public interface SwarmCli {
 
-    void update(Swarm swarm);
+    void update(String swarmId, Swarm swarm);
 
-    Swarm inspect();
+    Swarm inspect(String swarmId);
 
-    Unlock unlock();
+    Unlock unlock(String swarmId);
 
-    void rotate();
+    void rotate(String swarmId);
 
 }

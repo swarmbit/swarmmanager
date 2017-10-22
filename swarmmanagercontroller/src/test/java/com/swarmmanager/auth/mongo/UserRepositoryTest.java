@@ -1,6 +1,8 @@
 package com.swarmmanager.auth.mongo;
 
 import com.swarmmanager.integration.IntegrationTest;
+import com.swarmmanager.repository.User;
+import com.swarmmanager.repository.UserRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

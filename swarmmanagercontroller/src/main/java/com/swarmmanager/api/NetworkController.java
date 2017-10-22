@@ -12,34 +12,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/network")
+@RequestMapping("/api/swarms/{swarmId}/networks")
 public class NetworkController {
 
     @Autowired
     private NetworkCli networkCli;
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<NetworkSummary> networkLs() {
-        return networkCli.ls();
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<NetworkSummary> networkLs(@PathVariable String swarmId) {
+        return networkCli.ls(swarmId);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.POST, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Network networkCreate(@RequestBody Network network) {
-        return networkCli.create(network);
+    public Network networkCreate(@PathVariable String swarmId, @RequestBody Network network) {
+        return networkCli.create(swarmId, network);
     }
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{networkId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Network networkInspect(@PathVariable String networkId) {
-        return networkCli.inspect(networkId);
+    public Network networkInspect(@PathVariable String swarmId, @PathVariable String networkId) {
+        return networkCli.inspect(swarmId, networkId);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.DELETE, value = "{networkId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void networkRm(@PathVariable String networkId) {
-        networkCli.rm(networkId);
+    public void networkRm(@PathVariable String swarmId, @PathVariable String networkId) {
+        networkCli.rm(swarmId, networkId);
     }
 
 }

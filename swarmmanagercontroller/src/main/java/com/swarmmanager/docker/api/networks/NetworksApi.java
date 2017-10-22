@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface NetworksApi {
 
-    List<NetworkJson> listNetworks(NetworkListParameters parameters);
+    List<NetworkJson> listNetworks(String swarmId, NetworkListParameters parameters);
 
-    NetworkJson inspectNetwork(String id);
+    NetworkJson inspectNetwork(String swarmId, String id);
 
-    NetworkCreateResponseJson createNetwork(NetworkCreateParameters parameters);
+    NetworkCreateResponseJson createNetwork(String swarmId, NetworkCreateParameters parameters);
 
-    void deleteNetwork(String id);
+    void deleteNetwork(String swarmId, String id);
 
 }

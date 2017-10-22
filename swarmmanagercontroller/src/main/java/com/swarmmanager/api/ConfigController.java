@@ -11,40 +11,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/config")
+@RequestMapping("/api/swarms/{swarmId}/configs")
 public class ConfigController {
 
     @Autowired
     private ConfigCli configCli;
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Config> configLs() {
-        return configCli.ls();
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Config> configLs(@PathVariable String swarmId) {
+        return configCli.ls(swarmId);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.POST, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Config configCreate(@RequestBody Config config) {
-        return configCli.create(config);
+    public Config configCreate(@PathVariable String swarmId, @RequestBody Config config) {
+        return configCli.create(swarmId, config);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.PUT, value = "{configId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void configUpdate(@PathVariable String configId, @RequestBody Config config) {
-        configCli.update(configId, config);
+    public void configUpdate(@PathVariable String swarmId, @PathVariable String configId, @RequestBody Config config) {
+        configCli.update(swarmId, configId, config);
     }
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{configId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Config configInspect(@PathVariable String configId) {
-        return configCli.inspect(configId);
+    public Config configInspect(@PathVariable String swarmId, @PathVariable String configId) {
+        return configCli.inspect(swarmId, configId);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.DELETE, value = "{configId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void configRm(@PathVariable String configId) {
-        configCli.rm(configId);
+    public void configRm(@PathVariable String swarmId, @PathVariable String configId) {
+        configCli.rm(swarmId, configId);
     }
 
 }

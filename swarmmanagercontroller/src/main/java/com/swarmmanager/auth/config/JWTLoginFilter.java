@@ -1,7 +1,7 @@
 package com.swarmmanager.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swarmmanager.auth.mongo.User;
+import com.swarmmanager.repository.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

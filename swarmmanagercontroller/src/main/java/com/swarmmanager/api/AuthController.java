@@ -1,7 +1,7 @@
 package com.swarmmanager.api;
 
-import com.swarmmanager.auth.mongo.Token;
-import com.swarmmanager.auth.mongo.TokenRepository;
+import com.swarmmanager.repository.Token;
+import com.swarmmanager.repository.TokenRepository;
 import com.swarmmanager.auth.util.TokenExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

@@ -1,7 +1,7 @@
 package com.swarmmanager.auth.util;
 
 import com.swarmmanager.auth.config.JWTSigningKeyResolver;
-import com.swarmmanager.auth.mongo.UserRepository;
+import com.swarmmanager.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;

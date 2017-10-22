@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface SecretsApi {
 
-    List<SecretJson> listSecrets(SecretsListParameters parameters);
+    List<SecretJson> listSecrets(String swarmId, SecretsListParameters parameters);
 
-    SecretJson inspectSecret(String id);
+    SecretJson inspectSecret(String swarmId, String id);
 
-    SecretCreateResponseJson createSecret(SecretCreateParameters parameters);
+    SecretCreateResponseJson createSecret(String swarmId, SecretCreateParameters parameters);
 
-    void deleteSecret(String id);
+    void deleteSecret(String swarmId, String id);
 
-    void updateSecret(String id, SecretUpdateParameters parameters);
+    void updateSecret(String swarmId, String id, SecretUpdateParameters parameters);
 }

@@ -1,4 +1,4 @@
-package com.swarmmanager.auth.mongo;
+package com.swarmmanager.repository;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -89,7 +89,7 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
+        final StringBuilder sb = new StringBuilder("Registry{");
         sb.append("username='").append(username).append('\'');
         sb.append(", password='").append(password).append('\'');
         sb.append(", roles=").append(Arrays.toString(roles));

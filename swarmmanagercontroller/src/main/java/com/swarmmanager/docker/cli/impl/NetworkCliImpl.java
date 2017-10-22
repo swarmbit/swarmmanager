@@ -27,7 +27,7 @@ public class NetworkCliImpl implements NetworkCli {
     private NetworksApi networksApi;
 
     @Override
-    public Network create(Network network) {
+    public Network create(String swarmId, Network network) {
         network.setDriver("overlay");
         NetworkJson networkJson = new NetworkJson();
         networkJson.setDriver(network.getDriver());
@@ -56,16 +56,16 @@ public class NetworkCliImpl implements NetworkCli {
         networkJson.setIpam(ipamJson);
         NetworkCreateParameters parameters = new NetworkCreateParameters();
         parameters.setNetwork(networkJson);
-        NetworkCreateResponseJson networkCreateResponseJson = networksApi.createNetwork(parameters);
+        NetworkCreateResponseJson networkCreateResponseJson = networksApi.createNetwork(swarmId, parameters);
         network.setId(networkCreateResponseJson.getId());
         return network;
     }
 
     @Override
-    public List<NetworkSummary> ls() {
+    public List<NetworkSummary> ls(String swarmId) {
         NetworkFilters filters = new NetworkFilters();
         NetworkListParameters parameters = new NetworkListParameters().setFilters(filters);
-        List<NetworkJson> networkJsonList = networksApi.listNetworks(parameters);
+        List<NetworkJson> networkJsonList = networksApi.listNetworks(swarmId, parameters);
         List<NetworkSummary> networkSummaryList = new ArrayList<>();
         networkJsonList.forEach(networkJson -> {
             NetworkSummary networkSummary = new NetworkSummary();
@@ -79,8 +79,8 @@ public class NetworkCliImpl implements NetworkCli {
     }
 
     @Override
-    public Network inspect(String networkId) {
-        NetworkJson networkJson = networksApi.inspectNetwork(networkId);
+    public Network inspect(String swarmId, String networkId) {
+        NetworkJson networkJson = networksApi.inspectNetwork(swarmId, networkId);
         Network network = new Network();
         network.setId(networkJson.getId());
         network.setName(networkJson.getName());
@@ -113,8 +113,8 @@ public class NetworkCliImpl implements NetworkCli {
     }
 
     @Override
-    public void rm(String networkId) {
-        networksApi.deleteNetwork(networkId);
+    public void rm(String swarmId, String networkId) {
+        networksApi.deleteNetwork(swarmId, networkId);
     }
 
 }

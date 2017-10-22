@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface TasksApi {
 
-    List<TaskJson> listTasks(TasksListParameters parameters);
+    List<TaskJson> listTasks(String swarmId, TasksListParameters parameters);
 
-    TaskJson inspectTask(String id);
+    TaskJson inspectTask(String swarmId, String id);
 
-    byte[] getTaskLogs(String id, ServiceLogsParameters parameters);
+    byte[] getTaskLogs(String swarmId, String id, ServiceLogsParameters parameters);
 
 }

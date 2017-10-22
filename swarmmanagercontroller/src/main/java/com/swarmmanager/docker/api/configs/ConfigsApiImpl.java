@@ -21,27 +21,27 @@ public class ConfigsApiImpl extends AbstractApiImpl implements ConfigsApi {
     private static final String UPDATE_PATH = "/update";
 
     @Override
-    public List<ConfigJson> listConfigs(ConfigsListParameters parameters) {
-        return listObjects(CONFIGS_PATH, new RestResponseType<List<ConfigJson>>() {}, parameters);
+    public List<ConfigJson> listConfigs(String swarmId, ConfigsListParameters parameters) {
+        return listObjects(CONFIGS_PATH, swarmId, new RestResponseType<List<ConfigJson>>() {}, parameters);
     }
 
     @Override
-    public ConfigJson inspectConfig(String id) {
-        return inspectObject(CONFIGS_PATH, new RestResponseType<ConfigJson>() {}, id);
+    public ConfigJson inspectConfig(String swarmId, String id) {
+        return inspectObject(CONFIGS_PATH, swarmId, new RestResponseType<ConfigJson>() {}, id);
     }
 
     @Override
-    public ConfigCreateResponseJson createConfig(ConfigsCreateParameters parameters) {
-        return createObject(CONFIGS_PATH + CREATE_PATH, new RestResponseType<ConfigCreateResponseJson>() {}, parameters);
+    public ConfigCreateResponseJson createConfig(String swarmId, ConfigsCreateParameters parameters) {
+        return createObject(CONFIGS_PATH + CREATE_PATH, swarmId, new RestResponseType<ConfigCreateResponseJson>() {}, parameters);
     }
 
     @Override
-    public void deleteConfig(String id) {
-        deleteObject(CONFIGS_PATH + "/" + id, new RestResponseType<Void>() {});
+    public void deleteConfig(String swarmId, String id) {
+        deleteObject(CONFIGS_PATH + "/" + id, swarmId, new RestResponseType<Void>() {});
     }
 
     @Override
-    public void updateConfig(String id, ConfigsUpdateParameters parameters) {
-        updateObject(CONFIGS_PATH + "/" + id + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
+    public void updateConfig(String swarmId, String id, ConfigsUpdateParameters parameters) {
+        updateObject(CONFIGS_PATH + "/" + id + UPDATE_PATH, swarmId, new RestResponseType<Void>() {}, parameters, parameters);
     }
 }

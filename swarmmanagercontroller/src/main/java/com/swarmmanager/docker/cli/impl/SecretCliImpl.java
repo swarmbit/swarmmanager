@@ -26,39 +26,39 @@ public class SecretCliImpl implements SecretCli {
     private SecretsApi secretsApi;
 
     @Override
-    public Secret create(Secret secret) {
+    public Secret create(String swarmId, Secret secret) {
         SecretSpecJson secretSpecJson = new SecretSpecJson();
         secretSpecJson.setName(secret.getName());
         secretSpecJson.setLabels(secret.getLabels());
         secretSpecJson.setData(EncoderDecoder.base64URLEncode(secret.getData()));
-        SecretCreateResponseJson response = secretsApi.createSecret(new SecretCreateParameters()
+        SecretCreateResponseJson response = secretsApi.createSecret(swarmId, new SecretCreateParameters()
                 .setSecret(secretSpecJson));
         secret.setId(response.getId());
         return secret;
     }
 
     @Override
-    public void rm(String secretId) {
-        secretsApi.deleteSecret(secretId);
+    public void rm(String swarmId, String secretId) {
+        secretsApi.deleteSecret(swarmId, secretId);
     }
 
     @Override
-    public List<Secret> ls() {
+    public List<Secret> ls(String swarmId) {
         List<Secret> secrets = new ArrayList<>();
-        List<SecretJson> secretJsons = secretsApi.listSecrets(new SecretsListParameters());
+        List<SecretJson> secretJsons = secretsApi.listSecrets(swarmId, new SecretsListParameters());
         secretJsons.forEach(secretJson -> secrets.add(fromSecretJson(secretJson)));
         return secrets;
     }
 
     @Override
-    public Secret inspect(String secretId) {
-        SecretJson secretJson = secretsApi.inspectSecret(secretId);
+    public Secret inspect(String swarmId, String secretId) {
+        SecretJson secretJson = secretsApi.inspectSecret(swarmId, secretId);
         return fromSecretJson(secretJson);
     }
 
     @Override
-    public void update(String secretId, Secret secret) {
-        SecretJson secretJson = secretsApi.inspectSecret(secretId);
+    public void update(String swarmId, String secretId, Secret secret) {
+        SecretJson secretJson = secretsApi.inspectSecret(swarmId, secretId);
         VersionJson versionJson = secretJson.getVersion();
         SecretUpdateParameters parameters = new SecretUpdateParameters();
         parameters.setVersionQueryParam(versionJson.getIndex());
@@ -66,7 +66,7 @@ public class SecretCliImpl implements SecretCli {
             secretJson.getSpec().setLabels(secret.getLabels());
         }
         parameters.setSecrect(secretJson.getSpec());
-        secretsApi.updateSecret(secretId, parameters);
+        secretsApi.updateSecret(swarmId, secretId, parameters);
     }
 
     private Secret fromSecretJson(SecretJson secretJson) {

@@ -1,7 +1,7 @@
 package com.swarmmanager.auth.config;
 
-import com.swarmmanager.auth.mongo.User;
-import com.swarmmanager.auth.mongo.UserRepository;
+import com.swarmmanager.repository.User;
+import com.swarmmanager.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.SigningKeyResolver;

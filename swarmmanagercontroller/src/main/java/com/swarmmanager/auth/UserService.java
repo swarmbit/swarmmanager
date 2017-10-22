@@ -1,6 +1,6 @@
 package com.swarmmanager.auth;
 
-import com.swarmmanager.auth.mongo.UserRepository;
+import com.swarmmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +19,6 @@ public class UserService implements UserDetailsService {
         if (user != null) {
             return user;
         }
-        throw new UsernameNotFoundException("User not found");
+        throw new UsernameNotFoundException("Registry not found");
     }
 }

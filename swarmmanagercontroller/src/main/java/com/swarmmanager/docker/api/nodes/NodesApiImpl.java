@@ -18,23 +18,23 @@ public class NodesApiImpl extends AbstractApiImpl implements NodesApi {
     private static final String UPDATE_PATH = "/update";
 
     @Override
-    public List<NodeJson> listNodes(NodesListParameters parameters) {
-        return listObjects(NODES_PATH, new RestResponseType<List<NodeJson>>() {}, parameters);
+    public List<NodeJson> listNodes(String swarmId, NodesListParameters parameters) {
+        return listObjects(NODES_PATH, swarmId, new RestResponseType<List<NodeJson>>() {}, parameters);
     }
 
     @Override
-    public NodeJson inspectNode(String id) {
-        return  inspectObject(NODES_PATH, new RestResponseType<NodeJson>() {}, id);
+    public NodeJson inspectNode(String swarmId, String id) {
+        return  inspectObject(NODES_PATH, swarmId, new RestResponseType<NodeJson>() {}, id);
     }
 
     @Override
-    public void updateNode(String id, NodeUpdateParameters parameters) {
-        updateObject(NODES_PATH + "/" + id + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
+    public void updateNode(String swarmId, String id, NodeUpdateParameters parameters) {
+        updateObject(NODES_PATH + "/" + id + UPDATE_PATH, swarmId, new RestResponseType<Void>() {}, parameters, parameters);
     }
 
     @Override
-    public void deleteNode(String id, NodeDeleteParameters parameters) {
-        deleteObject(NODES_PATH + "/" + id, new RestResponseType<Void>(){}, parameters);
+    public void deleteNode(String swarmId, String id, NodeDeleteParameters parameters) {
+        deleteObject(NODES_PATH + "/" + id, swarmId, new RestResponseType<Void>(){}, parameters);
     }
 
 }

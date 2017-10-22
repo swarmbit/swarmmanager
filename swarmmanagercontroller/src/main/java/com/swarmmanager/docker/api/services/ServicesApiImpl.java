@@ -6,9 +6,6 @@ import com.swarmmanager.docker.api.common.json.ServiceGeneralResponseJson;
 import com.swarmmanager.docker.api.common.json.ServiceJson;
 import com.swarmmanager.docker.api.services.parameters.ServiceLogsParameters;
 import com.swarmmanager.docker.api.services.parameters.ServicesListParameters;
-import com.swarmmanager.rest.RestExecutorFactory;
-import com.swarmmanager.rest.RestMethod;
-import com.swarmmanager.rest.RestParameters;
 import com.swarmmanager.rest.RestResponseType;
 import com.swarmmanager.docker.api.services.parameters.ServiceCreateParameters;
 import org.springframework.stereotype.Component;
@@ -27,35 +24,34 @@ public class ServicesApiImpl extends AbstractApiImpl implements ServicesApi {
     private static final String LOGS_PATH = "/logs";
 
     @Override
-    public List<ServiceJson> listServices(ServicesListParameters parameters) {
-        return listObjects(SERVICES_PATH, new RestResponseType<List<ServiceJson>>() {}, parameters);
+    public List<ServiceJson> listServices(String swarmId, ServicesListParameters parameters) {
+        return listObjects(SERVICES_PATH, swarmId, new RestResponseType<List<ServiceJson>>() {}, parameters);
     }
 
     @Override
-    public ServiceJson inspectService(String id) {
-        return inspectObject(SERVICES_PATH, new RestResponseType<ServiceJson>() {}, id);
+    public ServiceJson inspectService(String swarmId, String id) {
+        return inspectObject(SERVICES_PATH, swarmId, new RestResponseType<ServiceJson>() {}, id);
     }
 
     @Override
-    public ServiceGeneralResponseJson createService(ServiceCreateParameters parameters) {
-        return createObject(SERVICES_PATH + CREATE_PATH, new RestResponseType<ServiceGeneralResponseJson>() {},
+    public ServiceGeneralResponseJson createService(String swarmId, ServiceCreateParameters parameters) {
+        return createObject(SERVICES_PATH + CREATE_PATH, swarmId, new RestResponseType<ServiceGeneralResponseJson>() {},
             parameters, parameters);
     }
 
     @Override
-    public void updateService(String id, ServiceUpdateParameters parameters) {
-        updateObject(SERVICES_PATH + "/" + id + UPDATE_PATH, new RestResponseType<ServiceGeneralResponseJson>() {},
+    public void updateService(String swarmId, String id, ServiceUpdateParameters parameters) {
+        updateObject(SERVICES_PATH + "/" + id + UPDATE_PATH, swarmId, new RestResponseType<ServiceGeneralResponseJson>() {},
                 parameters, parameters, parameters);
-
     }
 
     @Override
-    public void deleteService(String id) {
-          deleteObject(SERVICES_PATH + "/" + id, new RestResponseType<Void>() {});
+    public void deleteService(String swarmId, String id) {
+          deleteObject(SERVICES_PATH + "/" + id, swarmId, new RestResponseType<Void>() {});
     }
 
     @Override
-    public byte[] getServiceLogs(String id, ServiceLogsParameters parameters) {
-        return getObjectLogs(SERVICES_PATH + "/" + id + LOGS_PATH, parameters);
+    public byte[] getServiceLogs(String swarmId, String id, ServiceLogsParameters parameters) {
+        return getObjectLogs(SERVICES_PATH + "/" + id + LOGS_PATH, swarmId, parameters);
     }
 }

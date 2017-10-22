@@ -1,7 +1,7 @@
-package com.swarmmanager.auth.mongo;
+package com.swarmmanager.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UserRepository extends MongoRepository<User, Integer> {
+public interface UserRepository extends MongoRepository<User, String> {
     User findByUsername(String username);
 }

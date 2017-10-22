@@ -24,39 +24,39 @@ public class ConfigCliImpl implements ConfigCli {
     private ConfigsApi configsApi;
 
     @Override
-    public Config create(Config config) {
+    public Config create(String swarmId, Config config) {
         ConfigSpecJson configSpecJson = new ConfigSpecJson();
         configSpecJson.setName(config.getName());
         configSpecJson.setLabels(config.getLabels());
         configSpecJson.setData(EncoderDecoder.base64URLEncode(config.getData()));
-        ConfigCreateResponseJson response = configsApi.createConfig(new ConfigsCreateParameters()
+        ConfigCreateResponseJson response = configsApi.createConfig(swarmId, new ConfigsCreateParameters()
                 .setConfig(configSpecJson));
         config.setId(response.getId());
         return config;
     }
 
     @Override
-    public void rm(String configId) {
-        configsApi.deleteConfig(configId);
+    public void rm(String swarmId, String configId) {
+        configsApi.deleteConfig(swarmId, configId);
     }
 
     @Override
-    public List<Config> ls() {
+    public List<Config> ls(String swarmId) {
         List<Config> configs = new ArrayList<>();
-        List<ConfigJson> configsJson = configsApi.listConfigs(new ConfigsListParameters());
+        List<ConfigJson> configsJson = configsApi.listConfigs(swarmId, new ConfigsListParameters());
         configsJson.forEach(configJson -> configs.add(fromConfigJson(configJson)));
         return configs;
     }
 
     @Override
-    public Config inspect(String configId) {
-        ConfigJson configJson = configsApi.inspectConfig(configId);
+    public Config inspect(String swarmId, String configId) {
+        ConfigJson configJson = configsApi.inspectConfig(swarmId, configId);
         return fromConfigJson(configJson);
     }
 
     @Override
-    public void update(String configId, Config config) {
-        ConfigJson configJson = configsApi.inspectConfig(configId);
+    public void update(String swarmId, String configId, Config config) {
+        ConfigJson configJson = configsApi.inspectConfig(swarmId, configId);
         VersionJson versionJson = configJson.getVersion();
         ConfigsUpdateParameters parameters = new ConfigsUpdateParameters();
         parameters.setVersionQueryParam(versionJson.getIndex());
@@ -64,7 +64,7 @@ public class ConfigCliImpl implements ConfigCli {
             configJson.getSpec().setLabels(config.getLabels());
         }
         parameters.setConfig(configJson.getSpec());
-        configsApi.updateConfig(configId, parameters);
+        configsApi.updateConfig(swarmId, configId, parameters);
     }
 
     private Config fromConfigJson(ConfigJson configJson) {

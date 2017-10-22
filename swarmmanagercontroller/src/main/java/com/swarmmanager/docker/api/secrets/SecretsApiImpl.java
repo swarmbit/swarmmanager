@@ -21,27 +21,27 @@ public class SecretsApiImpl extends AbstractApiImpl implements SecretsApi {
     private static final String UPDATE_PATH = "/update";
 
     @Override
-    public List<SecretJson> listSecrets(SecretsListParameters parameters) {
-        return listObjects(SECRETS_PATH, new RestResponseType<List<SecretJson>>() {}, parameters);
+    public List<SecretJson> listSecrets(String swarmId, SecretsListParameters parameters) {
+        return listObjects(SECRETS_PATH, swarmId, new RestResponseType<List<SecretJson>>() {}, parameters);
     }
 
     @Override
-    public SecretJson inspectSecret(String id) {
-        return inspectObject(SECRETS_PATH, new RestResponseType<SecretJson>() {}, id);
+    public SecretJson inspectSecret(String swarmId, String id) {
+        return inspectObject(SECRETS_PATH, swarmId, new RestResponseType<SecretJson>() {}, id);
     }
 
     @Override
-    public SecretCreateResponseJson createSecret(SecretCreateParameters parameters) {
-        return createObject(SECRETS_PATH + CREATE_PATH, new RestResponseType<SecretCreateResponseJson>() {}, parameters);
+    public SecretCreateResponseJson createSecret(String swarmId, SecretCreateParameters parameters) {
+        return createObject(SECRETS_PATH + CREATE_PATH, swarmId, new RestResponseType<SecretCreateResponseJson>() {}, parameters);
     }
 
     @Override
-    public void deleteSecret(String id) {
-        deleteObject(SECRETS_PATH + "/" + id, new RestResponseType<Void>() {});
+    public void deleteSecret(String swarmId, String id) {
+        deleteObject(SECRETS_PATH + "/" + id, swarmId, new RestResponseType<Void>() {});
     }
 
     @Override
-    public void updateSecret(String id, SecretUpdateParameters parameters) {
-        updateObject(SECRETS_PATH + "/" + id + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
+    public void updateSecret(String swarmId, String id, SecretUpdateParameters parameters) {
+        updateObject(SECRETS_PATH + "/" + id + UPDATE_PATH, swarmId, new RestResponseType<Void>() {}, parameters, parameters);
     }
 }
