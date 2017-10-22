@@ -7,7 +7,6 @@ import com.swarmmanager.auth.util.TokenExtractor;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +83,7 @@ public class TokenAuthenticationService {
             try {
                 String user = tokenExtractor.getUser(tokenString);
                 return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
-            } catch (SignatureException | ExpiredJwtException e) {
+            } catch (ExpiredJwtException e) {
                 return null;
             } catch (IllegalArgumentException e) {
                 if (!StringUtils.equals(e.getMessage(), "A signing key must be specified if the specified JWT is digitally signed.")) {

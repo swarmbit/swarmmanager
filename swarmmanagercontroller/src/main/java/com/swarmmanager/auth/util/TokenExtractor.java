@@ -7,7 +7,9 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import static com.swarmmanager.util.DateConverter.dateToLocalDateTime;
 
 @Component
 public class TokenExtractor {
@@ -28,7 +30,7 @@ public class TokenExtractor {
         return getTokenContent(tokenString).getSubject();
     }
 
-    public Date getExpirationDate(String tokenString) {
-        return getTokenContent(tokenString).getExpiration();
+    public LocalDateTime getExpirationDate(String tokenString) {
+        return dateToLocalDateTime(getTokenContent(tokenString).getExpiration());
     }
 }
