@@ -20,7 +20,7 @@ public class JWTSigningKeyResolver implements SigningKeyResolver {
 
     private UserRepository userRepository;
 
-    JWTSigningKeyResolver(UserRepository userRepository) {
+    public JWTSigningKeyResolver(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
