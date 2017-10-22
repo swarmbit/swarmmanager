@@ -2,6 +2,7 @@ package com.swarmmanager.auth.util;
 
 import com.swarmmanager.auth.mongo.Token;
 import com.swarmmanager.auth.mongo.TokenRepository;
+import com.swarmmanager.integration.IntegrationTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class CleanInvalidTokensTest {
+public class CleanInvalidTokensTest extends IntegrationTest {
 
     @Autowired
     private ScheduledTasks scheduledTasks;
