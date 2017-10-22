@@ -9,10 +9,7 @@ import com.swarmmanager.docker.config.DockerSwarmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,26 +32,26 @@ public class SwarmController {
     }
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Swarm swarmInspect() {
-        return swarmCli.inspect();
+    @RequestMapping(method = RequestMethod.GET, value = "{swarmId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Swarm swarmInspect(@PathVariable String swarmId) {
+        return swarmCli.inspect(swarmId);
     }
 
     @Secured(Role.ADMIN)
-    @RequestMapping(method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void swarmUpdate(@RequestBody Swarm swarm) {
-        swarmCli.update(swarm);
+    @RequestMapping(method = RequestMethod.PUT, value = "{swarmId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void swarmUpdate(@PathVariable String swarmId, @RequestBody Swarm swarm) {
+        swarmCli.update(swarmId, swarm);
     }
 
     @Secured(Role.ADMIN)
-    @RequestMapping(method = RequestMethod.PUT, value = "unlock", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Unlock unlock() {
-        return swarmCli.unlock();
+    @RequestMapping(method = RequestMethod.PUT, value = "{swarmId}/unlock", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Unlock unlock(@PathVariable String swarmId) {
+        return swarmCli.unlock(swarmId);
     }
 
     @Secured(Role.ADMIN)
-    @RequestMapping(method = RequestMethod.PUT, value = "rotate", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void rotate() {
-        swarmCli.rotate();
+    @RequestMapping(method = RequestMethod.PUT, value = "{swarmId}/rotate", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void rotate(@PathVariable String swarmId) {
+        swarmCli.rotate(swarmId);
     }
 }

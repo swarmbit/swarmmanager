@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface ConfigCli {
 
-    Config create(Config config);
+    Config create(String swarmId, Config config);
 
-    void rm(String configId);
+    void rm(String swarmId, String configId);
 
-    List<Config> ls();
+    List<Config> ls(String swarmId);
 
-    Config inspect(String configId);
+    Config inspect(String swarmId, String configId);
 
-    void update(String configId, Config config);
+    void update(String swarmId, String configId, Config config);
 
 }

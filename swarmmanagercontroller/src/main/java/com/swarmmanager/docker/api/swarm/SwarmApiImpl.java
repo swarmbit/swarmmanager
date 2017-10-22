@@ -20,18 +20,18 @@ public class SwarmApiImpl  extends AbstractApiImpl implements SwarmApi {
     private static final String UPDATE_PATH = "/update";
 
     @Override
-    public SwarmJson inspectSwarm() {
-        return inspectObject(SWARM_PATH,  new RestResponseType<SwarmJson>() {});
+    public SwarmJson inspectSwarm(String swarmId) {
+        return inspectObject(SWARM_PATH, swarmId, new RestResponseType<SwarmJson>() {});
     }
 
     @Override
-    public void updateSwarm(SwarmUpdateParameters parameters) {
-        updateObject(SWARM_PATH + UPDATE_PATH, new RestResponseType<Void>() {}, parameters, parameters);
+    public void updateSwarm(String swarmId, SwarmUpdateParameters parameters) {
+        updateObject(SWARM_PATH + UPDATE_PATH, swarmId, new RestResponseType<Void>() {}, parameters, parameters);
     }
 
     @Override
-    public UnlockKeyJson unlock() {
-        RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource())
+    public UnlockKeyJson unlock(String swarmId) {
+        RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource(swarmId))
                 .setPath(SWARM_PATH + UNLOCK_PATH);
         return RestExecutorFactory.createRestExecutor(RestMethod.POST).execute(restParameters, new RestResponseType<UnlockKeyJson>() {});
     }

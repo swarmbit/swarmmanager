@@ -6,9 +6,9 @@ import com.swarmmanager.docker.api.common.json.SwarmJson;
 
 public interface SwarmApi {
 
-    SwarmJson inspectSwarm();
+    SwarmJson inspectSwarm(String swarmId);
 
-    void updateSwarm(SwarmUpdateParameters parameters);
+    void updateSwarm(String swarmId, SwarmUpdateParameters parameters);
 
-    UnlockKeyJson unlock();
+    UnlockKeyJson unlock(String swarmId);
 }

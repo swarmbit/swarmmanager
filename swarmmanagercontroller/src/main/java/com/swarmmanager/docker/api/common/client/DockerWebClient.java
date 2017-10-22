@@ -5,4 +5,6 @@ import javax.ws.rs.client.WebTarget;
 public interface DockerWebClient {
 
     WebTarget getBaseResource();
+
+    WebTarget getBaseResource(String id);
 }

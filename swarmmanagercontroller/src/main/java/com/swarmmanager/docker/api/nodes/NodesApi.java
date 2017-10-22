@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface NodesApi {
 
-    List<NodeJson> listNodes(NodesListParameters parameters);
+    List<NodeJson> listNodes(String swarmId, NodesListParameters parameters);
 
-    NodeJson inspectNode(String id);
+    NodeJson inspectNode(String swarmId, String id);
 
-    void updateNode(String id, NodeUpdateParameters parameters);
+    void updateNode(String swarmId, String id, NodeUpdateParameters parameters);
 
-    void deleteNode(String id, NodeDeleteParameters parameters);
+    void deleteNode(String swarmId, String id, NodeDeleteParameters parameters);
 
 }

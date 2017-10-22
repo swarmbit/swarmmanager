@@ -17,18 +17,18 @@ public class TasksApiImpl extends AbstractApiImpl implements TasksApi {
     private static final String LOGS_PATH = "/logs";
 
     @Override
-    public List<TaskJson> listTasks(TasksListParameters parameters) {
-        return listObjects(TASKS_PATH, new RestResponseType<List<TaskJson>>() {}, parameters);
+    public List<TaskJson> listTasks(String swarmId, TasksListParameters parameters) {
+        return listObjects(TASKS_PATH, swarmId, new RestResponseType<List<TaskJson>>() {}, parameters);
     }
 
     @Override
-    public TaskJson inspectTask(String id) {
-       return inspectObject(TASKS_PATH, new RestResponseType<TaskJson>() {}, id);
+    public TaskJson inspectTask(String swarmId, String id) {
+       return inspectObject(TASKS_PATH, swarmId, new RestResponseType<TaskJson>() {}, id);
     }
 
     @Override
-    public byte[] getTaskLogs(String id, ServiceLogsParameters parameters) {
-        return this.getObjectLogs(TASKS_PATH + "/" + id + LOGS_PATH, parameters);
+    public byte[] getTaskLogs(String swarmId, String id, ServiceLogsParameters parameters) {
+        return this.getObjectLogs(TASKS_PATH + "/" + id + LOGS_PATH, swarmId, parameters);
     }
 
 }

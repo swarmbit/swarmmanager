@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface NodeCli {
 
-    List<NodeSummary> ls();
+    List<NodeSummary> ls(String swarmId);
 
-    State ps(String nodeId);
+    State ps(String swarmId, String nodeId);
 
-    Node inspect(String nodeId);
+    Node inspect(String swarmId, String nodeId);
 
-    void rm(String nodeId, boolean force);
+    void rm(String swarmId, String nodeId, boolean force);
 
-    void update(String nodeId, Node node);
+    void update(String swarmId, String nodeId, Node node);
 
 }

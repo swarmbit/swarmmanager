@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface NetworkCli {
 
-    Network create(Network network);
+    Network create(String swarmId, Network network);
 
-    List<NetworkSummary> ls();
+    List<NetworkSummary> ls(String swarmId);
 
-    Network inspect(String networkId);
+    Network inspect(String swarmId, String networkId);
 
-    void rm(String networkId);
+    void rm(String swarmId, String networkId);
 
 }

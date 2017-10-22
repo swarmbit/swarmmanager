@@ -44,8 +44,8 @@ public class ServiceCliImpl implements ServiceCli {
 
 
     @Override
-    public Service inspectService(String serviceId) {
-        ServiceJson serviceJson = this.servicesApi.inspectService(serviceId);
+    public Service inspectService(String swarmId, String serviceId) {
+        ServiceJson serviceJson = this.servicesApi.inspectService(swarmId, serviceId);
         Service service = new Service();
         service.setId(serviceJson.getId());
         ZonedDateTime createdAt = DockerDateFormatter.fromDateStringToZonedDateTime(serviceJson.getCreatedAt());
@@ -67,8 +67,8 @@ public class ServiceCliImpl implements ServiceCli {
     }
 
     @Override
-    public List<ServiceSummary> serviceLs() {
-        List<ServiceJson> services = servicesApi.listServices(new ServicesListParameters());
+    public List<ServiceSummary> serviceLs(String swarmId) {
+        List<ServiceJson> services = servicesApi.listServices(swarmId, new ServicesListParameters());
         List<ServiceSummary> servicesSummary = new ArrayList<>();
         for (ServiceJson service : services) {
             ServiceSummary serviceSummary = new ServiceSummary();
@@ -81,7 +81,7 @@ public class ServiceCliImpl implements ServiceCli {
             filters.setService(serviceSummary.getId());
             filters.setDesiredState(TasksFilters.RUNNING_STATE);
             tasksListParameters.setFilters(filters);
-            List<TaskJson> tasks = tasksApi.listTasks(tasksListParameters);
+            List<TaskJson> tasks = tasksApi.listTasks(swarmId, tasksListParameters);
             if (replicated != null) {
                 serviceSummary.setReplicas(replicated.getReplicas());
             } else {
@@ -101,15 +101,15 @@ public class ServiceCliImpl implements ServiceCli {
     }
 
     @Override
-    public State servicePs(String serviceId) {
-        ServiceJson service = servicesApi.inspectService(serviceId);
+    public State servicePs(String swarmId, String serviceId) {
+        ServiceJson service = servicesApi.inspectService(swarmId, serviceId);
         State state =  new State();
         if (service != null) {
             TasksListParameters tasksListParameters = new TasksListParameters();
             TasksFilters filters = new TasksFilters();
             filters.setService(serviceId);
             tasksListParameters.setFilters(filters);
-            List<Task> tasks = TaskJsonHelper.getTasks(tasksApi.listTasks(tasksListParameters));
+            List<Task> tasks = TaskJsonHelper.getTasks(tasksApi.listTasks(swarmId, tasksListParameters));
             Map<String, List<Task>> tasksByService = new HashMap<>();
             tasks.forEach(task -> {
                 task.setServiceName(service.getSpec().getName());
@@ -117,7 +117,7 @@ public class ServiceCliImpl implements ServiceCli {
                 tasksAux.add(task);
             });
             for (Map.Entry<String, List<Task>> entry : tasksByService.entrySet()) {
-                NodeJson nodeJson = nodesApi.inspectNode(entry.getKey());
+                NodeJson nodeJson = nodesApi.inspectNode(swarmId, entry.getKey());
                 if (nodeJson != null) {
                     for (Task task : entry.getValue()) {
                         task.setNodeHostname(nodeJson.getDescription().getHostname());
@@ -131,7 +131,7 @@ public class ServiceCliImpl implements ServiceCli {
     }
 
     @Override
-    public Service serviceCreate(Service service) {
+    public Service serviceCreate(String swarmId, Service service) {
         ServiceCreateParameters createParameters = new ServiceCreateParameters();
         ServiceSpecJson serviceSpecJson = ServiceSpecJsonHelper.createNewHelper()
                 .setName(service.getName())
@@ -140,15 +140,15 @@ public class ServiceCliImpl implements ServiceCli {
                 .setMode(service.isGlobal(), service.getReplicas())
                 .getServiceSpecJson();
         createParameters.setService(serviceSpecJson);
-        ServiceGeneralResponseJson responseJson = servicesApi.createService(createParameters);
+        ServiceGeneralResponseJson responseJson = servicesApi.createService(swarmId, createParameters);
         service.setId(responseJson.getId());
         return service;
     }
 
     @Override
-    public void serviceUpdate(String serviceId, Service service) {
+    public void serviceUpdate(String swarmId, String serviceId, Service service) {
         ServiceUpdateParameters updateParameters = new ServiceUpdateParameters();
-        ServiceJson serviceJson = servicesApi.inspectService(serviceId);
+        ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId);
         VersionJson versionJson = serviceJson.getVersion();
         updateParameters.setVersionQueryParam(versionJson.getIndex());
         ServiceSpecJson serviceSpecJson = ServiceSpecJsonHelper.createNewHelper(serviceJson.getSpec())
@@ -157,16 +157,16 @@ public class ServiceCliImpl implements ServiceCli {
                 .setReplicas(service.getReplicas())
                 .getServiceSpecJson();
         updateParameters.setService(serviceSpecJson);
-        servicesApi.updateService(serviceId, updateParameters);
+        servicesApi.updateService(swarmId, serviceId, updateParameters);
     }
 
     @Override
-    public void serviceRm(String serviceId) {
-        servicesApi.deleteService(serviceId);
+    public void serviceRm(String swarmId, String serviceId) {
+        servicesApi.deleteService(swarmId, serviceId);
     }
 
     @Override
-    public Logs serviceLogs(String serviceId) {
+    public Logs serviceLogs(String swarmId, String serviceId) {
         ServiceLogsParameters parameters = new ServiceLogsParameters();
         parameters.setStderrQueryParam(true);
         parameters.setStdoutQueryParam(true);
@@ -182,10 +182,10 @@ public class ServiceCliImpl implements ServiceCli {
         });
         Logs logs = new Logs();
         Map<String, TaskJson> tasksById = new HashMap<>();
-        List<TaskJson> tasks = tasksApi.listTasks(new TasksListParameters());
+        List<TaskJson> tasks = tasksApi.listTasks(swarmId, new TasksListParameters());
         tasks.forEach(task -> tasksById.put(task.getId(), task));
 
-        byte[] logBuf = servicesApi.getServiceLogs(serviceId, parameters);
+        byte[] logBuf = servicesApi.getServiceLogs(swarmId, serviceId, parameters);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(logBuf);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF8"));

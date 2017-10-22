@@ -12,17 +12,17 @@ import java.util.List;
 
 public interface ServicesApi {
 
-    List<ServiceJson> listServices(ServicesListParameters parameters);
+    List<ServiceJson> listServices(String swarmId, ServicesListParameters parameters);
 
-    ServiceJson inspectService(String id);
+    ServiceJson inspectService(String swarmId, String id);
 
-    ServiceGeneralResponseJson createService(ServiceCreateParameters parameters);
+    ServiceGeneralResponseJson createService(String swarmId, ServiceCreateParameters parameters);
 
-    void updateService(String id, ServiceUpdateParameters parameters);
+    void updateService(String swarmId, String id, ServiceUpdateParameters parameters);
 
-    void deleteService(String id);
+    void deleteService(String swarmId, String id);
 
     @DockerRemoteApiMinVersion("v1.29")
-    byte[] getServiceLogs(String id, ServiceLogsParameters parameters);
+    byte[] getServiceLogs(String swarmId, String id, ServiceLogsParameters parameters);
 
 }

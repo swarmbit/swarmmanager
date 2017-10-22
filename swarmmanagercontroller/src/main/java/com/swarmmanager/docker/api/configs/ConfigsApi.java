@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface ConfigsApi {
 
-    List<ConfigJson> listConfigs(ConfigsListParameters parameters);
+    List<ConfigJson> listConfigs(String swarmId, ConfigsListParameters parameters);
 
-    ConfigJson inspectConfig(String id);
+    ConfigJson inspectConfig(String swarmId, String id);
 
-    ConfigCreateResponseJson createConfig(ConfigsCreateParameters parameters);
+    ConfigCreateResponseJson createConfig(String swarmId, ConfigsCreateParameters parameters);
 
-    void deleteConfig(String id);
+    void deleteConfig(String swarmId, String id);
 
-    void updateConfig(String id, ConfigsUpdateParameters parameters);
+    void updateConfig(String swarmId, String id, ConfigsUpdateParameters parameters);
 }

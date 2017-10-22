@@ -1,4 +1,4 @@
-package com.swarmmanager.mongo;
+package com.swarmmanager.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -6,6 +6,6 @@ public interface RegistryUserRepository extends MongoRepository<RegistryUser, St
 
     RegistryUser findByRegistryUsername(String registryUsername);
 
-    RegistryUser findFirstByRegistryAndUserOwner(String registry, String userOwner);
+    RegistryUser findFirstByRegistriesAndUserOwner(String registry, String userOwner);
 
 }

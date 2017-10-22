@@ -7,6 +7,7 @@ import com.swarmmanager.docker.api.common.client.jaxrs.filter.SelectiveLoggingFi
 import com.swarmmanager.docker.config.DockerClientConfig;
 import com.swarmmanager.docker.config.DockerConfig;
 import com.swarmmanager.docker.config.DockerSwarmConfig;
+import com.swarmmanager.exception.SwarmNotFound;
 import com.swarmmanager.exception.UnsupportedConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
@@ -97,6 +98,9 @@ public class DockerWebClientImpl implements DockerWebClient {
             if (StringUtils.equals(id, dockerSwarmWebTarget.getId())) {
                 baseResource = dockerSwarmWebTarget.getBaseResource();
             }
+        }
+        if (baseResource == null) {
+            throw new SwarmNotFound();
         }
         return baseResource;
     }

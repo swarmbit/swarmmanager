@@ -24,6 +24,8 @@ public class Service {
 
     private List<Port> ports;
 
+    private String registryUsername;
+
     public String getId() {
         return id;
     }
@@ -86,5 +88,13 @@ public class Service {
 
     public void setPorts(List<Port> ports) {
         this.ports = ports;
+    }
+
+    public String getRegistryUsername() {
+        return registryUsername;
+    }
+
+    public void setRegistryUsername(String registryUsername) {
+        this.registryUsername = registryUsername;
     }
 }

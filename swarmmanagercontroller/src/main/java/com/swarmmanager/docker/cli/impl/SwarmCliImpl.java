@@ -1,4 +1,5 @@
 package com.swarmmanager.docker.cli.impl;
+
 import com.swarmmanager.docker.api.common.json.SwarmJson;
 import com.swarmmanager.docker.api.common.json.UnlockKeyJson;
 import com.swarmmanager.docker.api.common.json.inner.ExternalCAJson;
@@ -23,8 +24,8 @@ public class SwarmCliImpl implements SwarmCli {
     private SwarmApi swarmApi;
 
     @Override
-    public void update(Swarm swarm) {
-        SwarmJson swarmJson = swarmApi.inspectSwarm();
+    public void update(String swarmId, Swarm swarm) {
+        SwarmJson swarmJson = swarmApi.inspectSwarm(swarmId);
         if (swarm.getAutolock() != null) {
             swarmJson.getSpec().getEncryptionConfig().setAutoLockManagers(swarm.getAutolock());
         }
@@ -57,12 +58,12 @@ public class SwarmCliImpl implements SwarmCli {
         }
         SwarmUpdateParameters parameters = new SwarmUpdateParameters();
         parameters.setSpec(swarmJson.getSpec());
-        swarmApi.updateSwarm(parameters);
+        swarmApi.updateSwarm(swarmId, parameters);
     }
 
     @Override
-    public Swarm inspect() {
-        SwarmJson swarmJson = swarmApi.inspectSwarm();
+    public Swarm inspect(String swarmId) {
+        SwarmJson swarmJson = swarmApi.inspectSwarm(swarmId);
         ZonedDateTime createdAt = DockerDateFormatter.fromDateStringToZonedDateTime(swarmJson.getCreatedAt());
         ZonedDateTime updatedAt = DockerDateFormatter.fromDateStringToZonedDateTime(swarmJson.getUpdatedAt());
         Swarm swarm = new Swarm();
@@ -92,23 +93,23 @@ public class SwarmCliImpl implements SwarmCli {
     }
 
     @Override
-    public Unlock unlock() {
+    public Unlock unlock(String swarmId) {
         Unlock unlock = new Unlock();
-        UnlockKeyJson unlockKeyJson = swarmApi.unlock();
+        UnlockKeyJson unlockKeyJson = swarmApi.unlock(swarmId);
         unlock.setUnlockKey(unlockKeyJson.getUnlockKey());
         return unlock;
     }
 
     @Override
-    public void rotate() {
-        SwarmJson swarmJson = swarmApi.inspectSwarm();
+    public void rotate(String swarmId) {
+        SwarmJson swarmJson = swarmApi.inspectSwarm(swarmId);
         SwarmUpdateParameters parameters = new SwarmUpdateParameters();
         parameters.setRotateManagerTokenQueryParam(true);
         parameters.setRotateManagerUnlockKeyQueryParam(true);
         parameters.setRotateWorkerTokenQueryParam(true);
         parameters.setVersionQueryParam(swarmJson.getVersion().getIndex());
         parameters.setSpec(swarmJson.getSpec());
-        swarmApi.updateSwarm(parameters);
+        swarmApi.updateSwarm(swarmId, parameters);
     }
 
 }

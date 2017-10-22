@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/node")
+@RequestMapping("/api/swarm/{swarmId}/node")
 public class NodeController {
 
     @Autowired
@@ -22,32 +22,32 @@ public class NodeController {
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<NodeSummary> nodeLs() {
-        return nodeCli.ls();
+    public List<NodeSummary> nodeLs(@PathVariable String swarmId) {
+        return nodeCli.ls(swarmId);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.PUT, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void nodeUpdate(@PathVariable String nodeId, @RequestBody Node node) {
-        nodeCli.update(nodeId, node);
+    public void nodeUpdate(@PathVariable String swarmId, @PathVariable String nodeId, @RequestBody Node node) {
+        nodeCli.update(swarmId, nodeId, node);
     }
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Node nodeInspect(@PathVariable String nodeId) {
-        return nodeCli.inspect(nodeId);
+    public Node nodeInspect(@PathVariable String swarmId, @PathVariable String nodeId) {
+        return nodeCli.inspect(swarmId, nodeId);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.DELETE, value = "{nodeId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void nodeRm(@PathVariable String nodeId, @QueryParam("force") boolean force) {
-        nodeCli.rm(nodeId, force);
+    public void nodeRm(@PathVariable String swarmId, @PathVariable String nodeId, @QueryParam("force") boolean force) {
+        nodeCli.rm(swarmId, nodeId, force);
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.GET, value = "{nodeId}/ps", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public State nodePs(@PathVariable String nodeId) {
-        return nodeCli.ps(nodeId);
+    public State nodePs(@PathVariable String swarmId, @PathVariable String nodeId) {
+        return nodeCli.ps(swarmId, nodeId);
     }
 
 }

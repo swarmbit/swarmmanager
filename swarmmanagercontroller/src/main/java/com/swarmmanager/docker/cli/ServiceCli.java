@@ -6,18 +6,18 @@ import java.util.List;
 
 public interface ServiceCli {
 
-    Service inspectService(String serviceId);
+    Service inspectService(String swarmId, String serviceId);
 
-    List<ServiceSummary> serviceLs();
+    List<ServiceSummary> serviceLs(String swarmId);
 
-    State servicePs(String serviceId);
+    State servicePs(String swarmId, String serviceId);
 
-    Service serviceCreate(Service service);
+    Service serviceCreate(String swarmId, Service service);
 
-    void serviceUpdate(String serviceId, Service service);
+    void serviceUpdate(String swarmId, String serviceId, Service service);
 
-    void serviceRm(String serviceId);
+    void serviceRm(String swarmId, String serviceId);
 
-    Logs serviceLogs(String serviceId);
+    Logs serviceLogs(String swarmId, String serviceId);
 
 }

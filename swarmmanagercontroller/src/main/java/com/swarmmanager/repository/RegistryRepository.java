@@ -1,4 +1,4 @@
-package com.swarmmanager.mongo;
+package com.swarmmanager.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

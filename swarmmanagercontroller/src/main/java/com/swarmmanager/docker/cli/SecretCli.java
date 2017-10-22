@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface SecretCli {
 
-    Secret create(Secret secret);
+    Secret create(String swarmId, Secret secret);
 
-    void rm(String secretId);
+    void rm(String swarmId, String secretId);
 
-    List<Secret> ls();
+    List<Secret> ls(String swarmId);
 
-    Secret inspect(String secretId);
+    Secret inspect(String swarmId, String secretId);
 
-    void update(String secretId, Secret secret);
+    void update(String swarmId, String secretId, Secret secret);
 
 }

@@ -16,9 +16,9 @@ public abstract class AbstractApiImpl {
     @Autowired
     protected DockerWebClient dockerWebClient;
 
-    protected  <E> List<E> listObjects(String apiPath, RestResponseType<List<E>> restResponseType, FiltersParameters filtersParameters) {
+    protected  <E> List<E> listObjects(String apiPath, String swarmId, RestResponseType<List<E>> restResponseType, FiltersParameters filtersParameters) {
         if (filtersParameters != null) {
-            RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource())
+            RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource(swarmId))
                     .setPath(apiPath);
             if (filtersParameters.getFilters().isPresent()) {
                 restParameters.addQueryParam(filtersParameters.getFilters().get());
@@ -28,50 +28,50 @@ public abstract class AbstractApiImpl {
         return new ArrayList<>();
     }
 
-    protected <E> E inspectObject(String apiPath, RestResponseType<E> restResponseType, String id) {
+    protected <E> E inspectObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, String id) {
         String path = id != null ? apiPath + "/" + id : apiPath;
-        RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource())
+        RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource(swarmId))
                 .setPath(path);
         return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, restResponseType);
     }
 
-    protected <E> E inspectObject(String apiPath, RestResponseType<E> restResponseType) {
-        return inspectObject(apiPath, restResponseType, null);
+    protected <E> E inspectObject(String apiPath, String swarmId, RestResponseType<E> restResponseType) {
+        return inspectObject(apiPath, swarmId, restResponseType, null);
     }
 
-    protected <E> E createObject(String apiPath, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter,
+    protected <E> E createObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter,
                                  HeaderParameters headerParameters) {
-        RestParameters restParameters = createRestParameters(apiPath, requestBodyParameter, headerParameters, null);
+        RestParameters restParameters = createRestParameters(apiPath, swarmId, requestBodyParameter, headerParameters, null);
         return RestExecutorFactory.createRestExecutor(RestMethod.POST).execute(restParameters, restResponseType);
     }
 
-    protected <E> E createObject(String apiPath, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter) {
-        return createObject(apiPath, restResponseType, requestBodyParameter, null);
+    protected <E> E createObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter) {
+        return createObject(apiPath, swarmId, restResponseType, requestBodyParameter, null);
     }
 
-    protected <E> E updateObject(String apiPath, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter,
+    protected <E> E updateObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter,
                                  QueryParameters queryParameters, HeaderParameters headerParameters) {
-        RestParameters restParameters = createRestParameters(apiPath, requestBodyParameter, headerParameters, queryParameters);
+        RestParameters restParameters = createRestParameters(apiPath, swarmId, requestBodyParameter, headerParameters, queryParameters);
         return RestExecutorFactory.createRestExecutor(RestMethod.POST).execute(restParameters, restResponseType);
     }
 
-    protected <E> E updateObject(String apiPath, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter,
+    protected <E> E updateObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, RequestBodyParameter requestBodyParameter,
                                QueryParameters queryParameters) {
-       return updateObject(apiPath, restResponseType, requestBodyParameter, queryParameters, null);
+       return updateObject(apiPath, swarmId, restResponseType, requestBodyParameter, queryParameters, null);
     }
 
-    protected <E> E deleteObject(String apiPath, RestResponseType<E> restResponseType, QueryParameters queryParameters) {
-        RestParameters restParameters = createRestParameters(apiPath, null, null, queryParameters);
+    protected <E> E deleteObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, QueryParameters queryParameters) {
+        RestParameters restParameters = createRestParameters(apiPath, swarmId, null, null, queryParameters);
         return RestExecutorFactory.createRestExecutor(RestMethod.DELETE).execute(restParameters, restResponseType);
     }
 
-    protected <E> E deleteObject(String apiPath, RestResponseType<E> restResponseType) {
-        return deleteObject(apiPath, restResponseType, null);
+    protected <E> E deleteObject(String apiPath, String swarmId, RestResponseType<E> restResponseType) {
+        return deleteObject(apiPath, swarmId, restResponseType, null);
     }
 
-    private RestParameters createRestParameters(String apiPath, RequestBodyParameter requestBodyParameter,
+    private RestParameters createRestParameters(String apiPath, String swarmId, RequestBodyParameter requestBodyParameter,
                                                 HeaderParameters headerParameters, QueryParameters queryParameters) {
-        RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource())
+        RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource(swarmId))
                 .setPath(apiPath);
         if (requestBodyParameter != null && requestBodyParameter.getRequestBody() != null) {
             restParameters.setRequestBody(requestBodyParameter.getRequestBody());
@@ -85,8 +85,8 @@ public abstract class AbstractApiImpl {
         return restParameters;
     }
 
-    public byte[] getObjectLogs(String apiPath, QueryParameters queryParameters) {
-        RestParameters restParameters = createRestParameters(apiPath, null, null, queryParameters);
+    public byte[] getObjectLogs(String apiPath, String swarmId, QueryParameters queryParameters) {
+        RestParameters restParameters = createRestParameters(apiPath, swarmId, null, null, queryParameters);
         return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, new RestResponseType<byte[]>(){});
     }
 
