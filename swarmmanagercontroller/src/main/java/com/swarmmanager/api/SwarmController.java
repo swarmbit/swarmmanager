@@ -5,7 +5,6 @@ import com.swarmmanager.docker.cli.SwarmCli;
 import com.swarmmanager.docker.cli.model.Swarm;
 import com.swarmmanager.docker.cli.model.Unlock;
 import com.swarmmanager.docker.config.DockerConfig;
-import com.swarmmanager.docker.config.DockerSwarmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -16,7 +15,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("/api/swarm")
+@RequestMapping("/api/swarms")
 public class SwarmController {
 
     @Autowired
@@ -27,8 +26,13 @@ public class SwarmController {
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<String> swarmLs() {
-        return dockerConfig.getSwarms().stream().map(DockerSwarmConfig::getId).collect(toList());
+    public List<SwarmConfigModel> swarmLs() {
+        return dockerConfig.getSwarms().stream().map(swarmConfig -> {
+            SwarmConfigModel swarmConfigModel = new SwarmConfigModel();
+            swarmConfigModel.setId(swarmConfig.getId());
+            swarmConfigModel.setName(swarmConfig.getName());
+            return swarmConfigModel;
+        }).collect(toList());
     }
 
     @Secured(Role.VISITOR)
@@ -53,5 +57,26 @@ public class SwarmController {
     @RequestMapping(method = RequestMethod.PUT, value = "{swarmId}/rotate", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void rotate(@PathVariable String swarmId) {
         swarmCli.rotate(swarmId);
+    }
+
+    public static class SwarmConfigModel {
+        private String id;
+        private String name;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }

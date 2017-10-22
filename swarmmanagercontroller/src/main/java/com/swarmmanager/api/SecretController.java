@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/swarm/{swarmId}/secret")
+@RequestMapping("/api/swarms/{swarmId}/secrets")
 public class SecretController {
 
     @Autowired
     private SecretCli secretCli;
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Secret> secretLs(@PathVariable String swarmId) {
         return secretCli.ls(swarmId);
     }

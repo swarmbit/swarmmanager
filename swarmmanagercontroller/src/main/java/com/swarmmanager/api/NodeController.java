@@ -14,14 +14,14 @@ import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/swarm/{swarmId}/node")
+@RequestMapping("/api/swarms/{swarmId}/nodes")
 public class NodeController {
 
     @Autowired
     private NodeCli nodeCli;
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<NodeSummary> nodeLs(@PathVariable String swarmId) {
         return nodeCli.ls(swarmId);
     }

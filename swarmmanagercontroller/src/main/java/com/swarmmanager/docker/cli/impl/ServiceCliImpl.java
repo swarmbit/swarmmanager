@@ -13,6 +13,12 @@ import com.swarmmanager.docker.cli.ServiceCli;
 import com.swarmmanager.docker.cli.impl.helper.ServiceSpecJsonHelper;
 import com.swarmmanager.docker.cli.impl.helper.TaskJsonHelper;
 import com.swarmmanager.docker.cli.model.*;
+import com.swarmmanager.exception.RegistryUserNotFound;
+import com.swarmmanager.repository.RegistryUser;
+import com.swarmmanager.repository.RegistryUserRepository;
+import com.swarmmanager.util.EncoderDecoder;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,8 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.*;
+
+import static com.swarmmanager.util.UserUtil.getCurrentUsername;
 
 @Component
 public class ServiceCliImpl implements ServiceCli {
@@ -42,6 +50,8 @@ public class ServiceCliImpl implements ServiceCli {
     @Autowired
     private NodesApi nodesApi;
 
+    @Autowired
+    private RegistryUserRepository registryUserRepository;
 
     @Override
     public Service inspectService(String swarmId, String serviceId) {
@@ -140,6 +150,13 @@ public class ServiceCliImpl implements ServiceCli {
                 .setMode(service.isGlobal(), service.getReplicas())
                 .getServiceSpecJson();
         createParameters.setService(serviceSpecJson);
+        if (service.getRegistryName()!= null) {
+            RegistryUser registryUser = registryUserRepository.findByNameAndUserOwner(service.getRegistryName(), getCurrentUsername());
+            if (registryUser == null) {
+                throw new RegistryUserNotFound();
+            }
+            createParameters.setXRegistryAuthHeader(getXRegistryAuthHeader(registryUser));
+        }
         ServiceGeneralResponseJson responseJson = servicesApi.createService(swarmId, createParameters);
         service.setId(responseJson.getId());
         return service;
@@ -251,6 +268,19 @@ public class ServiceCliImpl implements ServiceCli {
             }
         }
         return ports;
+    }
+
+    private String getXRegistryAuthHeader(RegistryUser registryUser) {
+        String xRegistryAuthHeader = "";
+        try {
+            xRegistryAuthHeader = new JSONObject()
+                    .put("username", registryUser.getRegistryUsername())
+                    .put("password", EncoderDecoder.base64URLDecode(registryUser.getRegistryPassword()))
+                    .put("serveraddress", registryUser.getUrl()).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return EncoderDecoder.base64URLEncode(xRegistryAuthHeader);
     }
 
 }

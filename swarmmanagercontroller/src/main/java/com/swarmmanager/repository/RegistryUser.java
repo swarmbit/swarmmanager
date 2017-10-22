@@ -1,21 +1,37 @@
 package com.swarmmanager.repository;
 
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
-@Document(collection = "registryUsers")
+@Document(collection = "registriesUsers")
+@CompoundIndex(unique = true, def = "{'userOwner': 1, 'name': 1}")
 public class RegistryUser {
 
-    @Id
+    private String name;
+
+    private String userOwner;
+
     private String registryUsername;
 
     private String registryPassword;
 
-    private List<String> registries;
+    private String url;
 
-    private String userOwner;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUserOwner() {
+        return userOwner;
+    }
+
+    public void setUserOwner(String userOwner) {
+        this.userOwner = userOwner;
+    }
 
     public String getRegistryUsername() {
         return registryUsername;
@@ -33,19 +49,12 @@ public class RegistryUser {
         this.registryPassword = registryPassword;
     }
 
-    public List<String> getRegistries() {
-        return registries;
+    public String getUrl() {
+        return url;
     }
 
-    public void setRegistries(List<String> registries) {
-        this.registries = registries;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public String getUserOwner() {
-        return userOwner;
-    }
-
-    public void setUserOwner(String userOwner) {
-        this.userOwner = userOwner;
-    }
 }

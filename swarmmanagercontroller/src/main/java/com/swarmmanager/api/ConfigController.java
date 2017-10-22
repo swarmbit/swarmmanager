@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/swarm/{swarmId}/config")
+@RequestMapping("/api/swarms/{swarmId}/configs")
 public class ConfigController {
 
     @Autowired
     private ConfigCli configCli;
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Config> configLs(@PathVariable String swarmId) {
         return configCli.ls(swarmId);
     }

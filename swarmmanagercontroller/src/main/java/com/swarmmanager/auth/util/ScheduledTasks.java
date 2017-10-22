@@ -1,6 +1,7 @@
 package com.swarmmanager.auth.util;
 
-import com.swarmmanager.auth.mongo.TokenRepository;
+import com.swarmmanager.repository.TokenRepository;
+import com.swarmmanager.repository.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class ScheduledTasks {
 
     /**
      * This {@link Scheduled} task will be executed evey 24h cleaning any invalid tokens.
-     * A {@link com.swarmmanager.auth.mongo.Token} is considered invalid if it's expiration date is in the past.
+     * A {@link Token} is considered invalid if it's expiration date is in the past.
      *
      */
     @Scheduled(fixedRate = 86400000) // 24h

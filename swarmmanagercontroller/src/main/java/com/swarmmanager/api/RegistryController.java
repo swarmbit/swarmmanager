@@ -1,8 +1,6 @@
 package com.swarmmanager.api;
 
 import com.swarmmanager.auth.Role;
-import com.swarmmanager.repository.Registry;
-import com.swarmmanager.repository.RegistryRepository;
 import com.swarmmanager.repository.RegistryUser;
 import com.swarmmanager.repository.RegistryUserRepository;
 import com.swarmmanager.util.EncoderDecoder;
@@ -12,54 +10,37 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static com.swarmmanager.util.UserUtil.getCurrentUsername;
 
 @RestController
-@RequestMapping("/api/registry")
+@RequestMapping("/api/registriesUsers")
 public class RegistryController {
-
-    @Autowired
-    private RegistryRepository registryRepository;
 
     @Autowired
     private RegistryUserRepository registryUserRepository;
 
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Registry> getRegistries() {
-        return registryRepository.findAll();
+    public List<RegistryUser> getRegistriesUsers() {
+        return registryUserRepository.findByUserOwner(getCurrentUsername()).stream().map(registryUser -> {
+            registryUser.setRegistryPassword(null);
+            return registryUser;
+        }).collect(Collectors.toList());
     }
 
     @Secured(Role.USER)
-    @RequestMapping(method = RequestMethod.DELETE, value = "{registryName}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void removeRegistry(@PathVariable String registryName) {
-        registryRepository.delete(registryName);
+    @RequestMapping(method = RequestMethod.DELETE, value = "{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void removeRegistryUser(@PathVariable String name) {
+        registryUserRepository.deleteByNameAndUserOwner(name, getCurrentUsername());
     }
 
     @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.POST, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void createRegistry(@RequestBody Registry registry) {
-        registryRepository.insert(registry);
-    }
-
-    @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "user", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<String> getRegistryUsers() {
-        return registryUserRepository.findAll().stream().map(RegistryUser::getRegistryUsername).collect(toList());
-    }
-
-    @Secured(Role.USER)
-    @RequestMapping(method = RequestMethod.DELETE, value = "user/{registryUsername}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void removeRegistryUsers(@PathVariable String registryUsername) {
-        registryUserRepository.delete(registryUsername);
-
-    }
-
-    @Secured(Role.USER)
-    @RequestMapping(method = RequestMethod.POST, value = "user", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void createRegistryUser(@RequestBody RegistryUser registryUser) {
-        if (registryUser.getRegistryUsername() != null && registryUser.getRegistryPassword() != null) {
+    public void createRegistryUSer(@RequestBody RegistryUser registryUser) {
+        registryUser.setUserOwner(getCurrentUsername());
+        if (registryUser.getRegistryPassword() != null) {
             registryUser.setRegistryPassword(EncoderDecoder.base64URLEncode(registryUser.getRegistryPassword()));
             registryUserRepository.insert(registryUser);
         }

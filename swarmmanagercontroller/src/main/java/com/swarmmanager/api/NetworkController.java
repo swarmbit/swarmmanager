@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/swarm/{swarmId}/network")
+@RequestMapping("/api/swarms/{swarmId}/networks")
 public class NetworkController {
 
     @Autowired
     private NetworkCli networkCli;
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<NetworkSummary> networkLs(@PathVariable String swarmId) {
         return networkCli.ls(swarmId);
     }

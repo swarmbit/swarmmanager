@@ -24,7 +24,7 @@ public class Service {
 
     private List<Port> ports;
 
-    private String registryUsername;
+    private String registryName;
 
     public String getId() {
         return id;
@@ -90,11 +90,11 @@ public class Service {
         this.ports = ports;
     }
 
-    public String getRegistryUsername() {
-        return registryUsername;
+    public String getRegistryName() {
+        return registryName;
     }
 
-    public void setRegistryUsername(String registryUsername) {
-        this.registryUsername = registryUsername;
+    public void setRegistryName(String registryName) {
+        this.registryName = registryName;
     }
 }

@@ -1,7 +1,7 @@
 package com.swarmmanager.auth.util;
 
-import com.swarmmanager.auth.mongo.Token;
-import com.swarmmanager.auth.mongo.TokenRepository;
+import com.swarmmanager.repository.Token;
+import com.swarmmanager.repository.TokenRepository;
 import com.swarmmanager.integration.IntegrationTest;
 import org.junit.After;
 import org.junit.Before;

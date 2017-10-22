@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/swarm/{swarmId}/service")
+@RequestMapping("/api/swarms/{swarmId}/services")
 public class ServiceController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class ServiceController {
     }
 
     @Secured(Role.VISITOR)
-    @RequestMapping(method = RequestMethod.GET, value = "ls", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ServiceSummary> serviceLs(@PathVariable String swarmId) {
         return serviceCli.serviceLs(swarmId);
     }
