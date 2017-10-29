@@ -7,13 +7,13 @@ public class LogFilter {
 
     private String taskId;
 
-    private int replica;
+    private Long replica;
 
     private String serviceId;
 
     private String nodeId;
 
-    public LogFilter(String taskId, int replica, String serviceId, String nodeId) {
+    public LogFilter(String taskId, Long replica, String serviceId, String nodeId) {
         this.taskId = taskId;
         this.replica = replica;
         this.serviceId = serviceId;
@@ -24,7 +24,7 @@ public class LogFilter {
         return taskId;
     }
 
-    public int getReplica() {
+    public Long getReplica() {
         return replica;
     }
 

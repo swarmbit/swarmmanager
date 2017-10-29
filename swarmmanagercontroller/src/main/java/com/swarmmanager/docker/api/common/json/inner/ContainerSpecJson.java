@@ -1,13 +1,16 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
+import com.swarmmanager.docker.api.common.json.ConfigSpecJson;
 
 import java.util.Arrays;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContainerSpecJson {
 
     @JsonProperty("Image")
@@ -39,16 +42,20 @@ public class ContainerSpecJson {
 
     @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("TTY")
-    private boolean tty;
+    private Boolean tty;
 
     @JsonProperty("OpenStdin")
-    private boolean openStdin;
+    private Boolean openStdin;
 
     @JsonProperty("Mounts")
     private MountJson[] mounts;
 
     @JsonProperty("StopGracePeriod")
     private String stopGracePeriod;
+
+    @DockerRemoteApiMinVersion("v1.28")
+    @JsonProperty("StopSignal")
+    private String stopSignal;
 
     @JsonProperty("Healthcheck")
     private HealthConfigJson healthConfig;
@@ -61,7 +68,14 @@ public class ContainerSpecJson {
     private DNSConfigJson dnsConfig;
 
     @JsonProperty("Secrets")
-    private SecretReferenceJson secrets;
+    private SecretReferenceJson[] secrets;
+
+    @JsonProperty("Configs")
+    private ConfigReferenceJson[] configs;
+
+    @DockerRemoteApiMinVersion("v1.28")
+    @JsonProperty("ReadOnly")
+    private Boolean readOnly;
 
     public String getImage() {
         return image;
@@ -135,19 +149,19 @@ public class ContainerSpecJson {
         this.groups = groups;
     }
 
-    public boolean isTty() {
+    public Boolean isTty() {
         return tty;
     }
 
-    public void setTty(boolean tty) {
+    public void setTty(Boolean tty) {
         this.tty = tty;
     }
 
-    public boolean isOpenStdin() {
+    public Boolean isOpenStdin() {
         return openStdin;
     }
 
-    public void setOpenStdin(boolean openStdin) {
+    public void setOpenStdin(Boolean openStdin) {
         this.openStdin = openStdin;
     }
 
@@ -191,12 +205,36 @@ public class ContainerSpecJson {
         this.dnsConfig = dnsConfig;
     }
 
-    public SecretReferenceJson getSecrets() {
+    public SecretReferenceJson[] getSecrets() {
         return secrets;
     }
 
-    public void setSecrets(SecretReferenceJson secrets) {
+    public void setSecrets(SecretReferenceJson[] secrets) {
         this.secrets = secrets;
+    }
+
+    public ConfigReferenceJson[] getConfigs() {
+        return configs;
+    }
+
+    public void setConfigs(ConfigReferenceJson[] configs) {
+        this.configs = configs;
+    }
+
+    public Boolean getReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(Boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+    public String getStopSignal() {
+        return stopSignal;
+    }
+
+    public void setStopSignal(String stopSignal) {
+        this.stopSignal = stopSignal;
     }
 
     @Override
@@ -204,7 +242,7 @@ public class ContainerSpecJson {
         final StringBuilder sb = new StringBuilder("ContainerSpecJson{");
         sb.append("image='").append(image).append('\'');
         sb.append(", labels=").append(labels);
-        sb.append(", cli=").append(Arrays.toString(command));
+        sb.append(", command=").append(Arrays.toString(command));
         sb.append(", args=").append(Arrays.toString(args));
         sb.append(", hostname='").append(hostname).append('\'');
         sb.append(", env=").append(Arrays.toString(env));
@@ -214,11 +252,14 @@ public class ContainerSpecJson {
         sb.append(", tty=").append(tty);
         sb.append(", openStdin=").append(openStdin);
         sb.append(", mounts=").append(Arrays.toString(mounts));
-        sb.append(", stopGracePeriod=").append(stopGracePeriod);
+        sb.append(", stopGracePeriod='").append(stopGracePeriod).append('\'');
+        sb.append(", stopSignal='").append(stopSignal).append('\'');
         sb.append(", healthConfig=").append(healthConfig);
         sb.append(", hosts=").append(Arrays.toString(hosts));
         sb.append(", dnsConfig=").append(dnsConfig);
-        sb.append(", secrets=").append(secrets);
+        sb.append(", secrets=").append(Arrays.toString(secrets));
+        sb.append(", configs=").append(Arrays.toString(configs));
+        sb.append(", readOnly=").append(readOnly);
         sb.append('}');
         return sb.toString();
     }

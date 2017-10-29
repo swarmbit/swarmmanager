@@ -1,13 +1,15 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ManagerStatusJson {
 
     @JsonProperty("Leader")
-    private boolean leader;
+    private Boolean leader;
 
     @JsonProperty("Reachability")
     private String reachability;
@@ -15,11 +17,11 @@ public class ManagerStatusJson {
     @JsonProperty("Addr")
     private String addr;
 
-    public boolean isLeader() {
+    public Boolean isLeader() {
         return leader;
     }
 
-    public void setLeader(boolean leader) {
+    public void setLeader(Boolean leader) {
         this.leader = leader;
     }
 

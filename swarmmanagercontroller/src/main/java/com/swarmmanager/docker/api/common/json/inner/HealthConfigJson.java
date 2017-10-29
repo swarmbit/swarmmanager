@@ -1,12 +1,14 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HealthConfigJson {
 
     @JsonProperty("Test")
@@ -19,11 +21,11 @@ public class HealthConfigJson {
     private String timeout;
 
     @JsonProperty("Retries")
-    private int retries;
+    private Integer retries;
 
     @DockerRemoteApiMinVersion("v1.29")
     @JsonProperty("StartPeriod")
-    private int startPeriod;
+    private String startPeriod;
 
     public String[] getTest() {
         return test;
@@ -49,19 +51,19 @@ public class HealthConfigJson {
         this.timeout = timeout;
     }
 
-    public int getRetries() {
+    public Integer getRetries() {
         return retries;
     }
 
-    public void setRetries(int retries) {
+    public void setRetries(Integer retries) {
         this.retries = retries;
     }
 
-    public int getStartPeriod() {
+    public String getStartPeriod() {
         return startPeriod;
     }
 
-    public void setStartPeriod(int startPeriod) {
+    public void setStartPeriod(String startPeriod) {
         this.startPeriod = startPeriod;
     }
 

@@ -1,23 +1,16 @@
-package com.swarmmanager.docker.api.common.json.inner;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.swarmmanager.docker.cli.model;
 
 import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class VolumeOptionsJson {
+public class VolumeMountOptions {
 
-    @JsonProperty("NoCopy")
     private Boolean noCopy;
 
-    @JsonProperty("Labels")
     private Map<String, String> labels;
 
-    @JsonProperty("DriverConfig")
-    private DriverJson driver;
+    private String driver;
+
+    private Map<String, String> driverOptions;
 
     public Boolean isNoCopy() {
         return noCopy;
@@ -35,21 +28,31 @@ public class VolumeOptionsJson {
         this.labels = labels;
     }
 
-    public DriverJson getDriver() {
+    public String getDriver() {
         return driver;
     }
 
-    public void setDriver(DriverJson driver) {
+    public void setDriver(String driver) {
         this.driver = driver;
+    }
+
+    public Map<String, String> getDriverOptions() {
+        return driverOptions;
+    }
+
+    public void setDriverOptions(Map<String, String> driverOptions) {
+        this.driverOptions = driverOptions;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("VolumeOptionsJson{");
+        final StringBuilder sb = new StringBuilder("VolumeMountOptions{");
         sb.append("noCopy=").append(noCopy);
         sb.append(", labels=").append(labels);
-        sb.append(", driver=").append(driver);
+        sb.append(", driver='").append(driver).append('\'');
+        sb.append(", driverOptions=").append(driverOptions);
         sb.append('}');
         return sb.toString();
     }
+
 }

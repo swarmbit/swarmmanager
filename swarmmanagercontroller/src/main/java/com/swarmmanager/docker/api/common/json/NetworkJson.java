@@ -1,6 +1,7 @@
 package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 import com.swarmmanager.docker.api.common.json.inner.IPAMJson;
@@ -8,6 +9,7 @@ import com.swarmmanager.docker.api.common.json.inner.IPAMJson;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class NetworkJson {
 
     @JsonProperty("Name")
@@ -33,16 +35,16 @@ public class NetworkJson {
     private String driver;
 
     @JsonProperty("Attachable")
-    private boolean attachable;
+    private Boolean attachable;
 
     @JsonProperty("Internal")
-    private boolean internal;
+    private Boolean internal;
 
     @JsonProperty("EnableIPv6")
-    private boolean enableIPv6;
+    private Boolean enableIPv6;
 
     @JsonProperty("CheckDuplicate")
-    private boolean checkDuplicate;
+    private Boolean checkDuplicate;
 
     @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("IPAM")
@@ -104,35 +106,35 @@ public class NetworkJson {
         this.driver = driver;
     }
 
-    public boolean isAttachable() {
+    public Boolean isAttachable() {
         return attachable;
     }
 
-    public void setAttachable(boolean attachable) {
+    public void setAttachable(Boolean attachable) {
         this.attachable = attachable;
     }
 
-    public boolean isInternal() {
+    public Boolean isInternal() {
         return internal;
     }
 
-    public void setInternal(boolean internal) {
+    public void setInternal(Boolean internal) {
         this.internal = internal;
     }
 
-    public boolean isEnableIPv6() {
+    public Boolean isEnableIPv6() {
         return enableIPv6;
     }
 
-    public void setEnableIPv6(boolean enableIPv6) {
+    public void setEnableIPv6(Boolean enableIPv6) {
         this.enableIPv6 = enableIPv6;
     }
 
-    public boolean isCheckDuplicate() {
+    public Boolean isCheckDuplicate() {
         return checkDuplicate;
     }
 
-    public void setCheckDuplicate(boolean checkDuplicate) {
+    public void setCheckDuplicate(Boolean checkDuplicate) {
         this.checkDuplicate = checkDuplicate;
     }
 

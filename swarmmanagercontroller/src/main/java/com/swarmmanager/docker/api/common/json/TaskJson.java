@@ -1,6 +1,7 @@
 package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.json.inner.NetworkAttachmentConfigJson;
 import com.swarmmanager.docker.api.common.json.inner.TaskSpecJson;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaskJson {
 
     @JsonProperty("ID")
@@ -32,7 +34,7 @@ public class TaskJson {
     private String serviceId;
 
     @JsonProperty("Slot")
-    private int slot;
+    private Long slot;
 
     @JsonProperty("NodeID")
     private String nodeId;
@@ -94,11 +96,11 @@ public class TaskJson {
         this.serviceId = serviceId;
     }
 
-    public int getSlot() {
+    public Long getSlot() {
         return slot;
     }
 
-    public void setSlot(int slot) {
+    public void setSlot(Long slot) {
         this.slot = slot;
     }
 

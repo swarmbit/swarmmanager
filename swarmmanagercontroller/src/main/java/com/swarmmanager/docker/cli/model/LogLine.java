@@ -11,13 +11,13 @@ public class LogLine {
 
     private String taskId;
 
-    private int replica;
+    private Long replica;
 
     private String message;
 
-    private long timestamp;
+    private Long timestamp;
 
-    public LogLine(String serviceId, String nodeId, String taskId, int replica, String message, long timestamp) {
+    public LogLine(String serviceId, String nodeId, String taskId, Long replica, String message, long timestamp) {
         this.serviceId = serviceId;
         this.nodeId = nodeId;
         this.taskId = taskId;
@@ -38,7 +38,7 @@ public class LogLine {
         return taskId;
     }
 
-    public int getReplica() {
+    public Long getReplica() {
         return replica;
     }
 
@@ -46,7 +46,7 @@ public class LogLine {
         return message;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 }

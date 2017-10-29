@@ -1,6 +1,7 @@
 package com.swarmmanager.docker.api.common.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 import com.swarmmanager.docker.api.common.json.inner.JoinTokensJson;
@@ -9,6 +10,7 @@ import com.swarmmanager.docker.api.common.json.inner.VersionJson;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SwarmJson {
 
     @JsonProperty("ID")
@@ -31,7 +33,7 @@ public class SwarmJson {
 
     @DockerRemoteApiMinVersion("v1.30")
     @JsonProperty("RootRotationInProgress")
-    private boolean rootRotationInProgress;
+    private Boolean rootRotationInProgress;
 
     @DockerRemoteApiMinVersion("v1.30")
     @JsonProperty("TLSInfo")
@@ -85,11 +87,11 @@ public class SwarmJson {
         this.joinTokens = joinTokens;
     }
 
-    public boolean isRootRotationInProgress() {
+    public Boolean isRootRotationInProgress() {
         return rootRotationInProgress;
     }
 
-    public void setRootRotationInProgress(boolean rootRotationInProgress) {
+    public void setRootRotationInProgress(Boolean rootRotationInProgress) {
         this.rootRotationInProgress = rootRotationInProgress;
     }
 
