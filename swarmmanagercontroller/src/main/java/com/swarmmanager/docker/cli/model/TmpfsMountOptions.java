@@ -1,17 +1,9 @@
-package com.swarmmanager.docker.api.common.json.inner;
+package com.swarmmanager.docker.cli.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class TmpfsMountOptions {
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class TmpfsOptionsJson {
-
-    @JsonProperty("SizeBytes")
     private Long sizeBytes;
 
-    @JsonProperty("Mode")
     private Integer mode;
 
     public Long getSizeBytes() {
@@ -32,7 +24,7 @@ public class TmpfsOptionsJson {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TmpfsOptionsJson{");
+        final StringBuilder sb = new StringBuilder("TmpfsMountOptions{");
         sb.append("sizeBytes=").append(sizeBytes);
         sb.append(", mode=").append(mode);
         sb.append('}');

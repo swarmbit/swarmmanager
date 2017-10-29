@@ -10,7 +10,7 @@ public class Task {
 
     private String id;
 
-    private int replica;
+    private Long replica;
 
     private String serviceId;
 
@@ -40,11 +40,11 @@ public class Task {
         this.id = id;
     }
 
-    public int getReplica() {
+    public Long getReplica() {
         return replica;
     }
 
-    public void setReplica(int replica) {
+    public void setReplica(Long replica) {
         this.replica = replica;
     }
 

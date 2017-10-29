@@ -1,22 +1,24 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestartPolicyJson {
 
     @JsonProperty("Condition")
     private String condition;
 
     @JsonProperty("Delay")
-    private long delay;
+    private String delay;
 
     @JsonProperty("MaxAttempts")
-    private long maxAttempts;
+    private Long maxAttempts;
 
     @JsonProperty("Window")
-    private long window;
+    private String window;
 
     public String getCondition() {
         return condition;
@@ -26,27 +28,27 @@ public class RestartPolicyJson {
         this.condition = condition;
     }
 
-    public long getDelay() {
+    public String getDelay() {
         return delay;
     }
 
-    public void setDelay(long delay) {
+    public void setDelay(String delay) {
         this.delay = delay;
     }
 
-    public long getMaxAttempts() {
+    public Long getMaxAttempts() {
         return maxAttempts;
     }
 
-    public void setMaxAttempts(long maxAttempts) {
+    public void setMaxAttempts(Long maxAttempts) {
         this.maxAttempts = maxAttempts;
     }
 
-    public long getWindow() {
+    public String getWindow() {
         return window;
     }
 
-    public void setWindow(long windows) {
+    public void setWindow(String window) {
         this.window = window;
     }
 

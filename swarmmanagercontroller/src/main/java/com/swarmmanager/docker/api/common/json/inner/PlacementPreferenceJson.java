@@ -6,24 +6,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ReplicatedServiceJson {
+public class PlacementPreferenceJson {
 
-    @JsonProperty("Replicas")
-    private Long replicas;
+    @JsonProperty("Spread")
+    private SpreadOverJson Spread;
 
-    public Long getReplicas() {
-        return replicas;
+    public SpreadOverJson getSpread() {
+        return Spread;
     }
 
-    public void setReplicas(Long replicas) {
-        this.replicas = replicas;
+    public void setSpread(SpreadOverJson spread) {
+        Spread = spread;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ReplicatedServiceJson{");
-        sb.append("replicas=").append(replicas);
+        final StringBuilder sb = new StringBuilder("PlacementPreferenceJson{");
+        sb.append("Spread=").append(Spread);
         sb.append('}');
         return sb.toString();
     }
+
 }

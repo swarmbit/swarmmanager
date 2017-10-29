@@ -1,9 +1,11 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PortConfigJson {
 
     @JsonProperty("Name")
@@ -13,10 +15,10 @@ public class PortConfigJson {
     private String protocol;
 
     @JsonProperty("TargetPort")
-    private int targetPort;
+    private Integer targetPort;
 
     @JsonProperty("PublishedPort")
-    private int publishedPort;
+    private Integer publishedPort;
 
     @JsonProperty("PublishMode")
     private String publishMode;
@@ -37,19 +39,19 @@ public class PortConfigJson {
         this.protocol = protocol;
     }
 
-    public int getTargetPort() {
+    public Integer getTargetPort() {
         return targetPort;
     }
 
-    public void setTargetPort(int targetPort) {
+    public void setTargetPort(Integer targetPort) {
         this.targetPort = targetPort;
     }
 
-    public int getPublishedPort() {
+    public Integer getPublishedPort() {
         return publishedPort;
     }
 
-    public void setPublishedPort(int publishedPort) {
+    public void setPublishedPort(Integer publishedPort) {
         this.publishedPort = publishedPort;
     }
 

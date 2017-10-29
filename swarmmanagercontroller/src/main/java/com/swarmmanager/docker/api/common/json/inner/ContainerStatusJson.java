@@ -1,19 +1,21 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ContainerStatusJson {
 
     @JsonProperty("ContainerID")
     private String containerId;
 
     @JsonProperty("PID")
-    private int pid;
+    private Integer pid;
 
     @JsonProperty("ExitCode")
-    private int exitCode;
+    private Integer exitCode;
 
     public String getContainerId() {
         return containerId;
@@ -23,19 +25,19 @@ public class ContainerStatusJson {
         this.containerId = containerId;
     }
 
-    public int getPid() {
+    public Integer getPid() {
         return pid;
     }
 
-    public void setPid(int pid) {
+    public void setPid(Integer pid) {
         this.pid = pid;
     }
 
-    public int getExitCode() {
+    public Integer getExitCode() {
         return exitCode;
     }
 
-    public void setExitCode(int exitCode) {
+    public void setExitCode(Integer exitCode) {
         this.exitCode = exitCode;
     }
 }

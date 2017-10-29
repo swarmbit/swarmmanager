@@ -1,16 +1,18 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CAConfigJson {
 
     @JsonProperty("NodeCertExpiry")
-    private long nodeCertExpiry;
+    private Long nodeCertExpiry;
 
     @JsonProperty("ExternalCAs")
     private ExternalCAJson[] externalCAs;
@@ -25,13 +27,13 @@ public class CAConfigJson {
 
     @DockerRemoteApiMinVersion("v1.30")
     @JsonProperty("ForceRotate")
-    private int forceRotate;
+    private Integer forceRotate;
 
-    public long getNodeCertExpiry() {
+    public Long getNodeCertExpiry() {
         return nodeCertExpiry;
     }
 
-    public void setNodeCertExpiry(long nodeCertExpiry) {
+    public void setNodeCertExpiry(Long nodeCertExpiry) {
         this.nodeCertExpiry = nodeCertExpiry;
     }
 
@@ -59,11 +61,11 @@ public class CAConfigJson {
         this.signingCAKey = signingCAKey;
     }
 
-    public int getForceRotate() {
+    public Integer getForceRotate() {
         return forceRotate;
     }
 
-    public void setForceRotate(int forceRotate) {
+    public void setForceRotate(Integer forceRotate) {
         this.forceRotate = forceRotate;
     }
 

@@ -1,10 +1,12 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MountJson {
 
     @JsonProperty("Type")
@@ -18,7 +20,7 @@ public class MountJson {
 
     @DockerRemoteApiMinVersion(version = "v1.28")
     @JsonProperty("ReadOnly")
-    private boolean readOnly;
+    private Boolean readOnly;
 
     @JsonProperty("BindOptions")
     private BindOptionsJson bindOptions;
@@ -28,6 +30,10 @@ public class MountJson {
 
     @JsonProperty("TmpfsOptions")
     private TmpfsOptionsJson tmpfsOptions;
+
+    @DockerRemoteApiMinVersion(version = "v1.29")
+    @JsonProperty("Consistency")
+    private String consistency;
 
     public String getType() {
         return type;
@@ -53,11 +59,11 @@ public class MountJson {
         this.target = target;
     }
 
-    public boolean isReadOnly() {
+    public Boolean isReadOnly() {
         return readOnly;
     }
 
-    public void setReadOnly(boolean readOnly) {
+    public void setReadOnly(Boolean readOnly) {
         this.readOnly = readOnly;
     }
 
@@ -85,16 +91,25 @@ public class MountJson {
         this.tmpfsOptions = tmpfsOptions;
     }
 
+    public String getConsistency() {
+        return consistency;
+    }
+
+    public void setConsistency(String consistency) {
+        this.consistency = consistency;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("MountJson{");
-        sb.append("type=").append(type);
+        sb.append("type='").append(type).append('\'');
         sb.append(", source='").append(source).append('\'');
         sb.append(", target='").append(target).append('\'');
         sb.append(", readOnly=").append(readOnly);
         sb.append(", bindOptions=").append(bindOptions);
         sb.append(", volumeOptions=").append(volumeOptions);
         sb.append(", tmpfsOptions=").append(tmpfsOptions);
+        sb.append(", consistency='").append(consistency).append('\'');
         sb.append('}');
         return sb.toString();
     }

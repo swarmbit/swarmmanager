@@ -1,12 +1,14 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swarmmanager.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaskSpecJson {
 
     @JsonProperty("ContainerSpec")
@@ -29,7 +31,7 @@ public class TaskSpecJson {
 
     @DockerRemoteApiMinVersion("v1.25")
     @JsonProperty("ForceUpdate")
-    private long forceUpdate;
+    private Long forceUpdate;
 
     public ContainerSpecJson getContainerSpec() {
         return containerSpec;
@@ -79,11 +81,11 @@ public class TaskSpecJson {
         this.logDriver = logDriver;
     }
 
-    public long getForceUpdate() {
+    public Long getForceUpdate() {
         return forceUpdate;
     }
 
-    public void setForceUpdate(long forceUpdate) {
+    public void setForceUpdate(Long forceUpdate) {
         this.forceUpdate = forceUpdate;
     }
 

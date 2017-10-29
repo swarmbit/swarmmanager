@@ -1,63 +1,65 @@
 package com.swarmmanager.docker.api.common.json.inner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RaftConfigJson {
 
     @JsonProperty("SnapshotInterval")
-    private long snapshotInterval;
+    private Long snapshotInterval;
 
     @JsonProperty("KeepOldSnapshots")
-    private long keepOldSnapshots;
+    private Long keepOldSnapshots;
 
     @JsonProperty("LogEntriesForSlowFollowers")
-    private long logEntriesForSlowFollowers;
+    private Long logEntriesForSlowFollowers;
 
     @JsonProperty("ElectionTick")
-    private int electionTick;
+    private Integer electionTick;
 
     @JsonProperty("HeartbeatTick")
-    private int heartbeatTick;
+    private Integer heartbeatTick;
 
-    public long getSnapshotInterval() {
+    public Long getSnapshotInterval() {
         return snapshotInterval;
     }
 
-    public void setSnapshotInterval(long snapshotInterval) {
+    public void setSnapshotInterval(Long snapshotInterval) {
         this.snapshotInterval = snapshotInterval;
     }
 
-    public long getKeepOldSnapshots() {
+    public Long getKeepOldSnapshots() {
         return keepOldSnapshots;
     }
 
-    public void setKeepOldSnapshots(long keepOldSnapshots) {
+    public void setKeepOldSnapshots(Long keepOldSnapshots) {
         this.keepOldSnapshots = keepOldSnapshots;
     }
 
-    public long getLogEntriesForSlowFollowers() {
+    public Long getLogEntriesForSlowFollowers() {
         return logEntriesForSlowFollowers;
     }
 
-    public void setLogEntriesForSlowFollowers(long logEntriesForSlowFollowers) {
+    public void setLogEntriesForSlowFollowers(Long logEntriesForSlowFollowers) {
         this.logEntriesForSlowFollowers = logEntriesForSlowFollowers;
     }
 
-    public int getElectionTick() {
+    public Integer getElectionTick() {
         return electionTick;
     }
 
-    public void setElectionTick(int electionTick) {
+    public void setElectionTick(Integer electionTick) {
         this.electionTick = electionTick;
     }
 
-    public int getHeartbeatTick() {
+    public Integer getHeartbeatTick() {
         return heartbeatTick;
     }
 
-    public void setHeartbeatTick(int heartbeatTick) {
+    public void setHeartbeatTick(Integer heartbeatTick) {
         this.heartbeatTick = heartbeatTick;
     }
 }

@@ -19,7 +19,9 @@ public class TaskJsonHelper {
         for (TaskJson taskJson : tasksList) {
             Task task = new Task();
             task.setId(taskJson.getId());
-            task.setReplica(taskJson.getSlot());
+            if (taskJson.getSlot() != null) {
+                task.setReplica(taskJson.getSlot());
+            }
             task.setDesiredState(taskJson.getDesiredState());
             task.setServiceId(taskJson.getServiceId());
             task.setImage(taskJson.getSpec().getContainerSpec().getImage());
@@ -69,8 +71,11 @@ public class TaskJsonHelper {
             if (!StringUtils.equals(task1.getServiceName(), task2.getServiceName())) {
                 return task1.getServiceName().compareTo(task2.getServiceName());
             }
-            if (task1.getReplica() != task2.getReplica()) {
-                return task1.getReplica() - task2.getReplica();
+            if (task1.getReplica() != null && task2.getReplica() != null) {
+                Long result = task1.getReplica() - task2.getReplica();
+                if (result != 0) {
+                    return result.intValue();
+                }
             }
             return task1.getLastStateChange().compareTo(task2.getLastStateChange());
         });
