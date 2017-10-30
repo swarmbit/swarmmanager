@@ -387,7 +387,7 @@ public class Service {
         return dansSearches;
     }
 
-    public void setDansSearches(List<String> dansSearches) {
+    public void setDnsSearches(List<String> dansSearches) {
         this.dansSearches = dansSearches;
     }
 
@@ -523,7 +523,7 @@ public class Service {
         return updateFailureRatio;
     }
 
-    public void setUpdateFailureRatio(Double updateFailureRatio) {
+    public void setUpdateMaxFailureRatio(Double updateFailureRatio) {
         this.updateFailureRatio = updateFailureRatio;
     }
 
