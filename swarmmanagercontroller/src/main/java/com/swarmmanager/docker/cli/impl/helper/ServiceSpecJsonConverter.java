@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ServiceSpecJsonHelper {
+public class ServiceSpecJsonConverter {
 
     private ServiceSpecJson serviceSpecJson;
 
-    private ServiceSpecJsonHelper() {
+    private ServiceSpecJsonConverter() {
     }
 
-    public static ServiceSpecJsonHelper createNewHelper(ServiceSpecJson serviceSpecJson) {
-        ServiceSpecJsonHelper builder = new ServiceSpecJsonHelper();
+    public static ServiceSpecJsonConverter createNewConverter(ServiceSpecJson serviceSpecJson) {
+        ServiceSpecJsonConverter builder = new ServiceSpecJsonConverter();
         TaskSpecJson taskSpecJson = serviceSpecJson.getTaskTemplate();
         if (taskSpecJson == null) {
             taskSpecJson = new TaskSpecJson();
@@ -33,24 +33,20 @@ public class ServiceSpecJsonHelper {
         return builder;
     }
 
-    public static ServiceSpecJsonHelper createNewHelper() {
+    public static ServiceSpecJsonConverter createNewConverter() {
         ServiceSpecJson serviceSpecJson = new ServiceSpecJson();
         TaskSpecJson taskSpecJson = new TaskSpecJson();
         taskSpecJson.setContainerSpec(new ContainerSpecJson());
         serviceSpecJson.setTaskTemplate(taskSpecJson);
-        return createNewHelper(serviceSpecJson);
+        return createNewConverter(serviceSpecJson);
     }
 
-    public ServiceSpecJsonHelper setName(String name) {
+    public ServiceSpecJsonConverter setName(String name) {
         serviceSpecJson.setName(name);
         return this;
     }
 
-    public ServiceSpecJsonHelper setMode(Boolean isGlobal) {
-        return setMode(isGlobal, null);
-    }
-
-    public ServiceSpecJsonHelper setMode(Boolean isGlobal, Long replicas) {
+    public ServiceSpecJsonConverter setMode(Boolean isGlobal) {
         if (serviceSpecJson.getMode() == null) {
             ServiceModeJson serviceModeJson = new ServiceModeJson();
             if (isGlobal != null && isGlobal) {
@@ -58,11 +54,7 @@ public class ServiceSpecJsonHelper {
                 serviceModeJson.setGlobal(globalServiceJson);
             } else {
                 ReplicatedServiceJson replicatedServiceJson = new ReplicatedServiceJson();
-                if (replicas != null) {
-                    replicatedServiceJson.setReplicas(replicas);
-                } else {
-                    replicatedServiceJson.setReplicas(1L);
-                }
+                replicatedServiceJson.setReplicas(1L);
                 serviceModeJson.setReplicated(replicatedServiceJson);
             }
             serviceSpecJson.setMode(serviceModeJson);
@@ -70,7 +62,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setReplicas(Long numberOfReplicas) {
+    public ServiceSpecJsonConverter setReplicas(Long numberOfReplicas) {
         if (serviceSpecJson.getMode().getReplicated() != null && numberOfReplicas != null) {
             ReplicatedServiceJson replicatedServiceJson = new ReplicatedServiceJson();
             replicatedServiceJson.setReplicas(numberOfReplicas);
@@ -81,7 +73,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setPorts(List<Port> ports) {
+    public ServiceSpecJsonConverter setPorts(List<Port> ports) {
         if (ports != null && !ports.isEmpty()) {
             EndpointSpecJson endpointSpecJson = serviceSpecJson.getEndpointSpec();
             if (endpointSpecJson == null) {
@@ -90,11 +82,16 @@ public class ServiceSpecJsonHelper {
             PortConfigJson[] portConfigs = new PortConfigJson[ports.size()];
             for (int i = 0; i < portConfigs.length; i++) {
                 Port port = ports.get(i);
-                PortConfigJson portConfig = new PortConfigJson();
-                portConfig.setProtocol(Port.Protocol.getProtocol(port.getProtocol()).toString().toLowerCase());
-                portConfig.setPublishedPort(port.getPublished());
-                portConfig.setTargetPort(port.getTarget());
-                portConfigs[i] = portConfig;
+                if (port != null) {
+                    PortConfigJson portConfig = new PortConfigJson();
+                    Port.Protocol protocol = Port.Protocol.getProtocol(port.getProtocol());
+                    if (protocol != null) {
+                        portConfig.setProtocol(protocol.toString().toLowerCase());
+                    }
+                    portConfig.setPublishedPort(port.getPublished());
+                    portConfig.setTargetPort(port.getTarget());
+                    portConfigs[i] = portConfig;
+                }
             }
             endpointSpecJson.setPorts(portConfigs);
             serviceSpecJson.setEndpointSpec(endpointSpecJson);
@@ -102,7 +99,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setImage(String image) {
+    public ServiceSpecJsonConverter setImage(String image) {
         if (image != null) {
             TaskSpecJson taskSpecJson = serviceSpecJson.getTaskTemplate();
             ContainerSpecJson containerSpecJson = taskSpecJson.getContainerSpec();
@@ -113,12 +110,12 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setConfigs(List<String> configs) {
+    public ServiceSpecJsonConverter setConfigs(List<String> configs) {
         if (configs != null) {
             List<ConfigReferenceJson> configsJson = new ArrayList<>();
             for (String config : configs) {
                 ConfigReferenceJson configReferenceJson = new ConfigReferenceJson();
-                configReferenceJson.setConfigID(config);
+                configReferenceJson.setConfigName(config);
                 configsJson.add(configReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setConfigs(configsJson.toArray(new ConfigReferenceJson[0]));
@@ -126,12 +123,12 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setSecrets(List<String> secrets) {
+    public ServiceSpecJsonConverter setSecrets(List<String> secrets) {
         if (secrets != null) {
             List<SecretReferenceJson> secretsJson = new ArrayList<>();
             for (String secret : secrets) {
                 SecretReferenceJson secretReferenceJson = new SecretReferenceJson();
-                secretReferenceJson.setSecretID(secret);
+                secretReferenceJson.setSecretName(secret);
                 secretsJson.add(secretReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setSecrets(secretsJson.toArray(new SecretReferenceJson[0]));
@@ -139,21 +136,21 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setLabels(Map<String, String> labels) {
+    public ServiceSpecJsonConverter setLabels(Map<String, String> labels) {
         if (labels != null) {
             serviceSpecJson.setLabels(labels);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setContainerLabels(Map<String, String> containerLabels) {
+    public ServiceSpecJsonConverter setContainerLabels(Map<String, String> containerLabels) {
         if (containerLabels != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setLabels(containerLabels);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setConstraints(Map<String, String> constraints) {
+    public ServiceSpecJsonConverter setConstraints(Map<String, String> constraints) {
         if (constraints != null) {
             List<String> constraintsString = new ArrayList<>();
             PlacementJson placementJson = serviceSpecJson.getTaskTemplate().getPlacement();
@@ -169,7 +166,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setPlacementPreferences(Map<String, String> placementPreferences) {
+    public ServiceSpecJsonConverter setPlacementPreferences(Map<String, String> placementPreferences) {
         if (placementPreferences != null) {
             List<PlacementPreferenceJson> placementPreferenceJsons = new ArrayList<>();
             PlacementJson placementJson = serviceSpecJson.getTaskTemplate().getPlacement();
@@ -190,35 +187,35 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setReadOnly(Boolean readOnly) {
+    public ServiceSpecJsonConverter setReadOnly(Boolean readOnly) {
         if (readOnly != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setReadOnly(readOnly);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setEntrypoint(String entrypoint) {
+    public ServiceSpecJsonConverter setEntrypoint(String entrypoint) {
         if (entrypoint != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setCommand(new String[] { entrypoint });
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setArgs(List<String> args) {
+    public ServiceSpecJsonConverter setArgs(List<String> args) {
         if (args != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setArgs(args.toArray(new String[0]));
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setGroups(List<String> groups) {
+    public ServiceSpecJsonConverter setGroups(List<String> groups) {
         if (groups != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setGroups(groups.toArray(new String[0]));
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setLogDriver(String logDriver) {
+    public ServiceSpecJsonConverter setLogDriver(String logDriver) {
         if (logDriver != null) {
             DriverJson driverJson = serviceSpecJson.getTaskTemplate().getLogDriver();
             if (driverJson != null && StringUtils.isNotEmpty(driverJson.getName())) {
@@ -232,7 +229,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setLogOptions(Map<String, String> logOptions) {
+    public ServiceSpecJsonConverter setLogOptions(Map<String, String> logOptions) {
         if (logOptions != null) {
             DriverJson driverJson = serviceSpecJson.getTaskTemplate().getLogDriver();
             if (driverJson == null) {
@@ -244,35 +241,35 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setUser(String user) {
+    public ServiceSpecJsonConverter setUser(String user) {
         if (user != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setUser(user);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setWorkDir(String workDir) {
+    public ServiceSpecJsonConverter setWorkDir(String workDir) {
         if (workDir != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setDir(workDir);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setStopGracePeriod(String stopGracePeriod) {
+    public ServiceSpecJsonConverter setStopGracePeriod(String stopGracePeriod) {
         if (stopGracePeriod != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setStopGracePeriod(stopGracePeriod);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setStopSignal(String stopSignal) {
+    public ServiceSpecJsonConverter setStopSignal(String stopSignal) {
         if (stopSignal != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setStopSignal(stopSignal);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setMounts(List<Mount> mounts) {
+    public ServiceSpecJsonConverter setMounts(List<Mount> mounts) {
         if (mounts != null) {
             List<MountJson> mountJsons = new ArrayList<>();
             for (Mount mount : mounts) {
@@ -316,7 +313,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setEndpointMode(String endpointMode) {
+    public ServiceSpecJsonConverter setEndpointMode(String endpointMode) {
         if (endpointMode != null) {
             EndpointSpecJson endpointSpecJson = serviceSpecJson.getEndpointSpec();
             if (endpointSpecJson == null) {
@@ -328,7 +325,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setNetworks(List<String> networks) {
+    public ServiceSpecJsonConverter setNetworks(List<String> networks) {
         if (networks != null) {
             NetworkAttachmentConfigJson[] networkAttachmentConfigJsons = new NetworkAttachmentConfigJson[networks.size()];
             for (int i = 0; i < networkAttachmentConfigJsons.length; i++) {
@@ -342,21 +339,21 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setHostname(String hostname) {
+    public ServiceSpecJsonConverter setHostname(String hostname) {
         if (hostname != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setHostname(hostname);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setHosts(List<String> hosts) {
+    public ServiceSpecJsonConverter setHosts(List<String> hosts) {
         if (hosts != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setHosts(hosts.toArray(new String[0]));
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setDnsServers(List<String> dnsServers) {
+    public ServiceSpecJsonConverter setDnsServers(List<String> dnsServers) {
         if (dnsServers != null) {
             DNSConfigJson dnsConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getDnsConfig();
             if (dnsConfigJson == null) {
@@ -368,7 +365,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setDnsOptions(List<String> dnsOptions) {
+    public ServiceSpecJsonConverter setDnsOptions(List<String> dnsOptions) {
         if (dnsOptions != null) {
             DNSConfigJson dnsConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getDnsConfig();
             if (dnsConfigJson == null) {
@@ -380,7 +377,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setDnsSearches(List<String> dnsSearches) {
+    public ServiceSpecJsonConverter setDnsSearches(List<String> dnsSearches) {
         if (dnsSearches != null) {
             DNSConfigJson dnsConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getDnsConfig();
             if (dnsConfigJson == null) {
@@ -392,7 +389,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setHealthCmd(String healthCmd) {
+    public ServiceSpecJsonConverter setHealthCmd(String healthCmd) {
         if (healthCmd != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -404,7 +401,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setNoHealthCheck(Boolean noHealthCheck) {
+    public ServiceSpecJsonConverter setNoHealthCheck(Boolean noHealthCheck) {
         if (noHealthCheck != null && noHealthCheck) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -416,7 +413,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setHealthRetries(Integer healthRetries) {
+    public ServiceSpecJsonConverter setHealthRetries(Integer healthRetries) {
         if (healthRetries != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -428,7 +425,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setHealthStartPeriod(String healthStartPeriod) {
+    public ServiceSpecJsonConverter setHealthStartPeriod(String healthStartPeriod) {
         if (healthStartPeriod != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -440,7 +437,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setHealthTimeout(String healthTimeout) {
+    public ServiceSpecJsonConverter setHealthTimeout(String healthTimeout) {
         if (healthTimeout != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -452,7 +449,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setHealthInterval(String healthInterval) {
+    public ServiceSpecJsonConverter setHealthInterval(String healthInterval) {
         if (healthInterval != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -464,7 +461,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setResourcesCpu(Long cpu, boolean limit) {
+    public ServiceSpecJsonConverter setResourcesCpu(Long cpu, boolean limit) {
         if (cpu != null) {
             ResourceRequirementsJson resourcesRequirements = serviceSpecJson.getTaskTemplate().getResources();
             if (resourcesRequirements == null) {
@@ -488,7 +485,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setResourcesMemory(Long memory, boolean limit) {
+    public ServiceSpecJsonConverter setResourcesMemory(Long memory, boolean limit) {
         if (memory != null) {
             ResourceRequirementsJson resourcesRequirements = serviceSpecJson.getTaskTemplate().getResources();
             if (resourcesRequirements == null) {
@@ -512,7 +509,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setRestartCondition(String restartCondition) {
+    public ServiceSpecJsonConverter setRestartCondition(String restartCondition) {
         if (restartCondition != null) {
             RestartPolicyJson restartPolicyJson = serviceSpecJson.getTaskTemplate().getRestartPolicy();
             if (restartPolicyJson == null) {
@@ -524,7 +521,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setRestartDelay(String restartDelay) {
+    public ServiceSpecJsonConverter setRestartDelay(String restartDelay) {
         if (restartDelay != null) {
             RestartPolicyJson restartPolicyJson = serviceSpecJson.getTaskTemplate().getRestartPolicy();
             if (restartPolicyJson == null) {
@@ -536,7 +533,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setRestartMaxAttempts(Long maxAttempts) {
+    public ServiceSpecJsonConverter setRestartMaxAttempts(Long maxAttempts) {
         if (maxAttempts != null) {
             RestartPolicyJson restartPolicyJson = serviceSpecJson.getTaskTemplate().getRestartPolicy();
             if (restartPolicyJson == null) {
@@ -548,7 +545,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setRestartWindow(String restartWindow) {
+    public ServiceSpecJsonConverter setRestartWindow(String restartWindow) {
         if (restartWindow != null) {
             RestartPolicyJson restartPolicyJson = serviceSpecJson.getTaskTemplate().getRestartPolicy();
             if (restartPolicyJson == null) {
@@ -560,14 +557,14 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setForceUpdate(Boolean forceUpdate) {
+    public ServiceSpecJsonConverter setForceUpdate(Boolean forceUpdate) {
         if (forceUpdate != null && forceUpdate) {
             serviceSpecJson.getTaskTemplate().setForceUpdate(1L);
         }
         return this;
     }
 
-    public ServiceSpecJsonHelper setConfigDelay(String updateDelay, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigDelay(String updateDelay, boolean rollback) {
         if (updateDelay != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {
@@ -586,7 +583,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setConfigFailureAction(String updateFailureAction, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigFailureAction(String updateFailureAction, boolean rollback) {
         if (updateFailureAction != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {
@@ -605,7 +602,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setConfigFailureRatio(Double updateFailureRatio, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigFailureRatio(Double updateFailureRatio, boolean rollback) {
         if (updateFailureRatio != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {
@@ -620,7 +617,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setConfigMonitor(String updateMonitor, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigMonitor(String updateMonitor, boolean rollback) {
         if (updateMonitor != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {
@@ -639,7 +636,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setConfigOrder(String updateOrder, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigOrder(String updateOrder, boolean rollback) {
         if (updateOrder != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {
@@ -658,7 +655,7 @@ public class ServiceSpecJsonHelper {
         return this;
     }
 
-    public ServiceSpecJsonHelper setConfigParallelism(Long updateParallelism, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigParallelism(Long updateParallelism, boolean rollback) {
         if (updateParallelism != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {

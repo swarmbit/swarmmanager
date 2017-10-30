@@ -51,14 +51,13 @@ export class AuthService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const user: string = localStorage.getItem(AuthService.AUTH_USER);
     if (user && user != null) {
+      localStorage.removeItem(AuthService.AUTH_HEADER);
+      localStorage.removeItem(AuthService.AUTH_USER);
       const userCredentials: UserCredentials = new UserCredentials();
       userCredentials.setUsername(user);
       this.http.post(this.logoutUrl, userCredentials, {
         headers: headers
-      })
-        .map(() => {
-          localStorage.removeItem(AuthService.AUTH_HEADER);
-          localStorage.removeItem(AuthService.AUTH_USER);
+      }).map(() => {
         }).subscribe();
     }
   }

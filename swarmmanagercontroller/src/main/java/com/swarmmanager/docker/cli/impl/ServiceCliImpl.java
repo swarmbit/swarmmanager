@@ -10,7 +10,8 @@ import com.swarmmanager.docker.api.tasks.TasksApi;
 import com.swarmmanager.docker.api.tasks.parameters.TasksFilters;
 import com.swarmmanager.docker.api.tasks.parameters.TasksListParameters;
 import com.swarmmanager.docker.cli.ServiceCli;
-import com.swarmmanager.docker.cli.impl.helper.ServiceSpecJsonHelper;
+import com.swarmmanager.docker.cli.impl.helper.ServiceConverter;
+import com.swarmmanager.docker.cli.impl.helper.ServiceSpecJsonConverter;
 import com.swarmmanager.docker.cli.impl.helper.TaskJsonHelper;
 import com.swarmmanager.docker.cli.model.*;
 import com.swarmmanager.exception.RegistryUserNotFound;
@@ -55,25 +56,8 @@ public class ServiceCliImpl implements ServiceCli {
 
     @Override
     public Service inspectService(String swarmId, String serviceId) {
-        ServiceJson serviceJson = this.servicesApi.inspectService(swarmId, serviceId);
-        Service service = new Service();
-        service.setId(serviceJson.getId());
-        ZonedDateTime createdAt = DockerDateFormatter.fromDateStringToZonedDateTime(serviceJson.getCreatedAt());
-        ZonedDateTime updatedAt = DockerDateFormatter.fromDateStringToZonedDateTime(serviceJson.getUpdatedAt());
-        service.setCreatedAt(createdAt.toInstant().toEpochMilli());
-        service.setUpdatedAt(updatedAt.toInstant().toEpochMilli());
-        service.setName(serviceJson.getSpec().getName());
-        service.setGlobal(serviceJson.getSpec().getMode().getGlobal() != null);
-        if (!service.isGlobal()) {
-            service.setReplicas(serviceJson.getSpec().getMode().getReplicated().getReplicas());
-        }
-        EndpointSpecJson endpointSpecJson = serviceJson.getSpec().getEndpointSpec();
-        List<Port> ports = getPorts(endpointSpecJson);
-        if (!ports.isEmpty()) {
-            service.setPorts(ports);
-        }
-        service.setImage(serviceJson.getSpec().getTaskTemplate().getContainerSpec().getImage());
-        return service;
+        ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId);
+        return ServiceConverter.newServiceConverter(serviceJson).getService();
     }
 
     @Override
@@ -101,7 +85,7 @@ public class ServiceCliImpl implements ServiceCli {
             tasks.removeIf(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState()));
             serviceSummary.setRunningReplicas(tasks.size());
             EndpointSpecJson endpointSpecJson = service.getSpec().getEndpointSpec();
-            List<Port> ports = getPorts(endpointSpecJson);
+            List<Port> ports = ServiceConverter.getPorts(endpointSpecJson);
             if (!ports.isEmpty()) {
                 serviceSummary.setPorts(ports);
             }
@@ -143,7 +127,7 @@ public class ServiceCliImpl implements ServiceCli {
     @Override
     public Service serviceCreate(String swarmId, Service service) {
         ServiceCreateParameters createParameters = new ServiceCreateParameters();
-        ServiceSpecJson serviceSpecJson = getServiceSpecJson(service, true);
+        ServiceSpecJson serviceSpecJson = getServiceSpecJson(new ServiceSpecJson(), service, true);
         createParameters.setService(serviceSpecJson);
         if (service.getRegistryName()!= null) {
             RegistryUser registryUser = registryUserRepository.findByNameAndUserOwner(service.getRegistryName(), getCurrentUsername());
@@ -163,7 +147,7 @@ public class ServiceCliImpl implements ServiceCli {
         ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId);
         VersionJson versionJson = serviceJson.getVersion();
         updateParameters.setVersionQueryParam(versionJson.getIndex());
-        ServiceSpecJson serviceSpecJson = getServiceSpecJson(service, false);
+        ServiceSpecJson serviceSpecJson = getServiceSpecJson(serviceJson.getSpec(), service, false);
         updateParameters.setService(serviceSpecJson);
         servicesApi.updateService(swarmId, serviceId, updateParameters);
     }
@@ -246,24 +230,6 @@ public class ServiceCliImpl implements ServiceCli {
         return null;
     }
 
-
-    private List<Port> getPorts(EndpointSpecJson endpointSpecJson) {
-        List<Port> ports = new ArrayList<>();
-        if (endpointSpecJson != null) {
-            PortConfigJson[] portConfigs = endpointSpecJson.getPorts();
-            if (portConfigs != null) {
-                for (PortConfigJson portConfig : portConfigs) {
-                    Port port = new Port();
-                    port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
-                    port.setPublished(portConfig.getPublishedPort());
-                    port.setTarget(portConfig.getTargetPort());
-                    ports.add(port);
-                }
-            }
-        }
-        return ports;
-    }
-
     private String getXRegistryAuthHeader(RegistryUser registryUser) {
         String xRegistryAuthHeader = "";
         try {
@@ -277,19 +243,21 @@ public class ServiceCliImpl implements ServiceCli {
         return EncoderDecoder.base64URLEncode(xRegistryAuthHeader);
     }
 
-    private ServiceSpecJson getServiceSpecJson(Service service, boolean create) {
-        ServiceSpecJsonHelper helper = ServiceSpecJsonHelper.createNewHelper()
+    private ServiceSpecJson getServiceSpecJson(ServiceSpecJson serviceSpecJson, Service service, boolean create) {
+        ServiceSpecJsonConverter helper = ServiceSpecJsonConverter.createNewConverter(serviceSpecJson);
+        if (create) {
+            helper.setName(service.getName());
+            helper.setMode(service.isGlobal());
+        }
+        helper.setReplicas(service.getReplicas())
                 .setPorts(service.getPorts())
                 .setImage(service.getImage())
                 .setConfigs(service.getConfigs())
                 .setSecrets(service.getSecrets())
-                .setMode(service.isGlobal(), service.getReplicas())
                 .setArgs(service.getArgs())
-                .setConfigs(service.getConfigs())
                 .setConstraints(service.getConstraints())
                 .setContainerLabels(service.getContainerLabels())
                 .setLabels(service.getLabels())
-                .setSecrets(service.getSecrets())
                 .setDnsOptions(service.getDnsOptions())
                 .setDnsSearches(service.getDansSearches())
                 .setDnsServers(service.getDnsServers())
@@ -335,9 +303,6 @@ public class ServiceCliImpl implements ServiceCli {
                 .setConfigMonitor(service.getRollbackMonitor(), true)
                 .setConfigOrder(service.getRollbackOrder(), true)
                 .setConfigParallelism(service.getRollbackParallelism(), true);
-        if (create) {
-            helper.setName(service.getName());
-        }
         return helper.getServiceSpecJson();
     }
 
