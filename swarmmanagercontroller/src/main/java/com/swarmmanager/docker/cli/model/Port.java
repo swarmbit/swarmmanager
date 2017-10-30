@@ -13,43 +13,52 @@ public class Port {
                 switch (protocolName.toLowerCase()) {
                     case "UDP":
                         return Protocol.UDP;
+                    case "TCP":
+                        return Protocol.TCP;
                 }
             }
-            return Protocol.TCP;
+            return null;
         }
     }
 
     private String protocol;
 
-    private int published;
+    private Integer published;
 
-    private int target;
+    private Integer target;
 
     public String getProtocol() {
         return protocol;
     }
 
     public void setProtocol(Protocol protocol) {
-        this.protocol = protocol.toString().toLowerCase();
+        if (protocol != null) {
+            this.protocol = protocol.toString().toLowerCase();
+        }
     }
 
-    public void setProtocol(String protocol) {
-        this.protocol = Protocol.getProtocol(protocol).toString().toLowerCase();
+    public void setProtocol(String protocolStr) {
+        if (protocolStr != null) {
+            Protocol protocol = Protocol.getProtocol(protocolStr);
+            if (protocol != null) {
+                this.protocol = protocol.toString().toLowerCase();
+            }
+        }
     }
 
-    public int getPublished() {
+    public Integer getPublished() {
         return published;
     }
 
-    public void setPublished(int published) {
+    public void setPublished(Integer published) {
         this.published = published;
     }
 
-    public int getTarget() {
+    public Integer getTarget() {
         return target;
     }
 
-    public void setTarget(int target) {
+    public void setTarget(Integer target) {
         this.target = target;
     }
 }

@@ -339,11 +339,13 @@ public class ServiceConverter {
             PortConfigJson[] portConfigs = endpointSpecJson.getPorts();
             if (portConfigs != null) {
                 for (PortConfigJson portConfig : portConfigs) {
-                    Port port = new Port();
-                    port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
-                    port.setPublished(portConfig.getPublishedPort());
-                    port.setTarget(portConfig.getTargetPort());
-                    ports.add(port);
+                    if (portConfig != null) {
+                        Port port = new Port();
+                        port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
+                        port.setPublished(portConfig.getPublishedPort());
+                        port.setTarget(portConfig.getTargetPort());
+                        ports.add(port);
+                    }
                 }
             }
         }

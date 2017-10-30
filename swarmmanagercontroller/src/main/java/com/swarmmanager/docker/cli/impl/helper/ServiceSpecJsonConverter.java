@@ -47,10 +47,6 @@ public class ServiceSpecJsonConverter {
     }
 
     public ServiceSpecJsonConverter setMode(Boolean isGlobal) {
-        return setMode(isGlobal, null);
-    }
-
-    public ServiceSpecJsonConverter setMode(Boolean isGlobal, Long replicas) {
         if (serviceSpecJson.getMode() == null) {
             ServiceModeJson serviceModeJson = new ServiceModeJson();
             if (isGlobal != null && isGlobal) {
@@ -58,11 +54,7 @@ public class ServiceSpecJsonConverter {
                 serviceModeJson.setGlobal(globalServiceJson);
             } else {
                 ReplicatedServiceJson replicatedServiceJson = new ReplicatedServiceJson();
-                if (replicas != null) {
-                    replicatedServiceJson.setReplicas(replicas);
-                } else {
-                    replicatedServiceJson.setReplicas(1L);
-                }
+                replicatedServiceJson.setReplicas(1L);
                 serviceModeJson.setReplicated(replicatedServiceJson);
             }
             serviceSpecJson.setMode(serviceModeJson);
@@ -90,11 +82,16 @@ public class ServiceSpecJsonConverter {
             PortConfigJson[] portConfigs = new PortConfigJson[ports.size()];
             for (int i = 0; i < portConfigs.length; i++) {
                 Port port = ports.get(i);
-                PortConfigJson portConfig = new PortConfigJson();
-                portConfig.setProtocol(Port.Protocol.getProtocol(port.getProtocol()).toString().toLowerCase());
-                portConfig.setPublishedPort(port.getPublished());
-                portConfig.setTargetPort(port.getTarget());
-                portConfigs[i] = portConfig;
+                if (port != null) {
+                    PortConfigJson portConfig = new PortConfigJson();
+                    Port.Protocol protocol = Port.Protocol.getProtocol(port.getProtocol());
+                    if (protocol != null) {
+                        portConfig.setProtocol(protocol.toString().toLowerCase());
+                    }
+                    portConfig.setPublishedPort(port.getPublished());
+                    portConfig.setTargetPort(port.getTarget());
+                    portConfigs[i] = portConfig;
+                }
             }
             endpointSpecJson.setPorts(portConfigs);
             serviceSpecJson.setEndpointSpec(endpointSpecJson);

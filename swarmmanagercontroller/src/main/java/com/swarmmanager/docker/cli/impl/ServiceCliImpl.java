@@ -127,7 +127,7 @@ public class ServiceCliImpl implements ServiceCli {
     @Override
     public Service serviceCreate(String swarmId, Service service) {
         ServiceCreateParameters createParameters = new ServiceCreateParameters();
-        ServiceSpecJson serviceSpecJson = getServiceSpecJson(service, true);
+        ServiceSpecJson serviceSpecJson = getServiceSpecJson(new ServiceSpecJson(), service, true);
         createParameters.setService(serviceSpecJson);
         if (service.getRegistryName()!= null) {
             RegistryUser registryUser = registryUserRepository.findByNameAndUserOwner(service.getRegistryName(), getCurrentUsername());
@@ -147,7 +147,7 @@ public class ServiceCliImpl implements ServiceCli {
         ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId);
         VersionJson versionJson = serviceJson.getVersion();
         updateParameters.setVersionQueryParam(versionJson.getIndex());
-        ServiceSpecJson serviceSpecJson = getServiceSpecJson(service, false);
+        ServiceSpecJson serviceSpecJson = getServiceSpecJson(serviceJson.getSpec(), service, false);
         updateParameters.setService(serviceSpecJson);
         servicesApi.updateService(swarmId, serviceId, updateParameters);
     }
@@ -243,13 +243,17 @@ public class ServiceCliImpl implements ServiceCli {
         return EncoderDecoder.base64URLEncode(xRegistryAuthHeader);
     }
 
-    private ServiceSpecJson getServiceSpecJson(Service service, boolean create) {
-        ServiceSpecJsonConverter helper = ServiceSpecJsonConverter.createNewConverter()
+    private ServiceSpecJson getServiceSpecJson(ServiceSpecJson serviceSpecJson, Service service, boolean create) {
+        ServiceSpecJsonConverter helper = ServiceSpecJsonConverter.createNewConverter(serviceSpecJson);
+        if (create) {
+            helper.setName(service.getName());
+            helper.setMode(service.isGlobal());
+        }
+        helper.setReplicas(service.getReplicas())
                 .setPorts(service.getPorts())
                 .setImage(service.getImage())
                 .setConfigs(service.getConfigs())
                 .setSecrets(service.getSecrets())
-                .setMode(service.isGlobal(), service.getReplicas())
                 .setArgs(service.getArgs())
                 .setConstraints(service.getConstraints())
                 .setContainerLabels(service.getContainerLabels())
@@ -299,9 +303,6 @@ public class ServiceCliImpl implements ServiceCli {
                 .setConfigMonitor(service.getRollbackMonitor(), true)
                 .setConfigOrder(service.getRollbackOrder(), true)
                 .setConfigParallelism(service.getRollbackParallelism(), true);
-        if (create) {
-            helper.setName(service.getName());
-        }
         return helper.getServiceSpecJson();
     }
 
