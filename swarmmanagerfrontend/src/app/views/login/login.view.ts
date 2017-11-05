@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,15 +7,7 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class LoginView {
 
-  username: string;
-
-  password: string;
-
-  constructor(private authService: AuthService, private router: Router) {}
-
-  login() {
-    this.authService.login(this.username, this.password);
-    this.router.navigate(['']);
-  }
-
+  generalErrorMessage = 'There was an error, if the problem persist please contact the System Administration!';
+  invalidUserPassword = 'Please insert a valid username and password!';
+  currentErrorMessage = this.invalidUserPassword;
 }

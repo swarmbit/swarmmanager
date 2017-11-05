@@ -1,0 +1,8 @@
+{
+  "name": "swarmmanagerfrontendserver",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.15.3",
+    "express-http-proxy": "^1.0.3"
+  }
+}

@@ -1,14 +1,14 @@
-import { SwarmmanagerfrontendPage } from './app.po';
+import { AppPage } from './app.po';
 
 describe('swarmmanagerfrontend App', () => {
-  let page: SwarmmanagerfrontendPage;
+  let page: AppPage;
 
   beforeEach(() => {
-    page = new SwarmmanagerfrontendPage();
+    page = new AppPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('Welcome to app!');
   });
 });
