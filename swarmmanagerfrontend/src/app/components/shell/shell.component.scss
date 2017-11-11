@@ -1,0 +1,105 @@
+@import '../../../assets/styles/common';
+
+.outer-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.navbar-container {
+  width: 18rem;
+  height: 100%;
+  background-color: #fafafa;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  overflow-y: auto;
+}
+
+.header-container {
+  height: 4rem;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+i.navbar-open {
+  cursor: pointer;
+  cursor: hand;
+  margin-right: 1rem;
+}
+
+.shell-content {
+  max-width: calc(100vh - 18rem);
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  height: 11rem;
+  background-color: #eeeeee;
+  border-bottom: solid 0.09rem;
+  border-color: #bdbdbd;
+}
+
+.user-area .user {
+  width: 100%;
+  text-align: center;
+}
+
+.navbar {
+  padding-top: 2rem;
+}
+
+.navbar div {
+  line-height: 3.5rem;
+  cursor: pointer;
+  cursor: hand;
+  color: #616161;
+  outline: none;
+}
+
+.navbar div.navbar-option:hover {
+  background-color: #e0e0e0;
+}
+
+.navbar div.navbar-option.active {
+  background-color: #bdbdbd;
+}
+
+.navbar-option-text {
+  width: 10rem;
+  margin: 0 auto;
+}
+
+.icon {
+  vertical-align: middle;
+  margin: 0.2rem;
+}
+
+.text {
+  vertical-align: middle;
+  display: inline;
+}
+
+.arrow-back {
+  display: inline;
+  margin-right: 1rem;
+  vertical-align: middle;
+  visibility: hidden;
+  font-size: 2.2rem;
+}
+
+.arrow-back:hover {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.arrow-back.show {
+  visibility: visible;
+}
+
+@media (max-width: $min-With-media-query)
+{
+  .shell-content {
+    max-width: 100vh;
+  }
+}
+

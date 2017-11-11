@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
+import { AuthService } from '../services/auth/auth.service';
 
 export class AuthInterceptor implements HttpInterceptor {
 
@@ -9,7 +9,8 @@ export class AuthInterceptor implements HttpInterceptor {
       req = req.clone({
         headers: req.headers.set(AuthService.AUTH_HEADER, localStorage.getItem(AuthService.AUTH_HEADER))});
     }
-    return next.handle(req).catch(err => {
+    return next.handle(req).catch(
+      err => {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401 || err.status === 403) {
           AuthService.removeToken();
@@ -18,5 +19,4 @@ export class AuthInterceptor implements HttpInterceptor {
       }
     });
   }
-
 }

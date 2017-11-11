@@ -1,1 +1,7 @@
-<app-login></app-login>
+<app-progress-bar></app-progress-bar>
+<div *ngIf="!isAuthenticated()">
+  <app-login></app-login>
+</div>
+<div *ngIf="isAuthenticated()">
+  <app-shell></app-shell>
+</div>
