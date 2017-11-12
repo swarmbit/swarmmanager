@@ -1,5 +1,6 @@
 package com.swarmmanager.repository;
 
+import com.swarmmanager.repository.model.Token;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDateTime;

@@ -1,5 +1,6 @@
 package com.swarmmanager.repository;
 
+import com.swarmmanager.repository.model.RegistryUser;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

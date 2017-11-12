@@ -1,6 +1,6 @@
 package com.swarmmanager.auth.util;
 
-import com.swarmmanager.repository.Token;
+import com.swarmmanager.repository.model.Token;
 import com.swarmmanager.repository.TokenRepository;
 import com.swarmmanager.integration.IntegrationTest;
 import org.junit.After;

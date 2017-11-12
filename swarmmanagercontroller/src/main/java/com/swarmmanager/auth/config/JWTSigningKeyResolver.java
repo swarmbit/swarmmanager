@@ -1,6 +1,6 @@
 package com.swarmmanager.auth.config;
 
-import com.swarmmanager.repository.User;
+import com.swarmmanager.repository.model.User;
 import com.swarmmanager.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwsHeader;
