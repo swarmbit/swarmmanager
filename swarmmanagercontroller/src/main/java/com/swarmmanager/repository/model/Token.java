@@ -1,4 +1,4 @@
-package com.swarmmanager.repository;
+package com.swarmmanager.repository.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

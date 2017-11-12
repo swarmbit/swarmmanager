@@ -15,7 +15,7 @@ import com.swarmmanager.docker.cli.impl.helper.ServiceSpecJsonConverter;
 import com.swarmmanager.docker.cli.impl.helper.TaskJsonHelper;
 import com.swarmmanager.docker.cli.model.*;
 import com.swarmmanager.exception.RegistryUserNotFound;
-import com.swarmmanager.repository.RegistryUser;
+import com.swarmmanager.repository.model.RegistryUser;
 import com.swarmmanager.repository.RegistryUserRepository;
 import com.swarmmanager.util.EncoderDecoder;
 import org.json.JSONException;

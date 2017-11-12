@@ -1,7 +1,7 @@
 package com.swarmmanager.api;
 
 import com.swarmmanager.auth.Role;
-import com.swarmmanager.repository.RegistryUser;
+import com.swarmmanager.repository.model.RegistryUser;
 import com.swarmmanager.repository.RegistryUserRepository;
 import com.swarmmanager.util.EncoderDecoder;
 import org.springframework.beans.factory.annotation.Autowired;

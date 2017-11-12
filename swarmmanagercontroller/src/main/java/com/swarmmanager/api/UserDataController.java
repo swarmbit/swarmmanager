@@ -1,8 +1,10 @@
 package com.swarmmanager.api;
 
 import com.swarmmanager.auth.Role;
-import com.swarmmanager.repository.UserData;
+import com.swarmmanager.repository.model.User;
+import com.swarmmanager.repository.model.UserData;
 import com.swarmmanager.repository.UserDataRepository;
+import com.swarmmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -19,9 +21,15 @@ public class UserDataController {
     @Autowired
     private UserDataRepository userDataRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Secured(Role.VISITOR)
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public UserData getUserData() {
-        return userDataRepository.findByUsername(getCurrentUsername());
+        User user = userRepository.findByUsername(getCurrentUsername());
+        UserData userData = userDataRepository.findByUsername(getCurrentUsername());
+        userData.setRoles(user.getRoles());
+        return userData;
     }
 }
