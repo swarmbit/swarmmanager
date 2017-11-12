@@ -3,6 +3,7 @@ import { UserCredentials } from './model/user.credentials';
 import 'rxjs/add/operator/catch';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AuthError } from './model/auth.error';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
     }
   }
 
-  constructor (private http: HttpClient) {
+  constructor (private http: HttpClient, private userService: UserService) {
   }
 
   login(username: string, password: string): Promise<any> {
@@ -79,10 +80,12 @@ export class AuthService {
         (resp: HttpResponse<any>) => {
           localStorage.removeItem(AuthService.AUTH_HEADER);
           localStorage.removeItem(AuthService.AUTH_USER);
+          this.userService.clearUser();
         },
         (err: HttpErrorResponse) => {
           localStorage.removeItem(AuthService.AUTH_HEADER);
           localStorage.removeItem(AuthService.AUTH_USER);
+          this.userService.clearUser();
         }
       );
     }

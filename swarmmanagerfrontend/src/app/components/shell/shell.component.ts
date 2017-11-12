@@ -22,7 +22,7 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   constructor(public screenService: ScreenService, private headerService: HeaderService) {
     this.navigationItems = [];
-    this.navigationItems.push(new NavigationItem('Services', '/services', 'cloud'));
+    this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
     this.subscription = this.headerService.getHeaderInfo().subscribe(headerInfo => {
       this.headerInfo = headerInfo;
       this.selectedViewName = headerInfo.currentViewName;

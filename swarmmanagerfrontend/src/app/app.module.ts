@@ -16,6 +16,8 @@ import { ShellComponent } from './components/shell/shell.component';
 import { ScreenService } from './services/screen/screen.service';
 import { UserComponent } from './components/user/user.component';
 import { HeaderService } from './services/header/header.service';
+import { UserService } from './services/user/user.service';
+import { DockerApiService } from './services/docker.api/docker.api.service';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { HeaderService } from './services/header/header.service';
     ProgressBarService,
     ScreenService,
     HeaderService,
+    UserService,
+    DockerApiService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
