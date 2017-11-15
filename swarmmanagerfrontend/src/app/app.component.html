@@ -3,5 +3,7 @@
   <app-login></app-login>
 </div>
 <div *ngIf="isAuthenticated()">
-  <app-shell></app-shell>
+  <app-shell>
+    <router-outlet></router-outlet>
+  </app-shell>
 </div>

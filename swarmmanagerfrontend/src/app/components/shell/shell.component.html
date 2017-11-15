@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="navbar">
-      <div class="navbar-option" routerLink="navigationItem.link" *ngFor="let navigationItem of navigationItems" routerLinkActive="active">
+      <div class="navbar-option" (click)="closeNavbar()" routerLink="{{navigationItem.link}}" *ngFor="let navigationItem of navigationItems" routerLinkActive="active">
         <div class="navbar-option-text">
           <i class="material-icons icon">{{navigationItem.icon}}</i>
           <span class="text">{{navigationItem.name}}</span>
@@ -18,14 +18,9 @@
     </div>
   </mat-sidenav>
   <mat-toolbar color="primary" class="header-container">
-    <i *ngIf="screenService.isSmall()" class="material-icons icon navbar-open" (click)="sidenav.open()">menu</i>
-    <header>
-      <div>
-        <i [class]="showBackArrow()" (click)="goBack()">arrow_back</i>
-        <h4 class="text">{{getSelectedViewName()}}</h4>
-      </div>
-    </header>
-
+      <i *ngIf="screenService.isSmall()" class="material-icons icon navbar-open" (click)="sidenav.open()">menu</i>
+      <i *ngIf="!screenService.isSmall()"[class]="showBackArrow()" (click)="goBack()">arrow_back</i>
+      <span class="text">{{getSelectedViewName()}}</span>
   </mat-toolbar>
   <main class="shell-content">
     <ng-content></ng-content>

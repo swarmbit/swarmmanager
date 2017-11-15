@@ -1,10 +1,12 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ScreenService } from '../../services/screen/screen.service';
 import { NavigationItem } from './model/navigation.item';
 import { HeaderService } from '../../services/header/header.service';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HeaderInfo } from '../../services/header/header.info';
+import { MatSidenav } from '@angular/material/sidenav';
+
+
 @Component({
   selector: 'app-shell',
   styleUrls: ['shell.component.scss'],
@@ -19,9 +21,12 @@ export class ShellComponent implements OnInit, OnDestroy {
   headerInfo: HeaderInfo;
   selectedViewName: string;
   private subscription: Subscription;
+  @ViewChild('sidenav') private sidenav: MatSidenav;
+
 
   constructor(public screenService: ScreenService, private headerService: HeaderService) {
     this.navigationItems = [];
+    this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
     this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
     this.subscription = this.headerService.getHeaderInfo().subscribe(headerInfo => {
       this.headerInfo = headerInfo;
@@ -62,6 +67,12 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   goBack() {
     if (this.headerInfo && this.headerInfo.backArrow) {
+    }
+  }
+
+  closeNavbar() {
+    if (this.screenService.isSmall()) {
+      this.sidenav.close();
     }
   }
 

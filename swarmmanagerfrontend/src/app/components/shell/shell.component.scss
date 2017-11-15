@@ -1,4 +1,4 @@
-@import '../../../assets/styles/common';
+@import '../../styles/common';
 
 .outer-container {
   width: 100vw;
@@ -15,13 +15,40 @@
 
 .header-container {
   height: 4rem;
+  display: flex;
+  align-items: center;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+.header-container header div {
+  display: inline-block;
 }
 
 .header-container i.navbar-open {
   cursor: pointer;
   cursor: hand;
   margin-right: 1rem;
+}
+
+.header-container .text {
+  font-size: 2rem;
+}
+
+.header-container .arrow-back {
+  display: inline;
+  margin-right: 1rem;
+  vertical-align: middle;
+  visibility: hidden;
+  font-size: 2.2rem;
+}
+
+.header-container .arrow-back:hover {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.header-container .arrow-back.show {
+  visibility: visible;
 }
 
 .logo-area {
@@ -83,33 +110,17 @@
   display: inline;
 }
 
-header .arrow-back {
-  display: inline;
-  margin-right: 1rem;
-  vertical-align: middle;
-  visibility: hidden;
-  font-size: 2.2rem;
-}
-
-header .arrow-back:hover {
-  cursor: pointer;
-  cursor: hand;
-}
-
-header .arrow-back.show {
-  visibility: visible;
-}
-
 .shell-content {
-  max-width: calc(100vh - 18rem);
-  max-height: calc(100vh - 4rem);
+  padding: 1rem;
+  max-width: calc(100vw - 18rem);
+  max-height: calc(100vh - 6rem);
   overflow: auto;
 }
 
 @media (max-width: $min-With-media-query)
 {
   .shell-content {
-    max-width: 100vh;
+    max-width: 100vw;
   }
 }
 
