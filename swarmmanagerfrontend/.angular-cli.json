@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "dist",
+      "outDir": "dist/static",
       "assets": [
         "assets",
         "favicon.ico"
@@ -19,8 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "app/styles/common.scss",
-        "app/styles/styles.scss"
+        "styles/styles.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

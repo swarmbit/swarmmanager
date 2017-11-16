@@ -11,7 +11,6 @@ export class NodesView extends BaseView {
 
   constructor(headerService: HeaderService) {
     super(headerService, 'Nodes');
-    super.enableBackArrow('/nodes');
   }
 
 }

@@ -4,13 +4,13 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve  --proxy-config proxy.conf.json",
+    "start": "ng serve --port 4201 --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "server-build": "ng build --prod --aot && cp -r server/* dist/",
-    "serve-prod": "npm run server-build && node dist/server.js"
+    "server-build": "ng build --prod --aot && cp -r server/* dist/ && cd dist && yarn install",
+    "serve-prod": "yarn run server-build && node dist/server.js"
   },
   "private": true,
   "dependencies": {

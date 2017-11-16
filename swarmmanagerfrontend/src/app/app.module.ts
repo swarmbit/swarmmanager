@@ -21,6 +21,22 @@ import { DockerApiService } from './services/docker.api/docker.api.service';
 import { RoutingModule } from './modules/routing/routing.module';
 import { NetworksView } from './views/networks/networks.view';
 import { NodesView } from './views/nodes/nodes.view';
+import 'hammerjs';
+
+import {
+  HammerGestureConfig,
+  HAMMER_GESTURE_CONFIG,
+} from '@angular/platform-browser';
+
+declare const Hammer: any;
+
+export class HammerConfig extends HammerGestureConfig  {
+  buildHammer(element: HTMLElement) {
+    return new Hammer(element, {
+      touchAction: 'pan-y'
+    });
+  }
+}
 
 @NgModule({
   declarations: [
@@ -47,6 +63,10 @@ import { NodesView } from './views/nodes/nodes.view';
     HeaderService,
     UserService,
     DockerApiService,
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: HammerConfig ,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

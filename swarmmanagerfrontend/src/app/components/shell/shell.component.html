@@ -18,11 +18,11 @@
     </div>
   </mat-sidenav>
   <mat-toolbar color="primary" class="header-container">
-      <i *ngIf="screenService.isSmall()" class="material-icons icon navbar-open" (click)="sidenav.open()">menu</i>
-      <i *ngIf="!screenService.isSmall()"[class]="showBackArrow()" (click)="goBack()">arrow_back</i>
+      <i *ngIf="screenService.isSmall() && !isBackArrowActive()" class="material-icons icon navbar-open" (click)="sidenav.open()">menu</i>
+      <i *ngIf="!screenService.isSmall() || isBackArrowActive()" [class]="showBackArrow()" (click)="goBack()">arrow_back</i>
       <span class="text">{{getSelectedViewName()}}</span>
   </mat-toolbar>
-  <main class="shell-content">
+  <main class="shell-content" (swiperight)="swipe($event.type)">
     <ng-content></ng-content>
   </main>
 </mat-sidenav-container>

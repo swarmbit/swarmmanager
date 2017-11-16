@@ -14,6 +14,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 })
 export class ShellComponent implements OnInit, OnDestroy {
 
+  SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   navbarModeOver = 'over';
   navbarModeSide = 'side';
   isSmall: boolean;
@@ -59,10 +60,14 @@ export class ShellComponent implements OnInit, OnDestroy {
   showBackArrow() {
     let cssClass = 'material-icons arrow-back';
 
-    if (this.headerInfo && this.headerInfo.backArrow && this.headerInfo.backArrow.show) {
+    if (this.isBackArrowActive()) {
       cssClass += ' show';
     }
     return cssClass;
+  }
+
+  isBackArrowActive() {
+    return this.headerInfo && this.headerInfo.backArrow && this.headerInfo.backArrow.show;
   }
 
   goBack() {
@@ -73,6 +78,15 @@ export class ShellComponent implements OnInit, OnDestroy {
   closeNavbar() {
     if (this.screenService.isSmall()) {
       this.sidenav.close();
+    }
+  }
+
+  swipe(action) {
+    console.log(action);
+    if (action === this.SWIPE_ACTION.RIGHT) {
+      if (this.screenService.isSmall()) {
+        this.sidenav.open();
+      }
     }
   }
 
