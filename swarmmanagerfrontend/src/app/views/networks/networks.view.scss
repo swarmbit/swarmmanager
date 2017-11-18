@@ -1,11 +1,15 @@
+@import '../../../styles/common';
+
+.control-bar-container {
+  margin: 1rem;
+}
+
 .control-bar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 0 1rem 1rem 1rem;
 }
 
-mat-card.control-bar.mat-card {
+.control-bar.mat-card {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -16,6 +20,7 @@ mat-card.control-bar.mat-card {
   align-items: center;
   flex-grow: 1;
 }
+
 .control-bar .network button {
   margin: 0.5rem;
 }
@@ -44,5 +49,20 @@ mat-card.control-bar.mat-card {
 
 .network-card-container .network-card table tr td {
   padding-right: 1rem;
+}
+
+@media (max-width: $min-With-media-query)
+{
+  .network-card-container {
+    width: 100%;
+  }
+  .network-card-container .network-card {
+    width: 100%;
+    margin: 0 0 1rem 0;
+  }
+  .control-bar-container {
+    width: 100%;
+    margin: 0 0 1rem 0;
+  }
 }
 
