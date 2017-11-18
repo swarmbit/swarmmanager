@@ -1,0 +1,48 @@
+.control-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 1rem 1rem 1rem;
+}
+
+mat-card.control-bar.mat-card {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.control-bar .network {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-grow: 1;
+}
+.control-bar .network button {
+  margin: 0.5rem;
+}
+
+.control-bar .list {
+  margin-left: 0.5rem;
+  margin-right: 4rem;
+}
+
+.control-bar .filter {
+  width: 12rem;
+}
+
+.network-card-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.network-card-container .network-card {
+  margin: 1rem;
+}
+
+.network-card-container .network-card table {
+  margin-bottom: 1rem;
+}
+
+.network-card-container .network-card table tr td {
+  padding-right: 1rem;
+}
+

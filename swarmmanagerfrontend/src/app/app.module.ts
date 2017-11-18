@@ -27,6 +27,7 @@ import {
   HammerGestureConfig,
   HAMMER_GESTURE_CONFIG,
 } from '@angular/platform-browser';
+import { DockerNetworksService } from './services/docker.networks/docker.networks.service';
 
 declare const Hammer: any;
 
@@ -63,6 +64,7 @@ export class HammerConfig extends HammerGestureConfig  {
     HeaderService,
     UserService,
     DockerSwarmService,
+    DockerNetworksService,
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: HammerConfig ,
