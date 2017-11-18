@@ -29,8 +29,9 @@ public class SwarmController {
     public List<SwarmConfigModel> swarmLs() {
         return dockerConfig.getSwarms().stream().map(swarmConfig -> {
             SwarmConfigModel swarmConfigModel = new SwarmConfigModel();
-            swarmConfigModel.setId(swarmConfig.getId());
-            swarmConfigModel.setName(swarmConfig.getName());
+            swarmConfigModel.id = swarmConfig.getId();
+            swarmConfigModel.name = swarmConfig.getName();
+            swarmConfigModel.apiVersion = swarmConfig.getApiVersion();
             return swarmConfigModel;
         }).collect(toList());
     }
@@ -62,6 +63,7 @@ public class SwarmController {
     public static class SwarmConfigModel {
         private String id;
         private String name;
+        private String apiVersion;
 
         public String getId() {
             return id;
@@ -77,6 +79,14 @@ public class SwarmController {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getApiVersion() {
+            return apiVersion;
+        }
+
+        public void setApiVersion(String apiVersion) {
+            this.apiVersion = apiVersion;
         }
     }
 }

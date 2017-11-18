@@ -83,7 +83,7 @@ public class DockerWebClientImpl implements DockerWebClient {
 
             DockerSwarmWebTarget dockerSwarmWebTarget = new DockerSwarmWebTarget();
             dockerSwarmWebTarget.setId(swarm.getId());
-            dockerSwarmWebTarget.setBaseResource(client.target(protocol.getUrlForProtocol(dockerClientConfig)).path(dockerConfig.getApiVersion()));
+            dockerSwarmWebTarget.setBaseResource(client.target(protocol.getUrlForProtocol(dockerClientConfig)).path(swarm.getApiVersion()));
             dockerSwarmWebTargetList.add(dockerSwarmWebTarget);
         });
     }

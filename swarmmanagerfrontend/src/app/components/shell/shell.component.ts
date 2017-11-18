@@ -5,6 +5,8 @@ import { HeaderService } from '../../services/header/header.service';
 import { Subscription } from 'rxjs';
 import { HeaderInfo } from '../../services/header/header.info';
 import { MatSidenav } from '@angular/material/sidenav';
+import { DockerSwarmService } from '../../services/docker.swarms/docker.swarms.service';
+import { DockerSwarm } from '../../services/docker.swarms/docker.swarm';
 
 
 @Component({
@@ -21,11 +23,14 @@ export class ShellComponent implements OnInit, OnDestroy {
   navigationItems: NavigationItem[];
   headerInfo: HeaderInfo;
   selectedViewName: string;
+  swarms: DockerSwarm[];
+  selectedSwarm = '';
+
   private subscription: Subscription;
   @ViewChild('sidenav') private sidenav: MatSidenav;
 
 
-  constructor(public screenService: ScreenService, private headerService: HeaderService) {
+  constructor(public screenService: ScreenService, private headerService: HeaderService, private swarmService: DockerSwarmService) {
     this.navigationItems = [];
     this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
     this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
@@ -33,6 +38,14 @@ export class ShellComponent implements OnInit, OnDestroy {
       this.headerInfo = headerInfo;
       this.selectedViewName = headerInfo.currentViewName;
     });
+    this.swarms = [];
+    this.swarmService.getSwarms().then(
+      swarms => {
+        this.swarms = swarms;
+        if (this.swarms && this.swarms.length > 0) {
+          this.selectedSwarm = this.swarms[0].id;
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -93,6 +106,10 @@ export class ShellComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.isSmall = this.screenService.isSmall();
+  }
+
+  selectSwarm(event) {
+    this.swarmService.selectSwarm(event.value);
   }
 
 }

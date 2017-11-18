@@ -54,15 +54,16 @@
 .logo-area {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: column;
-  height: 12rem;
+  height: 15rem;
   background-color: #eeeeee;
   border-bottom: solid 0.09rem;
   border-color: #bdbdbd;
 }
 
 .logo-area .logo {
+  margin-top: 2rem;
   height: 5rem;
 }
 
@@ -73,6 +74,15 @@
 .logo-area .user {
   width: 100%;
   text-align: center;
+}
+
+.logo-area .swarm-select-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.logo-area .swarm-select-container .swarm-select {
+  align-self: flex-end;
 }
 
 .navbar {
@@ -111,7 +121,7 @@
 }
 
 .shell-content {
-  padding: 1rem;
+  padding: 1rem 4rem 1rem 4rem;
   max-width: calc(100vw - 18rem);
   height: calc(100vh - 6rem);
   max-height: calc(100vh - 6rem);
@@ -121,6 +131,7 @@
 @media (max-width: $min-With-media-query)
 {
   .shell-content {
+    padding: 1rem 3rem 1rem 3rem;
     max-width: 100vw;
   }
 

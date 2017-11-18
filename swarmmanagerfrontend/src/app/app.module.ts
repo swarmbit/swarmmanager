@@ -17,7 +17,7 @@ import { ScreenService } from './services/screen/screen.service';
 import { UserComponent } from './components/user/user.component';
 import { HeaderService } from './services/header/header.service';
 import { UserService } from './services/user/user.service';
-import { DockerApiService } from './services/docker.api/docker.api.service';
+import { DockerSwarmService } from './services/docker.swarms/docker.swarms.service';
 import { RoutingModule } from './modules/routing/routing.module';
 import { NetworksView } from './views/networks/networks.view';
 import { NodesView } from './views/nodes/nodes.view';
@@ -62,7 +62,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ScreenService,
     HeaderService,
     UserService,
-    DockerApiService,
+    DockerSwarmService,
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: HammerConfig ,

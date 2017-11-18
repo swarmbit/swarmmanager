@@ -7,6 +7,17 @@
       <div class="user">
         <app-user></app-user>
       </div>
+      <div class="swarm-select-container">
+        <div class="swarm-select">
+          <mat-form-field>
+            <mat-select placeholder="Swarm" [(value)]="selectedSwarm" (change)="selectSwarm($event)">
+              <mat-option *ngFor="let swarm of swarms" [value]="swarm.id">
+                {{swarm.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
     <div class="navbar">
       <div class="navbar-option" (click)="closeNavbar()" routerLink="{{navigationItem.link}}" *ngFor="let navigationItem of navigationItems" routerLinkActive="active">
