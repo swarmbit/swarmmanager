@@ -1,16 +1,16 @@
 docker:
    swarms:
-       - id: 1
-         name: dev
+       - id: dev
+         name: Development
          apiVersion: v1.30
-         description: dev swarm
+         description: Dev swarm
          client:
             protocol: unix
             unixSocketPath: /var/run/docker.sock
-       - id: 2
-         name: prod
+       - id: prod
+         name: Production
          apiVersion: v1.30
-         description: prod swarm
+         description: Prod swarm
          client:
             protocol: unix
             unixSocketPath: /var/run/docker.sock

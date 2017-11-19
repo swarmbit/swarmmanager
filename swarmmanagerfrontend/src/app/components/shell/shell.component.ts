@@ -39,7 +39,7 @@ export class ShellComponent implements OnInit, OnDestroy {
       this.selectedViewName = headerInfo.currentViewName;
     });
     this.swarms = [];
-    this.swarmService.getSwarms().then(
+    this.swarmService.getSwarms().subscribe(
       swarms => {
         this.swarms = swarms;
         if (this.swarms && this.swarms.length > 0) {

@@ -1,8 +1,8 @@
 <div class="control-bar-container">
   <mat-card class="control-bar">
     <div class="network">
-      <button mat-raised-button color="accent">Create Network</button>
-      <button mat-raised-button color="accent">Refresh Network List</button>
+      <button mat-raised-button color="accent" *ngIf="user.isUser()">Create Network</button>
+      <button mat-raised-button color="accent" (click)="refreshNetworks()">Refresh Network List</button>
     </div>
     <div class="list">
       <mat-form-field class="filter">
@@ -16,7 +16,7 @@
   </mat-card>
 </div>
 <div class="network-card-container">
-  <mat-card class="network-card" *ngFor="let network of networks">
+  <mat-card class="network-card" *ngFor="let network of getNetworks()">
     <mat-card-title>{{network.name}}</mat-card-title>
     <mat-card-content>
       <table>

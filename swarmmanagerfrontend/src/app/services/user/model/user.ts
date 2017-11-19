@@ -8,10 +8,11 @@ export class User {
   }
 
   isUser(): boolean {
-    return this.roles.indexOf('USER') > -1 && !this.isAdmin();
+    console.log()
+    return this.roles.indexOf('USER') > -1;
   }
 
   isVisitor(): boolean {
-    return this.roles.indexOf('VISITOR') > -1 && !this.isUser();
+    return this.roles.indexOf('VISITOR') > -1;
   }
 }
