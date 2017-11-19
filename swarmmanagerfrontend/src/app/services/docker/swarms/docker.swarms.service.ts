@@ -10,7 +10,7 @@ export class DockerSwarmService {
   public static DOCKER_SWARMS_URL = '/api/swarms/';
   private selectedSwarm: DockerSwarm;
   private swarms: DockerSwarm[] = [];
-  private selectedSwarmObservers: Observer[] = [];
+  private selectedSwarmObservers: Observer<any>[] = [];
 
   constructor (private http: HttpClient) {
   }
@@ -30,7 +30,7 @@ export class DockerSwarmService {
       });
     } else {
       return Observable.create(observer => {
-        if (this.swarms > 0) {
+        if (this.swarms.length > 0) {
           this.selectSwarm(this.swarms[0].id);
         }
         observer.next(this.swarms);

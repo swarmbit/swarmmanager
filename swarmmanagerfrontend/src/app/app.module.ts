@@ -17,7 +17,7 @@ import { ScreenService } from './services/screen/screen.service';
 import { UserComponent } from './components/user/user.component';
 import { HeaderService } from './services/header/header.service';
 import { UserService } from './services/user/user.service';
-import { DockerSwarmService } from './services/docker.swarms/docker.swarms.service';
+import { DockerSwarmService } from './services/docker/swarms/docker.swarms.service';
 import { RoutingModule } from './modules/routing/routing.module';
 import { NetworksView } from './views/networks/networks.view';
 import { NodesView } from './views/nodes/nodes.view';
@@ -27,7 +27,8 @@ import {
   HammerGestureConfig,
   HAMMER_GESTURE_CONFIG,
 } from '@angular/platform-browser';
-import { DockerNetworksService } from './services/docker.networks/docker.networks.service';
+import { DockerNetworksService } from './services/docker/networks/docker.networks.service';
+import { SnackbarService } from './services/snackbar/snackbar.service';
 
 declare const Hammer: any;
 
@@ -63,6 +64,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ScreenService,
     HeaderService,
     UserService,
+    SnackbarService,
     DockerSwarmService,
     DockerNetworksService,
     {

@@ -2,7 +2,7 @@ import { HeaderService } from '../services/header/header.service';
 import { HeaderInfo } from '../services/header/header.info';
 import { BackArrow } from '../services/header/back.arrow';
 import { User } from '../services/user/model/user';
-import { DockerSwarmService } from '../services/docker.swarms/docker.swarms.service';
+import { DockerSwarmService } from '../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../services/user/user.service';
 
 export class BaseView {

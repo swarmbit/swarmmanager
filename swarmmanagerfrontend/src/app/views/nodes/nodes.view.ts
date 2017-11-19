@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { HeaderService } from '../../services/header/header.service';
 import { BaseView } from '../base.view';
-import { DockerSwarmService } from '../../services/docker.swarms/docker.swarms.service';
+import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../services/user/user.service';
 
 @Component({

@@ -5,8 +5,8 @@ import { HeaderService } from '../../services/header/header.service';
 import { Subscription } from 'rxjs';
 import { HeaderInfo } from '../../services/header/header.info';
 import { MatSidenav } from '@angular/material/sidenav';
-import { DockerSwarmService } from '../../services/docker.swarms/docker.swarms.service';
-import { DockerSwarm } from '../../services/docker.swarms/docker.swarm';
+import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';
+import { DockerSwarm } from '../../services/docker/swarms/docker.swarm';
 
 
 @Component({
@@ -110,6 +110,7 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   selectSwarm(event) {
     this.swarmService.selectSwarm(event.value);
+    this.closeNavbar();
   }
 
 }

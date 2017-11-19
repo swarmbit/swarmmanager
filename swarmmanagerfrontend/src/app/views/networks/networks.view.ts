@@ -2,9 +2,9 @@
 import { Component } from '@angular/core';
 import { BaseView } from '../base.view';
 import { HeaderService } from '../../services/header/header.service';
-import { DockerNetworksService } from '../../services/docker.networks/docker.networks.service';
-import { DockerNetworkSummary } from '../../services/docker.networks/docker.network.summary';
-import { DockerSwarmService } from '../../services/docker.swarms/docker.swarms.service';
+import { DockerNetworksService } from '../../services/docker/networks/docker.networks.service';
+import { DockerNetworkSummary } from '../../services/docker/networks/docker.network.summary';
+import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../services/user/user.service';
 import { ViewUtils } from '../view.utils';
 
