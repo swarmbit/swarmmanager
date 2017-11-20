@@ -10,6 +10,10 @@
   width: 26rem;
 }
 
+/deep/ .list-container > mat-card {
+  user-select: text;
+}
+
 /deep/ .list-container > mat-card table {
   margin-bottom: 1rem;
 }
