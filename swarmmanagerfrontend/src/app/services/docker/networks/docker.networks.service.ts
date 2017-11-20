@@ -36,6 +36,7 @@ export class DockerNetworksService extends DockerBaseService {
               this.snackbarService.showSuccess('Loaded ' + this.dockerSwarmName + ' networks!');
             },
             (err: HttpErrorResponse) => {
+              console.log(err);
               this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' networks! ' + err.message);
             });
       });

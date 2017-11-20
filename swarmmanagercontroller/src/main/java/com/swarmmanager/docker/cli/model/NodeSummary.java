@@ -10,7 +10,13 @@ public class NodeSummary {
 
     private String availability;
 
+    private boolean isManager;
+
     private boolean isLeader;
+
+    private String managerReachability;
+
+    private Long numberOfRunningTasks;
 
     public String getId() {
         return id;
@@ -50,5 +56,29 @@ public class NodeSummary {
 
     public void setLeader(boolean leader) {
         isLeader = leader;
+    }
+
+    public boolean isManager() {
+        return isManager;
+    }
+
+    public void setManager(boolean manager) {
+        isManager = manager;
+    }
+
+    public String getManagerReachability() {
+        return managerReachability;
+    }
+
+    public void setManagerReachability(String managerReachability) {
+        this.managerReachability = managerReachability;
+    }
+
+    public Long getNumberOfRunningTasks() {
+        return numberOfRunningTasks;
+    }
+
+    public void setNumberOfRunningTasks(Long numberOfRunningTasks) {
+        this.numberOfRunningTasks = numberOfRunningTasks;
     }
 }
