@@ -5,6 +5,7 @@ import { DockerSwarmService } from '../swarms/docker.swarms.service';
 import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
+import 'rxjs/add/operator/first';
 
 @Injectable()
 export class DockerNetworksService extends DockerBaseService {
@@ -21,6 +22,7 @@ export class DockerNetworksService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNetworkSummary[]>(this.dockerSwarmUrl + this.dockerNetworksUrl)
+          .first()
           .subscribe(
             (networks: DockerNetworkSummary[]) => {
               const networksReturn: DockerNetworkSummary[] = [];

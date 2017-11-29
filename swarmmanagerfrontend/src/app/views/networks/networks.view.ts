@@ -1,5 +1,4 @@
-
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { BaseView } from '../base.view';
 import { HeaderService } from '../../services/header/header.service';
 import { DockerNetworksService } from '../../services/docker/networks/docker.networks.service';
@@ -29,12 +28,12 @@ export class NetworksView extends BaseView {
   }
 
   refreshNetworks(): void {
-    this.networksService.getNetworksList().subscribe(
+    super.addSubscription(this.networksService.getNetworksList().subscribe(
       (networks: DockerNetworkSummary[]) => {
         this.networks = networks;
         this.networks.sort(ViewUtils.sortByName);
       }
-    );
+    ));
   }
 
   getNetworks(): DockerNetworkSummary[] {

@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import { DockerNodeSummary } from './docker.node.summary';
+import 'rxjs/add/operator/first';
+
 
 @Injectable()
 export class DockerNodesService extends DockerBaseService {
@@ -21,6 +23,7 @@ export class DockerNodesService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNodeSummary[]>(this.dockerSwarmUrl + this.dockerNodesUrl)
+          .first()
           .subscribe(
             (nodes: DockerNodeSummary[]) => {
               observer.next(nodes);

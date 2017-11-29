@@ -1,0 +1,11 @@
+<form class="network-form" (submit)="createNetwork(form)" #form="ngForm">
+  <mat-form-field class="big-field">
+    <input matInput name="Name" placeholder="Name" value="" ngModel>
+  </mat-form-field>
+  <mat-form-field class="big-field">
+    <input matInput name="IPAM Driver" placeholder="IPAM Driver" value="" ngModel>
+  </mat-form-field>
+  <div class="big-field">
+    <button mat-raised-button color="accent" type="submit">Create</button>
+  </div>
+</form>

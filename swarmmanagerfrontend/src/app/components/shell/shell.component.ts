@@ -7,6 +7,7 @@ import { HeaderInfo } from '../../services/header/header.info';
 import { MatSidenav } from '@angular/material/sidenav';
 import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';
 import { DockerSwarm } from '../../services/docker/swarms/docker.swarm';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') private sidenav: MatSidenav;
 
 
-  constructor(public screenService: ScreenService, private headerService: HeaderService, private swarmService: DockerSwarmService) {
+  constructor(private router: Router, public screenService: ScreenService, private headerService: HeaderService, private swarmService: DockerSwarmService) {
     this.navigationItems = [];
     this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
     this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
@@ -85,6 +86,7 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   goBack() {
     if (this.headerInfo && this.headerInfo.backArrow) {
+      this.router.navigate([this.headerInfo.backArrow.link]);
     }
   }
 

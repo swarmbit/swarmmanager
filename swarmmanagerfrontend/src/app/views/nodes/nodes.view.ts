@@ -29,7 +29,7 @@ export class NodesView extends BaseView {
   }
 
   refreshNodes(): void {
-    this.nodesService.getNodesList().subscribe(
+    super.addSubscription(this.nodesService.getNodesList().subscribe(
       (nodes: DockerNodeSummary[]) => {
         this.nodes = nodes;
         this.nodes.sort((value1, value2) => {
@@ -42,7 +42,7 @@ export class NodesView extends BaseView {
           return 0;
         });
       }
-    );
+    ));
   }
 
   getNodes(): DockerNodeSummary[] {
