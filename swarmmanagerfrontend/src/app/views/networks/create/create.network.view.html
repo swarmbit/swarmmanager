@@ -1,11 +1,81 @@
-<form class="network-form" (submit)="createNetwork(form)" #form="ngForm">
-  <mat-form-field class="big-field">
-    <input matInput name="Name" placeholder="Name" value="" ngModel>
-  </mat-form-field>
-  <mat-form-field class="big-field">
-    <input matInput name="IPAM Driver" placeholder="IPAM Driver" value="" ngModel>
-  </mat-form-field>
-  <div class="big-field">
-    <button mat-raised-button color="accent" type="submit">Create</button>
-  </div>
-</form>
+<div class="network-form-container">
+  <form class="network-form" (submit)="createNetwork(form)" #form="ngForm">
+    <div class="form-field">
+      <mat-form-field class="big-field">
+        <input matInput name="name" placeholder="Name" value="" ngModel>
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <mat-form-field class="big-field">
+        <input matInput name="driver" placeholder="Driver" value="" ngModel>
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <mat-form-field class="big-field">
+        <input matInput name="ipamDriver" placeholder="IPAM Driver" value="" ngModel>
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <h5>IPAM Options</h5>
+      <div class="pair">
+        <mat-form-field>
+          <input matInput name="ipamOption1" placeholder="Option" value="" ngModel>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput name="ipamOptionValue1" placeholder="Value" value="" ngModel>
+        </mat-form-field>
+        <button mat-mini-fab>
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="form-group">
+      <h5>Labels</h5>
+      <div class="pair">
+        <mat-form-field>
+          <input matInput name="label1" placeholder="Label" value="" ngModel>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput name="labelValue1" placeholder="Value" value="" ngModel>
+        </mat-form-field>
+        <button mat-mini-fab>
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="form-group">
+      <h5>Options</h5>
+      <div class="pair">
+        <mat-form-field>
+          <input matInput name="option1" placeholder="Option" value="" ngModel>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput name="optionValue1" placeholder="Value" value="" ngModel>
+        </mat-form-field>
+        <button mat-mini-fab>
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="form-field">
+      <div class="big-field padding">
+        <mat-slide-toggle>IPv6</mat-slide-toggle>
+      </div>
+    </div>
+    <div class="form-field">
+      <div class="big-field padding">
+        <mat-slide-toggle>Internal</mat-slide-toggle>
+      </div>
+    </div>
+    <div class="form-field">
+      <div class="big-field padding">
+        <mat-slide-toggle>Attachable</mat-slide-toggle>
+      </div>
+    </div>
+    <div class="form-field">
+      <div class="big-field submit">
+        <button mat-raised-button color="accent" type="submit">Create</button>
+      </div>
+    </div>
+  </form>
+</div>
