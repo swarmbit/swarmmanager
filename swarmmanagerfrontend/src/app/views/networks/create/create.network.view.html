@@ -15,8 +15,27 @@
         <input matInput name="ipamDriver" placeholder="IPAM Driver" value="" ngModel>
       </mat-form-field>
     </div>
-    <div class="form-group">
-      <h5>IPAM Options</h5>
+    <mat-expansion-panel class="expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          IPAM Configs
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="form-field">
+        <mat-form-field class="big-field">
+          <input matInput name="subnet1" placeholder="Subnet" value="" ngModel>
+        </mat-form-field>
+      </div>
+      <div class="form-field">
+        <mat-form-field class="big-field">
+          <input matInput name="ipRange1" placeholder="IP Range" value="" ngModel>
+        </mat-form-field>
+      </div>
+      <div class="form-field">
+        <mat-form-field class="big-field">
+          <input matInput name="gateway1" placeholder="Gateway" value="" ngModel>
+        </mat-form-field>
+      </div>
       <div class="pair">
         <mat-form-field>
           <input matInput name="ipamOption1" placeholder="Option" value="" ngModel>
@@ -28,9 +47,36 @@
           <mat-icon>add</mat-icon>
         </button>
       </div>
-    </div>
-    <div class="form-group">
-      <h5>Labels</h5>
+      <div class="form-field">
+        <div class="big-field">
+          <button mat-raised-button color="accent" type="submit">New Config</button>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          IPAM Options
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="pair">
+        <mat-form-field>
+          <input matInput name="ipamOption1" placeholder="Option" value="" ngModel>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput name="ipamOptionValue1" placeholder="Value" value="" ngModel>
+        </mat-form-field>
+        <button mat-mini-fab>
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Labels
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <div class="pair">
         <mat-form-field>
           <input matInput name="label1" placeholder="Label" value="" ngModel>
@@ -42,9 +88,11 @@
           <mat-icon>add</mat-icon>
         </button>
       </div>
-    </div>
-    <div class="form-group">
-      <h5>Options</h5>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="expansion-panel">
+      <mat-panel-title>
+        Options
+      </mat-panel-title>
       <div class="pair">
         <mat-form-field>
           <input matInput name="option1" placeholder="Option" value="" ngModel>
@@ -56,7 +104,7 @@
           <mat-icon>add</mat-icon>
         </button>
       </div>
-    </div>
+    </mat-expansion-panel>
     <div class="form-field">
       <div class="big-field padding">
         <mat-slide-toggle>IPv6</mat-slide-toggle>
