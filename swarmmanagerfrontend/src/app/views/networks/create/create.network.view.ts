@@ -23,7 +23,7 @@ export class CreateNetworkView extends BaseView {
   }
 
   createNetwork(form: NgForm): void {
-    console.log(form);
+    console.log(form.value);
   }
 
 }

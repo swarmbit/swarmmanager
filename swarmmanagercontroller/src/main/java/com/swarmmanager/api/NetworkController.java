@@ -24,19 +24,19 @@ public class NetworkController {
         return networkCli.ls(swarmId);
     }
 
-    @Secured(Role.USER)
+    @Secured(Role.ADMIN)
     @RequestMapping(method = RequestMethod.POST, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Network networkCreate(@PathVariable String swarmId, @RequestBody Network network) {
         return networkCli.create(swarmId, network);
     }
 
-    @Secured(Role.VISITOR)
+    @Secured(Role.USER)
     @RequestMapping(method = RequestMethod.GET, value = "{networkId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Network networkInspect(@PathVariable String swarmId, @PathVariable String networkId) {
         return networkCli.inspect(swarmId, networkId);
     }
 
-    @Secured(Role.USER)
+    @Secured(Role.ADMIN)
     @RequestMapping(method = RequestMethod.DELETE, value = "{networkId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void networkRm(@PathVariable String swarmId, @PathVariable String networkId) {
         networkCli.rm(swarmId, networkId);

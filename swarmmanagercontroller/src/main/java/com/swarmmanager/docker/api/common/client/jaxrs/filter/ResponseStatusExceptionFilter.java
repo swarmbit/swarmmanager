@@ -19,11 +19,13 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
         int status = responseContext.getStatus();
+        // status code used by the frontend to identify docker api errors
+        int dockerErrStatus = 100001;
         if (status >= 300) {
             if (status == 503) {
-                throw new DockerRemoteApiException("Configured node is not part of a swarm.", status);
+                throw new DockerRemoteApiException("Configured node is not part of a swarm.", dockerErrStatus);
             }
-            throw new DockerRemoteApiException(getBodyAsMessage(responseContext), status);
+            throw new DockerRemoteApiException(getBodyAsMessage(responseContext), dockerErrStatus);
         }
     }
 

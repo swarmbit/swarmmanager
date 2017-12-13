@@ -31,7 +31,12 @@ export class DockerNodesService extends DockerBaseService {
               this.snackbarService.showSuccess('Loaded ' + this.dockerSwarmName + ' nodes!');
             },
             (err: HttpErrorResponse) => {
-              this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' nodes! ' + err.message);
+              console.log(err);
+              if (err.status === 100001) {
+                this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' nodes! ' + err.message);
+              } else {
+                this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' nodes!');
+              }
             });
       });
     });

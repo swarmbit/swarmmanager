@@ -9,7 +9,7 @@ import { AuthError } from '../../services/auth/model/auth.error';
 })
 export class LoginView {
 
-  generalErrorMessage = 'There was an error, if the problem persist please contact the System Administration!';
+  generalErrorMessage = 'There was an error, if the problem persists please contact the System Administration!';
   invalidUserPassword = 'Please insert a valid username and password!';
   currentErrorMessage = '';
   username: string;

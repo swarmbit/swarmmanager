@@ -8,7 +8,6 @@ export class User {
   }
 
   isUser(): boolean {
-    console.log()
     return this.roles.indexOf('USER') > -1;
   }
 
