@@ -40,10 +40,10 @@ public class NetworkCliImpl implements NetworkCli {
         IPAMJson ipamJson = new IPAMJson();
         ipamJson.setDriver(network.getIpamDriver());
         ipamJson.setOptions(network.getIpamOptions());
-        if (network.getIpamConfig() != null) {
-            IPAMConfigJson[] ipamConfigJsons = new IPAMConfigJson[network.getIpamConfig().size()];
+        if (network.getIpamConfigs() != null) {
+            IPAMConfigJson[] ipamConfigJsons = new IPAMConfigJson[network.getIpamConfigs().size()];
             for (int i = 0; i < ipamConfigJsons.length; i++) {
-                IpamConfig ipamConfig = network.getIpamConfig().get(i);
+                IpamConfig ipamConfig = network.getIpamConfigs().get(i);
                 IPAMConfigJson ipamConfigJson = new IPAMConfigJson();
                 ipamConfigJson.setIpRange(ipamConfig.getIpRange());
                 ipamConfigJson.setAuxAddress(ipamConfig.getAuxAddress());
@@ -107,7 +107,7 @@ public class NetworkCliImpl implements NetworkCli {
                     ipamConfigList.add(ipamConfig);
                 }
             }
-            network.setIpamConfig(ipamConfigList);
+            network.setIpamConfigs(ipamConfigList);
         }
         return network;
     }

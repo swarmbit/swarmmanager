@@ -2,13 +2,44 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NodesView } from '../../views/nodes/nodes.view';
 import { NetworksView } from '../../views/networks/networks.view';
-import { CreateNetworkView } from '../../views/networks/create/create.network.view';
+import { ManageNetworkView } from '../../views/networks/manage/manage.network.view';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/networks', pathMatch: 'full'},
-  { path: 'networks', component: NetworksView },
-  { path: 'networks/create', component: CreateNetworkView },
-  { path: 'nodes', component: NodesView }
+  {
+    path: '',
+    redirectTo: '/networks',
+    pathMatch: 'full'
+  },
+  {
+    path: 'networks',
+    component: NetworksView,
+    data: {
+      title: 'Networks',
+    }
+  },
+  {
+    path: 'networks/manage',
+    component: ManageNetworkView,
+    data: {
+      title: 'Create Network',
+      action: 'create'
+    }
+  },
+  {
+    path: 'networks/:name',
+    component: ManageNetworkView,
+    data: {
+      title: 'Network',
+      action: 'manage'
+    }
+  },
+  {
+    path: 'nodes',
+    component: NodesView,
+    data: {
+      title: 'Nodes',
+    }
+  }
 ];
 @NgModule({
   imports: [

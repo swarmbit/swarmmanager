@@ -32,7 +32,7 @@ import { SnackbarService } from './services/snackbar/snackbar.service';
 import { ListControlBarComponent } from './components/list.control.bar/list.control.bar.component';
 import { ListContainerComponent } from './components/list.container/list.container.component';
 import { DockerNodesService } from './services/docker/nodes/docker.nodes.service';
-import { CreateNetworkView } from './views/networks/create/create.network.view';
+import { ManageNetworkView } from './views/networks/manage/manage.network.view';
 
 declare const Hammer: any;
 
@@ -54,7 +54,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ListContainerComponent,
     LoginView,
     NetworksView,
-    CreateNetworkView,
+    ManageNetworkView,
     NodesView
   ],
   imports: [

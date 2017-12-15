@@ -36,10 +36,6 @@
   margin-top: 4%;
 }
 
-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 30px white inset;
-}
-
 @media (max-width: $min-With-media-query)
 {
   .login-card {
