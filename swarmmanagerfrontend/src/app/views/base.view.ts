@@ -32,12 +32,13 @@ export class BaseView implements OnDestroy {
       }
     );
     this.subscriptions.push(swarmService.getSelectedSwarm().subscribe(
-      () => {
-        if (this.refreshFunction) {
-          this.refreshFunction();
+        () => {
+          if (this.refreshFunction) {
+            this.refreshFunction();
+          }
         }
-      }
-    ));
+      ),
+    );
   }
 
   setViewName(viewName: string): void {

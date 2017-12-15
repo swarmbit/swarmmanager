@@ -7,7 +7,7 @@ import { LoginView } from './views/login/login.view';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './services/auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProgressBarService } from './services/progress.bar/progress.bar.service';
 import { ProgressBarComponent } from './components/progress.bar/progress.bar.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -61,6 +61,7 @@ export class HammerConfig extends HammerGestureConfig  {
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     MaterialModule,
     HttpClientModule,
     RoutingModule

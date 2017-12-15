@@ -7,10 +7,16 @@ import { Observer } from 'rxjs/Observer';
 @Injectable()
 export class DockerSwarmService {
 
+  public static VERSION_1_25 = 1.25;
+  public static VERSION_1_26 = 1.26;
+  public static VERSION_1_27 = 1.27;
+  public static VERSION_1_28 = 1.28;
+  public static VERSION_1_29 = 1.29;
+  public static VERSION_1_30 = 1.30;
   public static DOCKER_SWARMS_URL = '/api/swarms/';
   private selectedSwarm: DockerSwarm;
   private swarms: DockerSwarm[] = [];
-  private selectedSwarmObservers: Observer<any>[] = [];
+  private selectedSwarmObservers: Observer<DockerSwarm>[] = [];
 
   constructor (private http: HttpClient) {
   }
@@ -61,6 +67,40 @@ export class DockerSwarmService {
 
   private fetchSwarms(): Observable<DockerSwarm[]> {
       return this.http.get<DockerSwarm[]>(DockerSwarmService.DOCKER_SWARMS_URL);
+  }
+
+  public equalsOrGreaterThenVersion25(): boolean {
+    return this.compareVersions(DockerSwarmService.VERSION_1_25);
+  }
+
+  public equalsOrGreaterThenVersion26(): boolean {
+    return this.compareVersions(DockerSwarmService.VERSION_1_26);
+  }
+
+  public equalsOrGreaterThenVersion27(): boolean {
+    return this.compareVersions(DockerSwarmService.VERSION_1_27);
+  }
+
+  public equalsOrGreaterThenVersion28(): boolean {
+    return this.compareVersions(DockerSwarmService.VERSION_1_28);
+  }
+
+  public equalsOrGreaterThenVersion29(): boolean {
+    return this.compareVersions(DockerSwarmService.VERSION_1_29);
+  }
+
+  public equalsOrGreaterThenVersion30(): boolean {
+    return this.compareVersions(DockerSwarmService.VERSION_1_30);
+  }
+
+  private compareVersions(versionToCompare: number): boolean {
+    if (this.selectedSwarm && this.selectedSwarm.apiVersion) {
+      const version: number = +this.selectedSwarm.apiVersion.substr(1);
+      if (version >= versionToCompare) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

@@ -1,19 +1,20 @@
 <div class="network-form-container">
-  <form class="network-form" (submit)="createNetwork(form)" #form="ngForm">
+  <form class="network-form" [formGroup]="createNetworkForm" (ngSubmit)="createNetwork()">
     <div class="form-field">
       <!-- Required -->
       <mat-form-field class="big-field">
-        <input matInput name="name" placeholder="Name" ngModel>
+        <input matInput placeholder="Name" [formControl]="name" required>
+        <mat-error *ngIf="name.invalid">Name is required to create a network</mat-error>
       </mat-form-field>
     </div>
     <div class="form-field">
       <mat-form-field class="big-field">
-        <input matInput name="driver" placeholder="Driver" ngModel>
+        <input matInput placeholder="Driver" [formControl]="driver">
       </mat-form-field>
     </div>
     <div class="form-field">
       <mat-form-field class="big-field">
-        <input matInput name="ipamDriver" placeholder="IPAM Driver" ngModel>
+        <input matInput placeholder="IPAM Driver" [formControl]="ipamDriver">
       </mat-form-field>
     </div>
     <mat-expansion-panel class="expansion-panel">
@@ -24,25 +25,25 @@
       </mat-expansion-panel-header>
       <div class="form-field">
         <mat-form-field class="big-field">
-          <input matInput name="subnet1" placeholder="Subnet" ngModel>
+          <input matInput placeholder="Subnet" [formControl]="subnet1">
         </mat-form-field>
       </div>
       <div class="form-field">
         <mat-form-field class="big-field">
-          <input matInput name="ipRange1" placeholder="IP Range" ngModel>
+          <input matInput placeholder="IP Range" [formControl]="ipRange1">
         </mat-form-field>
       </div>
       <div class="form-field">
         <mat-form-field class="big-field">
-          <input matInput name="gateway1" placeholder="Gateway" ngModel>
+          <input matInput placeholder="Gateway" [formControl]="gateway1">
         </mat-form-field>
       </div>
       <div class="pair">
         <mat-form-field>
-          <input matInput name="deviceName1" placeholder="Device Name" ngModel>
+          <input matInput placeholder="Device Name" [formControl]="deviceName1">
         </mat-form-field>
         <mat-form-field>
-          <input matInput name="ipAddress1" placeholder="IP Address" ngModel>
+          <input matInput placeholder="IP Address" [formControl]="ipAddress1">
         </mat-form-field>
         <button mat-mini-fab type="button">
           <mat-icon>add</mat-icon>
@@ -62,10 +63,10 @@
       </mat-expansion-panel-header>
       <div class="pair">
         <mat-form-field>
-          <input matInput name="ipamOption1" placeholder="Option" ngModel>
+          <input matInput placeholder="Option" [formControl]="ipamOption1">
         </mat-form-field>
         <mat-form-field>
-          <input matInput name="ipamOptionValue1" placeholder="Value" ngModel>
+          <input matInput placeholder="Value" [formControl]="ipamOptionValue1">
         </mat-form-field>
         <button mat-mini-fab type="button">
           <mat-icon>add</mat-icon>
@@ -80,10 +81,10 @@
       </mat-expansion-panel-header>
       <div class="pair">
         <mat-form-field>
-          <input matInput name="label1" placeholder="Label" ngModel>
+          <input matInput placeholder="Label" [formControl]="label1">
         </mat-form-field>
         <mat-form-field>
-          <input matInput name="labelValue1" placeholder="Value" ngModel>
+          <input matInput placeholder="Value" [formControl]="labelValue1">
         </mat-form-field>
         <button mat-mini-fab type="button">
           <mat-icon>add</mat-icon>
@@ -98,45 +99,29 @@
       </mat-expansion-panel-header>
       <div class="pair">
         <mat-form-field>
-          <input matInput name="option1" placeholder="Option" ngModel>
+          <input matInput placeholder="Option" [formControl]="option1">
         </mat-form-field>
         <mat-form-field>
-          <input matInput name="value1" placeholder="Value" ngModel>
+          <input matInput placeholder="Value" [formControl]="optionValue1">
         </mat-form-field>
         <button mat-mini-fab type="button">
           <mat-icon>add</mat-icon>
         </button>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel class="expansion-panel">
-      <mat-panel-title>
-        Options
-      </mat-panel-title>
-      <div class="pair">
-        <mat-form-field>
-          <input matInput name="option1" placeholder="Option" ngModel>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput name="optionValue1" placeholder="Value" ngModel>
-        </mat-form-field>
-        <button mat-mini-fab>
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </mat-expansion-panel>
     <div class="form-field">
       <div class="big-field padding">
-        <mat-slide-toggle>IPv6</mat-slide-toggle>
+        <mat-slide-toggle [formControl]="ipv6">IPv6</mat-slide-toggle>
       </div>
     </div>
     <div class="form-field">
       <div class="big-field padding">
-        <mat-slide-toggle>Internal</mat-slide-toggle>
+        <mat-slide-toggle [formControl]="internal">Internal</mat-slide-toggle>
       </div>
     </div>
-    <div class="form-field">
+    <div class="form-field" *ngIf="swarmService.equalsOrGreaterThenVersion26()">
       <div class="big-field padding">
-        <mat-slide-toggle>Attachable</mat-slide-toggle>
+        <mat-slide-toggle [formControl]="attachable">Attachable</mat-slide-toggle>
       </div>
     </div>
     <div class="form-field">
