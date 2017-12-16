@@ -9,7 +9,7 @@ docker:
             unixSocketPath: /var/run/docker.sock
        - id: prod
          name: Production
-         apiVersion: v1.30
+         apiVersion: v1.24
          description: Prod swarm
          client:
             protocol: unix

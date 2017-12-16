@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DockerNetworkSummary } from './docker.network.summary';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
@@ -7,6 +7,7 @@ import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
 import { DockerNetwork } from './docker.network';
+import { Observer } from 'rxjs';
 
 @Injectable()
 export class DockerNetworksService extends DockerBaseService {
@@ -15,8 +16,8 @@ export class DockerNetworksService extends DockerBaseService {
 
   constructor (private http: HttpClient,
                private swarmsService: DockerSwarmService,
-               private snackbarService: SnackbarService) {
-    super(swarmsService);
+               snackbarService: SnackbarService) {
+    super(swarmsService, snackbarService);
   }
 
   getNetworksList(): Observable<DockerNetworkSummary[]> {
@@ -34,20 +35,45 @@ export class DockerNetworksService extends DockerBaseService {
                   }
                 }
               }
-              observer.next(networksReturn);
-              observer.complete();
-              this.snackbarService.showSuccess('Loaded ' + this.dockerSwarmName + ' networks!');
+              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' networks!', networksReturn);
             },
             (err: HttpErrorResponse) => {
-              console.log(err);
-              if (err.status == 417) {
-                this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' networks! ' + err.error);
-              } else {
-                this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' networks!');
-              }
-              observer.error(err);
-              observer.complete();
+              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' networks!');
             });
+      });
+    });
+  }
+
+  getNetwork(name: string): Observable<DockerNetwork> {
+    return Observable.create(observer => {
+      this.afterDockerSwarmSelected.then(() => {
+        this.http.get<DockerNetwork>(this.dockerSwarmUrl + this.dockerNetworksUrl + '/' + name)
+          .first()
+          .subscribe(
+            (network: DockerNetwork) => {
+              this.completeWithSuccess(observer, 'Loaded ' + name + ' network!', network);
+            },
+            (err: HttpErrorResponse) => {
+              this.completeWithError(err, observer, 'Failed to load ' + name + ' network!');
+            });
+      });
+    });
+  }
+
+  removeNetwork(name: string): Observable<void> {
+    return Observable.create(observer => {
+      this.afterDockerSwarmSelected.then(() => {
+        this.http.delete(this.dockerSwarmUrl + this.dockerNetworksUrl + '/' + name, {
+          observe: 'response',
+          responseType: 'text'
+        }).subscribe(
+          (resp: HttpResponse<any>) => {
+            this.completeWithSuccess(observer, null, null);
+          },
+          (err: HttpErrorResponse) => {
+            this.completeWithError(err, observer, 'Failed to remove network ' + name + '!');
+          }
+        );
       });
     });
   }
@@ -58,23 +84,14 @@ export class DockerNetworksService extends DockerBaseService {
         this.http.post<DockerNetwork>(this.dockerSwarmUrl + this.dockerNetworksUrl, dockerNetwork)
           .subscribe(
             (returnedNetwork: DockerNetwork) => {
-              observer.next(returnedNetwork);
-              observer.complete();
+              this.completeWithSuccess(observer, null, returnedNetwork);
             },
             (err: HttpErrorResponse) => {
-              console.log(err);
-              if (err.status == 417) {
-                this.snackbarService.showError('Failed to manage network! ' + err.error);
-              } else {
-                this.snackbarService.showError('Failed to manage network!');
-              }
-              observer.error(err);
-              observer.complete();
+              this.completeWithError(err, observer, 'Failed to create network!');
             });
       });
     });
   }
-
 }
 
 

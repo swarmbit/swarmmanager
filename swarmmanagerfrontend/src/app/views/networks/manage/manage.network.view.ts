@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../../services/user/user.service';
@@ -7,8 +7,9 @@ import { BaseView } from '../../base.view';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DockerNetwork } from '../../../services/docker/networks/docker.network';
 import { DockerIpamConfig } from '../../../services/docker/networks/docker.ipam.config';
-import { Router } from '@angular/router';
-import { DISABLED } from '@angular/forms/src/model';
+import { ActivatedRoute, Data, Router } from '@angular/router';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import { ConfirmationDialogComponent } from '../../../components/confirmation.dialog/confirmation.dialog.component';
 
 @Component({
   selector: 'app-manage-network',
@@ -17,7 +18,9 @@ import { DISABLED } from '@angular/forms/src/model';
 })
 export class ManageNetworkView extends BaseView {
 
-  createNetworkForm: FormGroup;
+  isDetails: boolean;
+
+  networkForm: FormGroup;
 
   name: AbstractControl;
   driver: AbstractControl;
@@ -42,56 +45,83 @@ export class ManageNetworkView extends BaseView {
               private userService: UserService,
               private networksService: DockerNetworksService,
               private router: Router,
-              formBuilder: FormBuilder
+              private route: ActivatedRoute,
+              private formBuilder: FormBuilder,
+              public dialog: MatDialog
   ) {
-    super(headerService, 'Create Network', swarmService, userService);
+    super(headerService, route, swarmService, userService);
     super.enableBackArrow('/networks');
-    this.createNetworkForm = formBuilder.group({
-      'name':  ['', Validators.required],
-      'driver':  [{ value: 'overlay', disabled: true }],
-      'ipamDriver':  ['default'],
-      'subnet1':  [''],
-      'ipRange1':  [''],
-      'gateway1':  [''],
-      'deviceName1':  [''],
-      'ipAddress1':  [''],
-      'ipamOption1':  [''],
-      'ipamOptionValue1':  [''],
-      'label1':  [''],
-      'labelValue1':  [''],
-      'option1':  [''],
-      'optionValue1':  [''],
-      'ipv6':  [false],
-      'internal':  [false],
-      'attachable':  [false]
-    });
-    this.name = this.createNetworkForm.controls['name'];
-    this.driver = this.createNetworkForm.controls['driver'];
-    this.ipamDriver = this.createNetworkForm.controls['ipamDriver'];
-    this.subnet1 = this.createNetworkForm.controls['subnet1'];
-    this.ipRange1 = this.createNetworkForm.controls['ipRange1'];
-    this.gateway1 = this.createNetworkForm.controls['gateway1'];
-    this.deviceName1 = this.createNetworkForm.controls['deviceName1'];
-    this.ipAddress1 = this.createNetworkForm.controls['ipAddress1'];
-    this.ipamOption1 = this.createNetworkForm.controls['ipamOption1'];
-    this.ipamOptionValue1 = this.createNetworkForm.controls['ipamOptionValue1'];
-    this.label1 = this.createNetworkForm.controls['label1'];
-    this.labelValue1 = this.createNetworkForm.controls['labelValue1'];
-    this.option1 = this.createNetworkForm.controls['option1'];
-    this.optionValue1 = this.createNetworkForm.controls['optionValue1'];
-    this.ipv6 = this.createNetworkForm.controls['ipv6'];
-    this.internal = this.createNetworkForm.controls['internal'];
-    this.attachable = this.createNetworkForm.controls['attachable'];
+    this.isDetails = route.snapshot.data[ 'action' ] === 'manage';
+    if (this.isDetails) {
+      this.route.data
+        .subscribe(
+          (data: Data) => {
+            const dockerNetwork = data['dockerNetwork'];
+            super.setViewName('Network ' + dockerNetwork.name);
+            this.createForm(dockerNetwork);
+          }
+        );
+    } else {
+      this.createForm(new DockerNetwork());
+    }
   }
 
   createNetwork(): void {
-    if (this.createNetworkForm.valid) {
-      this.networksService.createNetwork(this.getNewDockerNetwork(this.createNetworkForm.value)).subscribe(
+    if (this.networkForm.valid) {
+      this.networksService.createNetwork(this.getNewDockerNetwork(this.networkForm.value)).subscribe(
         () => {
           this.router.navigate(['/networks']);
         }
       );
     }
+  }
+
+  createForm(dockerNetwork: DockerNetwork): void {
+    let driver = 'overlay';
+    if (dockerNetwork.driver != '') {
+      driver = dockerNetwork.driver;
+    }
+    let ipamDriver = 'default';
+    if (dockerNetwork.ipamDriver != '') {
+      ipamDriver = dockerNetwork.ipamDriver;
+    }
+
+    this.networkForm = this.formBuilder.group({
+        'name':  [{ value: dockerNetwork.name, disabled: this.isDetails }, Validators.required],
+        'driver':  [{ value: driver, disabled: this.isDetails }],
+        'ipamDriver':  [{ value: ipamDriver, disabled: this.isDetails }],
+        'subnet1':  [{ value: '', disabled: this.isDetails }],
+        'ipRange1':  [{ value: '', disabled: this.isDetails }],
+        'gateway1':  [{ value: '', disabled: this.isDetails }],
+        'deviceName1':  [{ value: '', disabled: this.isDetails }],
+        'ipAddress1':  [{ value: '', disabled: this.isDetails }],
+        'ipamOption1':  [{ value: '', disabled: this.isDetails }],
+        'ipamOptionValue1':  [{ value: '', disabled: this.isDetails }],
+        'label1':  [{ value: '', disabled: this.isDetails }],
+        'labelValue1':  [{ value: '', disabled: this.isDetails }],
+        'option1':  [{ value: '', disabled: this.isDetails }],
+        'optionValue1':  [{ value: '', disabled: this.isDetails }],
+        'ipv6':  [{ value: dockerNetwork.ipv6, disabled: this.isDetails }],
+        'internal':  [{ value: dockerNetwork.internal, disabled: this.isDetails }],
+        'attachable':  [{ value: dockerNetwork.attachable, disabled: this.isDetails }]
+      });
+    this.name = this.networkForm.controls['name'];
+    this.driver = this.networkForm.controls['driver'];
+    this.ipamDriver = this.networkForm.controls['ipamDriver'];
+    this.subnet1 = this.networkForm.controls['subnet1'];
+    this.ipRange1 = this.networkForm.controls['ipRange1'];
+    this.gateway1 = this.networkForm.controls['gateway1'];
+    this.deviceName1 = this.networkForm.controls['deviceName1'];
+    this.ipAddress1 = this.networkForm.controls['ipAddress1'];
+    this.ipamOption1 = this.networkForm.controls['ipamOption1'];
+    this.ipamOptionValue1 = this.networkForm.controls['ipamOptionValue1'];
+    this.label1 = this.networkForm.controls['label1'];
+    this.labelValue1 = this.networkForm.controls['labelValue1'];
+    this.option1 = this.networkForm.controls['option1'];
+    this.optionValue1 = this.networkForm.controls['optionValue1'];
+    this.ipv6 = this.networkForm.controls['ipv6'];
+    this.internal = this.networkForm.controls['internal'];
+    this.attachable = this.networkForm.controls['attachable'];
   }
 
   getNewDockerNetwork(values): DockerNetwork {
@@ -121,5 +151,23 @@ export class ManageNetworkView extends BaseView {
     return dockerNetwork;
   }
 
-}
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '15rem',
+      data: {
+        title: 'Remove Network'
+      }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.networksService.removeNetwork(this.name.value)
+          .subscribe(() => {
+            this.router.navigate(['/networks']);
+        });
+      }
+    });
+  }
+
+
+}

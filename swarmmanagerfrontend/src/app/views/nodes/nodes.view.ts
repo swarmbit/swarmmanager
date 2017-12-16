@@ -7,6 +7,7 @@ import { UserService } from '../../services/user/user.service';
 import { ViewUtils } from '../view.utils';
 import { DockerNodeSummary } from '../../services/docker/nodes/docker.node.summary';
 import { DockerNodesService } from '../../services/docker/nodes/docker.nodes.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nodes',
@@ -21,9 +22,10 @@ export class NodesView extends BaseView {
   constructor(headerService: HeaderService,
               private swarmService: DockerSwarmService,
               private userService: UserService,
-              private nodesService: DockerNodesService
+              private nodesService: DockerNodesService,
+              private route: ActivatedRoute
   ) {
-    super(headerService, 'Nodes', swarmService, userService);
+    super(headerService, route, swarmService, userService);
     this.refreshFunction = this.refreshNodes;
     this.refreshNodes();
   }

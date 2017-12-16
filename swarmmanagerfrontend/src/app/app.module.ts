@@ -33,6 +33,8 @@ import { ListControlBarComponent } from './components/list.control.bar/list.cont
 import { ListContainerComponent } from './components/list.container/list.container.component';
 import { DockerNodesService } from './services/docker/nodes/docker.nodes.service';
 import { ManageNetworkView } from './views/networks/manage/manage.network.view';
+import { DockerNetworkResolver } from './resolvers/docker/networks/docker.network.resolver';
+import { ConfirmationDialogComponent } from './components/confirmation.dialog/confirmation.dialog.component';
 
 declare const Hammer: any;
 
@@ -52,6 +54,7 @@ export class HammerConfig extends HammerGestureConfig  {
     UserComponent,
     ListControlBarComponent,
     ListContainerComponent,
+    ConfirmationDialogComponent,
     LoginView,
     NetworksView,
     ManageNetworkView,
@@ -76,6 +79,7 @@ export class HammerConfig extends HammerGestureConfig  {
     DockerSwarmService,
     DockerNetworksService,
     DockerNodesService,
+    DockerNetworkResolver,
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: HammerConfig ,
@@ -90,6 +94,9 @@ export class HammerConfig extends HammerGestureConfig  {
       useClass: ProgressBarInterceptor,
       multi: true
     }
+  ],
+  entryComponents: [
+    ConfirmationDialogComponent
   ],
   bootstrap: [AppComponent]
 })

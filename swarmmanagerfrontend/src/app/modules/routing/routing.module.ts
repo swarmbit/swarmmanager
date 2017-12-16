@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { NodesView } from '../../views/nodes/nodes.view';
 import { NetworksView } from '../../views/networks/networks.view';
 import { ManageNetworkView } from '../../views/networks/manage/manage.network.view';
+import { DockerNetworkResolver } from '../../resolvers/docker/networks/docker.network.resolver';
 
 const appRoutes: Routes = [
   {
@@ -18,7 +19,7 @@ const appRoutes: Routes = [
     }
   },
   {
-    path: 'networks/manage',
+    path: 'networks/create',
     component: ManageNetworkView,
     data: {
       title: 'Create Network',
@@ -29,8 +30,10 @@ const appRoutes: Routes = [
     path: 'networks/:name',
     component: ManageNetworkView,
     data: {
-      title: 'Network',
       action: 'manage'
+    },
+    resolve: {
+      dockerNetwork: DockerNetworkResolver
     }
   },
   {

@@ -1,5 +1,7 @@
 import { DockerSwarm } from './swarms/docker.swarm';
 import { DockerSwarmService } from './swarms/docker.swarms.service';
+import { Observer } from 'rxjs';
+import { SnackbarService } from '../snackbar/snackbar.service';
 
 export class DockerBaseService {
 
@@ -8,7 +10,7 @@ export class DockerBaseService {
 
   public afterDockerSwarmSelected: Promise<void>;
 
-  constructor(swarmsService: DockerSwarmService) {
+  constructor(swarmsService: DockerSwarmService, private snackbarService: SnackbarService) {
     let resolveAfterDockerSwarmSelected;
     this.afterDockerSwarmSelected = new Promise((resolve) => {
       resolveAfterDockerSwarmSelected = resolve;
@@ -21,6 +23,25 @@ export class DockerBaseService {
           resolveAfterDockerSwarmSelected();
         }
       });
+  }
+
+  completeWithSuccess(observer: Observer<any>, message: string, returnObject?: any) {
+    if (message) {
+      this.snackbarService.showSuccess(message);
+    }
+    observer.next(returnObject);
+    observer.complete();
+  }
+
+  completeWithError(err: any, observer: Observer<any>, message: string) {
+    console.log(err);
+    if (err.status == 417) {
+      this.snackbarService.showError(message + ' ' + err.error);
+    } else {
+      this.snackbarService.showError(message);
+    }
+    observer.error(err);
+    observer.complete();
   }
 
 }

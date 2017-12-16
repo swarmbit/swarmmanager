@@ -27,7 +27,8 @@
           <td>{{network.driver}}</td>
         </tr>
       </table>
-      <button mat-raised-button color="accent" routerLink="/networks/{{network.name}}">Manage</button>
+      <button mat-raised-button color="accent" routerLink="/networks/{{network.name}}" *ngIf="user.isAdmin()">Manage</button>
+      <button mat-raised-button color="accent" routerLink="/networks/{{network.name}}" *ngIf="user.isVisitor() && !user.isAdmin()">Details</button>
     </mat-card-content>
   </mat-card>
 </app-list-container>

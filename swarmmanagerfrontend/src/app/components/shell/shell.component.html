@@ -12,7 +12,7 @@
           <mat-form-field>
             <mat-select placeholder="Swarm" [(value)]="selectedSwarm" (change)="selectSwarm($event)">
               <mat-option *ngFor="let swarm of swarms" [value]="swarm.id">
-                {{swarm.name}}
+                {{swarm.name}} ({{swarm.apiVersion}})
               </mat-option>
             </mat-select>
           </mat-form-field>

@@ -6,6 +6,7 @@ import { DockerSwarmService } from '../services/docker/swarms/docker.swarms.serv
 import { UserService } from '../services/user/user.service';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 export class BaseView implements OnDestroy {
 
@@ -16,7 +17,7 @@ export class BaseView implements OnDestroy {
   subscriptions: Subscription[];
 
   constructor(headerService: HeaderService,
-              viewName: string,
+              route: ActivatedRoute,
               swarmService: DockerSwarmService,
               userService: UserService) {
     this.subscriptions = [];
@@ -24,7 +25,7 @@ export class BaseView implements OnDestroy {
     this.headerService = headerService;
     this.headerInfo = new HeaderInfo();
     this.headerInfo.currentViewName = '';
-    this.headerInfo.currentViewName = viewName;
+    this.headerInfo.currentViewName = route.snapshot.data['title'];
     this.headerService.setHeaderInfo(this.headerInfo);
     userService.getUser(false).then(
       user => {

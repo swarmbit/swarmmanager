@@ -1,5 +1,5 @@
 <div class="network-form-container">
-  <form class="network-form" [formGroup]="createNetworkForm" (ngSubmit)="createNetwork()">
+  <form class="network-form" [formGroup]="networkForm" (ngSubmit)="createNetwork()">
     <div class="form-field">
       <!-- Required -->
       <mat-form-field class="big-field">
@@ -45,11 +45,11 @@
         <mat-form-field>
           <input matInput placeholder="IP Address" [formControl]="ipAddress1">
         </mat-form-field>
-        <button mat-mini-fab type="button">
+        <button mat-mini-fab type="button" *ngIf="!isDetails">
           <mat-icon>add</mat-icon>
         </button>
       </div>
-      <div class="form-field">
+      <div class="form-field" *ngIf="!isDetails">
         <div class="big-field">
           <button mat-raised-button color="accent" type="button">New Config</button>
         </div>
@@ -68,7 +68,7 @@
         <mat-form-field>
           <input matInput placeholder="Value" [formControl]="ipamOptionValue1">
         </mat-form-field>
-        <button mat-mini-fab type="button">
+        <button mat-mini-fab type="button" *ngIf="!isDetails">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -86,7 +86,7 @@
         <mat-form-field>
           <input matInput placeholder="Value" [formControl]="labelValue1">
         </mat-form-field>
-        <button mat-mini-fab type="button">
+        <button mat-mini-fab type="button" *ngIf="!isDetails">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -104,7 +104,7 @@
         <mat-form-field>
           <input matInput placeholder="Value" [formControl]="optionValue1">
         </mat-form-field>
-        <button mat-mini-fab type="button">
+        <button mat-mini-fab type="button" *ngIf="!isDetails">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -126,7 +126,8 @@
     </div>
     <div class="form-field">
       <div class="big-field submit">
-        <button mat-raised-button color="accent">Create</button>
+        <button mat-raised-button color="accent" *ngIf="!isDetails">Create</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails" type="button" (click)="openDialog()">Remove</button>
       </div>
     </div>
   </form>

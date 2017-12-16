@@ -15,8 +15,8 @@ export class DockerNodesService extends DockerBaseService {
 
   constructor (private http: HttpClient,
                private swarmsService: DockerSwarmService,
-               private snackbarService: SnackbarService) {
-    super(swarmsService);
+               snackbarService: SnackbarService) {
+    super(swarmsService, snackbarService);
   }
 
   getNodesList(): Observable<DockerNodeSummary[]> {
@@ -26,19 +26,10 @@ export class DockerNodesService extends DockerBaseService {
           .first()
           .subscribe(
             (nodes: DockerNodeSummary[]) => {
-              observer.next(nodes);
-              observer.complete();
-              this.snackbarService.showSuccess('Loaded ' + this.dockerSwarmName + ' nodes!');
+              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' nodes!', nodes);
             },
             (err: HttpErrorResponse) => {
-              console.log(err);
-              if (err.status == 417) {
-                this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' nodes! ' + err.error);
-              } else {
-                this.snackbarService.showError('Failed to loaded ' + this.dockerSwarmName + ' nodes!');
-              }
-              observer.error(err);
-              observer.complete();
+              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' nodes!');
             });
       });
     });
