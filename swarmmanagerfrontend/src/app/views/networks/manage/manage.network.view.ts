@@ -72,36 +72,67 @@ export class ManageNetworkView extends BaseView {
         'ipv6':  new FormControl({ value: dockerNetwork.ipv6, disabled: this.isDetails }),
         'internal': new FormControl({ value: dockerNetwork.internal, disabled: this.isDetails }),
         'attachable': new FormControl({ value: dockerNetwork.attachable, disabled: this.isDetails }),
-        'labels': new FormArray([
-          new FormGroup({
-            'name': new FormControl({value: null, disabled: this.isDetails}),
-            'value': new FormControl({value: null, disabled: this.isDetails}),
-          })
-        ])
-      });
-  }
-
-  addLabel(): void {
-    const control = new FormGroup({
-      'name': new FormControl({value: null, disabled: this.isDetails}),
-      'value': new FormControl({value: null, disabled: this.isDetails}),
+        'labels': new FormArray([]),
+        'ipamOptions': new FormArray([]),
+        'options': new FormArray([])
     });
-    (<FormArray>this.networkForm.get('labels')).push(control);
+    this.parseNetworkFieldToOptions(dockerNetwork, 'labels');
+    this.parseNetworkFieldToOptions(dockerNetwork, 'ipamOptions');
+    this.parseNetworkFieldToOptions(dockerNetwork, 'options');
   }
 
-  removeLabel(index: number): void {
-    (<FormArray>this.networkForm.get('labels')).removeAt(index);
+  parseNetworkFieldToOptions(dockerNetwork: DockerNetwork, field: string): void {
+    if (dockerNetwork[field]) {
+      for (const prop of Object.keys(dockerNetwork[field])) {
+        this.addOption(field, prop, dockerNetwork[field][prop]);
+      }
+    }
+    if (!this.isDetails) {
+      this.addOption(field);
+    }
+  }
+
+  addOption(type: string, name?: any, value?: any): void {
+    let control = new FormGroup({
+      'name': new FormControl({value: '', disabled: this.isDetails}),
+      'value': new FormControl({value: '', disabled: this.isDetails}),
+    });
+    if (name && value) {
+      control = new FormGroup({
+        'name': new FormControl({value: name, disabled: this.isDetails}),
+        'value': new FormControl({value: value, disabled: this.isDetails}),
+      });
+    }
+    (<FormArray>this.networkForm.get(type)).push(control);
+  }
+
+  removeOption(type: string, index: number): void {
+    (<FormArray>this.networkForm.get(type)).removeAt(index);
   }
 
   getNewDockerNetwork(values): DockerNetwork {
     const dockerNetwork = new DockerNetwork();
     dockerNetwork.name = values['name'];
-    dockerNetwork.driver = values['drive'];
+    dockerNetwork.driver = values['driver'];
     dockerNetwork.ipamDriver = values['ipamDriver'];
     dockerNetwork.ipv6 = values['ipv6'];
     dockerNetwork.internal = values['internal'];
     dockerNetwork.attachable = values['attachable'];
+    this.parseOptionsToNetworkField(dockerNetwork, values, 'labels');
+    this.parseOptionsToNetworkField(dockerNetwork, values, 'options');
+    this.parseOptionsToNetworkField(dockerNetwork, values, 'ipamOptions');
     return dockerNetwork;
+  }
+
+  parseOptionsToNetworkField(dockerNetwork: DockerNetwork, values: any, field: string): void {
+    for (const value of values[field]) {
+      if (value.name) {
+        if (!dockerNetwork[field]) {
+          dockerNetwork[field] = {};
+        }
+        dockerNetwork[field][value.name] = value.value;
+      }
+    }
   }
 
   openDialog(): void {

@@ -7,7 +7,7 @@ export class DockerNetwork {
   ipamOptions: any;
   labels: any;
   options: any;
-  ipv6: boolean;
-  internal: boolean;
-  attachable: boolean;
+  ipv6 = false;
+  internal = false;
+  attachable = false;
 }
