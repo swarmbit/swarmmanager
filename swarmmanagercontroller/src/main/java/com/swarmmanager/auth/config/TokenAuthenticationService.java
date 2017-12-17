@@ -25,8 +25,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
 
-import static java.util.Collections.emptyList;
-
 @Service
 public class TokenAuthenticationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationService.class.getName());
@@ -81,8 +79,11 @@ public class TokenAuthenticationService {
             }
 
             try {
-                String user = tokenExtractor.getUser(tokenString);
-                return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
+                String username = tokenExtractor.getUser(tokenString);
+                if (username != null) {
+                    User user = userRepository.findByUsername(username);
+                    return new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
+                }
             } catch (ExpiredJwtException e) {
                 return null;
             } catch (IllegalArgumentException e) {

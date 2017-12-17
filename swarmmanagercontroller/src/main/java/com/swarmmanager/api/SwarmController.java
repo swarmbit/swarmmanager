@@ -7,7 +7,7 @@ import com.swarmmanager.docker.cli.model.Unlock;
 import com.swarmmanager.docker.config.DockerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class SwarmController {
     @Autowired
     private SwarmCli swarmCli;
 
-    @Secured(Role.VISITOR)
+    @PreAuthorize(Role.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<SwarmConfigModel> swarmLs() {
         return dockerConfig.getSwarms().stream().map(swarmConfig -> {
@@ -36,25 +36,25 @@ public class SwarmController {
         }).collect(toList());
     }
 
-    @Secured(Role.VISITOR)
+    @PreAuthorize(Role.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{swarmId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Swarm swarmInspect(@PathVariable String swarmId) {
         return swarmCli.inspect(swarmId);
     }
 
-    @Secured(Role.ADMIN)
+    @PreAuthorize(Role.IS_ADMIN)
     @RequestMapping(method = RequestMethod.PUT, value = "{swarmId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void swarmUpdate(@PathVariable String swarmId, @RequestBody Swarm swarm) {
         swarmCli.update(swarmId, swarm);
     }
 
-    @Secured(Role.ADMIN)
+    @PreAuthorize(Role.IS_ADMIN)
     @RequestMapping(method = RequestMethod.PUT, value = "{swarmId}/unlock", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Unlock unlock(@PathVariable String swarmId) {
         return swarmCli.unlock(swarmId);
     }
 
-    @Secured(Role.ADMIN)
+    @PreAuthorize(Role.IS_ADMIN)
     @RequestMapping(method = RequestMethod.PUT, value = "{swarmId}/rotate", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void rotate(@PathVariable String swarmId) {
         swarmCli.rotate(swarmId);

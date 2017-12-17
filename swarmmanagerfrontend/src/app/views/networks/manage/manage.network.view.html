@@ -3,18 +3,18 @@
     <div class="form-field">
       <!-- Required -->
       <mat-form-field class="big-field">
-        <input matInput placeholder="Name" [formControl]="name" required>
-        <mat-error *ngIf="name.invalid">Name is required to create a network</mat-error>
+        <input matInput placeholder="Name" formControlName="name">
+        <mat-error *ngIf="networkForm.get('name').invalid">Name is required to create a network</mat-error>
       </mat-form-field>
     </div>
     <div class="form-field">
       <mat-form-field class="big-field">
-        <input matInput placeholder="Driver" [formControl]="driver">
+        <input matInput placeholder="Driver" formControlName="driver">
       </mat-form-field>
     </div>
     <div class="form-field">
       <mat-form-field class="big-field">
-        <input matInput placeholder="IPAM Driver" [formControl]="ipamDriver">
+        <input matInput placeholder="IPAM Driver" formControlName="ipamDriver">
       </mat-form-field>
     </div>
     <mat-expansion-panel class="expansion-panel">
@@ -25,25 +25,25 @@
       </mat-expansion-panel-header>
       <div class="form-field">
         <mat-form-field class="big-field">
-          <input matInput placeholder="Subnet" [formControl]="subnet1">
+          <input matInput placeholder="Subnet">
         </mat-form-field>
       </div>
       <div class="form-field">
         <mat-form-field class="big-field">
-          <input matInput placeholder="IP Range" [formControl]="ipRange1">
+          <input matInput placeholder="IP Range">
         </mat-form-field>
       </div>
       <div class="form-field">
         <mat-form-field class="big-field">
-          <input matInput placeholder="Gateway" [formControl]="gateway1">
+          <input matInput placeholder="Gateway">
         </mat-form-field>
       </div>
       <div class="pair">
         <mat-form-field>
-          <input matInput placeholder="Device Name" [formControl]="deviceName1">
+          <input matInput placeholder="Device Name">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="IP Address" [formControl]="ipAddress1">
+          <input matInput placeholder="IP Address">
         </mat-form-field>
         <button mat-mini-fab type="button" *ngIf="!isDetails">
           <mat-icon>add</mat-icon>
@@ -63,31 +63,34 @@
       </mat-expansion-panel-header>
       <div class="pair">
         <mat-form-field>
-          <input matInput placeholder="Option" [formControl]="ipamOption1">
+          <input matInput placeholder="Option">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Value" [formControl]="ipamOptionValue1">
+          <input matInput placeholder="Value">
         </mat-form-field>
         <button mat-mini-fab type="button" *ngIf="!isDetails">
           <mat-icon>add</mat-icon>
         </button>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel class="expansion-panel">
+    <mat-expansion-panel class="expansion-panel" formArrayName="labels">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Labels
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="pair">
+      <div class="pair" formGroupName="label" [formGroupName]="i" *ngFor="let labelControl of networkForm.get('labels').controls; let i = index;">
         <mat-form-field>
-          <input matInput placeholder="Label" [formControl]="label1">
+          <input matInput placeholder="Label" formControlName="name">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Value" [formControl]="labelValue1">
+          <input matInput placeholder="Value" formControlName="value">
         </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails">
+        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('labels').controls.length - 1)" (click)="addLabel()">
           <mat-icon>add</mat-icon>
+        </button>
+        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('labels').controls.length - 1)" (click)="removeLabel(i)">
+          <mat-icon>delete</mat-icon>
         </button>
       </div>
     </mat-expansion-panel>
@@ -99,10 +102,10 @@
       </mat-expansion-panel-header>
       <div class="pair">
         <mat-form-field>
-          <input matInput placeholder="Option" [formControl]="option1">
+          <input matInput placeholder="Option">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Value" [formControl]="optionValue1">
+          <input matInput placeholder="Value">
         </mat-form-field>
         <button mat-mini-fab type="button" *ngIf="!isDetails">
           <mat-icon>add</mat-icon>
@@ -111,23 +114,23 @@
     </mat-expansion-panel>
     <div class="form-field">
       <div class="big-field padding">
-        <mat-slide-toggle [formControl]="ipv6">IPv6</mat-slide-toggle>
+        <mat-slide-toggle formControlName="ipv6">IPv6</mat-slide-toggle>
       </div>
     </div>
     <div class="form-field">
       <div class="big-field padding">
-        <mat-slide-toggle [formControl]="internal">Internal</mat-slide-toggle>
+        <mat-slide-toggle formControlName="internal">Internal</mat-slide-toggle>
       </div>
     </div>
     <div class="form-field" *ngIf="swarmService.equalsOrGreaterThenVersion26()">
       <div class="big-field padding">
-        <mat-slide-toggle [formControl]="attachable">Attachable</mat-slide-toggle>
+        <mat-slide-toggle formControlName="attachable">Attachable</mat-slide-toggle>
       </div>
     </div>
     <div class="form-field">
       <div class="big-field submit">
         <button mat-raised-button color="accent" *ngIf="!isDetails">Create</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails" type="button" (click)="openDialog()">Remove</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin()" type="button" (click)="openDialog()">Remove</button>
       </div>
     </div>
   </form>
