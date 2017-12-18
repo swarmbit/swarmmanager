@@ -17,41 +17,44 @@
         <input matInput placeholder="IPAM Driver" formControlName="ipamDriver">
       </mat-form-field>
     </div>
-    <mat-expansion-panel class="expansion-panel">
+    <mat-expansion-panel class="expansion-panel" formArrayName="ipamConfigs" *ngIf="networkForm.get('ipamConfigs').controls.length > 0">
       <mat-expansion-panel-header>
         <mat-panel-title>
           IPAM Configs
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="form-field">
-        <mat-form-field class="big-field">
-          <input matInput placeholder="Subnet">
-        </mat-form-field>
-      </div>
-      <div class="form-field">
-        <mat-form-field class="big-field">
-          <input matInput placeholder="IP Range">
-        </mat-form-field>
-      </div>
-      <div class="form-field">
-        <mat-form-field class="big-field">
-          <input matInput placeholder="Gateway">
-        </mat-form-field>
-      </div>
-      <div class="pair">
-        <mat-form-field>
-          <input matInput placeholder="Device Name">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="IP Address">
-        </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails">
-          <mat-icon>add</mat-icon>
-        </button>
+      <div class="ipam-config-block" [formGroupName]="i" *ngFor="let ipamConfigControl of networkForm.get('ipamConfigs').controls; let i = index;">
+        <mat-icon class="ipam-remove-icon" *ngIf="!isDetails && i < (networkForm.get('ipamConfigs').controls.length - 1)" (click)="removeIpamConfig(this.networkForm, i)">remove_circle_outline</mat-icon>
+        <div class="form-field">
+          <mat-form-field class="big-field">
+            <input matInput placeholder="Subnet" formControlName="subnet">
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field class="big-field">
+            <input matInput placeholder="IP Range" formControlName="ipRange">
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field class="big-field">
+            <input matInput placeholder="Gateway" formControlName="gateway">
+          </mat-form-field>
+        </div>
+        <!-- div class="pair" [formGroupName]="j" *ngFor="let auxAddressControl of ipamConfigControl.get('auxAddress').controls; let j = index;">
+          <mat-form-field>
+            <input matInput placeholder="Device Name" formControlName="deviceName">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="IP Address" formControlName="ipAddress">
+          </mat-form-field>
+          <button mat-mini-fab type="button" *ngIf="!isDetails">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div -->
       </div>
       <div class="form-field" *ngIf="!isDetails">
         <div class="big-field">
-          <button mat-raised-button color="accent" type="button">New Config</button>
+          <button mat-raised-button color="accent" type="button" (click)="addIpamConfig(networkForm)">New Config</button>
         </div>
       </div>
     </mat-expansion-panel>
@@ -68,10 +71,10 @@
         <mat-form-field>
           <input matInput placeholder="Value" formControlName="value">
         </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('ipamOptions').controls.length - 1)" (click)="addOption('ipamOptions')">
+        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('ipamOptions').controls.length - 1)" (click)="addOption(networkForm, 'ipamOptions', 'name', 'value')">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('ipamOptions').controls.length - 1)" (click)="removeOption('ipamOptions', i)">
+        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('ipamOptions').controls.length - 1)" (click)="removeOption(networkForm, 'ipamOptions', i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -89,10 +92,10 @@
         <mat-form-field>
           <input matInput placeholder="Value" formControlName="value">
         </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('labels').controls.length - 1)" (click)="addOption('labels')">
+        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('labels').controls.length - 1)" (click)="addOption(networkForm, 'labels', 'name', 'value')">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('labels').controls.length - 1)" (click)="removeOption('labels', i)">
+        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('labels').controls.length - 1)" (click)="removeOption(networkForm, 'labels', i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -110,10 +113,10 @@
         <mat-form-field>
           <input matInput placeholder="Value" formControlName="value">
         </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('options').controls.length - 1)" (click)="addOption('options')">
+        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('options').controls.length - 1)" (click)="addOption(networkForm, 'options', 'name', 'value')">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('options').controls.length - 1)" (click)="removeOption('options', i)">
+        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('options').controls.length - 1)" (click)="removeOption(networkForm, 'options', i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
