@@ -12,7 +12,7 @@
 }
 
 .network-form .expansion-panel .ipam-config-block {
-  border: 0.05rem solid #607d8b;
+  border: 0.05rem solid #bdbdbd;
   border-radius: 0.15rem;
   padding: 1rem;
   margin-top: 0.5rem;
@@ -22,6 +22,7 @@
 .network-form .expansion-panel .ipam-remove-icon {
   float: right;
   cursor: pointer;
+  color: #bdbdbd;
 }
 
 .network-form .expansion-panel .form-field .big-field {

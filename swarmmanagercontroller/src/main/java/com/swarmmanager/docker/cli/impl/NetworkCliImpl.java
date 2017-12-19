@@ -28,7 +28,6 @@ public class NetworkCliImpl implements NetworkCli {
 
     @Override
     public Network create(String swarmId, Network network) {
-        network.setDriver("overlay");
         NetworkJson networkJson = new NetworkJson();
         networkJson.setDriver(network.getDriver());
         networkJson.setName(network.getName());

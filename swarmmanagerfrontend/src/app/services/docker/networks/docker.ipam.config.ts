@@ -2,5 +2,5 @@ export class DockerIpamConfig {
   subnet: string;
   ipRange: string;
   gateway: string;
-  auxAddress: any;
+  auxAddress: string;
 }

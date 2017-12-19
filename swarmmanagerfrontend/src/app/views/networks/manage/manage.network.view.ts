@@ -208,5 +208,4 @@ export class ManageNetworkView extends BaseView {
     }));
   }
 
-
 }
