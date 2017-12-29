@@ -50,6 +50,13 @@
 
 .network-form .submit {
   padding-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.network-form .submit .form-error {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 @media (max-width: $min-With-media-query)

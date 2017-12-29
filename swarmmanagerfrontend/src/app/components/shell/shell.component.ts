@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ScreenService } from '../../services/screen/screen.service';
 import { NavigationItem } from './model/navigation.item';
 import { HeaderService } from '../../services/header/header.service';
@@ -8,7 +8,6 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';
 import { DockerSwarm } from '../../services/docker/swarms/docker.swarm';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-shell',
@@ -30,8 +29,10 @@ export class ShellComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   @ViewChild('sidenav') private sidenav: MatSidenav;
 
-
-  constructor(private router: Router, public screenService: ScreenService, private headerService: HeaderService, private swarmService: DockerSwarmService) {
+  public constructor(private router: Router,
+                     public screenService: ScreenService,
+                     private headerService: HeaderService,
+                     private swarmService: DockerSwarmService) {
     this.navigationItems = [];
     this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
     this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));

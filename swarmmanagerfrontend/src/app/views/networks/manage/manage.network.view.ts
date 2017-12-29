@@ -18,6 +18,8 @@ import { DockerIpamConfig } from '../../../services/docker/networks/docker.ipam.
 })
 export class ManageNetworkView extends BaseView {
 
+  formErrorMessage = 'Please check invalid fields!';
+  formInvalid: boolean;
   isDetails: boolean;
   networkForm: FormGroup;
 
@@ -48,11 +50,14 @@ export class ManageNetworkView extends BaseView {
 
   createNetwork(): void {
     if (this.networkForm.valid) {
+      this.formInvalid = false;
       this.subscriptions.push(this.networksService.createNetwork(this.getNewDockerNetwork(this.networkForm.value)).subscribe(
         () => {
           this.router.navigate(['/networks']);
         }
       ));
+    } else {
+      this.formInvalid = true;
     }
   }
 
