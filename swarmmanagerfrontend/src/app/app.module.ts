@@ -35,6 +35,9 @@ import { DockerNodesService } from './services/docker/nodes/docker.nodes.service
 import { ManageNetworkView } from './views/networks/manage/manage.network.view';
 import { DockerNetworkResolver } from './resolvers/docker/networks/docker.network.resolver';
 import { ConfirmationDialogComponent } from './components/confirmation.dialog/confirmation.dialog.component';
+import { ServicesView } from './views/services/services.view';
+import { ManageServicesView } from './views/services/manage/manage.services.view';
+import { DockerServicesService } from './services/docker/services/docker.services.service';
 
 declare const Hammer: any;
 
@@ -58,6 +61,8 @@ export class HammerConfig extends HammerGestureConfig  {
     LoginView,
     NetworksView,
     ManageNetworkView,
+    ServicesView,
+    ManageServicesView,
     NodesView
   ],
   imports: [
@@ -77,6 +82,7 @@ export class HammerConfig extends HammerGestureConfig  {
     UserService,
     SnackbarService,
     DockerSwarmService,
+    DockerServicesService,
     DockerNetworksService,
     DockerNodesService,
     DockerNetworkResolver,

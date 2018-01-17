@@ -34,6 +34,7 @@ export class ShellComponent implements OnInit, OnDestroy {
                      private headerService: HeaderService,
                      private swarmService: DockerSwarmService) {
     this.navigationItems = [];
+    this.navigationItems.push(new NavigationItem('Services', '/services', 'cloud'));
     this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
     this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
     this.subscription = this.headerService.getHeaderInfo().subscribe(headerInfo => {

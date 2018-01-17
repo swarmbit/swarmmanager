@@ -7,7 +7,6 @@ import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
 import { DockerNetwork } from './docker.network';
-import { Observer } from 'rxjs';
 
 @Injectable()
 export class DockerNetworksService extends DockerBaseService {
