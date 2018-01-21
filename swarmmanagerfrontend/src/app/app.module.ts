@@ -38,6 +38,7 @@ import { ConfirmationDialogComponent } from './components/confirmation.dialog/co
 import { ServicesView } from './views/services/services.view';
 import { ManageServicesView } from './views/services/manage/manage.services.view';
 import { DockerServicesService } from './services/docker/services/docker.services.service';
+import { CleanServiceImagePipe } from './pipes/clean.service.image.pipe';
 
 declare const Hammer: any;
 
@@ -58,6 +59,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ListControlBarComponent,
     ListContainerComponent,
     ConfirmationDialogComponent,
+    CleanServiceImagePipe,
     LoginView,
     NetworksView,
     ManageNetworkView,

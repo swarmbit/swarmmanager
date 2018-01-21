@@ -341,6 +341,7 @@ public class ServiceConverter {
                 for (PortConfigJson portConfig : portConfigs) {
                     if (portConfig != null) {
                         Port port = new Port();
+                        System.out.println(portConfig.getProtocol());
                         port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
                         port.setPublished(portConfig.getPublishedPort());
                         port.setTarget(portConfig.getTargetPort());

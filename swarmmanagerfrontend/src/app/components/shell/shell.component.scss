@@ -141,6 +141,10 @@
     height: calc(100vh - 6rem);
   }
 
+  .shell-content > div.content {
+    width: 100%;
+  }
+
   .header-container .text {
     font-size: 1.5rem;
   }

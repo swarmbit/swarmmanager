@@ -22,10 +22,34 @@
           <td><strong>Id</strong></td>
           <td>{{service.id}}</td>
         </tr>
+        <tr>
+          <td><strong>Running Replicas</strong></td>
+          <td>{{service.runningReplicas}} / {{service.runningReplicas}} </td>
+        </tr>
+        <tr>
+          <td><strong>Global</strong></td>
+          <td>{{service.global}}</td>
+        </tr>
+        <tr>
+          <td><strong>Image</strong></td>
+          <td>{{service.image | cleanServiceImagePipe}}</td>
+        </tr>
+        <tr *ngIf="service.ports && service.ports.length > 0">
+          <td><strong>Ports</strong></td>
+          <td>
+            <div *ngFor="let port of service.ports">
+              {{port.published}} -> {{port.target}} / {{port.protocol}}
+            </div>
+          </td>
+        </tr>
       </table>
-      <button mat-raised-button color="accent" *ngIf="user.isAdmin()">Manage</button>
-      <button mat-raised-button color="accent" *ngIf="user.isVisitor() && !user.isAdmin()" class="service-button">Details</button>
-      <button mat-raised-button color="accent" class="service-button">State</button>
     </mat-card-content>
+    <div class="card-actions">
+      <div class="card-buttons">
+        <button mat-raised-button color="accent" *ngIf="user.isAdmin()">Manage</button>
+        <button mat-raised-button color="accent" *ngIf="user.isVisitor() && !user.isAdmin()" class="service-button">Details</button>
+        <button mat-raised-button color="accent" class="service-button">State</button>
+      </div>
+    </div>
   </mat-card>
 </app-list-container>
