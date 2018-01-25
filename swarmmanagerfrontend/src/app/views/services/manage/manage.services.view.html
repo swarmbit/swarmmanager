@@ -1,143 +1,14 @@
-<div class="network-form-container">
-  <form class="network-form" [formGroup]="networkForm" (ngSubmit)="createNetwork()">
+<div class="service-form-container">
+  <form class="service-form" [formGroup]="serviceForm" (ngSubmit)="createService()">
     <div class="form-field">
-      <!-- Required -->
       <mat-form-field class="big-field">
-        <input matInput placeholder="Name" formControlName="name" [required]="!isDetails">
-        <mat-error *ngIf="networkForm.get('name').invalid">Name is required to create a network</mat-error>
+        <input matInput placeholder="Name" formControlName="name">
       </mat-form-field>
     </div>
     <div class="form-field">
       <mat-form-field class="big-field">
-        <input matInput placeholder="Driver" formControlName="driver">
+        <input matInput placeholder="Image" formControlName="image">
       </mat-form-field>
-    </div>
-    <div class="form-field">
-      <mat-form-field class="big-field">
-        <input matInput placeholder="IPAM Driver" formControlName="ipamDriver">
-      </mat-form-field>
-    </div>
-    <mat-expansion-panel [expanded]="isDetails" class="expansion-panel" formArrayName="ipamConfigs" *ngIf="networkForm.get('ipamConfigs').controls.length > 0">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          IPAM Configs
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="ipam-config-block" [formGroup]="ipamConfigControl" *ngFor="let ipamConfigControl of networkForm.get('ipamConfigs').controls; let i = index;">
-        <mat-icon class="ipam-remove-icon" *ngIf="!isDetails && i < (networkForm.get('ipamConfigs').controls.length - 1)" (click)="removeIpamConfig(this.networkForm, i)">delete</mat-icon>
-        <div class="form-field">
-          <mat-form-field class="big-field">
-            <input matInput placeholder="Subnet" formControlName="subnet">
-          </mat-form-field>
-        </div>
-        <div class="form-field">
-          <mat-form-field class="big-field">
-            <input matInput placeholder="IP Range" formControlName="ipRange">
-          </mat-form-field>
-        </div>
-        <div class="form-field">
-          <mat-form-field class="big-field">
-            <input matInput placeholder="Gateway" formControlName="gateway">
-          </mat-form-field>
-        </div>
-        <div class="pair" [formGroup]="auxAddressControl" *ngFor="let auxAddressControl of ipamConfigControl.get('auxAddress').controls; let j = index;">
-          <mat-form-field>
-            <input matInput placeholder="Device Name" formControlName="deviceName">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="IP Address" formControlName="ipAddress">
-          </mat-form-field>
-          <button mat-mini-fab type="button" *ngIf="!isDetails && j == (ipamConfigControl.get('auxAddress').controls.length - 1)" (click)="addOption(ipamConfigControl, 'auxAddress', 'deviceName', 'ipAddress')">
-            <mat-icon>add</mat-icon>
-          </button>
-          <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && j < (ipamConfigControl.get('auxAddress').controls.length - 1)" (click)="removeOption(ipamConfigControl, 'auxAddress', j)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </div>
-      <div class="form-field" *ngIf="!isDetails">
-        <div class="big-field">
-          <button mat-raised-button color="accent" type="button" (click)="addIpamConfig(networkForm)">New Config</button>
-        </div>
-      </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="isDetails" class="expansion-panel" formArrayName="ipamOptions" *ngIf="networkForm.get('ipamOptions').controls.length > 0">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          IPAM Options
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="pair" [formGroup]="ipamOptionControl" *ngFor="let ipamOptionControl of networkForm.get('ipamOptions').controls; let i = index;">
-        <mat-form-field>
-          <input matInput placeholder="Option" formControlName="name">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Value" formControlName="value">
-        </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('ipamOptions').controls.length - 1)" (click)="addOption(networkForm, 'ipamOptions', 'name', 'value')">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('ipamOptions').controls.length - 1)" (click)="removeOption(networkForm, 'ipamOptions', i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="isDetails" class="expansion-panel" formArrayName="labels" *ngIf="networkForm.get('labels').controls.length > 0">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Labels
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="pair" [formGroup]="labelControl" *ngFor="let labelControl of networkForm.get('labels').controls; let i = index;">
-        <mat-form-field>
-          <input matInput placeholder="Label" formControlName="name">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Value" formControlName="value">
-        </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('labels').controls.length - 1)" (click)="addOption(networkForm, 'labels', 'name', 'value')">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('labels').controls.length - 1)" (click)="removeOption(networkForm, 'labels', i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="isDetails" class="expansion-panel" formArrayName="options" *ngIf="networkForm.get('options').controls.length > 0">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Options
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="pair" [formGroup]="optionControl" *ngFor="let optionControl of networkForm.get('options').controls; let i = index;">
-        <mat-form-field>
-          <input matInput placeholder="Option" formControlName="name">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Value" formControlName="value">
-        </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails && i == (networkForm.get('options').controls.length - 1)" (click)="addOption(networkForm, 'options', 'name', 'value')">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (networkForm.get('options').controls.length - 1)" (click)="removeOption(networkForm, 'options', i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </mat-expansion-panel>
-    <div class="form-field">
-      <div class="big-field padding">
-        <mat-slide-toggle formControlName="ipv6">IPv6</mat-slide-toggle>
-      </div>
-    </div>
-    <div class="form-field">
-      <div class="big-field padding">
-        <mat-slide-toggle formControlName="internal">Internal</mat-slide-toggle>
-      </div>
-    </div>
-    <div class="form-field" *ngIf="swarmService.equalsOrGreaterThenVersion26()">
-      <div class="big-field padding">
-        <mat-slide-toggle formControlName="attachable">Attachable</mat-slide-toggle>
-      </div>
     </div>
     <div class="form-field">
       <div class="big-field submit">

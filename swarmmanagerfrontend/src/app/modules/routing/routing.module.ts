@@ -6,6 +6,7 @@ import { ManageNetworkView } from '../../views/networks/manage/manage.network.vi
 import { DockerNetworkResolver } from '../../resolvers/docker/networks/docker.network.resolver';
 import { ServicesView } from '../../views/services/services.view';
 import { ManageServicesView } from '../../views/services/manage/manage.services.view';
+import { DockerServiceResolver } from '../../resolvers/docker/services/docker.service.resolver';
 
 const appRoutes: Routes = [
   {
@@ -35,7 +36,7 @@ const appRoutes: Routes = [
       action: 'manage'
     },
     resolve: {
-      dockerNetwork: DockerNetworkResolver
+      dockerService: DockerServiceResolver
     }
   },
   {
