@@ -10,6 +10,7 @@ import { ConfirmationDialogComponent } from '../../../components/confirmation.di
 import { DockerServicesService } from '../../../services/docker/services/docker.services.service';
 import { DockerService } from '../../../services/docker/services/docker.service';
 import { CleanServiceImagePipe } from '../../../pipes/clean.service.image.pipe';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-manage-service',
@@ -36,15 +37,34 @@ export class ManageServicesView extends BaseView {
     super(headerService, route, swarmService, userService);
     super.enableBackArrow('/services');
     this.isDetails = route.snapshot.data[ 'action' ] === 'manage';
-    if (this.isDetails) {
+    this.loadFunction = this.loadService;
+    this.initCreateForm();
+  }
+
+  loadService() {
+    this.dockerServicesService.getService(this.serviceName)
+      .subscribe(
+        (dockerService: DockerService) => {
+          this.initCreateForm(dockerService);
+        },
+        (err: HttpErrorResponse) => {
+          this.router.navigate(['/services']);
+        });
+  }
+
+  initCreateForm(dockerService ?: DockerService): void {
+    if (!dockerService && this.isDetails) {
       this.subscriptions.push(this.route.data
         .subscribe(
           (data: Data) => {
-            const dockerService = data['dockerService'];
-            super.setViewName('Service ' + dockerService.name);
-            this.createForm(dockerService);
+            const dockerServiceData = data['dockerService'];
+            this.serviceName = dockerServiceData.name;
+            super.setViewName('Service ' + dockerServiceData.name);
+            this.createForm(dockerServiceData);
           }
-      ));
+        ));
+    } else if (dockerService) {
+      this.createForm(dockerService);
     } else {
       this.createForm(new DockerService());
     }
@@ -65,7 +85,6 @@ export class ManageServicesView extends BaseView {
 
   createForm(dockerService: DockerService): void {
     const imagePipe = new CleanServiceImagePipe();
-    this.serviceName = dockerService.name;
     this.serviceForm = new FormGroup({
       'name': new FormControl({ value: dockerService.name, disabled: this.isDetails }),
       'image': new FormControl({ value: imagePipe.transform(dockerService.image), disabled: this.isDetails })

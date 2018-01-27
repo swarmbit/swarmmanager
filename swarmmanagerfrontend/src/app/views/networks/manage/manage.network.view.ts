@@ -10,6 +10,7 @@ import { ActivatedRoute, Data, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ConfirmationDialogComponent } from '../../../components/confirmation.dialog/confirmation.dialog.component';
 import { DockerIpamConfig } from '../../../services/docker/networks/docker.ipam.config';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-manage-network',
@@ -22,6 +23,7 @@ export class ManageNetworkView extends BaseView {
   formInvalid: boolean;
   isDetails: boolean;
   networkForm: FormGroup;
+  networkName: string;
 
   constructor(headerService: HeaderService,
               public swarmService: DockerSwarmService,
@@ -34,15 +36,34 @@ export class ManageNetworkView extends BaseView {
     super(headerService, route, swarmService, userService);
     super.enableBackArrow('/networks');
     this.isDetails = route.snapshot.data[ 'action' ] === 'manage';
-    if (this.isDetails) {
+    this.loadFunction = this.loadNetworks;
+    this.initCreateForm();
+  }
+
+  loadNetworks() {
+    this.networksService.getNetwork(this.networkName)
+      .subscribe(
+        (dockerNetwork: DockerNetwork) => {
+          this.initCreateForm(dockerNetwork);
+        },
+        (err: HttpErrorResponse) => {
+          this.router.navigate(['/networks']);
+        });
+  }
+
+  initCreateForm(dockerNetwork ?: DockerNetwork): void {
+    if (!dockerNetwork && this.isDetails) {
       this.subscriptions.push(this.route.data
         .subscribe(
           (data: Data) => {
-            const dockerNetwork = data['dockerNetwork'];
-            super.setViewName('Network ' + dockerNetwork.name);
-            this.createForm(dockerNetwork);
+            const dockerNetworkData = data['dockerNetwork'];
+            this.networkName = dockerNetworkData.name;
+            super.setViewName('Network ' + dockerNetworkData.name);
+            this.createForm(dockerNetworkData);
           }
-      ));
+        ));
+    } else if (dockerNetwork) {
+      this.createForm(dockerNetwork);
     } else {
       this.createForm(new DockerNetwork());
     }

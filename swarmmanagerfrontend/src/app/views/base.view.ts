@@ -14,6 +14,7 @@ export class BaseView implements OnDestroy {
   headerInfo: HeaderInfo;
   user: User;
   refreshFunction: Function;
+  loadFunction: Function;
   subscriptions: Subscription[];
 
   constructor(headerService: HeaderService,
@@ -36,6 +37,9 @@ export class BaseView implements OnDestroy {
         () => {
           if (this.refreshFunction) {
             this.refreshFunction();
+          }
+          if (this.loadFunction) {
+            this.loadFunction();
           }
         }
       ),
