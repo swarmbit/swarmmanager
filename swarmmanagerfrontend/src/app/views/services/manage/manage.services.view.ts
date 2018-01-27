@@ -21,7 +21,9 @@ export class ManageServicesView extends BaseView {
   formErrorMessage = 'Please check invalid fields!';
   formInvalid: boolean;
   isDetails: boolean;
+  editMode: boolean;
   serviceForm: FormGroup;
+  serviceName: string;
 
   constructor(headerService: HeaderService,
               public swarmService: DockerSwarmService,
@@ -63,24 +65,78 @@ export class ManageServicesView extends BaseView {
 
   createForm(dockerService: DockerService): void {
     const imagePipe = new CleanServiceImagePipe();
+    this.serviceName = dockerService.name;
     this.serviceForm = new FormGroup({
       'name': new FormControl({ value: dockerService.name, disabled: this.isDetails }),
       'image': new FormControl({ value: imagePipe.transform(dockerService.image), disabled: this.isDetails })
     });
   }
 
+  disableForm(): void {
+    this.serviceForm.disable();
+  }
+
+  enableForm(): void {
+    this.serviceForm.enable();
+    this.serviceForm.get('name').disable();
+  }
+
   getNewDockerService(values): DockerService {
     const dockerService = new DockerService();
-    dockerService.name = values['name'];
+    if (values['name']) {
+      dockerService.name = values['name'];
+    } else {
+      dockerService.name = this.serviceName;
+    }
     dockerService.image = values['image'];
     return dockerService;
   }
 
-  openDialog(): void {
+  setEditMode(): void {
+    this.editMode = true;
+    this.enableForm();
+  }
+
+  forceUpdate(): void {
+    const dockerService = new DockerService();
+    dockerService.name = this.serviceName;
+    dockerService.forceUpdate = true;
+    this.subscriptions.push(this.dockerServicesService.updateService(dockerService).subscribe());
+  }
+
+  openSaveDialog(): void {
+    if (this.serviceForm.valid && this.serviceForm.touched) {
+      this.formInvalid = false;
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '18rem',
+        data: {
+          title: 'Save service changes'
+        }
+      });
+
+      this.subscriptions.push(dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.subscriptions.push(this.dockerServicesService.updateService(this.getNewDockerService(this.serviceForm.value)).subscribe(
+            () => {
+              this.editMode = false;
+              this.serviceForm.markAsUntouched();
+              this.disableForm();
+          }));
+        }
+      }));
+    } else if (this.serviceForm.valid && !this.serviceForm.touched) {
+      this.editMode = false;
+      this.disableForm();
+    } else {
+      this.formInvalid = true;
+    }
+  }
+
+  openRemoveDialog(): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '15rem',
       data: {
-        title: 'Remove Service'
+        title: 'Remove service'
       }
     });
 

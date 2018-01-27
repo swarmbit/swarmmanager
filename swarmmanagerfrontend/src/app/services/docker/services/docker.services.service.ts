@@ -19,14 +19,14 @@ export class DockerServicesService extends DockerBaseService {
     super(swarmsService, snackbarService);
   }
 
-  getServicesList(): Observable<DockerServicesSummary[]> {
+  getServicesList(noMessage?: boolean): Observable<DockerServicesSummary[]> {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerServicesSummary[]>(this.dockerSwarmUrl + this.dockerServicesUrl)
           .first()
           .subscribe(
             (services: DockerServicesSummary[]) => {
-              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' services!', services);
+              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' services!', services, noMessage);
             },
             (err: HttpErrorResponse) => {
               this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' services!');
@@ -35,14 +35,14 @@ export class DockerServicesService extends DockerBaseService {
     });
   }
 
-  getService(name: string): Observable<DockerService> {
+  getService(name: string, noMessage?: boolean): Observable<DockerService> {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + name)
           .first()
           .subscribe(
             (service: DockerService) => {
-              this.completeWithSuccess(observer, 'Loaded ' + name + ' service!', service);
+              this.completeWithSuccess(observer, 'Loaded ' + name + ' service!', service, noMessage);
             },
             (err: HttpErrorResponse) => {
               this.completeWithError(err, observer, 'Failed to load ' + name + ' service!');
@@ -75,10 +75,25 @@ export class DockerServicesService extends DockerBaseService {
         this.http.post<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl, dockerService)
           .subscribe(
             (returnedService: DockerService) => {
-              this.completeWithSuccess(observer, null, returnedService);
+              this.completeWithSuccess(observer, 'Created ' + returnedService.name + ' service!', returnedService);
             },
             (err: HttpErrorResponse) => {
               this.completeWithError(err, observer, 'Failed to create service!');
+            });
+      });
+    });
+  }
+
+  updateService(dockerService: DockerService): Observable<any> {
+    return Observable.create(observer => {
+      this.afterDockerSwarmSelected.then(() => {
+        this.http.put<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + dockerService.name, dockerService)
+          .subscribe(
+            (returnedService: DockerService) => {
+              this.completeWithSuccess(observer, 'Updated ' + returnedService.name + ' service!', returnedService);
+            },
+            (err: HttpErrorResponse) => {
+              this.completeWithError(err, observer, 'Failed to update service!');
             });
       });
     });

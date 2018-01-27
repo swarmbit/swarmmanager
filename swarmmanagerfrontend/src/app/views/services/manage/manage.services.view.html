@@ -13,7 +13,10 @@
     <div class="form-field">
       <div class="big-field submit">
         <button mat-raised-button color="accent" *ngIf="!isDetails">Create</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin()" type="button" (click)="openDialog()">Remove</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && editMode" type="button" (click)="openSaveDialog()">Save</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin()" type="button" (click)="openRemoveDialog()">Remove</button>
         <div class="form-error">
           <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
         </div>

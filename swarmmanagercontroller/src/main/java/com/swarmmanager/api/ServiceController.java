@@ -55,7 +55,8 @@ public class ServiceController {
 
     @PreAuthorize(Role.IS_USER)
     @RequestMapping(method = RequestMethod.PUT, value = "{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void serviceUpdate(@PathVariable String swarmId, @PathVariable String serviceId, @RequestBody Service service) {
+    public Service serviceUpdate(@PathVariable String swarmId, @PathVariable String serviceId, @RequestBody Service service) {
         serviceCli.serviceUpdate(swarmId, serviceId, service);
+        return service;
     }
 }

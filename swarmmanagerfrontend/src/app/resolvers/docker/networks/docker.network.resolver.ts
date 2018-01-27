@@ -11,6 +11,6 @@ export class DockerNetworkResolver implements Resolve<DockerNetwork> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<DockerNetwork> | Promise<DockerNetwork> | DockerNetwork {
-    return this.dockerNetworksService.getNetwork(route.params['name']);
+    return this.dockerNetworksService.getNetwork(route.params['name'], true);
   }
 }

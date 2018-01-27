@@ -19,14 +19,14 @@ export class DockerNodesService extends DockerBaseService {
     super(swarmsService, snackbarService);
   }
 
-  getNodesList(): Observable<DockerNodeSummary[]> {
+  getNodesList(noMessage?: boolean): Observable<DockerNodeSummary[]> {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNodeSummary[]>(this.dockerSwarmUrl + this.dockerNodesUrl)
           .first()
           .subscribe(
             (nodes: DockerNodeSummary[]) => {
-              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' nodes!', nodes);
+              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' nodes!', nodes, noMessage);
             },
             (err: HttpErrorResponse) => {
               this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' nodes!');

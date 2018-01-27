@@ -24,7 +24,7 @@
         </tr>
         <tr>
           <td><strong>Running Replicas</strong></td>
-          <td>{{service.runningReplicas}} / {{service.runningReplicas}} </td>
+          <td>{{service.runningReplicas}} / {{service.replicas}} </td>
         </tr>
         <tr>
           <td><strong>Global</strong></td>
@@ -47,8 +47,8 @@
     <div class="card-actions">
       <div class="card-buttons">
         <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isAdmin()">Manage</button>
-        <button mat-raised-button color="accent" *ngIf="user.isVisitor() && !user.isAdmin()" class="service-button">Details</button>
-        <button mat-raised-button color="accent" class="service-button">State</button>
+        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isAdmin()" class="service-button">Details</button>
+        <!--button mat-raised-button color="accent" class="service-button">State</button-->
       </div>
     </div>
   </mat-card>

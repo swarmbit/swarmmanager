@@ -11,6 +11,6 @@ export class DockerServiceResolver implements Resolve<DockerService> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<DockerService> | Promise<DockerService> | DockerService {
-    return this.dockerServicesService.getService(route.params['name']);
+    return this.dockerServicesService.getService(route.params['name'], true);
   }
 }

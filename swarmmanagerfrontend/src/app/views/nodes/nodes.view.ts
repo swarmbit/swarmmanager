@@ -27,11 +27,11 @@ export class NodesView extends BaseView {
   ) {
     super(headerService, route, swarmService, userService);
     this.refreshFunction = this.refreshNodes;
-    this.refreshNodes();
+    this.refreshNodes(true);
   }
 
-  refreshNodes(): void {
-    super.addSubscription(this.nodesService.getNodesList().subscribe(
+  refreshNodes(noMessage?: boolean): void {
+    super.addSubscription(this.nodesService.getNodesList(noMessage).subscribe(
       (nodes: DockerNodeSummary[]) => {
         this.nodes = nodes;
         this.nodes.sort((value1, value2) => {

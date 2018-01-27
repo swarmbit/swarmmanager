@@ -25,8 +25,8 @@ export class DockerBaseService {
       });
   }
 
-  completeWithSuccess(observer: Observer<any>, message: string, returnObject?: any) {
-    if (message) {
+  completeWithSuccess(observer: Observer<any>, message: string, returnObject?: any, noMessage?: boolean) {
+    if (message && !noMessage) {
       this.snackbarService.showSuccess(message);
     }
     observer.next(returnObject);

@@ -559,7 +559,7 @@ public class ServiceSpecJsonConverter {
 
     public ServiceSpecJsonConverter setForceUpdate(Boolean forceUpdate) {
         if (forceUpdate != null && forceUpdate) {
-            serviceSpecJson.getTaskTemplate().setForceUpdate(1L);
+            serviceSpecJson.getTaskTemplate().setForceUpdate(System.currentTimeMillis());
         }
         return this;
     }

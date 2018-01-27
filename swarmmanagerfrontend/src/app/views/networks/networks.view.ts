@@ -26,11 +26,11 @@ export class NetworksView extends BaseView {
               ) {
     super(headerService, route, swarmService, userService);
     this.refreshFunction = this.refreshNetworks;
-    this.refreshNetworks();
+    this.refreshNetworks(true);
   }
 
-  refreshNetworks(): void {
-    super.addSubscription(this.networksService.getNetworksList().subscribe(
+  refreshNetworks(noMessage?: boolean): void {
+    super.addSubscription(this.networksService.getNetworksList(noMessage).subscribe(
       (networks: DockerNetworkSummary[]) => {
         this.networks = networks;
         this.networks.sort(ViewUtils.sortByName);
