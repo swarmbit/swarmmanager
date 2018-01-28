@@ -1,0 +1,15 @@
+@import 'common';
+@import 'typography';
+
+body {
+  display: block;
+  margin: 0;
+}
+
+.mat-mini-fab .mat-button-wrapper {
+  line-height: 12px !important;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+}

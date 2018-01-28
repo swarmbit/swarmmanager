@@ -1,12 +1,12 @@
 <div>
-  <md-icon class="user-icon">account_circle</md-icon>
-  <span class="user-name">{{user.name}}</span>
-  <button md-icon-button [mdMenuTriggerFor]="menu">
-    <md-icon>keyboard_arrow_downn</md-icon>
+  <mat-icon class="user-icon">account_circle</mat-icon>
+  <span class="user-name">{{userName}}</span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>keyboard_arrow_downn</mat-icon>
   </button>
-  <md-menu #menu="mdMenu">
-    <button md-menu-item (click)="logout()">
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="logout()">
       <span>Logout</span>
     </button>
-  </md-menu>
+  </mat-menu>
 </div>

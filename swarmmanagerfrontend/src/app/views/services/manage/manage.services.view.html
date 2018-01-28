@@ -1,0 +1,26 @@
+<div class="service-form-container">
+  <form class="service-form" [formGroup]="serviceForm" (ngSubmit)="createService()">
+    <div class="form-field">
+      <mat-form-field class="big-field">
+        <input matInput placeholder="Name" formControlName="name">
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <mat-form-field class="big-field">
+        <input matInput placeholder="Image" formControlName="image">
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <div class="big-field submit">
+        <button mat-raised-button color="accent" *ngIf="!isDetails">Create</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && editMode" type="button" (click)="openSaveDialog()">Save</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin()" type="button" (click)="openRemoveDialog()">Remove</button>
+        <div class="form-error">
+          <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

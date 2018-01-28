@@ -7,7 +7,7 @@ import com.swarmmanager.repository.UserDataRepository;
 import com.swarmmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,7 @@ public class UserDataController {
     @Autowired
     private UserRepository userRepository;
 
-    @Secured(Role.VISITOR)
+    @PreAuthorize(Role.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public UserData getUserData() {
         User user = userRepository.findByUsername(getCurrentUsername());

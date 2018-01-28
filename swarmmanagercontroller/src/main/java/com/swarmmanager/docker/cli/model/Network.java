@@ -19,7 +19,7 @@ public class Network {
 
     private String ipamDriver;
 
-    private List<IpamConfig> ipamConfig;
+    private List<IpamConfig> ipamConfigs;
 
     private Map<String, String> ipamOptions;
 
@@ -117,12 +117,12 @@ public class Network {
         this.attachable = attachable;
     }
 
-    public List<IpamConfig> getIpamConfig() {
-        return ipamConfig;
+    public List<IpamConfig> getIpamConfigs() {
+        return ipamConfigs;
     }
 
-    public void setIpamConfig(List<IpamConfig> ipamConfig) {
-        this.ipamConfig = ipamConfig;
+    public void setIpamConfigs(List<IpamConfig> ipamConfigs) {
+        this.ipamConfigs = ipamConfigs;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.swarmmanager.docker.api.common.client.jaxrs.filter;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swarmmanager.docker.api.common.client.jaxrs.exception.DockerRemoteApiException;
 import org.apache.commons.io.IOUtils;
 
@@ -18,6 +20,9 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
         int status = responseContext.getStatus();
         if (status >= 300) {
+            if (status == 503) {
+                throw new DockerRemoteApiException("Configured node is not part of a swarm.", status);
+            }
             throw new DockerRemoteApiException(getBodyAsMessage(responseContext), status);
         }
     }
@@ -49,7 +54,17 @@ public class ResponseStatusExceptionFilter implements ClientResponseFilter {
                 if (charset == null) {
                     charset = Charset.defaultCharset();
                 }
-                return new String(buffer, charset);
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode node = mapper.readTree(new String(buffer, charset));
+                String message = node.get("message").asText();
+                if (message != null) {
+                    String[] parts = message.split(" ");
+                    if (parts.length > 0 && parts[0] != null && parts[0].length() > 0) {
+                        parts[0] = parts[0].substring(0, 1).toUpperCase() + parts[0].substring(1);
+                        message = String.join(" ", parts);
+                    }
+                }
+                return message;
             }
         }
         return null;

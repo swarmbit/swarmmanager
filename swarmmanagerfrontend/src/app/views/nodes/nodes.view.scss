@@ -1,0 +1,22 @@
+@import '../../../styles/common';
+
+.node {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.node button {
+  margin: 0.5rem;
+}
+
+.list {
+  margin-left: 0.5rem;
+  margin-right: 4rem;
+}
+
+.filter {
+  width: 12rem;
+}
+

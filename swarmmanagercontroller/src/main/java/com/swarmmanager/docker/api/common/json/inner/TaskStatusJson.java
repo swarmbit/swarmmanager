@@ -73,4 +73,17 @@ public class TaskStatusJson {
     public void setPortStatus(PortStatusJson portStatus) {
         this.portStatus = portStatus;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("TaskStatusJson{");
+        sb.append("timestamp='").append(timestamp).append('\'');
+        sb.append(", taskState='").append(taskState).append('\'');
+        sb.append(", message='").append(message).append('\'');
+        sb.append(", err='").append(err).append('\'');
+        sb.append(", containerStatus=").append(containerStatus);
+        sb.append(", portStatus=").append(portStatus);
+        sb.append('}');
+        return sb.toString();
+    }
 }

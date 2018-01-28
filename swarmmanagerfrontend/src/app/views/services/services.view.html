@@ -1,0 +1,55 @@
+<app-list-control-bar>
+  <div class="service">
+    <button routerLink="/services/create" mat-raised-button color="accent" *ngIf="user.isAdmin()">Create Service</button>
+    <button mat-raised-button color="accent" (click)="refreshNetworks()">Refresh Services List</button>
+  </div>
+  <div class="list">
+    <mat-form-field class="filter">
+      <input matInput type="text" placeholder="Filter" [(ngModel)]="filter"/>
+      <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-hint>Filter by service name</mat-hint>
+    </mat-form-field>
+  </div>
+</app-list-control-bar>
+<app-list-container>
+  <mat-card class="service-card" *ngFor="let service of getServices()">
+    <mat-card-title>{{service.name}}</mat-card-title>
+    <mat-card-content>
+      <table>
+        <tr>
+          <td><strong>Id</strong></td>
+          <td>{{service.id}}</td>
+        </tr>
+        <tr>
+          <td><strong>Running Replicas</strong></td>
+          <td>{{service.runningReplicas}} / {{service.replicas}} </td>
+        </tr>
+        <tr>
+          <td><strong>Global</strong></td>
+          <td>{{service.global}}</td>
+        </tr>
+        <tr>
+          <td><strong>Image</strong></td>
+          <td>{{service.image | cleanServiceImagePipe}}</td>
+        </tr>
+        <tr *ngIf="service.ports && service.ports.length > 0">
+          <td><strong>Ports</strong></td>
+          <td>
+            <div *ngFor="let port of service.ports">
+              {{port.published}} -> {{port.target}} / {{port.protocol}}
+            </div>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+    <div class="card-actions">
+      <div class="card-buttons">
+        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isAdmin()">Manage</button>
+        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isAdmin()" class="service-button">Details</button>
+        <!--button mat-raised-button color="accent" class="service-button">State</button-->
+      </div>
+    </div>
+  </mat-card>
+</app-list-container>

@@ -1,0 +1,48 @@
+@import '../../../styles/common';
+
+.list-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/deep/ .list-container > mat-card {
+  margin: 1rem;
+  min-width: 26rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/deep/ .list-container > mat-card .card-actions {
+  flex-grow: 1;
+  display: flex;
+}
+
+/deep/ .list-container > mat-card .card-buttons {
+  align-self: flex-end;
+}
+
+/deep/ .list-container > mat-card {
+  user-select: text;
+}
+
+/deep/ .list-container > mat-card table {
+  margin-bottom: 1rem;
+}
+
+/deep/ .list-container > mat-card table tr td {
+  padding-right: 1rem;
+}
+
+@media (max-width: $min-With-media-query)
+{
+  /deep/ .list-container {
+    width: 100%;
+  }
+
+  /deep/ .list-container > mat-card {
+    min-width: 0;
+    width: 100%;
+    margin: 0 0 1rem 0;
+  }
+
+}

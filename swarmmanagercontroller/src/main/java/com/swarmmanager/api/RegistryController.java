@@ -6,7 +6,7 @@ import com.swarmmanager.repository.RegistryUserRepository;
 import com.swarmmanager.util.EncoderDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class RegistryController {
     @Autowired
     private RegistryUserRepository registryUserRepository;
 
-    @Secured(Role.VISITOR)
+    @PreAuthorize(Role.IS_USER)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RegistryUser> getRegistriesUsers() {
         return registryUserRepository.findByUserOwner(getCurrentUsername()).stream().map(registryUser -> {
@@ -30,13 +30,13 @@ public class RegistryController {
         }).collect(Collectors.toList());
     }
 
-    @Secured(Role.USER)
+    @PreAuthorize(Role.IS_USER)
     @RequestMapping(method = RequestMethod.DELETE, value = "{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void removeRegistryUser(@PathVariable String name) {
         registryUserRepository.deleteByNameAndUserOwner(name, getCurrentUsername());
     }
 
-    @Secured(Role.USER)
+    @PreAuthorize(Role.IS_USER)
     @RequestMapping(method = RequestMethod.POST, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void createRegistryUSer(@RequestBody RegistryUser registryUser) {
         registryUser.setUserOwner(getCurrentUsername());

@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
-import { User } from './user';
 import { AuthService } from '../../services/auth/auth.service';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-user',
@@ -10,14 +10,17 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class UserComponent implements OnInit {
 
-  user: User;
+  userName: String;
 
-  constructor(private authService: AuthService) {
+  constructor(private userService: UserService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.user = new User();
-    this.user.name = 'Bruno Vale';
+    this.userService.getUser(false).then(
+      user => {
+        this.userName = user.displayName;
+      }
+    );
   }
 
   logout() {

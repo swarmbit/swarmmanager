@@ -19,6 +19,9 @@ public class IPAMConfigJson {
     @JsonProperty("Gateway")
     private String gateway;
 
+    /*
+     * Apparently this is not working on version 1.30
+     */
     @JsonProperty("AuxiliaryAddresses")
     private Map<String, String> auxAddress;
 

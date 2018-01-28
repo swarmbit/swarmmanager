@@ -10,7 +10,7 @@ public class Port {
 
         public static Protocol getProtocol(String protocolName) {
             if (protocolName != null) {
-                switch (protocolName.toLowerCase()) {
+                switch (protocolName.toUpperCase()) {
                     case "UDP":
                         return Protocol.UDP;
                     case "TCP":

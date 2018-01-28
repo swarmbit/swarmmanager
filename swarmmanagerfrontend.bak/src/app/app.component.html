@@ -1,0 +1,4 @@
+<app-shell *ngIf="isAuthenticated()"></app-shell>
+<div *ngIf="!isAuthenticated()">
+  <app-login></app-login>
+</div>

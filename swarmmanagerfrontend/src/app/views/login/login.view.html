@@ -1,18 +1,17 @@
 <div class="login-container">
-  <md-card class="login-card">
-    <md-card-title class="login-title">Login</md-card-title>
-    <md-card-content class="login-content">
-      <md-input-container>
-        <input class="login-input" mdInput placeholder="Username" type="text" [(ngModel)]="username">
-      </md-input-container>
-      <br>
-      <md-input-container>
-        <input class="login-input" mdInput placeholder="Password" type="password" [(ngModel)]="password">
-      </md-input-container>
-    </md-card-content>
-    <md-card-actions  class="login-button" >
-      <button md-raised-button color="accent" (click)="login()">Login</button>
-    </md-card-actions>
-  </md-card>
+  <mat-card class="login-card">
+    <div class="login-logo-container">
+      <img mat-card-image src="../../../assets/logo/swarmmanager-big-logo.png">
+    </div>
+    <div class="card-content">
+      <mat-form-field class="login-input">
+        <input matInput [(ngModel)]="username" placeholder="Username" >
+      </mat-form-field>
+      <mat-form-field class="login-input">
+        <input matInput [(ngModel)]="password" placeholder="Password" type="password">
+      </mat-form-field>
+      <mat-error>{{currentErrorMessage}}</mat-error>
+      <button class="login-button" mat-raised-button color="accent" (click)="login()">Login</button>
+    </div>
+  </mat-card>
 </div>
-

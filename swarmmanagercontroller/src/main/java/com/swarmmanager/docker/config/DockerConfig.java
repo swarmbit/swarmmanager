@@ -10,20 +10,10 @@ import java.util.List;
 @ConfigurationProperties(prefix="docker")
 public class DockerConfig {
 
-    private String apiVersion;
-
     private List<DockerSwarmConfig> swarms;
 
     public DockerConfig() {
         swarms = new ArrayList<>();
-    }
-
-    public String getApiVersion() {
-        return apiVersion;
-    }
-
-    public void setApiVersion(String apiVersion) {
-        this.apiVersion = apiVersion;
     }
 
     public List<DockerSwarmConfig> getSwarms() {
@@ -37,7 +27,6 @@ public class DockerConfig {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("DockerConfig{");
-        sb.append("apiVersion='").append(apiVersion).append('\'');
         sb.append(", swarms=").append(swarms);
         sb.append('}');
         return sb.toString();

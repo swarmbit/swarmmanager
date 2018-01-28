@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.swarmmanager.util.UserUtil.getCurrentUsername;
 
@@ -80,7 +81,10 @@ public class ServiceCliImpl implements ServiceCli {
                 serviceSummary.setReplicas(replicated.getReplicas());
             } else {
                 serviceSummary.setGlobal(true);
-                serviceSummary.setReplicas(tasks.stream().filter(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState())).count());
+                Map<Long, Long>  groupBySlot = tasks
+                        .stream()
+                        .collect(Collectors.groupingBy(TaskJson::getSlot, Collectors.counting()));
+                serviceSummary.setReplicas(groupBySlot.size());
             }
             tasks.removeIf(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState()));
             serviceSummary.setRunningReplicas(tasks.size());

@@ -11,5 +11,4 @@ export class AppComponent {
   isAuthenticated(): boolean {
     return AuthService.isAuthenticated();
   }
-
 }

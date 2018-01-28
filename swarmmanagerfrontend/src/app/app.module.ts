@@ -1,94 +1,112 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MaterialModule } from './modules/material/material.module';
-import 'hammerjs';
+import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { ShellComponent } from './shell/shell.component';
-import { DockerServicesView } from './views/docker-services/docker.services.view';
-import { RouterModule, Routes } from '@angular/router';
-import { DashboardView } from './views/dashboard/dashboard.view';
-import { SwarmView } from './views/swarm/swarm.view';
-import { NodesView } from './views/nodes/nodes.view';
-import { NetworksView } from './views/networks/networks.view';
-import { SecretsView } from './views/secrets/secrets.view';
-import { RegistriesComponent } from './views/registries/registries.view';
-import { AuditView } from './views/audit/audit.view';
-import { UserManagementView } from './views/user-management/user.management.view';
-import { HeaderService } from './services/header/header.service';
-import { DockerServicesService } from './services/docker-services/docker.services.service';
-import { CleanServiceImagePipe } from './views/docker-services/pipes/clean.service.image.pipe';
-import { DockerServiceRemoveDialog, DockerServiceView } from './views/docker-services/docker-service/edit/docker.service.view';
-import { HeaderComponent } from './shell/header/header.component';
-import { SidenavComponent } from './shell/navbar/navbar.component';
-import { AuthService } from './services/auth/auth.service';
-import { UserComponent } from './components/user/user.component';
+import { MaterialModule } from './modules/material/material.module';
 import { LoginView } from './views/login/login.view';
-import { SmTableComponent } from './components/sm-table/sm.table.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthService } from './services/auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptor } from './services/auth/auth.interceptor';
-import { DockerServiceLogsView } from './views/docker-services/docker-service/logs/docker.service.logs.view';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ProgressBarService } from './services/progress.bar/progress.bar.service';
+import { ProgressBarComponent } from './components/progress.bar/progress.bar.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ProgressBarInterceptor } from './interceptors/progress.bar.interceptor';
+import { ShellComponent } from './components/shell/shell.component';
+import { ScreenService } from './services/screen/screen.service';
+import { UserComponent } from './components/user/user.component';
+import { HeaderService } from './services/header/header.service';
+import { UserService } from './services/user/user.service';
+import { DockerSwarmService } from './services/docker/swarms/docker.swarms.service';
+import { RoutingModule } from './modules/routing/routing.module';
+import { NetworksView } from './views/networks/networks.view';
+import { NodesView } from './views/nodes/nodes.view';
+import 'hammerjs';
 
-const appRoutes: Routes = [
-  { path: '', redirectTo: '/services', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardView },
-  { path: 'services', component: DockerServicesView },
-  { path: 'service', component: DockerServiceView },
-  { path: 'service/:id', component: DockerServiceView },
-  { path: 'service/logs/:id', component: DockerServiceLogsView },
-  { path: 'swarm', component: SwarmView },
-  { path: 'nodes', component: NodesView },
-  { path: 'networks', component: NetworksView },
-  { path: 'secrets', component: SecretsView },
-  { path: 'registries', component: RegistriesComponent },
-  { path: 'audit', component: AuditView },
-  { path: 'users', component: UserManagementView }
-];
+import {
+  HammerGestureConfig,
+  HAMMER_GESTURE_CONFIG,
+} from '@angular/platform-browser';
+import { DockerNetworksService } from './services/docker/networks/docker.networks.service';
+import { SnackbarService } from './services/snackbar/snackbar.service';
+import { ListControlBarComponent } from './components/list.control.bar/list.control.bar.component';
+import { ListContainerComponent } from './components/list.container/list.container.component';
+import { DockerNodesService } from './services/docker/nodes/docker.nodes.service';
+import { ManageNetworkView } from './views/networks/manage/manage.network.view';
+import { DockerNetworkResolver } from './resolvers/docker/networks/docker.network.resolver';
+import { ConfirmationDialogComponent } from './components/confirmation.dialog/confirmation.dialog.component';
+import { ServicesView } from './views/services/services.view';
+import { ManageServicesView } from './views/services/manage/manage.services.view';
+import { DockerServicesService } from './services/docker/services/docker.services.service';
+import { CleanServiceImagePipe } from './pipes/clean.service.image.pipe';
+import { DockerServiceResolver } from './resolvers/docker/services/docker.service.resolver';
+
+declare const Hammer: any;
+
+export class HammerConfig extends HammerGestureConfig  {
+  buildHammer(element: HTMLElement) {
+    return new Hammer(element, {
+      touchAction: 'pan-y'
+    });
+  }
+}
+
 @NgModule({
   declarations: [
     AppComponent,
+    ProgressBarComponent,
     ShellComponent,
-    DockerServicesView,
-    DockerServiceView,
     UserComponent,
-    DashboardView,
-    SwarmView,
-    NodesView,
-    NetworksView,
-    SecretsView,
-    RegistriesComponent,
-    AuditView,
-    UserManagementView,
+    ListControlBarComponent,
+    ListContainerComponent,
+    ConfirmationDialogComponent,
     CleanServiceImagePipe,
-    HeaderComponent,
-    SidenavComponent,
-    SmTableComponent,
     LoginView,
-    DockerServiceLogsView,
-    DockerServiceRemoveDialog
+    NetworksView,
+    ManageNetworkView,
+    ServicesView,
+    ManageServicesView,
+    NodesView
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes),
-    MaterialModule
+    RoutingModule
   ],
   providers: [
-    HeaderService,
-    DockerServicesService,
     AuthService,
+    ProgressBarService,
+    ScreenService,
+    HeaderService,
+    UserService,
+    SnackbarService,
+    DockerSwarmService,
+    DockerServicesService,
+    DockerServiceResolver,
+    DockerNetworksService,
+    DockerNodesService,
+    DockerNetworkResolver,
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: HammerConfig ,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ProgressBarInterceptor,
+      multi: true
     }
-    ],
+  ],
   entryComponents: [
-    DockerServiceRemoveDialog
+    ConfirmationDialogComponent
   ],
   bootstrap: [AppComponent]
 })
