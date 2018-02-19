@@ -1,2 +1,3 @@
 #!/bin/bash
-ng serve --proxy-config proxy.conf.json
+yarn install
+yarn start
