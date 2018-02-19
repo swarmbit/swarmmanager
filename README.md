@@ -28,7 +28,6 @@ $ ./run.sh
 3. Run swarm manager frontend, execute:
 ```
 $ cd swarmmanagerfrontend
-$ yarn install
 $ ./run.sh
 ```
 4. At this point the web app should be available on: http://localhost:4201.
@@ -36,7 +35,7 @@ Login with username *admin* and password *test*.
 
 ## Project Maintainers
 * Bruno Vale
-* Fl√°via Penim
+* Fl·via Penim
 
 ## Contributing
 * Writing tests //TODO
