@@ -28,7 +28,8 @@
         </tr>
         <tr>
           <td><strong>Global</strong></td>
-          <td>{{service.global}}</td>
+          <td *ngIf="service.global">{{service.global}}</td>
+          <td *ngIf="!service.global">false</td>
         </tr>
         <tr>
           <td><strong>Image</strong></td>

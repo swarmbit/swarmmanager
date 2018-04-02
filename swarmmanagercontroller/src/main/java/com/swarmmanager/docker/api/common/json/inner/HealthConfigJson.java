@@ -15,17 +15,17 @@ public class HealthConfigJson {
     private String[] test;
 
     @JsonProperty("Interval")
-    private String interval;
+    private Long interval;
 
     @JsonProperty("Timeout")
-    private String timeout;
+    private Long timeout;
 
     @JsonProperty("Retries")
     private Integer retries;
 
     @DockerRemoteApiMinVersion("v1.29")
     @JsonProperty("StartPeriod")
-    private String startPeriod;
+    private Long startPeriod;
 
     public String[] getTest() {
         return test;
@@ -35,19 +35,19 @@ public class HealthConfigJson {
         this.test = test;
     }
 
-    public String getInterval() {
+    public Long getInterval() {
         return interval;
     }
 
-    public void setInterval(String interval) {
+    public void setInterval(Long interval) {
         this.interval = interval;
     }
 
-    public String getTimeout() {
+    public Long getTimeout() {
         return timeout;
     }
 
-    public void setTimeout(String timeout) {
+    public void setTimeout(Long timeout) {
         this.timeout = timeout;
     }
 
@@ -59,11 +59,11 @@ public class HealthConfigJson {
         this.retries = retries;
     }
 
-    public String getStartPeriod() {
+    public Long getStartPeriod() {
         return startPeriod;
     }
 
-    public void setStartPeriod(String startPeriod) {
+    public void setStartPeriod(Long startPeriod) {
         this.startPeriod = startPeriod;
     }
 

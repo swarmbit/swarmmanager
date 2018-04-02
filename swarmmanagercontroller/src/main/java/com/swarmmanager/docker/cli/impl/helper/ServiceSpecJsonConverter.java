@@ -74,7 +74,7 @@ public class ServiceSpecJsonConverter {
     }
 
     public ServiceSpecJsonConverter setPorts(List<Port> ports) {
-        if (ports != null && !ports.isEmpty()) {
+        if (ports != null) {
             EndpointSpecJson endpointSpecJson = serviceSpecJson.getEndpointSpec();
             if (endpointSpecJson == null) {
                 endpointSpecJson  = new EndpointSpecJson();
@@ -95,6 +95,22 @@ public class ServiceSpecJsonConverter {
             }
             endpointSpecJson.setPorts(portConfigs);
             serviceSpecJson.setEndpointSpec(endpointSpecJson);
+        }
+        return this;
+    }
+
+    public ServiceSpecJsonConverter setEnvs(List<String> env) {
+        if (env != null) {
+            TaskSpecJson taskSpecJson = serviceSpecJson.getTaskTemplate();
+            if (taskSpecJson == null) {
+                taskSpecJson = new TaskSpecJson();
+            }
+
+            ContainerSpecJson containerSpecJson = taskSpecJson.getContainerSpec();
+            if (containerSpecJson == null) {
+                containerSpecJson = new ContainerSpecJson();
+            }
+            containerSpecJson.setEnv(env.toArray(new String[]{}));
         }
         return this;
     }
@@ -255,7 +271,7 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setStopGracePeriod(String stopGracePeriod) {
+    public ServiceSpecJsonConverter setStopGracePeriod(Long stopGracePeriod) {
         if (stopGracePeriod != null) {
             serviceSpecJson.getTaskTemplate().getContainerSpec().setStopGracePeriod(stopGracePeriod);
         }
@@ -298,8 +314,8 @@ public class ServiceSpecJsonConverter {
                     mountJson.setVolumeOptions(volumeOptionsJson);
                 } else if (StringUtils.equals(Mount.TMPFS_TYPE, mount.getType()) && mount.getTmpfsOptions() != null) {
                     TmpfsOptionsJson tmpfsOptionsJson = new TmpfsOptionsJson();
-                    if (mount.getTmpfsOptions().getSizeBytes() != null) {
-                        tmpfsOptionsJson.setSizeBytes(mount.getTmpfsOptions().getSizeBytes());
+                    if (mount.getTmpfsOptions().getSize() != null) {
+                        tmpfsOptionsJson.setSizeBytes(mount.getTmpfsOptions().getSize());
                     }
                     if (mount.getTmpfsOptions().getMode() != null) {
                         tmpfsOptionsJson.setMode(mount.getTmpfsOptions().getMode());
@@ -334,7 +350,11 @@ public class ServiceSpecJsonConverter {
                 networkAttachmentConfigJson.setTarget(network);
                 networkAttachmentConfigJsons[i] = networkAttachmentConfigJson;
             }
-            serviceSpecJson.setNetworks(networkAttachmentConfigJsons);
+            TaskSpecJson taskSpecJson = serviceSpecJson.getTaskTemplate();
+            if (taskSpecJson == null) {
+                taskSpecJson  = new TaskSpecJson();
+            }
+            taskSpecJson.setNetworks(networkAttachmentConfigJsons);
         }
         return this;
     }
@@ -402,12 +422,19 @@ public class ServiceSpecJsonConverter {
     }
 
     public ServiceSpecJsonConverter setNoHealthCheck(Boolean noHealthCheck) {
-        if (noHealthCheck != null && noHealthCheck) {
+        if (noHealthCheck != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
                 healthConfigJson = new HealthConfigJson();
             }
-            healthConfigJson.setTest(new String[] { "NONE" });
+            if (noHealthCheck) {
+                healthConfigJson.setTest(new String[] { "NONE" });
+            } else {
+                String[] test = healthConfigJson.getTest();
+                if (test != null && test.length == 1 && "NONE".equals(test[0])) {
+                    healthConfigJson.setTest(new String[]{});
+                }
+            }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setHealthConfig(healthConfigJson);
         }
         return this;
@@ -425,7 +452,7 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setHealthStartPeriod(String healthStartPeriod) {
+    public ServiceSpecJsonConverter setHealthStartPeriod(Long healthStartPeriod) {
         if (healthStartPeriod != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -437,7 +464,7 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setHealthTimeout(String healthTimeout) {
+    public ServiceSpecJsonConverter setHealthTimeout(Long healthTimeout) {
         if (healthTimeout != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -449,7 +476,7 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setHealthInterval(String healthInterval) {
+    public ServiceSpecJsonConverter setHealthInterval(Long healthInterval) {
         if (healthInterval != null) {
             HealthConfigJson healthConfigJson = serviceSpecJson.getTaskTemplate().getContainerSpec().getHealthConfig();
             if (healthConfigJson == null) {
@@ -521,7 +548,7 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setRestartDelay(String restartDelay) {
+    public ServiceSpecJsonConverter setRestartDelay(Long restartDelay) {
         if (restartDelay != null) {
             RestartPolicyJson restartPolicyJson = serviceSpecJson.getTaskTemplate().getRestartPolicy();
             if (restartPolicyJson == null) {
@@ -545,7 +572,7 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setRestartWindow(String restartWindow) {
+    public ServiceSpecJsonConverter setRestartWindow(Long restartWindow) {
         if (restartWindow != null) {
             RestartPolicyJson restartPolicyJson = serviceSpecJson.getTaskTemplate().getRestartPolicy();
             if (restartPolicyJson == null) {
@@ -564,7 +591,7 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setConfigDelay(String updateDelay, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigDelay(Long updateDelay, boolean rollback) {
         if (updateDelay != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {
@@ -612,12 +639,16 @@ public class ServiceSpecJsonConverter {
                 configJson = new UpdateConfigJson();
             }
             configJson.setMaxFailureRatio(updateFailureRatio);
-            serviceSpecJson.setUpdateConfig(configJson);
+            if (rollback) {
+                serviceSpecJson.setRollbackConfig(configJson);
+            } else {
+                serviceSpecJson.setUpdateConfig(configJson);
+            }
         }
         return this;
     }
 
-    public ServiceSpecJsonConverter setConfigMonitor(String updateMonitor, boolean rollback) {
+    public ServiceSpecJsonConverter setConfigMonitor(Long updateMonitor, boolean rollback) {
         if (updateMonitor != null) {
             UpdateConfigJson configJson = serviceSpecJson.getUpdateConfig();
             if (rollback) {

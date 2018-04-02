@@ -33,7 +33,7 @@ public class RestParameters {
     }
 
     public RestParameters addHeaderParams(List<HeaderParam> headerParams) {
-        headerParams.addAll(headerParams);
+        this.headerParams.addAll(headerParams);
         return this;
     }
 

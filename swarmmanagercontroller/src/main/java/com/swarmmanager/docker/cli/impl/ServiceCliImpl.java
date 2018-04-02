@@ -18,6 +18,7 @@ import com.swarmmanager.exception.RegistryUserNotFound;
 import com.swarmmanager.repository.model.RegistryUser;
 import com.swarmmanager.repository.RegistryUserRepository;
 import com.swarmmanager.util.EncoderDecoder;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -81,13 +82,13 @@ public class ServiceCliImpl implements ServiceCli {
                 serviceSummary.setReplicas(replicated.getReplicas());
             } else {
                 serviceSummary.setGlobal(true);
-                Map<Long, Long>  groupBySlot = tasks
+                Map<String, Long> groupBySlot = tasks
                         .stream()
-                        .collect(Collectors.groupingBy(TaskJson::getSlot, Collectors.counting()));
-                serviceSummary.setReplicas(groupBySlot.size());
+                        .collect(Collectors.groupingBy(TaskJson::getNodeId, Collectors.counting()));
+                serviceSummary.setReplicas((long) groupBySlot.size());
             }
             tasks.removeIf(task -> !TasksFilters.RUNNING_STATE.equals(task.getStatus().getTaskState()));
-            serviceSummary.setRunningReplicas(tasks.size());
+            serviceSummary.setRunningReplicas((long) tasks.size());
             EndpointSpecJson endpointSpecJson = service.getSpec().getEndpointSpec();
             List<Port> ports = ServiceConverter.getPorts(endpointSpecJson);
             if (!ports.isEmpty()) {
@@ -133,12 +134,9 @@ public class ServiceCliImpl implements ServiceCli {
         ServiceCreateParameters createParameters = new ServiceCreateParameters();
         ServiceSpecJson serviceSpecJson = getServiceSpecJson(new ServiceSpecJson(), service, true);
         createParameters.setService(serviceSpecJson);
-        if (service.getRegistryName()!= null) {
-            RegistryUser registryUser = registryUserRepository.findByNameAndUserOwner(service.getRegistryName(), getCurrentUsername());
-            if (registryUser == null) {
-                throw new RegistryUserNotFound();
-            }
-            createParameters.setXRegistryAuthHeader(getXRegistryAuthHeader(registryUser));
+        String xRegistryAuthHeader = getAuth(service);
+        if (StringUtils.isNotEmpty(xRegistryAuthHeader)) {
+            createParameters.setXRegistryAuthHeader(xRegistryAuthHeader);
         }
         ServiceGeneralResponseJson responseJson = servicesApi.createService(swarmId, createParameters);
         service.setId(responseJson.getId());
@@ -151,9 +149,34 @@ public class ServiceCliImpl implements ServiceCli {
         ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId);
         VersionJson versionJson = serviceJson.getVersion();
         updateParameters.setVersionQueryParam(versionJson.getIndex());
+        updateParameters.setRollback(service.getRollback());
         ServiceSpecJson serviceSpecJson = getServiceSpecJson(serviceJson.getSpec(), service, false);
         updateParameters.setService(serviceSpecJson);
+        String xRegistryAuthHeader = getAuth(service);
+        if (StringUtils.isNotEmpty(xRegistryAuthHeader)) {
+            updateParameters.setXRegistryAuthHeader(xRegistryAuthHeader);
+        } else {
+            updateParameters.setRegistryAuthFromSpec();
+        }
         servicesApi.updateService(swarmId, serviceId, updateParameters);
+    }
+
+    private String getAuth(Service service) {
+        String xRegistryAuthHeader = null;
+        if (service.getRegistryName() != null) {
+            RegistryUser registryUser = registryUserRepository.findByNameAndUserOwner(service.getRegistryName(), getCurrentUsername());
+            if (registryUser == null) {
+                throw new RegistryUserNotFound();
+            }
+            xRegistryAuthHeader = getXRegistryAuthHeader(registryUser.getRegistryUsername(),
+                    registryUser.getRegistryPassword(),
+                    registryUser.getUrl());
+        } else if (service.getRegistryUsername() != null && service.getRegistryPassword() != null) {
+            xRegistryAuthHeader = getXRegistryAuthHeader(service.getRegistryUsername(),
+                    service.getRegistryPassword(),
+                    getUrlFromImage(service.getImage(), service.isDockerHubRegistry()));
+        }
+        return xRegistryAuthHeader;
     }
 
     @Override
@@ -234,17 +257,25 @@ public class ServiceCliImpl implements ServiceCli {
         return null;
     }
 
-    private String getXRegistryAuthHeader(RegistryUser registryUser) {
+    private String getXRegistryAuthHeader(String username, String password, String url) {
         String xRegistryAuthHeader = "";
         try {
-            xRegistryAuthHeader = new JSONObject()
-                    .put("username", registryUser.getRegistryUsername())
-                    .put("password", EncoderDecoder.base64URLDecode(registryUser.getRegistryPassword()))
-                    .put("serveraddress", registryUser.getUrl()).toString();
+            JSONObject object = new JSONObject()
+                    .put("username", username)
+                    .put("password", EncoderDecoder.base64URLDecode(password))
+                    .put("serveraddress", url);
+            xRegistryAuthHeader = object.toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return EncoderDecoder.base64URLEncode(xRegistryAuthHeader);
+        return EncoderDecoder.base64Encode(xRegistryAuthHeader);
+    }
+
+    private String getUrlFromImage(String image, Boolean isDockerHub) {
+        if (StringUtils.isNotEmpty(image) && StringUtils.contains(image, "/") && (isDockerHub == null || !isDockerHub)) {
+            return image.substring(0, image.indexOf("/"));
+        }
+        return "";
     }
 
     private ServiceSpecJson getServiceSpecJson(ServiceSpecJson serviceSpecJson, Service service, boolean create) {
@@ -255,6 +286,7 @@ public class ServiceCliImpl implements ServiceCli {
         }
         helper.setReplicas(service.getReplicas())
                 .setPorts(service.getPorts())
+                .setEnvs(service.getEnv())
                 .setImage(service.getImage())
                 .setConfigs(service.getConfigs())
                 .setSecrets(service.getSecrets())
@@ -263,7 +295,7 @@ public class ServiceCliImpl implements ServiceCli {
                 .setContainerLabels(service.getContainerLabels())
                 .setLabels(service.getLabels())
                 .setDnsOptions(service.getDnsOptions())
-                .setDnsSearches(service.getDansSearches())
+                .setDnsSearches(service.getDnsSearches())
                 .setDnsServers(service.getDnsServers())
                 .setEndpointMode(service.getEndpointMode())
                 .setEntrypoint(service.getEntrypoint())
@@ -278,12 +310,12 @@ public class ServiceCliImpl implements ServiceCli {
                 .setLogOptions(service.getLogOptions())
                 .setMounts(service.getMounts())
                 .setNetworks(service.getNetworks())
-                .setNoHealthCheck(service.getNoHealthCheck())
                 .setHealthCmd(service.getHealthCmd())
                 .setHealthInterval(service.getHealthInterval())
                 .setHealthRetries(service.getHealthRetries())
                 .setHealthStartPeriod(service.getHealthStartPeriod())
                 .setHealthTimeout(service.getHealthTimeout())
+                .setNoHealthCheck(service.getNoHealthCheck())
                 .setPlacementPreferences(service.getPlacementPreferences())
                 .setReadOnly(service.getReadOnly())
                 .setStopSignal(service.getStopSignal())
@@ -297,7 +329,7 @@ public class ServiceCliImpl implements ServiceCli {
                 .setRestartWindow(service.getRestartWindow())
                 .setConfigDelay(service.getUpdateDelay(), false)
                 .setConfigFailureAction(service.getUpdateFailureAction(), false)
-                .setConfigFailureRatio(service.getUpdateFailureRatio(), false)
+                .setConfigFailureRatio(service.getUpdateMaxFailureRatio(), false)
                 .setConfigMonitor(service.getUpdateMonitor(), false)
                 .setConfigOrder(service.getUpdateOrder(), false)
                 .setConfigParallelism(service.getUpdateParallelism(), false)

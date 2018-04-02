@@ -5,11 +5,15 @@ import com.swarmmanager.docker.api.common.json.inner.*;
 import com.swarmmanager.docker.api.common.util.DockerDateFormatter;
 import com.swarmmanager.docker.cli.model.*;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.*;
 
 public class ServiceConverter {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(ServiceConverter.class.getName());
 
     private Service service;
 
@@ -66,6 +70,10 @@ public class ServiceConverter {
             service.setImage(taskSpecJson.getContainerSpec().getImage());
             ContainerSpecJson containerSpecJson = taskSpecJson.getContainerSpec();
             if (containerSpecJson != null) {
+                Boolean readOnly = containerSpecJson.getReadOnly();
+                if (readOnly != null) {
+                    service.setReadOnly(readOnly);
+                }
                 ConfigReferenceJson[] configReferenceJsons = containerSpecJson.getConfigs();
                 if (configReferenceJsons != null) {
                     List<String> configs = new ArrayList<>();
@@ -82,6 +90,12 @@ public class ServiceConverter {
                     }
                     service.setSecrets(secrets);
                 }
+
+                String[] env = containerSpecJson.getEnv();
+                if (env != null) {
+                    service.setEnv(Arrays.asList(env));
+                }
+
                 String[] args = containerSpecJson.getArgs();
                 if (args != null) {
                     service.setArgs(Arrays.asList(args));
@@ -119,7 +133,7 @@ public class ServiceConverter {
 
                 HealthConfigJson healthConfigJson = containerSpecJson.getHealthConfig();
                 if (healthConfigJson != null) {
-                    String startPeriod = healthConfigJson.getStartPeriod();
+                    Long startPeriod = healthConfigJson.getStartPeriod();
                     if (startPeriod != null) {
                         service.setHealthStartPeriod(startPeriod);
                     }
@@ -135,12 +149,12 @@ public class ServiceConverter {
                         }
                     }
 
-                    String healthInterval = healthConfigJson.getInterval();
+                    Long healthInterval = healthConfigJson.getInterval();
                     if (healthInterval != null) {
                         service.setHealthInterval(healthInterval);
                     }
 
-                    String healthTimeout = healthConfigJson.getTimeout();
+                    Long healthTimeout = healthConfigJson.getTimeout();
                     if (healthTimeout != null) {
                         service.setHealthTimeout(healthTimeout);
                     }
@@ -168,7 +182,7 @@ public class ServiceConverter {
                         service.setDnsSearches(Arrays.asList(dnsSearches));
                     }
 
-                    String stopGracePeriod = containerSpecJson.getStopGracePeriod();
+                    Long stopGracePeriod = containerSpecJson.getStopGracePeriod();
                     if (stopGracePeriod != null) {
                         service.setStopGracePeriod(stopGracePeriod);
                     }
@@ -183,11 +197,6 @@ public class ServiceConverter {
                         if (cmd.length > 0) {
                             service.setEntrypoint(cmd[0]);
                         }
-                    }
-
-                    Boolean readOnly = containerSpecJson.getReadOnly();
-                    if (readOnly != null) {
-                        containerSpecJson.setReadOnly(readOnly);
                     }
 
                     MountJson[] mountJsons = containerSpecJson.getMounts();
@@ -229,108 +238,119 @@ public class ServiceConverter {
                                 if (tmpfsOptionsJson != null) {
                                     TmpfsMountOptions tmpfsMountOptions = new TmpfsMountOptions();
                                     tmpfsMountOptions.setMode(tmpfsOptionsJson.getMode());
-                                    tmpfsMountOptions.setSizeBytes(tmpfsOptionsJson.getSizeBytes());
+                                    tmpfsMountOptions.setSize(tmpfsOptionsJson.getSizeBytes());
                                     mount.setTmpfsMountOptions(tmpfsMountOptions);
                                 }
                             }
+                            mounts.add(mount);
                         }
                         service.setMounts(mounts);
                     }
 
                 }
+            }
 
-                PlacementJson placementJson = taskSpecJson.getPlacement();
-                if (placementJson != null) {
-                    String[] constraints = placementJson.getConstraints();
-                    if (constraints != null) {
-                        Map<String, String> constraintsMap = new HashMap<>();
-                        for (String constraint : constraints) {
-                            if (constraint != null) {
-                                String[] constraintSplit = constraint.split("=");
-                                if (constraintSplit.length == 2) {
-                                    constraintsMap.put(constraintSplit[0], constraintSplit[1]);
-                                }
+            PlacementJson placementJson = taskSpecJson.getPlacement();
+            if (placementJson != null) {
+                String[] constraints = placementJson.getConstraints();
+                if (constraints != null) {
+                    Map<String, String> constraintsMap = new HashMap<>();
+                    for (String constraint : constraints) {
+                        if (constraint != null) {
+                            String[] constraintSplit = constraint.split("=");
+                            if (constraintSplit.length == 2) {
+                                constraintsMap.put(constraintSplit[0], constraintSplit[1]);
                             }
                         }
-                        service.setConstraints(constraintsMap);
                     }
-                    PlacementPreferenceJson[] placementPreferences = placementJson.getPreferences();
-                    if (placementPreferences != null) {
-                        Map<String, String> placementPreferencesMap = new HashMap<>();
-                        for (PlacementPreferenceJson placementPreference : placementPreferences) {
-                            placementPreferencesMap.put("spread", placementPreference.getSpread().getSpreadDescriptor());
-                        }
-                        service.setPlacementPreferences(placementPreferencesMap);
-                    }
-
-                    DriverJson driverJson = taskSpecJson.getLogDriver();
-                    if (driverJson != null) {
-                        String name = driverJson.getName();
-                        if (name != null) {
-                            service.setLogDriver(name);
-                        }
-                        Map<String, String> options = driverJson.getOptions();
-                        if (options != null) {
-                            service.setLogOptions(options);
-                        }
-                    }
-
-                    NetworkAttachmentConfigJson[] networkAttachmentConfigJsons = taskSpecJson.getNetworks();
-                    if (networkAttachmentConfigJsons != null) {
-                        List<String> networks = new ArrayList<>();
-                        for (NetworkAttachmentConfigJson networkAttachmentConfigJson : networkAttachmentConfigJsons) {
-                            networks.add(networkAttachmentConfigJson.getTarget());
-                        }
-                        service.setNetworks(networks);
-                    }
-
-                    RestartPolicyJson restartPolicyJson = taskSpecJson.getRestartPolicy();
-                    if (restartPolicyJson != null) {
-                        service.setRestartCondition(restartPolicyJson.getCondition());
-                        service.setRestartDelay(restartPolicyJson.getDelay());
-                        service.setRestartMaxAttempts(restartPolicyJson.getMaxAttempts());
-                        service.setRestartWindow(restartPolicyJson.getWindow());
-                    }
-
-                    ResourceRequirementsJson resourceRequirementsJson = taskSpecJson.getResources();
-                    if (resourceRequirementsJson != null) {
-                        ResourcesJson resourcesLimitsJson = resourceRequirementsJson.getLimits();
-                        if (resourcesLimitsJson != null) {
-                            service.setLimitCpu(resourcesLimitsJson.getNanoCPUs());
-                            service.setLimitMemory(resourcesLimitsJson.getMemoryBytes());
-                        }
-                        ResourcesJson resourcesReservationsJson = resourceRequirementsJson.getReservations();
-                        if (resourcesReservationsJson != null) {
-                            service.setReserveCpu(resourcesReservationsJson.getNanoCPUs());
-                            service.setReserveMemory(resourcesReservationsJson.getMemoryBytes());
-                        }
-                    }
+                    service.setConstraints(constraintsMap);
                 }
-
-                UpdateConfigJson updateConfigJson = serviceJson.getSpec().getUpdateConfig();
-                if (updateConfigJson != null) {
-                    service.setUpdateDelay(updateConfigJson.getDelay());
-                    service.setUpdateFailureAction(updateConfigJson.getFailureAction());
-                    service.setUpdateMaxFailureRatio(updateConfigJson.getMaxFailureRatio());
-                    service.setUpdateMonitor(updateConfigJson.getMonitor());
-                    service.setUpdateOrder(updateConfigJson.getOrder());
-                    service.setUpdateParallelism(updateConfigJson.getParallelism());
-                }
-
-                UpdateConfigJson rollbackConfigJson = serviceJson.getSpec().getRollbackConfig();
-                if (rollbackConfigJson != null) {
-                    service.setRollbackDelay(rollbackConfigJson.getDelay());
-                    service.setRollbackFailureAction(rollbackConfigJson.getFailureAction());
-                    service.setRollbackMaxFailureRatio(rollbackConfigJson.getMaxFailureRatio());
-                    service.setRollbackMonitor(rollbackConfigJson.getMonitor());
-                    service.setRollbackOrder(rollbackConfigJson.getOrder());
-                    service.setRollbackParallelism(rollbackConfigJson.getParallelism());
+                PlacementPreferenceJson[] placementPreferences = placementJson.getPreferences();
+                if (placementPreferences != null) {
+                    Map<String, String> placementPreferencesMap = new HashMap<>();
+                    for (PlacementPreferenceJson placementPreference : placementPreferences) {
+                        placementPreferencesMap.put("spread", placementPreference.getSpread().getSpreadDescriptor());
+                    }
+                    service.setPlacementPreferences(placementPreferencesMap);
                 }
             }
 
+            DriverJson driverJson = taskSpecJson.getLogDriver();
+            if (driverJson != null) {
+                String name = driverJson.getName();
+                if (name != null) {
+                    service.setLogDriver(name);
+                }
+                Map<String, String> options = driverJson.getOptions();
+                if (options != null) {
+                    service.setLogOptions(options);
+                }
+            }
+
+            NetworkAttachmentConfigJson[] networkAttachmentConfigJsons = taskSpecJson.getNetworks();
+            if (networkAttachmentConfigJsons != null) {
+                List<String> networks = getNetworks(networkAttachmentConfigJsons);
+                service.setNetworks(networks);
+            } else {
+                networkAttachmentConfigJsons = serviceJson.getSpec().getNetworks();
+                if (networkAttachmentConfigJsons != null) {
+                    List<String> networks = getNetworks(networkAttachmentConfigJsons);
+                    service.setNetworks(networks);
+                }
+            }
+
+            RestartPolicyJson restartPolicyJson = taskSpecJson.getRestartPolicy();
+            if (restartPolicyJson != null) {
+                service.setRestartCondition(restartPolicyJson.getCondition());
+                service.setRestartDelay(restartPolicyJson.getDelay());
+                service.setRestartMaxAttempts(restartPolicyJson.getMaxAttempts());
+                service.setRestartWindow(restartPolicyJson.getWindow());
+            }
+
+            ResourceRequirementsJson resourceRequirementsJson = taskSpecJson.getResources();
+            if (resourceRequirementsJson != null) {
+                ResourcesJson resourcesLimitsJson = resourceRequirementsJson.getLimits();
+                if (resourcesLimitsJson != null) {
+                    service.setLimitCpu(resourcesLimitsJson.getNanoCPUs());
+                    service.setLimitMemory(resourcesLimitsJson.getMemoryBytes());
+                }
+                ResourcesJson resourcesReservationsJson = resourceRequirementsJson.getReservations();
+                if (resourcesReservationsJson != null) {
+                    service.setReserveCpu(resourcesReservationsJson.getNanoCPUs());
+                    service.setReserveMemory(resourcesReservationsJson.getMemoryBytes());
+                }
+            }
+
+            UpdateConfigJson updateConfigJson = serviceJson.getSpec().getUpdateConfig();
+            if (updateConfigJson != null) {
+                service.setUpdateDelay(updateConfigJson.getDelay());
+                service.setUpdateFailureAction(updateConfigJson.getFailureAction());
+                service.setUpdateMaxFailureRatio(updateConfigJson.getMaxFailureRatio());
+                service.setUpdateMonitor(updateConfigJson.getMonitor());
+                service.setUpdateOrder(updateConfigJson.getOrder());
+                service.setUpdateParallelism(updateConfigJson.getParallelism());
+            }
+
+            UpdateConfigJson rollbackConfigJson = serviceJson.getSpec().getRollbackConfig();
+            if (rollbackConfigJson != null) {
+                service.setRollbackDelay(rollbackConfigJson.getDelay());
+                service.setRollbackFailureAction(rollbackConfigJson.getFailureAction());
+                service.setRollbackMaxFailureRatio(rollbackConfigJson.getMaxFailureRatio());
+                service.setRollbackMonitor(rollbackConfigJson.getMonitor());
+                service.setRollbackOrder(rollbackConfigJson.getOrder());
+                service.setRollbackParallelism(rollbackConfigJson.getParallelism());
+            }
         }
 
         return service;
+    }
+
+    private List<String> getNetworks(NetworkAttachmentConfigJson[] networkAttachmentConfigJsons) {
+        List<String> networks = new ArrayList<>();
+        for (NetworkAttachmentConfigJson networkAttachmentConfigJson : networkAttachmentConfigJsons) {
+            networks.add(networkAttachmentConfigJson.getTarget());
+        }
+        return networks;
     }
 
     public static List<Port> getPorts(EndpointSpecJson endpointSpecJson) {

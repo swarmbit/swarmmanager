@@ -23,9 +23,7 @@ public class ServiceCreateParameters implements RequestBodyParameter, HeaderPara
     }
 
     public ServiceCreateParameters setXRegistryAuthHeader(String XRegistryAuthValue) {
-        if (XRegistryAuthValue != null) {
-            this.XRegistryAuthHeader = Optional.of(new HeaderParam(X_REGISTRY_AUTH_HEADER_NAME, XRegistryAuthValue));
-        }
+        this.XRegistryAuthHeader = Optional.of(new HeaderParam(X_REGISTRY_AUTH_HEADER_NAME, XRegistryAuthValue));
         return this;
     }
 
@@ -42,9 +40,7 @@ public class ServiceCreateParameters implements RequestBodyParameter, HeaderPara
     @Override
     public List<HeaderParam> getHeaders() {
         List<HeaderParam> headers = new ArrayList<>();
-        if (XRegistryAuthHeader.isPresent()) {
-            headers.add(XRegistryAuthHeader.get());
-        }
+        XRegistryAuthHeader.ifPresent(headers::add);
         return headers;
     }
 }

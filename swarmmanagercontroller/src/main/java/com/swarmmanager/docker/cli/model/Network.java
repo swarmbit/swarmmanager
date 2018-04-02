@@ -9,7 +9,7 @@ public class Network {
 
     private String name;
 
-    private long created;
+    private Long created;
 
     private Map<String, String> labels;
 
@@ -45,11 +45,11 @@ public class Network {
         this.name = name;
     }
 
-    public long getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public void setCreated(long createdAt) {
+    public void setCreated(Long createdAt) {
         this.created = createdAt;
     }
 

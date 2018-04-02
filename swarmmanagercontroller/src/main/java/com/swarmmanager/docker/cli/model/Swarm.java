@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Swarm {
 
-    private long createdAt;
+    private Long createdAt;
 
-    private long updatedAt;
+    private Long updatedAt;
 
     private Boolean autolock;
 
@@ -26,21 +26,21 @@ public class Swarm {
 
     private String managerToken;
 
-    private boolean rotateInProgress;
+    private Boolean rotateInProgress;
 
-    public long getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(long createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
     }
 
-    public long getUpdatedAt() {
+    public Long getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(long updatedAt) {
+    public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -116,11 +116,11 @@ public class Swarm {
         this.managerToken = managerToken;
     }
 
-    public boolean isRotateInProgress() {
+    public Boolean isRotateInProgress() {
         return rotateInProgress;
     }
 
-    public void setRotateInProgress(boolean rotateInProgress) {
+    public void setRotateInProgress(Boolean rotateInProgress) {
         this.rotateInProgress = rotateInProgress;
     }
 }

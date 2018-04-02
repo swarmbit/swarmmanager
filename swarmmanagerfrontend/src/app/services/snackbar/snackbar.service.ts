@@ -15,7 +15,7 @@ export class SnackbarService {
 
   showError(message: string): void {
     const config = new MatSnackBarConfig();
-    config.duration = 2000;
+    config.duration = 5000;
     this.snackBar.open(message, 'Dismiss', config);
   }
 }

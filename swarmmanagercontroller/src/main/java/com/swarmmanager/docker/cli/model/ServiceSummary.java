@@ -11,11 +11,11 @@ public class ServiceSummary {
 
     private String name;
 
-    private long runningReplicas;
+    private Long runningReplicas;
 
-    private long replicas;
+    private Long replicas;
 
-    private boolean global;
+    private Boolean global;
 
     private String image;
 
@@ -37,27 +37,27 @@ public class ServiceSummary {
         this.name = name;
     }
 
-    public long getRunningReplicas() {
+    public Long getRunningReplicas() {
         return runningReplicas;
     }
 
-    public void setRunningReplicas(long runningReplicas) {
+    public void setRunningReplicas(Long runningReplicas) {
         this.runningReplicas = runningReplicas;
     }
 
-    public long getReplicas() {
+    public Long getReplicas() {
         return replicas;
     }
 
-    public void setReplicas(long replicas) {
+    public void setReplicas(Long replicas) {
         this.replicas = replicas;
     }
 
-    public boolean isGlobal() {
+    public Boolean isGlobal() {
         return global;
     }
 
-    public void setGlobal(boolean global) {
+    public void setGlobal(Boolean global) {
         this.global = global;
     }
 

@@ -11,10 +11,10 @@ import { MatDialog } from '@angular/material';
 import { ConfirmationDialogComponent } from '../../../components/confirmation.dialog/confirmation.dialog.component';
 import { DockerIpamConfig } from '../../../services/docker/networks/docker.ipam.config';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormsService } from '../../../services/utils/forms.service';
 
 @Component({
   selector: 'app-manage-network',
-  styleUrls: ['manage.network.view.scss'],
   templateUrl: 'manage.network.view.html'
 })
 export class ManageNetworkView extends BaseView {
@@ -31,7 +31,8 @@ export class ManageNetworkView extends BaseView {
               private networksService: DockerNetworksService,
               private router: Router,
               private route: ActivatedRoute,
-              public dialog: MatDialog
+              public dialog: MatDialog,
+              public formsService: FormsService
   ) {
     super(headerService, route, swarmService, userService);
     super.enableBackArrow('/networks');
@@ -104,9 +105,12 @@ export class ManageNetworkView extends BaseView {
         'options': new FormArray([]),
         'ipamConfigs': new FormArray([])
     });
-    this.parseNetworkFieldToOptions(this.networkForm, dockerNetwork, 'labels', 'name', 'value');
-    this.parseNetworkFieldToOptions(this.networkForm, dockerNetwork, 'ipamOptions', 'name', 'value');
-    this.parseNetworkFieldToOptions(this.networkForm, dockerNetwork, 'options', 'name', 'value');
+    this.formsService
+      .parseObjectFieldToOptions(this.networkForm, dockerNetwork, 'labels', !this.isDetails, this.isDetails, 'name', 'value');
+    this.formsService
+      .parseObjectFieldToOptions(this.networkForm, dockerNetwork, 'ipamOptions', !this.isDetails, this.isDetails, 'name', 'value');
+    this.formsService
+      .parseObjectFieldToOptions(this.networkForm, dockerNetwork, 'options', !this.isDetails, this.isDetails, 'name', 'value');
     if (dockerNetwork.ipamConfigs) {
       for (const ipamConfig of dockerNetwork.ipamConfigs) {
         this.addIpamConfig(this.networkForm, ipamConfig);
@@ -118,53 +122,14 @@ export class ManageNetworkView extends BaseView {
 
   addIpamConfig(formGroup: FormGroup, ipamConfig?: DockerIpamConfig): void {
     const ipamConfigGroup = new FormGroup({
-      'subnet': new FormControl({ value: this.getIpamConfigValue(ipamConfig, 'subnet'), disabled: this.isDetails }),
-      'ipRange': new FormControl({ value: this.getIpamConfigValue(ipamConfig, 'ipRange'), disabled: this.isDetails }),
-      'gateway': new FormControl({ value: this.getIpamConfigValue(ipamConfig, 'gateway'), disabled: this.isDetails }),
+      'subnet': new FormControl({ value: this.formsService.getValue(ipamConfig, 'subnet'), disabled: this.isDetails }),
+      'ipRange': new FormControl({ value: this.formsService.getValue(ipamConfig, 'ipRange'), disabled: this.isDetails }),
+      'gateway': new FormControl({ value: this.formsService.getValue(ipamConfig, 'gateway'), disabled: this.isDetails }),
       'auxAddress':   new FormArray([])
     });
-    this.parseNetworkFieldToOptions(ipamConfigGroup, ipamConfig, 'auxAddress', 'deviceName', 'ipAddress');
+    this.formsService
+      .parseObjectFieldToOptions(ipamConfigGroup, ipamConfig, 'auxAddress', !this.isDetails, this.isDetails, 'deviceName', 'ipAddress');
     (<FormArray>formGroup.get('ipamConfigs')).push(ipamConfigGroup);
-  }
-
-  getIpamConfigValue(ipamConfig?: DockerIpamConfig, field?: string): string {
-    let value = '';
-    if (ipamConfig && field) {
-      value = ipamConfig[field] ? ipamConfig[field]  : '';
-    }
-    return value;
-  }
-
-  removeIpamConfig(formGroup: FormGroup, index: number): void {
-    (<FormArray>formGroup.get('ipamConfigs')).removeAt(index);
-  }
-
-  parseNetworkFieldToOptions(formGroup: FormGroup, object: any, field: string, firstLabel?: string, secondLabel?: string): void {
-    if (object && object[field]) {
-      for (const prop of Object.keys(object[field])) {
-        this.addOption(formGroup, field, firstLabel, secondLabel, prop, object[field][prop]);
-      }
-    }
-    if (!this.isDetails) {
-      this.addOption(formGroup, field, firstLabel, secondLabel);
-    }
-  }
-
-  addOption(formGroup: FormGroup, type: string, firstLabel: string, secondLabel: string, firstValue?: any, secondValue?: any): void {
-    const formGroupObj = {};
-    formGroupObj[firstLabel] = new FormControl({value: '', disabled: this.isDetails});
-    formGroupObj[secondLabel] = new FormControl({value: '', disabled: this.isDetails});
-    if (firstValue) {
-      formGroupObj[firstLabel] = new FormControl({value: firstValue, disabled: this.isDetails});
-      if (secondValue) {
-        formGroupObj[secondLabel] = new FormControl({value: secondValue, disabled: this.isDetails});
-      }
-    }
-    (<FormArray>formGroup.get(type)).push(new FormGroup(formGroupObj));
-  }
-
-  removeOption(formGroup: FormGroup, type: string, index: number): void {
-    (<FormArray>formGroup.get(type)).removeAt(index);
   }
 
   getNewDockerNetwork(values): DockerNetwork {
@@ -175,9 +140,9 @@ export class ManageNetworkView extends BaseView {
     dockerNetwork.ipv6 = values['ipv6'];
     dockerNetwork.internal = values['internal'];
     dockerNetwork.attachable = values['attachable'];
-    this.parseOptionsToNetworkField(dockerNetwork, values, 'labels', 'name', 'value');
-    this.parseOptionsToNetworkField(dockerNetwork, values, 'options', 'name', 'value');
-    this.parseOptionsToNetworkField(dockerNetwork, values, 'ipamOptions', 'name', 'value');
+    this.formsService.parseOptionsToObjectField(dockerNetwork, values, 'labels', 'name', 'value');
+    this.formsService.parseOptionsToObjectField(dockerNetwork, values, 'options', 'name', 'value');
+    this.formsService.parseOptionsToObjectField(dockerNetwork, values, 'ipamOptions', 'name', 'value');
     const ipamConfigs: DockerIpamConfig[] = [];
     for (const ipamConfigValues of values['ipamConfigs']) {
       const ipamConfig = this.parseToIpamConfig(ipamConfigValues);
@@ -200,19 +165,8 @@ export class ManageNetworkView extends BaseView {
       ipamConfig.subnet = subnet;
       ipamConfig.ipRange = ipRange;
       ipamConfig.gateway = gateway;
-      this.parseOptionsToNetworkField(ipamConfig, values, 'auxAddress', 'deviceName', 'ipAddress');
+      this.formsService.parseOptionsToObjectField(ipamConfig, values, 'auxAddress', 'deviceName', 'ipAddress');
       return ipamConfig;
-    }
-  }
-
-  parseOptionsToNetworkField(object: any, values: any, field: string, first: string, second: string): void {
-    for (const value of values[field]) {
-      if (value[first]) {
-        if (!object[field]) {
-          object[field] = {};
-        }
-        object[field][value[first]] = value[second];
-      }
     }
   }
 

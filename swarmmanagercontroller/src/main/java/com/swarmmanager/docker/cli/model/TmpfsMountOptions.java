@@ -2,16 +2,16 @@ package com.swarmmanager.docker.cli.model;
 
 public class TmpfsMountOptions {
 
-    private Long sizeBytes;
+    private Long size;
 
     private Integer mode;
 
-    public Long getSizeBytes() {
-        return sizeBytes;
+    public Long getSize() {
+        return size;
     }
 
-    public void setSizeBytes(Long sizeBytes) {
-        this.sizeBytes = sizeBytes;
+    public void setSize(Long size) {
+        this.size = size;
     }
 
     public Integer getMode() {
@@ -25,7 +25,7 @@ public class TmpfsMountOptions {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("TmpfsMountOptions{");
-        sb.append("sizeBytes=").append(sizeBytes);
+        sb.append("size=").append(size);
         sb.append(", mode=").append(mode);
         sb.append('}');
         return sb.toString();

@@ -9,9 +9,9 @@ public class Config {
 
     private String id;
 
-    private long createdAt;
+    private Long createdAt;
 
-    private long updatedAt;
+    private Long updatedAt;
 
     private String name;
 
@@ -27,19 +27,19 @@ public class Config {
         this.id = id;
     }
 
-    public long getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(long createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
     }
 
-    public long getUpdatedAt() {
+    public Long getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(long updatedAt) {
+    public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
     }
 

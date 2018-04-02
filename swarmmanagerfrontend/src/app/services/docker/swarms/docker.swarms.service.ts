@@ -13,6 +13,7 @@ export class DockerSwarmService {
   public static VERSION_1_28 = 1.28;
   public static VERSION_1_29 = 1.29;
   public static VERSION_1_30 = 1.30;
+  public static VERSION_1_31 = 1.31;
   public static DOCKER_SWARMS_URL = '/api/swarms/';
   private selectedSwarm: DockerSwarm;
   private swarms: DockerSwarm[] = [];
@@ -91,6 +92,10 @@ export class DockerSwarmService {
 
   public equalsOrGreaterThenVersion30(): boolean {
     return this.compareVersions(DockerSwarmService.VERSION_1_30);
+  }
+
+  public equalsOrGreaterThenVersion31(): boolean {
+    return this.compareVersions(DockerSwarmService.VERSION_1_31);
   }
 
   private compareVersions(versionToCompare: number): boolean {

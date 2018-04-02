@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from './model/user';
+import { SnackbarService } from '../snackbar/snackbar.service';
 @Injectable()
 export class UserService {
 
@@ -8,7 +9,7 @@ export class UserService {
 
   private user: User;
 
-  constructor (private http: HttpClient) {
+  constructor (private http: HttpClient, private snackbarService: SnackbarService) {
   }
 
   getUser(fetch: boolean): Promise<User> {
@@ -21,6 +22,7 @@ export class UserService {
           }
         ).catch(
           () => {
+            this.snackbarService.showError('Error loading user data, if the problem persists please contact the Administrator!');
             reject();
           }
         );
@@ -46,6 +48,7 @@ export class UserService {
             resolve(user);
           },
           (err: HttpErrorResponse) => {
+            this.snackbarService.showError('Error loading user data, if the problem persists please contact the Administrator!');
             console.log('Error fetching user data: ' + err.message);
             reject();
           }

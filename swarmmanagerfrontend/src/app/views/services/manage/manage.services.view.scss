@@ -1,60 +1,11 @@
 @import '../../../../styles/common';
 
-.service-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.service-form .expansion-panel {
-  width: 80%;
-  margin-bottom: 1rem;
-}
-
-.service-form .form-field {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  width: 80%;
-}
-
-.service-form .form-field .big-field {
-  width: 45%;
-}
-
-.service-form .form-field .big-field.padding {
-  padding-bottom: 0.2rem
-}
-
-.service-form .submit {
-  padding-top: 1rem;
-  display: flex;
-  align-items: center;
-}
-
-.service-form .submit button {
-  margin-right: 1rem;
-}
-
-.service-form .submit .form-error {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
 @media (max-width: $min-With-media-query)
 {
-  .service-form .form-group {
+  .networks .sm-form-field {
     width: 80%;
   }
-
-  .service-form .form-field {
-    width: 80%;
-  }
-
-  .service-form .form-field .big-field {
-    width: 100%;
-  }
-
-  .service-form .expansion-panel .pair mat-form-field {
-    width: 35%;
+  .sm-field.ports .sm-form-field {
+    width: 20%;
   }
 }

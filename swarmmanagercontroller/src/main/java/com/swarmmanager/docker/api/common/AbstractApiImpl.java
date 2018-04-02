@@ -31,7 +31,8 @@ public abstract class AbstractApiImpl {
     protected <E> E inspectObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, String id) {
         String path = id != null ? apiPath + "/" + id : apiPath;
         RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource(swarmId))
-                .setPath(path);
+                .setPath(path)
+                        .addQueryParam(new QueryParam("insertDefaults", true));
         return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, restResponseType);
     }
 

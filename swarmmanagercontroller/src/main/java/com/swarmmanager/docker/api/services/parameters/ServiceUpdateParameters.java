@@ -19,19 +19,23 @@ public class ServiceUpdateParameters implements RequestBodyParameter, HeaderPara
 
     private static final String REGISTRY_AUTH_FORM_NAME = "registryAuthFrom";
 
+    private static final String ROLLBACK_NAME = "rollback";
+
     private ServiceSpecJson service;
 
     private QueryParam versionQueryParam;
 
     private QueryParam registryAuthFromQueryParam;
 
+    private Optional<QueryParam> rollbackQueryParam;
+
     private Optional<HeaderParam> XRegistryAuthHeader;
 
     public ServiceUpdateParameters() {
         service = new ServiceSpecJson();
         this.versionQueryParam = new QueryParam(VERSION_NAME, 0L);
-        this.registryAuthFromQueryParam = new QueryParam(REGISTRY_AUTH_FORM_NAME,"spec");
         this.XRegistryAuthHeader = Optional.empty();
+        this.rollbackQueryParam = Optional.empty();
     }
 
     public ServiceUpdateParameters setService(ServiceSpecJson service) {
@@ -44,13 +48,20 @@ public class ServiceUpdateParameters implements RequestBodyParameter, HeaderPara
         return this;
     }
 
-    public ServiceUpdateParameters setRegistryAuthFromQueryParam(String registryAuthFromValue) {
-        this.registryAuthFromQueryParam = new QueryParam(REGISTRY_AUTH_FORM_NAME, registryAuthFromValue);
+    public ServiceUpdateParameters setRollback(Boolean rollback) {
+        if (rollback != null && rollback) {
+            this.rollbackQueryParam = Optional.of(new QueryParam(ROLLBACK_NAME, "previous"));
+        }
         return this;
     }
 
     public ServiceUpdateParameters setXRegistryAuthHeader(String XRegistryAuthValue) {
         this.XRegistryAuthHeader = Optional.of(new HeaderParam(X_REGISTRY_AUTH_HEADER, XRegistryAuthValue));
+        return this;
+    }
+
+    public ServiceUpdateParameters setRegistryAuthFromSpec() {
+        this.registryAuthFromQueryParam = new QueryParam(REGISTRY_AUTH_FORM_NAME,"spec");
         return this;
     }
 
@@ -63,7 +74,10 @@ public class ServiceUpdateParameters implements RequestBodyParameter, HeaderPara
     public List<QueryParam> getQueryParams() {
         List<QueryParam> queryParams = new ArrayList<>();
         queryParams.add(versionQueryParam);
-        queryParams.add(registryAuthFromQueryParam);
+        if (registryAuthFromQueryParam != null) {
+            queryParams.add(registryAuthFromQueryParam);
+        }
+        rollbackQueryParam.ifPresent(queryParams::add);
         return queryParams;
     }
 

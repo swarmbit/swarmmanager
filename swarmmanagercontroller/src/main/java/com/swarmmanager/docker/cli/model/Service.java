@@ -24,39 +24,44 @@ public class Service {
 
     private List<Port> ports;
 
+    private List<String> env;
+
     private List<String> configs;
 
     private List<String> secrets;
 
     private Map<String, String> labels;
 
-    private Map<String, String> containerLabels;
-
     private Map<String, String> constraints;
 
     private Map<String, String> placementPreferences;
 
+    /**
+     * Container general
+     */
     private Boolean readOnly;
-
     private String entrypoint;
-
+    private Map<String, String> containerLabels;
     private List<String> args;
-
     private List<String> groups;
+    private String user;
+    private String workDir;
+    private Long stopGracePeriod;
+    private String stopSignal;
 
+    /**
+     * Logs
+     */
     private String logDriver;
-
     private Map<String, String> logOptions;
 
+    /**
+     * Registry
+     */
+    private Boolean isDockerHubRegistry;
     private String registryName;
-
-    private String user;
-
-    private String workDir;
-
-    private String stopGracePeriod;
-
-    private String stopSignal;
+    private String registryUsername;
+    private String registryPassword;
 
     private List<Mount> mounts;
 
@@ -75,16 +80,16 @@ public class Service {
      */
     private List<String> dnsServers;
     private List<String> dnsOptions;
-    private List<String> dansSearches;
+    private List<String> dnsSearches;
 
     /**
      * Health Check
      */
     private String healthCmd;
     private Integer healthRetries;
-    private String healthStartPeriod;
-    private String healthInterval;
-    private String healthTimeout;
+    private Long healthStartPeriod;
+    private Long healthInterval;
+    private Long healthTimeout;
     private Boolean noHealthCheck;
 
     /**
@@ -100,32 +105,34 @@ public class Service {
     private Long limitMemory;
 
     /**
-     * Restarts
+     * Restart config
      */
     private String restartCondition;
-    private String restartDelay;
+    private Long restartDelay;
     private Long restartMaxAttempts;
-    private String restartWindow;
+    private Long restartWindow;
 
     /**
-     * Updates
+     * Update config
      */
-    private String updateDelay;
+    private Long updateDelay;
     private String updateFailureAction;
-    private Double updateFailureRatio;
-    private String updateMonitor;
+    private Double updateMaxFailureRatio;
+    private Long updateMonitor;
     private String updateOrder;
     private Long updateParallelism;
 
     /**
-     * Rollbacks
+     * Rollback config
      */
-    private String rollbackDelay;
+    private Long rollbackDelay;
     private String rollbackFailureAction;
     private Double rollbackMaxFailureRatio;
-    private String rollbackMonitor;
+    private Long rollbackMonitor;
     private String rollbackOrder;
     private Long rollbackParallelism;
+
+    private Boolean rollback;
 
     public String getId() {
         return id;
@@ -189,6 +196,14 @@ public class Service {
 
     public void setPorts(List<Port> ports) {
         this.ports = ports;
+    }
+
+    public List<String> getEnv() {
+        return env;
+    }
+
+    public void setEnv(List<String> env) {
+        this.env = env;
     }
 
     public String getRegistryName() {
@@ -319,11 +334,11 @@ public class Service {
         this.workDir = workDir;
     }
 
-    public String getStopGracePeriod() {
+    public Long getStopGracePeriod() {
         return stopGracePeriod;
     }
 
-    public void setStopGracePeriod(String stopGracePeriod) {
+    public void setStopGracePeriod(Long stopGracePeriod) {
         this.stopGracePeriod = stopGracePeriod;
     }
 
@@ -383,12 +398,12 @@ public class Service {
         this.dnsOptions = dnsOptions;
     }
 
-    public List<String> getDansSearches() {
-        return dansSearches;
+    public List<String> getDnsSearches() {
+        return dnsSearches;
     }
 
     public void setDnsSearches(List<String> dansSearches) {
-        this.dansSearches = dansSearches;
+        this.dnsSearches = dansSearches;
     }
 
     public String getHealthCmd() {
@@ -407,27 +422,27 @@ public class Service {
         this.healthRetries = healthRetries;
     }
 
-    public String getHealthStartPeriod() {
+    public Long getHealthStartPeriod() {
         return healthStartPeriod;
     }
 
-    public void setHealthStartPeriod(String healthStartPeriod) {
+    public void setHealthStartPeriod(Long healthStartPeriod) {
         this.healthStartPeriod = healthStartPeriod;
     }
 
-    public String getHealthInterval() {
+    public Long getHealthInterval() {
         return healthInterval;
     }
 
-    public void setHealthInterval(String healthInterval) {
+    public void setHealthInterval(Long healthInterval) {
         this.healthInterval = healthInterval;
     }
 
-    public String getHealthTimeout() {
+    public Long getHealthTimeout() {
         return healthTimeout;
     }
 
-    public void setHealthTimeout(String healthTimeout) {
+    public void setHealthTimeout(Long healthTimeout) {
         this.healthTimeout = healthTimeout;
     }
 
@@ -479,11 +494,11 @@ public class Service {
         this.restartCondition = restartCondition;
     }
 
-    public String getRestartDelay() {
+    public Long getRestartDelay() {
         return restartDelay;
     }
 
-    public void setRestartDelay(String restartDelay) {
+    public void setRestartDelay(Long restartDelay) {
         this.restartDelay = restartDelay;
     }
 
@@ -495,19 +510,19 @@ public class Service {
         this.restartMaxAttempts = restartMaxAttempts;
     }
 
-    public String getRestartWindow() {
+    public Long getRestartWindow() {
         return restartWindow;
     }
 
-    public void setRestartWindow(String restartWindow) {
+    public void setRestartWindow(Long restartWindow) {
         this.restartWindow = restartWindow;
     }
 
-    public String getUpdateDelay() {
+    public Long getUpdateDelay() {
         return updateDelay;
     }
 
-    public void setUpdateDelay(String updateDelay) {
+    public void setUpdateDelay(Long updateDelay) {
         this.updateDelay = updateDelay;
     }
 
@@ -519,19 +534,15 @@ public class Service {
         this.updateFailureAction = updateFailureAction;
     }
 
-    public Double getUpdateFailureRatio() {
-        return updateFailureRatio;
+    public Double getUpdateMaxFailureRatio() {
+        return updateMaxFailureRatio;
     }
 
-    public void setUpdateMaxFailureRatio(Double updateFailureRatio) {
-        this.updateFailureRatio = updateFailureRatio;
-    }
-
-    public String getUpdateMonitor() {
+    public Long getUpdateMonitor() {
         return updateMonitor;
     }
 
-    public void setUpdateMonitor(String updateMonitor) {
+    public void setUpdateMonitor(Long updateMonitor) {
         this.updateMonitor = updateMonitor;
     }
 
@@ -551,11 +562,11 @@ public class Service {
         this.updateParallelism = updateParallelism;
     }
 
-    public String getRollbackDelay() {
+    public Long getRollbackDelay() {
         return rollbackDelay;
     }
 
-    public void setRollbackDelay(String rollbackDelay) {
+    public void setRollbackDelay(Long rollbackDelay) {
         this.rollbackDelay = rollbackDelay;
     }
 
@@ -575,11 +586,11 @@ public class Service {
         this.rollbackMaxFailureRatio = rollbackMaxFailureRatio;
     }
 
-    public String getRollbackMonitor() {
+    public Long getRollbackMonitor() {
         return rollbackMonitor;
     }
 
-    public void setRollbackMonitor(String rollbackMonitor) {
+    public void setRollbackMonitor(Long rollbackMonitor) {
         this.rollbackMonitor = rollbackMonitor;
     }
 
@@ -607,6 +618,42 @@ public class Service {
         this.forceUpdate = forceUpdate;
     }
 
+    public String getRegistryUsername() {
+        return registryUsername;
+    }
+
+    public void setRegistryUsername(String registryUsername) {
+        this.registryUsername = registryUsername;
+    }
+
+    public String getRegistryPassword() {
+        return registryPassword;
+    }
+
+    public void setRegistryPassword(String registryPassword) {
+        this.registryPassword = registryPassword;
+    }
+
+    public void setUpdateMaxFailureRatio(Double updateMaxFailureRatio) {
+        this.updateMaxFailureRatio = updateMaxFailureRatio;
+    }
+
+    public Boolean isDockerHubRegistry() {
+        return isDockerHubRegistry;
+    }
+
+    public void setDockerHubRegistry(Boolean dockerHubRegistry) {
+        isDockerHubRegistry = dockerHubRegistry;
+    }
+
+    public Boolean getRollback() {
+        return rollback;
+    }
+
+    public void setRollback(Boolean rollback) {
+        this.rollback = rollback;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Service{");
@@ -618,23 +665,27 @@ public class Service {
         sb.append(", name='").append(name).append('\'');
         sb.append(", replicas=").append(replicas);
         sb.append(", ports=").append(ports);
+        sb.append(", env=").append(env);
         sb.append(", configs=").append(configs);
         sb.append(", secrets=").append(secrets);
         sb.append(", labels=").append(labels);
-        sb.append(", containerLabels=").append(containerLabels);
         sb.append(", constraints=").append(constraints);
         sb.append(", placementPreferences=").append(placementPreferences);
         sb.append(", readOnly=").append(readOnly);
         sb.append(", entrypoint='").append(entrypoint).append('\'');
+        sb.append(", containerLabels=").append(containerLabels);
         sb.append(", args=").append(args);
         sb.append(", groups=").append(groups);
-        sb.append(", logDriver='").append(logDriver).append('\'');
-        sb.append(", logOptions=").append(logOptions);
-        sb.append(", registryName='").append(registryName).append('\'');
         sb.append(", user='").append(user).append('\'');
         sb.append(", workDir='").append(workDir).append('\'');
-        sb.append(", stopGracePeriod='").append(stopGracePeriod).append('\'');
+        sb.append(", stopGracePeriod=").append(stopGracePeriod);
         sb.append(", stopSignal='").append(stopSignal).append('\'');
+        sb.append(", logDriver='").append(logDriver).append('\'');
+        sb.append(", logOptions=").append(logOptions);
+        sb.append(", isDockerHubRegistry=").append(isDockerHubRegistry);
+        sb.append(", registryName='").append(registryName).append('\'');
+        sb.append(", registryUsername='").append(registryUsername).append('\'');
+        sb.append(", registryPassword='").append(registryPassword).append('\'');
         sb.append(", mounts=").append(mounts);
         sb.append(", forceUpdate=").append(forceUpdate);
         sb.append(", endpointMode='").append(endpointMode).append('\'');
@@ -643,33 +694,34 @@ public class Service {
         sb.append(", hosts=").append(hosts);
         sb.append(", dnsServers=").append(dnsServers);
         sb.append(", dnsOptions=").append(dnsOptions);
-        sb.append(", dansSearches=").append(dansSearches);
+        sb.append(", dnsSearches=").append(dnsSearches);
         sb.append(", healthCmd='").append(healthCmd).append('\'');
         sb.append(", healthRetries=").append(healthRetries);
-        sb.append(", healthStartPeriod='").append(healthStartPeriod).append('\'');
-        sb.append(", healthInterval='").append(healthInterval).append('\'');
-        sb.append(", healthTimeout='").append(healthTimeout).append('\'');
+        sb.append(", healthStartPeriod=").append(healthStartPeriod);
+        sb.append(", healthInterval=").append(healthInterval);
+        sb.append(", healthTimeout=").append(healthTimeout);
         sb.append(", noHealthCheck=").append(noHealthCheck);
         sb.append(", reserveCpu=").append(reserveCpu);
         sb.append(", reserveMemory=").append(reserveMemory);
         sb.append(", limitCpu=").append(limitCpu);
         sb.append(", limitMemory=").append(limitMemory);
         sb.append(", restartCondition='").append(restartCondition).append('\'');
-        sb.append(", restartDelay='").append(restartDelay).append('\'');
+        sb.append(", restartDelay=").append(restartDelay);
         sb.append(", restartMaxAttempts=").append(restartMaxAttempts);
-        sb.append(", restartWindow='").append(restartWindow).append('\'');
-        sb.append(", updateDelay='").append(updateDelay).append('\'');
+        sb.append(", restartWindow=").append(restartWindow);
+        sb.append(", updateDelay=").append(updateDelay);
         sb.append(", updateFailureAction='").append(updateFailureAction).append('\'');
-        sb.append(", updateFailureRatio=").append(updateFailureRatio);
-        sb.append(", updateMonitor='").append(updateMonitor).append('\'');
+        sb.append(", updateMaxFailureRatio=").append(updateMaxFailureRatio);
+        sb.append(", updateMonitor=").append(updateMonitor);
         sb.append(", updateOrder='").append(updateOrder).append('\'');
         sb.append(", updateParallelism=").append(updateParallelism);
-        sb.append(", rollbackDelay='").append(rollbackDelay).append('\'');
+        sb.append(", rollbackDelay=").append(rollbackDelay);
         sb.append(", rollbackFailureAction='").append(rollbackFailureAction).append('\'');
         sb.append(", rollbackMaxFailureRatio=").append(rollbackMaxFailureRatio);
-        sb.append(", rollbackMonitor='").append(rollbackMonitor).append('\'');
+        sb.append(", rollbackMonitor=").append(rollbackMonitor);
         sb.append(", rollbackOrder='").append(rollbackOrder).append('\'');
         sb.append(", rollbackParallelism=").append(rollbackParallelism);
+        sb.append(", rollback=").append(rollback);
         sb.append('}');
         return sb.toString();
     }

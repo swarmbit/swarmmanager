@@ -10,7 +10,7 @@ export class DockerServiceMount {
 }
 
 export class DockerTmpfsMountOptions {
-  sizeBytes: number;
+  size: number;
   mode: number;
 }
 

@@ -51,7 +51,7 @@ public class ContainerSpecJson {
     private MountJson[] mounts;
 
     @JsonProperty("StopGracePeriod")
-    private String stopGracePeriod;
+    private Long stopGracePeriod;
 
     @DockerRemoteApiMinVersion("v1.28")
     @JsonProperty("StopSignal")
@@ -173,11 +173,11 @@ public class ContainerSpecJson {
         this.mounts = mounts;
     }
 
-    public String getStopGracePeriod() {
+    public Long getStopGracePeriod() {
         return stopGracePeriod;
     }
 
-    public void setStopGracePeriod(String stopGracePeriod) {
+    public void setStopGracePeriod(Long stopGracePeriod) {
         this.stopGracePeriod = stopGracePeriod;
     }
 

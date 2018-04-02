@@ -40,6 +40,8 @@ import { ManageServicesView } from './views/services/manage/manage.services.view
 import { DockerServicesService } from './services/docker/services/docker.services.service';
 import { CleanServiceImagePipe } from './pipes/clean.service.image.pipe';
 import { DockerServiceResolver } from './resolvers/docker/services/docker.service.resolver';
+import { FormsService } from './services/utils/forms.service';
+import { ManageServiceConfirmation } from './views/services/manage/manage.service.confirmation';
 
 declare const Hammer: any;
 
@@ -66,6 +68,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ManageNetworkView,
     ServicesView,
     ManageServicesView,
+    ManageServiceConfirmation,
     NodesView
   ],
   imports: [
@@ -87,6 +90,7 @@ export class HammerConfig extends HammerGestureConfig  {
     DockerSwarmService,
     DockerServicesService,
     DockerServiceResolver,
+    FormsService,
     DockerNetworksService,
     DockerNodesService,
     DockerNetworkResolver,
@@ -106,7 +110,8 @@ export class HammerConfig extends HammerGestureConfig  {
     }
   ],
   entryComponents: [
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ManageServiceConfirmation
   ],
   bootstrap: [AppComponent]
 })

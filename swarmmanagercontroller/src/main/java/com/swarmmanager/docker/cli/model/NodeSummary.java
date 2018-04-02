@@ -10,9 +10,9 @@ public class NodeSummary {
 
     private String availability;
 
-    private boolean isManager;
+    private Boolean isManager;
 
-    private boolean isLeader;
+    private Boolean isLeader;
 
     private String managerReachability;
 
@@ -50,19 +50,19 @@ public class NodeSummary {
         this.availability = availability;
     }
 
-    public boolean isLeader() {
+    public Boolean isLeader() {
         return isLeader;
     }
 
-    public void setLeader(boolean leader) {
+    public void setLeader(Boolean leader) {
         isLeader = leader;
     }
 
-    public boolean isManager() {
+    public Boolean isManager() {
         return isManager;
     }
 
-    public void setManager(boolean manager) {
+    public void setManager(Boolean manager) {
         isManager = manager;
     }
 

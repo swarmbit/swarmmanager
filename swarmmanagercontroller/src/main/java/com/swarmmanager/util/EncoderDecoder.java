@@ -33,6 +33,13 @@ public class EncoderDecoder {
         return "";
     }
 
+    public static String base64Encode(String data) {
+        if (data != null) {
+            return new String(Base64.getEncoder().encode(data.getBytes()));
+        }
+        return "";
+    }
+
     public static String base64Decode(String data) {
         if (data != null) {
             return new String(Base64.getDecoder().decode(data.getBytes()));

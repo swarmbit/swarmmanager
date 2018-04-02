@@ -8,27 +8,41 @@ export class DockerService {
   image: string;
   global: boolean;
   name: string;
-  replicas: number;
+  replicas = 1;
   ports: DockerServicePort[];
+  env: string[];
   configs: string[];
   secrets: string[];
   labels: any;
   containerLabels: any;
   constraints: any;
   placementPreferences: any;
-  readOnly: boolean;
+
+  workDir: string;
   entrypoint: string;
   args: string[];
+  user: string;
   groups: string[];
-  logDriver: string[];
-  logOptions: any;
-  registryName: any;
-  user: any;
-  workDir: any;
-  stopGracePeriod: any;
-  stopSignal: any;
+  stopGracePeriod: number;
+  stopSignal: string;
+  readOnly: boolean;
 
-  mounts: DockerServiceMount;
+  logDriver: string;
+  logOptions: any;
+
+  mounts: DockerServiceMount[];
+
+  /**
+   * Dns
+   */
+  dnsServers: string[];
+  dnsOptions: string[];
+  dnsSearches: string[];
+
+  dockerHubRegistry: boolean;
+  registryName: string;
+  registryUsername: string;
+  registryPassword: string;
 
   forceUpdate: boolean;
 
@@ -41,20 +55,13 @@ export class DockerService {
   hosts: string[];
 
   /**
-   * Dns
-   */
-  dnsServers: string[];
-  dnsOptions: string[];
-  dansSearches: string[];
-
-  /**
    * Health Check
    */
   healthCmd: string;
   healthRetries: number;
-  healthStartPeriod: string;
-  healthInterval: string;
-  healthTimeout: string;
+  healthStartPeriod: number;
+  healthInterval: number;
+  healthTimeout: number;
   noHealthCheck: boolean;
 
   /**
@@ -73,27 +80,29 @@ export class DockerService {
    * Restarts
    */
   restartCondition: string;
-  restartDelay: string;
+  restartDelay: number;
   restartMaxAttempts: number;
-  restartWindow: string;
+  restartWindow: number;
 
   /**
    * Updates
    */
-  updateDelay: string;
+  updateDelay: number;
   updateFailureAction: string;
-  updateFailureRatio: number;
-  updateMonitor: string;
+  updateMaxFailureRatio: number;
+  updateMonitor: number;
   updateOrder: string;
   updateParallelism: number;
 
   /**
    * Rollbacks
    */
-  rollbackDelay: string;
+  rollbackDelay: number;
   rollbackFailureAction: string;
   rollbackMaxFailureRatio: number;
-  rollbackMonitor: string;
+  rollbackMonitor: number;
   rollbackOrder: string;
   rollbackParallelism: number;
+
+  rollback: boolean;
 }
