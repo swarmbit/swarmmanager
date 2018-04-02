@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../../services/user/user.service';
@@ -14,7 +14,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DockerServicePort } from '../../../services/docker/services/docker.service.port';
 import { FormsService } from '../../../services/utils/forms.service';
 import { DockerNetworksService } from '../../../services/docker/networks/docker.networks.service';
-import { DockerNetwork } from '../../../services/docker/networks/docker.network';
 import { DockerNetworkSummary } from '../../../services/docker/networks/docker.network.summary';
 import { ManageServiceConfirmation } from './manage.service.confirmation';
 import { isNumber } from 'util';
@@ -22,6 +21,7 @@ import {
   BindMountOptions, DockerServiceMount,
   DockerTmpfsMountOptions, DockerVolumeMountOptions
 } from '../../../services/docker/services/docker.service.mount';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-manage-service',
@@ -59,6 +59,9 @@ export class ManageServicesView extends BaseView implements OnInit {
     sizeUnit: 'Bytes'
   };
 
+  @ViewChild('importInput')
+  importInput: ElementRef;
+
   constructor(headerService: HeaderService,
               public swarmService: DockerSwarmService,
               private userService: UserService,
@@ -67,16 +70,17 @@ export class ManageServicesView extends BaseView implements OnInit {
               private route: ActivatedRoute,
               public dialog: MatDialog,
               public formsService: FormsService,
-              private networkService: DockerNetworksService
+              private networkService: DockerNetworksService,
+              private snackbarService: SnackbarService
   ) {
     super(headerService, route, swarmService, userService);
     super.enableBackArrow('/services');
     this.isDetails = route.snapshot.data[ 'action' ] === 'manage';
     this.loadFunction = this.loadService;
-    this.initCreateForm();
   }
 
   ngOnInit(): void {
+    this.initCreateForm();
     this.networkService.getNetworksList(true).subscribe(
       networks => {
         for (const network of networks) {
@@ -93,7 +97,6 @@ export class ManageServicesView extends BaseView implements OnInit {
       this.dockerServicesService.getService(this.serviceName)
         .subscribe(
           (dockerService: DockerService) => {
-            this.service = dockerService;
             this.initCreateForm(dockerService);
           },
           (err: HttpErrorResponse) => {
@@ -179,6 +182,7 @@ export class ManageServicesView extends BaseView implements OnInit {
   }
 
   createForm(dockerService: DockerService): void {
+    this.service = dockerService;
     const imagePipe = new CleanServiceImagePipe();
     this.serviceForm = new FormGroup({
       'name': new FormControl({ value: dockerService.name, disabled: this.isDetails }, [Validators.required]),
@@ -420,15 +424,15 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.previousTimeFields[field + 'Unit'] = event.value;
   }
 
-  changeMemoryUnit(event, field: string, control?: FormControl): void {
-    if (!control) {
-      control = this.serviceForm;
+  changeMemoryUnit(event, field: string, group?: FormGroup): void {
+    if (!group) {
+      group = this.serviceForm;
     }
 
-    const currentValue = control.get(field).value;
+    const currentValue = group.get(field).value;
     if (isNumber(currentValue)) {
       const newValue = this.formsService.calculateMemoryValue(currentValue, this.previousMemoryFields[ field + 'Unit' ], event.value);
-      control.get(field).setValue(newValue);
+      group.get(field).setValue(newValue);
     }
     this.previousMemoryFields[ field + 'Unit' ] = event.value;
   }
@@ -630,6 +634,7 @@ export class ManageServicesView extends BaseView implements OnInit {
               this.editMode = false;
               this.serviceForm.markAsUntouched();
               this.disableForm();
+              this.loadService();
           }));
         }
       }));
@@ -679,6 +684,56 @@ export class ManageServicesView extends BaseView implements OnInit {
         });
       }
     }));
+  }
+
+
+  exportService(): void {
+    const cleanedDockerService = this.getCleanedObject(new Set([
+      'id',
+      'createdAt',
+      'updatedAt'
+    ]), false, this.service);
+    const serviceAsString = JSON.stringify(cleanedDockerService, null, 2);
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(serviceAsString));
+    element.setAttribute('download', this.service.name + '.json');
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  importService(): void {
+    this.importInput.nativeElement.click();
+  }
+
+  loadJsonService(event: any): void {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const serviceJsonFile = files[ 0 ];
+      const fr = new FileReader();
+      fr.onload = (e: any) => {
+        const lines = e.target.result;
+        const dockerService = JSON.parse(lines);
+        this.initCreateForm(dockerService);
+        this.snackbarService.showSuccess('Loaded service from file!');
+      };
+      fr.readAsText(serviceJsonFile);
+    }
+  }
+
+  getCleanedObject(fields: Set<string>, include: boolean, object: any) {
+    const newObj = {};
+    for (const field in object) {
+      let add = !fields.has(field);
+      if (include) {
+        add = fields.has(field);
+      }
+      if (add) {
+        newObj[field] = object[field];
+      }
+    }
+    return newObj;
   }
 
 }

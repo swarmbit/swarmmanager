@@ -17,11 +17,15 @@ export class ProgressBarInterceptor implements HttpInterceptor {
     this.progressBarService.showProgessBar();
     return next.handle(req).do(event => {
       if (event instanceof HttpResponse) {
-        this.progressBarService.hideProgessBar();
+        setTimeout(() => {
+          this.progressBarService.hideProgessBar();
+        }, 700);
       }
     }).catch(
       (err) => {
-        this.progressBarService.hideProgessBar();
+        setTimeout(() => {
+          this.progressBarService.hideProgessBar();
+        }, 700);
         return Observable.throw(err);
       });
   }

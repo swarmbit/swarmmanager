@@ -1,11 +1,18 @@
 @import '../../../../styles/common';
 
+input[type="file"].import {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
 @media (max-width: $min-With-media-query)
 {
-  .networks .sm-form-field {
-    width: 80%;
-  }
   .sm-field.ports .sm-form-field {
     width: 20%;
   }
+
 }
