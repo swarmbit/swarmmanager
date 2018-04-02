@@ -1,4 +1,11 @@
 <form class="sm-manage-form" [formGroup]="serviceForm" (ngSubmit)="createService()">
+  <div class="sm-form-row" *ngIf="this.isDetails && !this.editMode">
+    <button mat-raised-button color="accent" (click)="exportService()" style="float: right" type="button">Export</button>
+  </div>
+  <div class="sm-form-row" *ngIf="!this.isDetails || this.editMode">
+    <input #importInput type="file" id="file" (change)="loadJsonService($event)" class="import">
+    <button mat-raised-button color="accent" (click)="importService()" style="float: right" type="button">Import</button>
+  </div>
   <div class="sm-form-row">
     <mat-form-field class="sm-form-field big">
       <input matInput placeholder="Name" formControlName="name" [required]="!isDetails">
