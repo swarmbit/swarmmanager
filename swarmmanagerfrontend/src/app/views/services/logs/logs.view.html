@@ -1,13 +1,15 @@
-<div class="log-filters">
-  <div class="label-text">Filters</div>
-  <div class="log-filters-content">
-    <div class="log-filter-item" *ngFor="let filter of logFilters">
-    <md-checkbox (click)="toggleFilter(filter)">{{filter.replica + '.' + filter.taskId}}</md-checkbox>
-    </div>
+<div class="log-header">
+  <h4 *ngIf="logFilters && logFilters.length > 0">Filters</h4>
+  <div>
+    <button mat-raised-button color="accent" (click)="getServiceLogs(id)">Refresh</button>
   </div>
 </div>
-<div class="log-refresh">
-  <button md-raised-button color="accent" (click)="getServiceLogs(id)">Refresh</button>
+<div class="log-filters">
+  <div class="log-filters-content">
+    <div class="log-filter-item" *ngFor="let filter of logFilters">
+    <mat-checkbox (click)="toggleFilter(filter)">{{filter.replica + '.' + filter.taskId}}</mat-checkbox>
+    </div>
+  </div>
 </div>
 <div style="clear: both"></div>
 <div class="log-window" #logWindow>

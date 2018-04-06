@@ -1,4 +1,4 @@
-export class LogLine {
+export class DockerServiceLogLine {
 
   serviceId: string;
 

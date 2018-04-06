@@ -23,7 +23,7 @@
   </div>
   <div class="sm-form-row" *ngIf="!isDetails  || !isGlobalService">
     <mat-form-field class="sm-form-field after-toggle">
-      <input matInput placeholder="Replicas" formControlName="replicas" type="number" min="1" [required]="!isDetails">
+      <input matInput placeholder="Replicas" formControlName="replicas" type="number" min="0" [required]="!isDetails">
       <mat-error *ngIf="serviceForm.get('replicas').invalid">Replicas field is invalid</mat-error>
     </mat-form-field>
   </div>

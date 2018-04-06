@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../../services/user/user.service';
@@ -32,7 +32,8 @@ export class ManageNetworkView extends BaseView {
               private router: Router,
               private route: ActivatedRoute,
               public dialog: MatDialog,
-              public formsService: FormsService
+              public formsService: FormsService,
+              public ngZone: NgZone
   ) {
     super(headerService, route, swarmService, userService);
     super.enableBackArrow('/networks');
@@ -44,7 +45,7 @@ export class ManageNetworkView extends BaseView {
   loadNetworks() {
     this.networksService.getNetwork(this.networkName)
       .subscribe(
-        (dockerNetwork: DockerNetwork) => {
+        (dockerNetwork: any) => {
           this.initCreateForm(dockerNetwork);
         },
         (err: HttpErrorResponse) => {

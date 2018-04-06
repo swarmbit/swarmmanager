@@ -7,6 +7,7 @@ import { DockerNetworkResolver } from '../../resolvers/docker/networks/docker.ne
 import { ServicesView } from '../../views/services/services.view';
 import { ManageServicesView } from '../../views/services/manage/manage.services.view';
 import { DockerServiceResolver } from '../../resolvers/docker/services/docker.service.resolver';
+import { LogsView } from '../../views/services/logs/logs.view';
 
 const appRoutes: Routes = [
   {
@@ -37,6 +38,13 @@ const appRoutes: Routes = [
     },
     resolve: {
       dockerService: DockerServiceResolver
+    }
+  },
+  {
+    path: 'services/:name/logs',
+    component: LogsView,
+    data: {
+      title: 'Service Logs',
     }
   },
   {

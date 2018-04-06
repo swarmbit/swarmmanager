@@ -1,6 +1,7 @@
 import { DockerSwarm } from './swarms/docker.swarm';
 import { DockerSwarmService } from './swarms/docker.swarms.service';
 import { Observer } from 'rxjs';
+
 import { SnackbarService } from '../snackbar/snackbar.service';
 
 export class DockerBaseService {
@@ -34,7 +35,6 @@ export class DockerBaseService {
   }
 
   completeWithError(err: any, observer: Observer<any>, message: string) {
-    console.log(err);
     if (err.status == 417) {
       this.snackbarService.showError(message + ' ' + err.error);
     } else {

@@ -42,6 +42,7 @@ import { CleanServiceImagePipe } from './pipes/clean.service.image.pipe';
 import { DockerServiceResolver } from './resolvers/docker/services/docker.service.resolver';
 import { FormsService } from './services/utils/forms.service';
 import { ManageServiceConfirmation } from './views/services/manage/manage.service.confirmation';
+import { LogsView } from './views/services/logs/logs.view';
 
 declare const Hammer: any;
 
@@ -69,6 +70,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ServicesView,
     ManageServicesView,
     ManageServiceConfirmation,
+    LogsView,
     NodesView
   ],
   imports: [

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Injectable } from '@angular/core';
 import { DockerNetworkSummary } from './docker.network.summary';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';

@@ -19,7 +19,7 @@ export class ServicesView extends BaseView {
   filter = '';
 
   constructor(headerService: HeaderService,
-              private swarmService: DockerSwarmService,
+              public swarmService: DockerSwarmService,
               private userService: UserService,
               private route: ActivatedRoute,
               private dockerServicesService: DockerServicesService

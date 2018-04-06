@@ -2,11 +2,12 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Injectable } from '@angular/core';
 import { DockerServicesSummary } from './docker.services.summary';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
 import { DockerService } from './docker.service';
+import {DockerServiceLogs} from './docker.service.logs';
 
 @Injectable()
 export class DockerServicesService extends DockerBaseService {
@@ -94,6 +95,21 @@ export class DockerServicesService extends DockerBaseService {
             },
             (err: HttpErrorResponse) => {
               this.completeWithError(err, observer, 'Failed to update service!');
+            });
+      });
+    });
+  }
+
+  getServiceLogs(name: string): Observable<DockerServiceLogs> {
+    return Observable.create(observer => {
+      this.afterDockerSwarmSelected.then(() => {
+        this.http.get<DockerServiceLogs>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + name + '/logs')
+          .subscribe(
+            (dockerServiceLogs: DockerServiceLogs) => {
+              this.completeWithSuccess(observer, 'Loaded ' + name + ' service logs!', dockerServiceLogs);
+            },
+            (err: HttpErrorResponse) => {
+              this.completeWithError(err, observer, 'Failed to load ' + name + ' service!');
             });
       });
     });
