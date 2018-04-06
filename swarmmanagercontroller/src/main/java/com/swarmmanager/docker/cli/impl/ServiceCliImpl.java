@@ -214,8 +214,10 @@ public class ServiceCliImpl implements ServiceCli {
             String entry;
             while ((entry = reader.readLine()) != null) {
                 LogLine logLine = convertLogString(serviceId, tasksById, entry);
-                logLines.add(logLine);
-                logFilters.add(new LogFilter(logLine.getTaskId(), logLine.getReplica(), logLine.getServiceId(), logLine.getNodeId()));
+                if (logLine != null) {
+                    logLines.add(logLine);
+                    logFilters.add(new LogFilter(logLine.getTaskId(), logLine.getReplica(), logLine.getServiceId(), logLine.getNodeId()));
+                }
             }
         } catch (IOException e) {
             LOGGER.error("Error parsing logs", e);
@@ -244,12 +246,13 @@ public class ServiceCliImpl implements ServiceCli {
                 }
                 if (detail.startsWith(TASK_DETAIL)) {
                     tasKId = detail.substring(TASK_DETAIL.length() + 1);
-                    replica = tasksById.get(tasKId).getSlot();
+                    Long slot = tasksById.get(tasKId).getSlot();
+                    replica = slot != null ? slot : 0;
                 }
             }
             StringBuilder messageBuilder = new StringBuilder(parts[2]);
             for (int i = 3; i < parts.length; i++) {
-                messageBuilder.append(" " + parts[i]);
+                messageBuilder.append(" ").append(parts[i]);
             }
             String message = messageBuilder.toString();
             return new LogLine(serviceId, nodeId, tasKId, replica, message, timestamp.toInstant().toEpochMilli());

@@ -7,7 +7,7 @@
 <div class="log-filters">
   <div class="log-filters-content">
     <div class="log-filter-item" *ngFor="let filter of logFilters">
-    <mat-checkbox (click)="toggleFilter(filter)">{{filter.replica + '.' + filter.taskId}}</mat-checkbox>
+      <mat-checkbox (click)="toggleFilter(filter)"><span *ngIf="filter.replica > 0">{{filter.replica + '.' }}</span>{{filter.taskId}}</mat-checkbox>
     </div>
   </div>
 </div>
