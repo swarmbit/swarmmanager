@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { Form, FormArray, FormControl, FormGroup } from '@angular/forms';
 
 @Injectable()
 export class FormsService {
@@ -55,6 +55,10 @@ export class FormsService {
       order: 3,
     }
   };
+
+  getFormArray(formField: FormGroup, field): FormArray {
+    return (<FormArray> formField.get(field));
+  }
 
   parseOptionsToObjectField(object: any, values: any, field: string, first: string, second?: string): void {
     if (second) {
