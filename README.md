@@ -13,7 +13,7 @@ Her you can find all the instructions needed to run the Swarm Manager developmen
 * Node 8.9.3
 * Yarn
 
-## Set Up
+## Set up development environment
 1. Create mongo db database, execute:
 ```
 $ cd mongo
@@ -40,7 +40,7 @@ $ docker run --name swarmmanager -p 3000:3080 -e DBPASS=password -v /var/run/doc
 
 ### Run https with redirect
 ```
-$ docker run --name swarmmanager -p 80:3080 -p 443:30443 -e DBPASS=password -e -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
+$ docker run --name swarmmanager -p 80:3080 -p 443:30443 -e DBPASS=password -e HTTPS=true -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
 ```
 
 * docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
