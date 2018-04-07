@@ -1,0 +1,57 @@
+package co.uk.swarmbit.docker.api.common.json;
+
+import co.uk.swarmbit.docker.api.common.annotation.DockerRemoteApiMinVersion;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@DockerRemoteApiMinVersion("v1.25")
+public class SecretSpecJson {
+
+    @JsonProperty("Name")
+    private String name;
+
+    @JsonProperty("Labels")
+    private Map<String, String> labels;
+
+    @JsonProperty("Data")
+    private String data;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<String, String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SecretSpecJson{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", labels=").append(labels);
+        sb.append(", data='").append(data).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+}

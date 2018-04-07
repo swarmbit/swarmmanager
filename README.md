@@ -16,7 +16,7 @@ Her you can find all the instructions needed to run the Swarm Manager developmen
 ## Set Up
 1. Create mongo db database, execute:
 ```
-$ cd swarmmanagercontroller/mongo
+$ cd mongo
 $ ./docker-build.sh
 $ docker run --name swarm-manager-db -d -p 27017:27017 swarmmanager/db
 ```
@@ -33,9 +33,17 @@ $ ./run.sh
 4. At this point the web app should be available on: http://localhost:4201.
 Login with username *admin* and password *test*.
 
+## Run swarm manager image
+* docker run --name swarmmanager -p 3000:3000 -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
+* docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
+
+## Run swarm manager ligh image
+* docker run --name swarmmanagerlight -p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/config:/config -d swarmbit/swarmmanagerlight
+* docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
+
 ## Project Maintainers
 * Bruno Vale
-* Flávia Penim
+* Flï¿½via Penim
 
 ## Contributing
 * Writing tests //TODO
