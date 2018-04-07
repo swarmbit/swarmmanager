@@ -10,7 +10,7 @@ Her you can find all the instructions needed to run the Swarm Manager developmen
 * Java 8
 * Maven
 * Docker CE **17.12** (support from 1.12)
-* Node 6.11.2
+* Node 8.9.3
 * Yarn
 
 ## Set Up
@@ -47,7 +47,7 @@ $ docker run --name swarmmanagerlight -p 3000:3000 -v /var/run/docker.sock:/var/
 
 ## Project Maintainers
 * Bruno Vale
-* Flávia Penim
+* Flï¿½via Penim
 
 ## Contributing
 * Writing tests //TODO
