@@ -11,6 +11,7 @@ RUN mvn clean install
 
 FROM  swarmbit/swarmmanagerbase:alpine3.7-java8-mongo3.4.0-node8.9.3
 ENV DBPASS swarmmanager
+ENV HTTPS false
 COPY --from=swarmmanagerfrontend /swarmmanagerfrontend/dist /swarmmanagerfrontend
 COPY --from=swarmmanagercontroller /swarmmanagercontroller/target/swarmmanagercontroller.jar /swarmmanagercontroller/swarmmanagercontroller.jar
 COPY ./mongo/createSwarmManagerDB.js /scripts/createSwarmManagerDB.js
