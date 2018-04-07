@@ -34,11 +34,15 @@ $ ./run.sh
 Login with username *admin* and password *test*.
 
 ## Run swarm manager image
-* docker run --name swarmmanager -p 3000:3000 -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
+```
+$ docker run --name swarmmanager -p 3000:3000 -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
+```
 * docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
 
-## Run swarm manager ligh image
-* docker run --name swarmmanagerlight -p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/config:/config -d swarmbit/swarmmanagerlight
+## Run swarm manager light image
+```
+docker run --name swarmmanagerlight -p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/config:/config -d swarmbit/swarmmanagerlight
+```
 * docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
 
 ## Project Maintainers
