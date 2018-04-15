@@ -1,5 +1,3 @@
-<img align="right" alt="Swarm Manager logo" width="250" src="swarm-manager-logo.png">
-
 # README #
 
 The Swarm Manager is a web application to manage [docker swarms](https://docs.docker.com/engine/swarm/). The goal of this web app is to support all the swarm configurations that the docker CLI supports and to add new functionalities like audit logs, user management and others.
@@ -53,7 +51,7 @@ $ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/ru
 
 ## Project Maintainers
 * Bruno Vale
-* Fl�via Penim
+* Flavia Penim
 
 ## Contributing
 * Writing tests //TODO

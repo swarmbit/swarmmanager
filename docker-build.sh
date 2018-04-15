@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t swarmbit/swarmmanager .
+docker build -t swarmbit/swarmmanager:$1 .

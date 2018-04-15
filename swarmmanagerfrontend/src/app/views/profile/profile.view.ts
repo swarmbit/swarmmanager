@@ -14,11 +14,11 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 })
 export class ProfileView  extends BaseView implements OnInit {
 
-  private userDataForm: FormGroup;
-  private passwordForm: FormGroup;
-  private displayName = 'displayName';
-  private username = 'username';
-  private passwordChangeError: string;
+  userDataForm: FormGroup;
+  passwordForm: FormGroup;
+  displayName = 'displayName';
+  username = 'username';
+  passwordChangeError: string;
 
   constructor(headerService: HeaderService,
               public swarmService: DockerSwarmService,
