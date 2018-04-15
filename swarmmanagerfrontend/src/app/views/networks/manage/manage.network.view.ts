@@ -12,6 +12,7 @@ import { ConfirmationDialogComponent } from '../../../components/confirmation.di
 import { DockerIpamConfig } from '../../../services/docker/networks/docker.ipam.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsService } from '../../../services/utils/forms.service';
+import { BrowserService } from '../../../services/utils/browser.service';
 
 @Component({
   selector: 'app-manage-network',
@@ -33,10 +34,10 @@ export class ManageNetworkView extends BaseView {
               private route: ActivatedRoute,
               public dialog: MatDialog,
               public formsService: FormsService,
-              public ngZone: NgZone
+              private browserService: BrowserService
   ) {
-    super(headerService, route, swarmService, userService);
-    super.enableBackArrow('/networks');
+    super(headerService, route, swarmService, userService, browserService);
+    super.enableBackArrow();
     this.isDetails = route.snapshot.data[ 'action' ] === 'manage';
     this.loadFunction = this.loadNetworks;
     this.initCreateForm();
@@ -49,7 +50,7 @@ export class ManageNetworkView extends BaseView {
           this.initCreateForm(dockerNetwork);
         },
         (err: HttpErrorResponse) => {
-          this.router.navigate(['/networks']);
+          this.goBack(this.router, 'networks');
         });
   }
 

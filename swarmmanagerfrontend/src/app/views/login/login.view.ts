@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { AuthError } from '../../services/auth/model/auth.error';
+import { AuthError } from '../../services/auth/auth.error';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +10,8 @@ import { AuthError } from '../../services/auth/model/auth.error';
 })
 export class LoginView {
 
-  generalErrorMessage = 'There was an error, if the problem persists please contact the System Administration!';
-  invalidUserPassword = 'Please insert a valid username and password!';
+  generalErrorMessage = 'There was an error, if the problem persists please contact the System Administration.';
+  invalidUserPassword = 'Please insert a valid username and password.';
   currentErrorMessage = '';
   username: string;
   password: string;
@@ -28,5 +29,11 @@ export class LoginView {
         }
       }
     );
+  }
+
+  onKeydown(event): void {
+    if (event.key === 'Enter') {
+      this.login();
+    }
   }
 }

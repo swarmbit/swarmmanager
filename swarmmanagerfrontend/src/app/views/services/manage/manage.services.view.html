@@ -1,4 +1,4 @@
-<form class="sm-manage-form" [formGroup]="serviceForm" (ngSubmit)="createService()">
+<form class="sm-form" [formGroup]="serviceForm" (ngSubmit)="createService()">
   <div class="sm-form-row" *ngIf="this.isDetails && !this.editMode">
     <button mat-raised-button color="accent" (click)="exportService()" style="float: right" type="button">Export</button>
   </div>
@@ -724,14 +724,14 @@
   </mat-expansion-panel>
   <div class="sm-form-row">
     <div class="sm-form-field big sm-form-submit">
-      <button mat-raised-button color="accent" *ngIf="!isDetails">Create</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && !editMode" type="button" (click)="setEditMode()">Edit</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && editMode" type="button" (click)="openSaveDialog()">Save</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isAdmin() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
-      <div class="sm-form-form-error">
+      <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
+      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
+      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
+      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
+      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+      <div class="sm-form-error">
         <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
       </div>
     </div>

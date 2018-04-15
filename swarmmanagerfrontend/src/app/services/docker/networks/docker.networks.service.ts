@@ -34,10 +34,10 @@ export class DockerNetworksService extends DockerBaseService {
                   }
                 }
               }
-              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' networks!', networksReturn, noMessage);
+              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' networks', networksReturn, noMessage);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' networks!');
+              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' networks');
             });
       });
     });
@@ -50,10 +50,10 @@ export class DockerNetworksService extends DockerBaseService {
           .first()
           .subscribe(
             (network: DockerNetwork) => {
-              this.completeWithSuccess(observer, 'Loaded ' + name + ' network!', network, noMessage);
+              this.completeWithSuccess(observer, 'Loaded ' + name + ' network', network, noMessage);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to load ' + name + ' network!');
+              this.completeWithError(err, observer, 'Failed to load ' + name + ' network');
             });
       });
     });
@@ -67,10 +67,10 @@ export class DockerNetworksService extends DockerBaseService {
           responseType: 'text'
         }).subscribe(
           (resp: HttpResponse<any>) => {
-            this.completeWithSuccess(observer, 'Removed ' + name + ' network!', null);
+            this.completeWithSuccess(observer, 'Removed ' + name + ' network', null);
           },
           (err: HttpErrorResponse) => {
-            this.completeWithError(err, observer, 'Failed to remove network ' + name + '!');
+            this.completeWithError(err, observer, 'Failed to remove network ' + name);
           }
         );
       });
@@ -83,10 +83,10 @@ export class DockerNetworksService extends DockerBaseService {
         this.http.post<DockerNetwork>(this.dockerSwarmUrl + this.dockerNetworksUrl, dockerNetwork)
           .subscribe(
             (returnedNetwork: DockerNetwork) => {
-              this.completeWithSuccess(observer, 'Created ' + name + ' network!', returnedNetwork);
+              this.completeWithSuccess(observer, 'Created ' + name + ' network', returnedNetwork);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to create network!');
+              this.completeWithError(err, observer, 'Failed to create network');
             });
       });
     });

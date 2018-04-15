@@ -6,10 +6,12 @@ import { DockerServicesService } from '../../../services/docker/services/docker.
 import { BaseView } from '../../base.view';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../../services/user/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { HeaderService } from '../../../services/header/header.service';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { DockerServiceLogs } from '../../../services/docker/services/docker.service.logs';
+import { BrowserService } from '../../../services/utils/browser.service';
 
 @Component({
   selector: 'app-services-logs',
@@ -36,10 +38,11 @@ export class LogsView extends BaseView implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router,
               private dockerServicesService: DockerServicesService,
-              private snackbarService: SnackbarService
+              private snackbarService: SnackbarService,
+              private browserService: BrowserService
   ) {
-    super(headerService, route, swarmService, userService);
-    this.enableBackArrow('/services');
+    super(headerService, route, swarmService, userService, browserService);
+    this.enableBackArrow();
     this.logLines = [];
     this.selectedLogFilters = [];
     this.loadFunction = this.getServiceLogs;
@@ -50,33 +53,43 @@ export class LogsView extends BaseView implements OnInit, OnDestroy {
       this.id = params['name'];
       if (this.id) {
         this.setViewName(this.id + ' logs');
-        this.getServiceLogs();
       }
     }));
+    this.subs.push(this.route.data
+      .subscribe(
+        (data: Data) => {
+          const logs = data['dockerServiceLogs'];
+          this.initServiceLogs(logs);
+        }
+      ));
   }
 
   getServiceLogs() {
     this.subs.push(this.swarmService.getSelectedSwarm().subscribe(() => {
       if (!this.swarmService.equalsOrGreaterThenVersion29()) {
-        this.snackbarService.showError('Swarm does not support service logs');
-        this.router.navigate(['/services']);
-      } else {
+        this.snackbarService.showError('Swarm does not support service logs!');
+        this.goBack(this.router, 'services');
+      } else if (this.id) {
         this.dockerServicesService.getServiceLogs(this.id)
           .subscribe(
             logs => {
-              this.logLines = logs.logLines;
-              this.logFilters = logs.logFilters;
-              this.selectedLogFilters = [];
-              setTimeout(() => {
-                this.scrollToBottom();
-              });
+              this.initServiceLogs(logs);
             },
-            (error: any) => {
-              this.router.navigate(['/services']);
+            () => {
+              this.goBack(this.router, 'services');
             });
       }
 
     }));
+  }
+
+  initServiceLogs(logs: DockerServiceLogs): void {
+    this.logLines = logs.logLines;
+    this.logFilters = logs.logFilters;
+    this.selectedLogFilters = [];
+    setTimeout(() => {
+      this.scrollToBottom();
+    });
   }
 
   getLogLines(): DockerServiceLogLine[] {
@@ -119,7 +132,7 @@ export class LogsView extends BaseView implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.disableBackArrow();
+    super.ngOnDestroy();
     this.subs.forEach(sub => sub.unsubscribe());
   }
 

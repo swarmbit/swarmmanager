@@ -1,3 +1,4 @@
+
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ScreenService } from '../../services/screen/screen.service';
 import { NavigationItem } from './model/navigation.item';
@@ -8,6 +9,9 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';
 import { DockerSwarm } from '../../services/docker/swarms/docker.swarm';
 import { Router } from '@angular/router';
+import { BrowserService } from '../../services/utils/browser.service';
+import { UserService } from '../../services/user/user.service';
+import { User } from '../../services/user/user';
 
 @Component({
   selector: 'app-shell',
@@ -25,6 +29,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   selectedViewName: string;
   swarms: DockerSwarm[];
   selectedSwarm = '';
+  user: User;
 
   private subscription: Subscription;
   @ViewChild('sidenav') private sidenav: MatSidenav;
@@ -32,23 +37,33 @@ export class ShellComponent implements OnInit, OnDestroy {
   public constructor(private router: Router,
                      public screenService: ScreenService,
                      private headerService: HeaderService,
-                     private swarmService: DockerSwarmService) {
+                     private swarmService: DockerSwarmService,
+                     private browserService: BrowserService,
+                     private userService: UserService) {
     this.navigationItems = [];
-    this.navigationItems.push(new NavigationItem('Services', '/services', 'cloud'));
-    this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
-    this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
+    this.userService.getUser().then((user) => {
+      this.user = user;
+      if (user.isVisitor()) {
+        this.swarmService.getSwarms().subscribe(
+          swarms => {
+            this.swarms = swarms;
+            if (this.swarms && this.swarms.length > 0) {
+              this.selectedSwarm = this.swarms[0].id;
+            }
+        });
+        this.navigationItems.push(new NavigationItem('Services', '/services', 'cloud'));
+        this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
+        this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
+      }
+      if (user.isAdmin()) {
+        this.navigationItems.push(new NavigationItem('User Management', '/users', 'account_box'));
+      }
+    });
     this.subscription = this.headerService.getHeaderInfo().subscribe(headerInfo => {
       this.headerInfo = headerInfo;
       this.selectedViewName = headerInfo.currentViewName;
     });
     this.swarms = [];
-    this.swarmService.getSwarms().subscribe(
-      swarms => {
-        this.swarms = swarms;
-        if (this.swarms && this.swarms.length > 0) {
-          this.selectedSwarm = this.swarms[0].id;
-        }
-      });
   }
 
   ngOnInit(): void {
@@ -83,12 +98,12 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   isBackArrowActive() {
-    return this.headerInfo && this.headerInfo.backArrow && this.headerInfo.backArrow.show;
+    return this.headerInfo && this.headerInfo.backArrow && this.headerInfo.backArrow.show && !this.browserService.isEmpty();
   }
 
   goBack() {
     if (this.headerInfo && this.headerInfo.backArrow) {
-      this.router.navigate([this.headerInfo.backArrow.link]);
+      this.router.navigate([this.browserService.getBackUrl()]);
     }
   }
 
@@ -99,7 +114,6 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   swipe(action) {
-    console.log(action);
     if (action === this.SWIPE_ACTION.RIGHT) {
       if (this.screenService.isSmall()) {
         this.sidenav.open();

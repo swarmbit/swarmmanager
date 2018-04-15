@@ -21,6 +21,10 @@
   align-self: flex-end;
 }
 
+/deep/ .list-container > mat-card .card-buttons > button {
+  margin-right: 1rem;
+}
+
 /deep/ .list-container > mat-card {
   user-select: text;
 }

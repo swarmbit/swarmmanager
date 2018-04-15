@@ -43,6 +43,20 @@ import { DockerServiceResolver } from './resolvers/docker/services/docker.servic
 import { FormsService } from './services/utils/forms.service';
 import { ManageServiceConfirmation } from './views/services/manage/manage.service.confirmation';
 import { LogsView } from './views/services/logs/logs.view';
+import { DockerServiceLogsResolver } from './resolvers/docker/services/docker.service.logs.resolver';
+import { ProfileView } from './views/profile/profile.view';
+import { BrowserService } from './services/utils/browser.service';
+import { UserManagementView } from './views/user.management/user.management.view';
+import { UsersService } from './services/users/users.service';
+import { TitleCasePipe } from '@angular/common';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
+import { VisitorGuard } from './guards/visitor.guard';
+import { CreateUserView } from './views/create.user/create.user.view';
+import { LoginGuard } from './guards/login.guard';
+import { ResetKeyDialogComponent } from './views/create.user/reset.key.dialog/reset.key.dialog.component';
+import { NotFoundView } from './views/not.found/not.found.view';
+import { ForgotView } from './views/forgot/forgot.view';
 
 declare const Hammer: any;
 
@@ -71,7 +85,13 @@ export class HammerConfig extends HammerGestureConfig  {
     ManageServicesView,
     ManageServiceConfirmation,
     LogsView,
-    NodesView
+    NodesView,
+    ProfileView,
+    UserManagementView,
+    CreateUserView,
+    ResetKeyDialogComponent,
+    NotFoundView,
+    ForgotView
   ],
   imports: [
     BrowserModule,
@@ -84,6 +104,10 @@ export class HammerConfig extends HammerGestureConfig  {
   ],
   providers: [
     AuthService,
+    AuthGuard,
+    AdminGuard,
+    VisitorGuard,
+    LoginGuard,
     ProgressBarService,
     ScreenService,
     HeaderService,
@@ -92,10 +116,13 @@ export class HammerConfig extends HammerGestureConfig  {
     DockerSwarmService,
     DockerServicesService,
     DockerServiceResolver,
+    DockerServiceLogsResolver,
     FormsService,
     DockerNetworksService,
     DockerNodesService,
     DockerNetworkResolver,
+    BrowserService,
+    UsersService,
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: HammerConfig ,
@@ -113,6 +140,7 @@ export class HammerConfig extends HammerGestureConfig  {
   ],
   entryComponents: [
     ConfirmationDialogComponent,
+    ResetKeyDialogComponent,
     ManageServiceConfirmation
   ],
   bootstrap: [AppComponent]

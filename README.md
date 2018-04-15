@@ -1,4 +1,4 @@
-<img align="right" alt="Swarm Manager logo" width="250" src="SwarmManager.png">
+<img align="right" alt="Swarm Manager logo" width="250" src="swarm-manager-logo.png">
 
 # README #
 

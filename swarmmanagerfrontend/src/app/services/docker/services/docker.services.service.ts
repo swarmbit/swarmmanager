@@ -27,10 +27,10 @@ export class DockerServicesService extends DockerBaseService {
           .first()
           .subscribe(
             (services: DockerServicesSummary[]) => {
-              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' services!', services, noMessage);
+              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' services', services, noMessage);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' services!');
+              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' services');
             });
       });
     });
@@ -43,10 +43,10 @@ export class DockerServicesService extends DockerBaseService {
           .first()
           .subscribe(
             (service: DockerService) => {
-              this.completeWithSuccess(observer, 'Loaded ' + name + ' service!', service, noMessage);
+              this.completeWithSuccess(observer, 'Loaded ' + name + ' service', service, noMessage);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to load ' + name + ' service!');
+              this.completeWithError(err, observer, 'Failed to load ' + name + ' service');
             });
       });
     });
@@ -63,7 +63,7 @@ export class DockerServicesService extends DockerBaseService {
             this.completeWithSuccess(observer, null, null);
           },
           (err: HttpErrorResponse) => {
-            this.completeWithError(err, observer, 'Failed to remove service ' + name + '!');
+            this.completeWithError(err, observer, 'Failed to remove service ' + name );
           }
         );
       });
@@ -76,10 +76,10 @@ export class DockerServicesService extends DockerBaseService {
         this.http.post<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl, dockerService)
           .subscribe(
             (returnedService: DockerService) => {
-              this.completeWithSuccess(observer, 'Created ' + returnedService.name + ' service!', returnedService);
+              this.completeWithSuccess(observer, 'Created ' + returnedService.name + ' service', returnedService);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to create service!');
+              this.completeWithError(err, observer, 'Failed to create service');
             });
       });
     });
@@ -91,10 +91,10 @@ export class DockerServicesService extends DockerBaseService {
         this.http.put<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + dockerService.name, dockerService)
           .subscribe(
             (returnedService: DockerService) => {
-              this.completeWithSuccess(observer, 'Updated ' + returnedService.name + ' service!', returnedService);
+              this.completeWithSuccess(observer, 'Updated ' + returnedService.name + ' service', returnedService);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to update service!');
+              this.completeWithError(err, observer, 'Failed to update service');
             });
       });
     });
@@ -106,10 +106,10 @@ export class DockerServicesService extends DockerBaseService {
         this.http.get<DockerServiceLogs>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + name + '/logs')
           .subscribe(
             (dockerServiceLogs: DockerServiceLogs) => {
-              this.completeWithSuccess(observer, 'Loaded ' + name + ' service logs!', dockerServiceLogs);
+              this.completeWithSuccess(observer, 'Loaded ' + name + ' service logs', dockerServiceLogs);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to load ' + name + ' service!');
+              this.completeWithError(err, observer, 'Failed to load ' + name + ' service');
             });
       });
     });

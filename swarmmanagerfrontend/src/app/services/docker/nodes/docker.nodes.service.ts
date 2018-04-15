@@ -26,10 +26,10 @@ export class DockerNodesService extends DockerBaseService {
           .first()
           .subscribe(
             (nodes: DockerNodeSummary[]) => {
-              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' nodes!', nodes, noMessage);
+              this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' nodes', nodes, noMessage);
             },
             (err: HttpErrorResponse) => {
-              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' nodes!');
+              this.completeWithError(err, observer, 'Failed to load ' + this.dockerSwarmName + ' nodes');
             });
       });
     });

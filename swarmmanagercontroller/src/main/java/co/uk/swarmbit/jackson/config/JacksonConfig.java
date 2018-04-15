@@ -16,7 +16,7 @@ import java.util.List;
 public class JacksonConfig extends WebMvcConfigurationSupport {
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Override
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

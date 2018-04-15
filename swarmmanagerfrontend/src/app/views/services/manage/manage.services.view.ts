@@ -22,6 +22,7 @@ import {
   DockerTmpfsMountOptions, DockerVolumeMountOptions
 } from '../../../services/docker/services/docker.service.mount';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { BrowserService } from '../../../services/utils/browser.service';
 
 @Component({
   selector: 'app-manage-service',
@@ -71,10 +72,11 @@ export class ManageServicesView extends BaseView implements OnInit {
               public dialog: MatDialog,
               public formsService: FormsService,
               private networkService: DockerNetworksService,
-              private snackbarService: SnackbarService
+              private snackbarService: SnackbarService,
+              private browserService: BrowserService
   ) {
-    super(headerService, route, swarmService, userService);
-    super.enableBackArrow('/services');
+    super(headerService, route, swarmService, userService, browserService);
+    super.enableBackArrow();
     this.isDetails = route.snapshot.data[ 'action' ] === 'manage';
     this.loadFunction = this.loadService;
   }
@@ -93,14 +95,14 @@ export class ManageServicesView extends BaseView implements OnInit {
   }
 
   loadService() {
-    if (this.isDetails) {
+    if (this.isDetails && this.serviceName) {
       this.dockerServicesService.getService(this.serviceName)
         .subscribe(
           (dockerService: DockerService) => {
             this.initCreateForm(dockerService);
           },
           (err: HttpErrorResponse) => {
-            this.router.navigate(['/services']);
+            this.goBack(this.router, 'services');
           });
     }
   }
@@ -160,7 +162,7 @@ export class ManageServicesView extends BaseView implements OnInit {
       this.subscriptions.push(dialogRef.afterClosed().subscribe(confirmation => {
         if (confirmation.result === true) {
           const dockerService = this.getNewDockerService(this.serviceForm.value);
-          if (confirmation.privateRegistry) {
+          if (confirmation['privateRegistry']) {
             dockerService.registryUsername = confirmation.username;
             dockerService.registryPassword = btoa(confirmation.password);
             dockerService.dockerHubRegistry = confirmation.dockerHubRegistry;
@@ -624,7 +626,7 @@ export class ManageServicesView extends BaseView implements OnInit {
       this.subscriptions.push(dialogRef.afterClosed().subscribe(confirmation => {
         if (confirmation.result === true) {
           const dockerService = this.getNewDockerService(this.serviceForm.value);
-          if (confirmation.privateRegistry) {
+          if (confirmation['privateRegistry']) {
             dockerService.registryUsername = confirmation.username;
             dockerService.registryPassword = btoa(confirmation.password);
             dockerService.dockerHubRegistry = confirmation.dockerHubRegistry;

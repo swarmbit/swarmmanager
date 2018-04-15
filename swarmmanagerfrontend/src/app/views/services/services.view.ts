@@ -7,9 +7,10 @@ import { ViewUtils } from '../view.utils';
 import { ActivatedRoute } from '@angular/router';
 import { DockerServicesSummary } from '../../services/docker/services/docker.services.summary';
 import { DockerServicesService } from '../../services/docker/services/docker.services.service';
+import { BrowserService } from '../../services/utils/browser.service';
 
 @Component({
-  selector: 'app-networks',
+  selector: 'app-services',
   styleUrls: ['services.view.scss'],
   templateUrl: 'services.view.html'
 })
@@ -22,9 +23,10 @@ export class ServicesView extends BaseView {
               public swarmService: DockerSwarmService,
               private userService: UserService,
               private route: ActivatedRoute,
-              private dockerServicesService: DockerServicesService
-              ) {
-    super(headerService, route, swarmService, userService);
+              private dockerServicesService: DockerServicesService,
+              private browserService: BrowserService
+  ) {
+    super(headerService, route, swarmService, userService, browserService);
     this.refreshFunction = this.refreshNetworks;
     this.refreshNetworks(true);
   }

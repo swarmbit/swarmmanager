@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { UserCredentials } from './model/user.credentials';
+import { UserCredentials } from './user.credentials';
 import 'rxjs/add/operator/catch';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { AuthError } from './model/auth.error';
+import { AuthError } from './auth.error';
 import { UserService } from '../user/user.service';
+import { Router } from '@angular/router';
+import { BrowserService } from '../utils/browser.service';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +33,7 @@ export class AuthService {
     }
   }
 
-  constructor (private http: HttpClient, private userService: UserService) {
+  constructor (private http: HttpClient, private userService: UserService, private router: Router, private browserService: BrowserService) {
   }
 
   login(username: string, password: string): Promise<any> {
@@ -49,6 +51,14 @@ export class AuthService {
         (resp: HttpResponse<any>) => {
           localStorage.setItem(AuthService.AUTH_HEADER, resp.headers.get(AuthService.AUTH_HEADER));
           localStorage.setItem(AuthService.AUTH_USER, userCredentials.getUsername());
+          this.userService.getUser().then((user) => {
+            if (user.isNone() && !user.isVisitor()) {
+              this.router.navigate(['user/profile']);
+            } else {
+              this.router.navigate(['']);
+            }
+
+          });
           resolve();
         },
         (err: HttpErrorResponse) => {
@@ -81,11 +91,13 @@ export class AuthService {
           localStorage.removeItem(AuthService.AUTH_HEADER);
           localStorage.removeItem(AuthService.AUTH_USER);
           this.userService.clearUser();
+          this.router.navigate(['login']);
         },
         (err: HttpErrorResponse) => {
           localStorage.removeItem(AuthService.AUTH_HEADER);
           localStorage.removeItem(AuthService.AUTH_USER);
           this.userService.clearUser();
+          this.router.navigate(['login']);
         }
       );
     }

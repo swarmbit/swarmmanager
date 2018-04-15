@@ -32,7 +32,11 @@ public class DockerDateFormatter {
             try {
                 parsedDate = ZonedDateTime.parse(dateTime, formatter2);
             } catch (DateTimeParseException exception2) {
-                parsedDate = ZonedDateTime.parse(dateTime, formatter3);
+                try {
+                    parsedDate = ZonedDateTime.parse(dateTime, formatter3);
+                } catch (Exception e) {
+                    return null;
+                }
             }
         }
         return parsedDate;

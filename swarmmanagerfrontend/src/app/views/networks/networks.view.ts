@@ -7,6 +7,7 @@ import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.s
 import { UserService } from '../../services/user/user.service';
 import { ViewUtils } from '../view.utils';
 import { ActivatedRoute } from '@angular/router';
+import { BrowserService } from '../../services/utils/browser.service';
 
 @Component({
   selector: 'app-networks',
@@ -22,9 +23,10 @@ export class NetworksView extends BaseView {
               private swarmService: DockerSwarmService,
               private userService: UserService,
               private route: ActivatedRoute,
-              private networksService: DockerNetworksService
+              private networksService: DockerNetworksService,
+              private browserService: BrowserService
               ) {
-    super(headerService, route, swarmService, userService);
+    super(headerService, route, swarmService, userService, browserService);
     this.refreshFunction = this.refreshNetworks;
     this.refreshNetworks(true);
   }

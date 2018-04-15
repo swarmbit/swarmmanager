@@ -4,7 +4,6 @@ export class UserCredentials {
 
   private password: string;
 
-
   getUsername(): string {
     return this.username;
   }

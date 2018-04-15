@@ -26,11 +26,12 @@ swarmmanagerDB.createCollection("usersData");
 swarmmanagerDB.users.insert({  
    "_id":"admin",
    "_class":"com.swarmmanager.repository.model.User",
-   "password":"$2a$10$4HBJhX/aPaV6Ji8ke20BUeaF.5hPopHFQ07kkKwes6otml58ZpjHG",
+   "password":"$2a$10$LIuMuDvSe.IpQEESBh687eOYMPQ/2uVqElCq8I5feRKLEiv1J8Hsq",
    "roles":[  
       "ADMIN",
       "USER",
-      "VISITOR"
+      "VISITOR",
+      "NONE"
    ],
    "secret":[  
       BinData(0,
@@ -43,20 +44,5 @@ swarmmanagerDB.usersData.insert({
    "_id":"admin",
    "_class":"com.swarmmanager.repository.model.UserData",
    "displayName": "Administrator"
-});
-swarmmanagerDB.users.insert({  
-   "_id":"tester",
-   "_class":"com.swarmmanager.repository.model.User",
-   "password":"$2a$10$4HBJhX/aPaV6Ji8ke20BUeaF.5hPopHFQ07kkKwes6otml58ZpjHG",
-   "roles":[  
-      "USER",
-      "VISITOR"
-   ],
-   "secret": null
-});
-swarmmanagerDB.usersData.insert({  
-   "_id":"tester",
-   "_class":"com.swarmmanager.repository.model.UserData",
-   "displayName": "Tester"
 });
 db.shutdownServer();

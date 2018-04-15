@@ -219,7 +219,7 @@ public class ServiceCliImpl implements ServiceCli {
             String entry;
             while ((entry = reader.readLine()) != null) {
                 LogLine logLine = convertLogString(serviceId, tasksById, entry);
-                if (logLine != null) {
+                if (logLine != null && StringUtils.isNotEmpty(logLine.getTaskId())) {
                     logLines.add(logLine);
                     logFilters.add(new LogFilter(logLine.getTaskId(), logLine.getReplica(), logLine.getServiceId(), logLine.getNodeId()));
                 }
@@ -239,7 +239,13 @@ public class ServiceCliImpl implements ServiceCli {
         String[] parts = log.split(" ");
         if (parts.length > 2) {
             String timestampStr = parts[0];
-            ZonedDateTime timestamp = DockerDateFormatter.fromDateStringToZonedDateTime(timestampStr);
+            long timestamp = 0L;
+            if (StringUtils.isNotEmpty(timestampStr)) {
+                ZonedDateTime date = DockerDateFormatter.fromDateStringToZonedDateTime(timestampStr);
+                if (date != null) {
+                    timestamp = date.toInstant().toEpochMilli();
+                }
+            }
             String detailsStr = parts[1];
             String nodeId = "";
             String tasKId = "";
@@ -260,7 +266,7 @@ public class ServiceCliImpl implements ServiceCli {
                 messageBuilder.append(" ").append(parts[i]);
             }
             String message = messageBuilder.toString();
-            return new LogLine(serviceId, nodeId, tasKId, replica, message, timestamp.toInstant().toEpochMilli());
+            return new LogLine(serviceId, nodeId, tasKId, replica, message, timestamp);
         }
         return null;
     }

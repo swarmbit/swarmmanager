@@ -1,0 +1,32 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <div class="card-content">
+      <div class="login-logo-container">
+        <img class="logo-small" mat-card-image src="../../../assets/logo/swarm-manager-logo.png">
+      </div>
+      <form [formGroup]="signInForm" (submit)="signIn()">
+        <mat-form-field class="login-input">
+          <input matInput placeholder="Username"  formControlName="username">
+          <mat-error *ngIf="signInForm.get('username').errors?.required">Username is required.</mat-error>
+          <mat-error *ngIf="signInForm.get('username').errors?.minlength">Username must be at least 4 characters long.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="login-input">
+          <input matInput placeholder="Password" type="password" formControlName="password">
+          <mat-error *ngIf="signInForm.get('password').errors?.required">Password is required.</mat-error>
+          <mat-error *ngIf="signInForm.get('password').errors?.minlength">Password must be at least 6 characters long.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="login-input">
+          <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword">
+          <mat-error *ngIf="signInForm.get('confirmPassword').errors?.required">Password is required.</mat-error>
+          <mat-error *ngIf="signInForm.get('confirmPassword').errors?.minlength">Password must be at least 6 characters long.</mat-error>
+        </mat-form-field>
+        <div>
+          <mat-error *ngIf="signInError">{{signInError}}</mat-error>
+        </div>
+        <div>
+          <button class="login-button" mat-raised-button color="accent">Create User</button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>

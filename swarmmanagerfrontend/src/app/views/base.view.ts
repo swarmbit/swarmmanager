@@ -1,12 +1,14 @@
 import { HeaderService } from '../services/header/header.service';
 import { HeaderInfo } from '../services/header/header.info';
 import { BackArrow } from '../services/header/back.arrow';
-import { User } from '../services/user/model/user';
+import { User } from '../services/user/user';
 import { DockerSwarmService } from '../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../services/user/user.service';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { BrowserService } from '../services/utils/browser.service';
+import { browser } from 'protractor';
 
 export class BaseView implements OnDestroy {
 
@@ -16,11 +18,14 @@ export class BaseView implements OnDestroy {
   refreshFunction: Function;
   loadFunction: Function;
   subscriptions: Subscription[];
+  browser: BrowserService;
 
   constructor(headerService: HeaderService,
               route: ActivatedRoute,
               swarmService: DockerSwarmService,
-              userService: UserService) {
+              userService: UserService,
+              browserService: BrowserService) {
+    this.browser = browserService;
     this.subscriptions = [];
     this.user = new User();
     this.headerService = headerService;
@@ -28,12 +33,12 @@ export class BaseView implements OnDestroy {
     this.headerInfo.currentViewName = '';
     this.headerInfo.currentViewName = route.snapshot.data['title'];
     this.headerService.setHeaderInfo(this.headerInfo);
-    userService.getUser(false).then(
+    userService.getUser().then(
       user => {
         this.user = user;
       }
     );
-    this.subscriptions.push(swarmService.getSelectedSwarm().subscribe(
+    this.subscriptions.push(swarmService.onSwarmChange().subscribe(
         () => {
           if (this.refreshFunction) {
             this.refreshFunction();
@@ -51,13 +56,13 @@ export class BaseView implements OnDestroy {
     this.headerService.setHeaderInfo(this.headerInfo);
   }
 
-  enableBackArrow(link: string): void {
-    this.headerInfo.backArrow = new BackArrow(true, link);
+  enableBackArrow(): void {
+    this.headerInfo.backArrow = new BackArrow(true);
     this.headerService.setHeaderInfo(this.headerInfo);
   }
 
   disableBackArrow(): void {
-    this.headerInfo.backArrow = new BackArrow(false, '');
+    this.headerInfo.backArrow = new BackArrow(false);
     this.headerService.setHeaderInfo(this.headerInfo);
   }
 
@@ -69,6 +74,15 @@ export class BaseView implements OnDestroy {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
+  }
+
+  goBack(router, page): void {
+    const backUrl = this.browser.getBackUrl;
+    if (backUrl) {
+      router.navigate([backUrl]);
+    } else {
+      router.navigate([page]);
+    }
   }
 
 }

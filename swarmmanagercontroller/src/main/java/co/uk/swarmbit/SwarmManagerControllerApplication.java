@@ -2,6 +2,7 @@ package co.uk.swarmbit;
 
 import co.uk.swarmbit.docker.config.DockerConfig;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,7 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SwarmManagerControllerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SwarmManagerControllerApplication.class, args);
+        SpringApplication app = new SpringApplication(SwarmManagerControllerApplication.class);
+        app.setBannerMode(Banner.Mode.OFF);
+        app.run(args);
     }
 
     @Bean

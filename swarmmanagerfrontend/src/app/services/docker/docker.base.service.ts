@@ -16,7 +16,7 @@ export class DockerBaseService {
     this.afterDockerSwarmSelected = new Promise((resolve) => {
       resolveAfterDockerSwarmSelected = resolve;
     });
-    swarmsService.getSelectedSwarm().subscribe(
+    swarmsService.onSwarmChange().subscribe(
       (dockerSwarm: DockerSwarm) => {
         if (dockerSwarm.id) {
           this.dockerSwarmUrl = DockerSwarmService.DOCKER_SWARMS_URL + dockerSwarm.id;
@@ -35,9 +35,15 @@ export class DockerBaseService {
   }
 
   completeWithError(err: any, observer: Observer<any>, message: string) {
-    if (err.status == 417) {
-      this.snackbarService.showError(message + ' ' + err.error);
-    } else {
+    let showedMessage = false;
+    if (err && err.error) {
+      const error = err.error.errors[ 0 ];
+      if (error.code === 'docker') {
+        this.snackbarService.showError(message + ' ' + error.message);
+        showedMessage = true;
+      }
+    }
+    if (!showedMessage) {
       this.snackbarService.showError(message);
     }
     observer.error(err);

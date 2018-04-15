@@ -1,9 +1,7 @@
 export class BackArrow {
   show: boolean;
-  link: string;
 
-  constructor(show: boolean, link: string) {
+  constructor(show: boolean) {
     this.show = show;
-    this.link = link;
   }
 }

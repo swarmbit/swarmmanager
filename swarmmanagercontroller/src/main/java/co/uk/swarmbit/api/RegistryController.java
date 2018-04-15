@@ -1,6 +1,6 @@
 package co.uk.swarmbit.api;
 
-import co.uk.swarmbit.auth.Role;
+import co.uk.swarmbit.auth.RoleAuthorities;
 import co.uk.swarmbit.repository.RegistryUserRepository;
 import co.uk.swarmbit.repository.model.RegistryUser;
 import co.uk.swarmbit.util.EncoderDecoder;
@@ -20,7 +20,7 @@ public class RegistryController {
     @Autowired
     private RegistryUserRepository registryUserRepository;
 
-    @PreAuthorize(Role.IS_USER)
+    @PreAuthorize(RoleAuthorities.IS_USER)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RegistryUser> getRegistriesUsers() {
         return registryUserRepository.findByUserOwner(UserUtil.getCurrentUsername()).stream().map(registryUser -> {
@@ -29,13 +29,13 @@ public class RegistryController {
         }).collect(Collectors.toList());
     }
 
-    @PreAuthorize(Role.IS_USER)
+    @PreAuthorize(RoleAuthorities.IS_USER)
     @RequestMapping(method = RequestMethod.DELETE, value = "{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void removeRegistryUser(@PathVariable String name) {
         registryUserRepository.deleteByNameAndUserOwner(name, UserUtil.getCurrentUsername());
     }
 
-    @PreAuthorize(Role.IS_USER)
+    @PreAuthorize(RoleAuthorities.IS_USER)
     @RequestMapping(method = RequestMethod.POST, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void createRegistryUSer(@RequestBody RegistryUser registryUser) {
         registryUser.setUserOwner(UserUtil.getCurrentUsername());

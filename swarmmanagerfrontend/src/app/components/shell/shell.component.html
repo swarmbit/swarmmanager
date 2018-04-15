@@ -2,14 +2,14 @@
   <mat-sidenav #sidenav mode="{{getNavbarMode()}}" opened="{{!screenService.isSmall()}}"  class="navbar-container">
     <div class="logo-area">
       <div class="logo">
-        <img src="../../../assets/logo/swarmmanager-big-logo.png">
+        <img src="../../../assets/logo/swarm-manager-logo.png">
       </div>
       <div class="user">
         <app-user></app-user>
       </div>
       <div class="swarm-select-container">
         <div class="swarm-select">
-          <mat-form-field>
+          <mat-form-field *ngIf="user && user.isVisitor()">
             <mat-select placeholder="Swarm" [(value)]="selectedSwarm" (change)="selectSwarm($event)">
               <mat-option *ngFor="let swarm of swarms" [value]="swarm.id">
                 {{swarm.name}} ({{swarm.apiVersion}})
@@ -35,7 +35,7 @@
   </mat-toolbar>
   <main class="shell-content" (swiperight)="swipe($event.type)">
     <div class="content">
-      <ng-content></ng-content>
+      <router-outlet></router-outlet>
     </div>
   </main>
 </mat-sidenav-container>

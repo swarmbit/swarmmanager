@@ -2,6 +2,7 @@ export class User {
   username = '';
   displayName = '';
   roles: string[] = [];
+  role: string;
 
   isAdmin(): boolean {
     return this.roles.indexOf('ADMIN') > -1;
@@ -13,5 +14,9 @@ export class User {
 
   isVisitor(): boolean {
     return this.roles.indexOf('VISITOR') > -1;
+  }
+
+  isNone(): boolean {
+    return this.roles.indexOf('NONE') > -1;
   }
 }

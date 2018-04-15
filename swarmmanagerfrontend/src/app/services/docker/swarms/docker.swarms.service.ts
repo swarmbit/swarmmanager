@@ -18,8 +18,13 @@ export class DockerSwarmService {
   private selectedSwarm: DockerSwarm;
   private swarms: DockerSwarm[] = [];
   private selectedSwarmObservers: Observer<DockerSwarm>[] = [];
+  private swarmChangeObservers: Observer<DockerSwarm>[] = [];
 
   constructor (private http: HttpClient) {
+  }
+
+  isSwarmSelected(): boolean {
+    return this.selectedSwarm != null;
   }
 
   getSwarms(): Observable<DockerSwarm[]> {
@@ -28,7 +33,7 @@ export class DockerSwarmService {
         this.fetchSwarms().subscribe(
           (swarms: DockerSwarm[]) => {
             this.swarms = swarms;
-            if (this.swarms.length > 0) {
+            if (!this.isSwarmSelected() && this.swarms.length > 0) {
               this.selectSwarm(this.swarms[0].id);
             }
             observer.next(this.swarms);
@@ -50,8 +55,18 @@ export class DockerSwarmService {
     return Observable.create(observer => {
       if (this.selectedSwarm != null) {
         observer.next(this.selectedSwarm);
+        observer.complete();
       }
       this.selectedSwarmObservers.push(observer);
+    });
+  }
+
+  onSwarmChange(): Observable<DockerSwarm> {
+    return Observable.create(observer => {
+      if (this.selectedSwarm != null) {
+        observer.next(this.selectedSwarm);
+      }
+      this.swarmChangeObservers.push(observer);
     });
   }
 
@@ -60,6 +75,10 @@ export class DockerSwarmService {
       if (id == swarm.id) {
         this.selectedSwarm = swarm;
         for (const observer of this.selectedSwarmObservers) {
+          observer.next(this.selectedSwarm);
+          observer.complete();
+        }
+        for (const observer of this.swarmChangeObservers) {
           observer.next(this.selectedSwarm);
         }
       }

@@ -18,6 +18,8 @@ public class User implements UserDetails {
 
     private String password;
 
+    private String resetKey;
+
     private String[] roles;
 
     private byte[][] secret;
@@ -38,6 +40,14 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getResetKey() {
+        return resetKey;
+    }
+
+    public void setResetKey(String resetKey) {
+        this.resetKey = resetKey;
     }
 
     public String[] getRoles() {

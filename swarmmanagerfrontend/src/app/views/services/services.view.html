@@ -47,8 +47,8 @@
     </mat-card-content>
     <div class="card-actions">
       <div class="card-buttons">
-        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isAdmin()">Manage</button>
-        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isAdmin()" class="service-button">Details</button>
+        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isUser()">Manage</button>
+        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isUser()" class="service-button">Details</button>
         <button mat-raised-button color="accent" routerLink="/services/{{service.name}}/logs" *ngIf="swarmService.equalsOrGreaterThenVersion29()" class="service-button">Logs</button>
         <!--button mat-raised-button color="accent" class="service-button">State</button-->
       </div>

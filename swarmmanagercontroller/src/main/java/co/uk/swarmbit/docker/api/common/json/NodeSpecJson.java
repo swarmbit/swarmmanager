@@ -16,7 +16,7 @@ public class NodeSpecJson {
     @JsonProperty("Labels")
     private Map<String, String> labels;
 
-    @JsonProperty("Role")
+    @JsonProperty("RoleAuthorities")
     private String role;
 
     @JsonProperty("Availability")
