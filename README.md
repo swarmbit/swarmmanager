@@ -1,8 +1,11 @@
-# README #
 
-The Swarm Manager is a web application to manage [docker swarms](https://docs.docker.com/engine/swarm/). The goal of this web app is to support all the swarm configurations that the docker CLI supports and to add new functionalities like audit logs, user management and others.
+<img align="right" alt="Ajv logo" width="320" src="https://github.com/swarmbit/swarmmanager/blob/master/swarm-manager-logo.png">
 
-Her you can find all the instructions needed to run the Swarm Manager development environment.
+# README
+
+The Swarm Manager is a web application to manage [docker swarms](https://docs.docker.com/engine/swarm/). The goal of this web app is to support all swarm configurations that the docker CLI supports and to add new functionalities like audit logs, user management and others.
+
+Here you can find all the instructions needed to run the Swarm Manager development environment.
 
 ## Dependencies
 * Java 8
@@ -29,29 +32,28 @@ $ cd swarmmanagerfrontend
 $ ./run.sh
 ```
 4. At this point the web app should be available on: http://localhost:4201.
-Login with username *admin* and password *test*.
+Login with username *admin* and password *administrator*.
 
 ## Run swarm manager image
 ```
 $ docker run --name swarmmanager -p 3000:3080 -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
 ```
+* docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
 
 ### Run https with redirect
 ```
 $ docker run --name swarmmanager -p 80:3080 -p 443:30443 -e DBPASS=password -e HTTPS=true -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
 ```
-
-* docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
+* Certificate - *server.crt* - and key - *server.key* - can be added to ~/swarmmanager/config
 
 ## Run swarm manager light image
 ```
 $ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/config:/config -d swarmbit/swarmmanagerlight
 ```
-* docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
 
 ## Project Maintainers
 * Bruno Vale
-* Flavia Penim
+* Flávia Penim
 
 ## Contributing
 * Writing tests //TODO
