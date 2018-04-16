@@ -16,8 +16,8 @@ import { Subscription } from 'rxjs';
 })
 export class CreateUserView implements OnInit, OnDestroy  {
 
-  signInForm: FormGroup;
-  signInError: string;
+  createUserForm: FormGroup;
+  createUserError: string;
   subscriptions: Subscription[] = [];
 
   constructor(private usersService: UsersService,
@@ -27,25 +27,25 @@ export class CreateUserView implements OnInit, OnDestroy  {
   }
 
   ngOnInit(): void {
-    this.initSigninForm();
+    this.createUserFormInit();
   }
 
-  private initSigninForm(): void {
-    this.signInForm = new FormGroup({
+  private createUserFormInit(): void {
+    this.createUserForm = new FormGroup({
       'username': new FormControl('', [Validators.required, Validators.minLength(4)]),
       'password': new FormControl('', [Validators.required, Validators.minLength(6)]),
       'confirmPassword': new FormControl('', [Validators.required, Validators.minLength(6)]),
     });
   }
 
-  signIn(): void {
-    if (this.signInForm.valid) {
-      const values = this.signInForm.value;
+  createUser(): void {
+    if (this.createUserForm.valid) {
+      const values = this.createUserForm.value;
       const username = values['username'];
       const password = values['password'];
       const confirmPassword = values['confirmPassword'];
       if (password === confirmPassword) {
-        this.signInError = null;
+        this.createUserError = null;
         this.usersService.createUser(username, password).subscribe(
           (createUserResponse: CreateUserResponse) => {
             this.snackbarService.showSuccess('User ' + username + ' successfuly created');
@@ -54,12 +54,12 @@ export class CreateUserView implements OnInit, OnDestroy  {
           error => {
             const apiError = ApiUtils.getApiError(error);
             if (apiError === 'exist') {
-              this.signInError = 'Username already exists.';
+              this.createUserError = 'Username already exists.';
             }
           }
         );
       } else {
-        this.signInError = 'Confirmation password does not match password.';
+        this.createUserError = 'Confirmation password does not match password.';
       }
     }
   }

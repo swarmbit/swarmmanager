@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class LoginView {
 
-  generalErrorMessage = 'There was an error, if the problem persists please contact the System Administration.';
+  generalErrorMessage = 'There was an error, if the problem persists please contact the system administration.';
   invalidUserPassword = 'Please insert a valid username and password.';
   currentErrorMessage = '';
   username: string;

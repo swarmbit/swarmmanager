@@ -1,5 +1,5 @@
 
-<img align="right" alt="Ajv logo" width="320" src="https://github.com/swarmbit/swarmmanager/blob/master/swarm-manager-logo.png">
+<img align="right" alt="Swarm manager logo" width="320" src="https://github.com/swarmbit/swarmmanager/blob/master/swarm-manager-logo.png">
 
 # README
 
@@ -34,21 +34,39 @@ $ ./run.sh
 4. At this point the web app should be available on: http://localhost:4201.
 Login with username *admin* and password *administrator*.
 
-## Run swarm manager image
-```
-$ docker run --name swarmmanager -p 3000:3080 -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
-```
-* docker.config.yml and application-prod.properties can be added to ~/swarmmanager/config
+## Run swarm manager full image (swarm manager controller, swarm manager frontend and database)
 
-### Run https with redirect
+Available tags can be found here: https://hub.docker.com/r/swarmbit/swarmmanager/tags/
+* Star swarm manager, this command does not persist data.
 ```
-$ docker run --name swarmmanager -p 80:3080 -p 443:30443 -e DBPASS=password -e HTTPS=true -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/data:/swarmmanagercontroller/data -v ~/swarmmanager/config:/config -d swarmbit/swarmmanager
+$ docker run --name swarmmanager -p 3000:3080 -v /var/run/docker.sock:/var/run/docker.sock -d swarmbit/swarmmanager:0.0.2-beta
 ```
-* Certificate - *server.crt* - and key - *server.key* - can be added to ~/swarmmanager/config
 
-## Run swarm manager light image
+* Start swarm manage with configuration and data directory.
 ```
-$ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/run/docker.sock -v ~/swarmmanager/config:/config -d swarmbit/swarmmanagerlight
+$ docker run --name swarmmanager -p 3000:3080 -e HTTPS=true -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/data:/swarmmanagercontroller/data -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanager:0.0.2-beta
+```
+  * Swarm manager stores data /swarmmanagercontroller/data and reads the configuration from /config.
+    * Hosts directories can be mounted to persist data and to add configuration to swarm manager.
+    * When *HTTPS=true* the frontend expects to find the certificate - *server.crt* - and key - *server.key* in */config* .
+    * If *-e DBPASS=password* provided application-prod.properties with right password needs to be added */config* (spring.data.mongodb.password=password).
+    * *docker.config.yml* is the swarm manager docker client configuration and it supports *daemon socket*, *tcp*, *tls* and *tlsverify*. Several swarm can be configured and the different swarms don't need to run on the same version of docker.
+
+
+## Run swarm manager light image (swarm manager controller and swarm manager fronted)
+
+* When running light image mongo db parameters need to be configured in application-prod.properties.
+  * These properties are:
+```
+spring.data.mongodb.host=127.0.0.1
+spring.data.mongodb.port=27017
+spring.data.mongodb.username=swarmmanager
+spring.data.mongodb.password=swarmmanager
+spring.data.mongodb.database=swarmmanager
+```
+* Run light image
+```
+$ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanagerlight:0.0.2-beta
 ```
 
 ## Project Maintainers

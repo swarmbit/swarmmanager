@@ -5,6 +5,7 @@ import { SnackbarService } from '../snackbar/snackbar.service';
 import { Observable, Observer } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiUtils } from '../utils/api.utils';
+
 @Injectable()
 export class UserService {
 
@@ -44,7 +45,7 @@ export class UserService {
           }
         ).catch(
           () => {
-            this.snackbarService.showError('Error loading user data, if the problem persists please contact the Administrator.');
+            this.snackbarService.showError('Error loading user data, if the problem persists please contact the administrator.');
             reject();
           }
         );
@@ -135,7 +136,7 @@ export class UserService {
             resolve(user);
           },
           (err: HttpErrorResponse) => {
-            this.snackbarService.showError('Error loading user data, if the problem persists please contact the Administrator');
+            this.snackbarService.showError('Error loading user data, if the problem persists please contact the administrator');
             console.log('Error fetching user data: ' + err.message);
             reject();
           }
@@ -144,4 +145,3 @@ export class UserService {
   }
 
 }
-

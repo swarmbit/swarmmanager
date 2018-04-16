@@ -2,6 +2,7 @@ FROM node:8.11.1 as swarmmanagerfrontend
 WORKDIR /swarmmanagerfrontend
 COPY swarmmanagerfrontend .
 RUN npm install -g yarn@v1.5.1
+RUN yarn --pure-lockfile
 RUN rm -rf node_modules && yarn install && yarn server-build
 
 FROM maven:3.5.3-jdk-8 as swarmmanagercontroller

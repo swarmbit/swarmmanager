@@ -234,39 +234,44 @@ public class ServiceCliImpl implements ServiceCli {
     }
 
     private LogLine convertLogString(String serviceId, Map<String, TaskJson> tasksById, String logString) {
-        //remove 8 bytes padding padding
-        String log = logString.substring(8);
-        String[] parts = log.split(" ");
-        if (parts.length > 2) {
-            String timestampStr = parts[0];
-            long timestamp = 0L;
-            if (StringUtils.isNotEmpty(timestampStr)) {
-                ZonedDateTime date = DockerDateFormatter.fromDateStringToZonedDateTime(timestampStr);
-                if (date != null) {
-                    timestamp = date.toInstant().toEpochMilli();
-                }
+        if (StringUtils.isNotEmpty(logString)) {
+            //remove 8 bytes padding padding
+            String log = logString;
+            if (StringUtils.length(logString) >= 8) {
+                log = logString.substring(8);
             }
-            String detailsStr = parts[1];
-            String nodeId = "";
-            String tasKId = "";
-            Long replica = 0L;
-            String[] details = detailsStr.split(",");
-            for (String detail : details) {
-                if (detail.startsWith(NODE_DETAIL)) {
-                    nodeId = detail.substring(NODE_DETAIL.length() + 1);
+            String[] parts = log.split(" ");
+            if (parts.length > 2) {
+                String timestampStr = parts[0];
+                long timestamp = 0L;
+                if (StringUtils.isNotEmpty(timestampStr)) {
+                    ZonedDateTime date = DockerDateFormatter.fromDateStringToZonedDateTime(timestampStr);
+                    if (date != null) {
+                        timestamp = date.toInstant().toEpochMilli();
+                    }
                 }
-                if (detail.startsWith(TASK_DETAIL)) {
-                    tasKId = detail.substring(TASK_DETAIL.length() + 1);
-                    Long slot = tasksById.get(tasKId).getSlot();
-                    replica = slot != null ? slot : 0;
+                String detailsStr = parts[1];
+                String nodeId = "";
+                String tasKId = "";
+                Long replica = 0L;
+                String[] details = detailsStr.split(",");
+                for (String detail : details) {
+                    if (detail.startsWith(NODE_DETAIL)) {
+                        nodeId = detail.substring(NODE_DETAIL.length() + 1);
+                    }
+                    if (detail.startsWith(TASK_DETAIL)) {
+                        tasKId = detail.substring(TASK_DETAIL.length() + 1);
+                        Long slot = tasksById.get(tasKId).getSlot();
+                        replica = slot != null ? slot : 0;
+                    }
                 }
+                StringBuilder messageBuilder = new StringBuilder(parts[2]);
+                for (int i = 3; i < parts.length; i++) {
+                    messageBuilder.append(" ").append(parts[i]);
+                }
+                String message = messageBuilder.toString();
+                return new LogLine(serviceId, nodeId, tasKId, replica, message, timestamp);
             }
-            StringBuilder messageBuilder = new StringBuilder(parts[2]);
-            for (int i = 3; i < parts.length; i++) {
-                messageBuilder.append(" ").append(parts[i]);
-            }
-            String message = messageBuilder.toString();
-            return new LogLine(serviceId, nodeId, tasKId, replica, message, timestamp);
         }
         return null;
     }
