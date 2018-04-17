@@ -18,8 +18,12 @@ import java.util.List;
 @RequestMapping("/api/swarms/{swarmId}/nodes")
 public class NodeController {
 
+    private final NodeCli nodeCli;
+
     @Autowired
-    private NodeCli nodeCli;
+    public NodeController(NodeCli nodeCli) {
+        this.nodeCli = nodeCli;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})

@@ -15,8 +15,12 @@ import java.util.List;
 @RequestMapping("/api/swarms/{swarmId}/services")
 public class ServiceController {
 
+    private final ServiceCli serviceCli;
+
     @Autowired
-    private ServiceCli serviceCli;
+    public ServiceController(ServiceCli serviceCli) {
+        this.serviceCli = serviceCli;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "{serviceId}", produces = {MediaType.APPLICATION_JSON_VALUE})

@@ -2,6 +2,7 @@ package co.uk.swarmbit.docker.api.networks;
 
 import co.uk.swarmbit.docker.api.common.AbstractApiImpl;
 import co.uk.swarmbit.docker.api.common.json.NetworkJson;
+import co.uk.swarmbit.docker.api.networks.parameters.NetworkInspectParameters;
 import co.uk.swarmbit.docker.api.networks.parameters.NetworkListParameters;
 import co.uk.swarmbit.docker.api.common.json.NetworkCreateResponseJson;
 import co.uk.swarmbit.docker.api.networks.parameters.NetworkCreateParameters;
@@ -23,8 +24,8 @@ public class NetworksApiImpl extends AbstractApiImpl implements NetworksApi {
     }
 
     @Override
-    public NetworkJson inspectNetwork(String swarmId, String id) {
-        return inspectObject(NETWORKS_PATH + "/" + id, swarmId, new RestResponseType<NetworkJson>(){});
+    public NetworkJson inspectNetwork(String swarmId, String id, NetworkInspectParameters parameters) {
+        return inspectObject(NETWORKS_PATH, swarmId, new RestResponseType<NetworkJson>(){}, id, parameters);
     }
 
     @Override

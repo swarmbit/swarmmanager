@@ -19,6 +19,14 @@ public class Secret {
 
     private String data;
 
+    private String templatingName;
+
+    private Map<String, String> templatingOptions;
+
+    private String driverName;
+
+    private Map<String, String> driverOptions;
+
     public String getId() {
         return id;
     }
@@ -65,5 +73,37 @@ public class Secret {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getTemplatingName() {
+        return templatingName;
+    }
+
+    public void setTemplatingName(String templatingName) {
+        this.templatingName = templatingName;
+    }
+
+    public Map<String, String> getTemplatingOptions() {
+        return templatingOptions;
+    }
+
+    public void setTemplatingOptions(Map<String, String> templatingOptions) {
+        this.templatingOptions = templatingOptions;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public Map<String, String> getDriverOptions() {
+        return driverOptions;
+    }
+
+    public void setDriverOptions(Map<String, String> driverOptions) {
+        this.driverOptions = driverOptions;
     }
 }

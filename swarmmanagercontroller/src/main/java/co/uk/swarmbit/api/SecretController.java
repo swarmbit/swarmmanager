@@ -19,8 +19,12 @@ import java.util.List;
 @RequestMapping("/api/swarms/{swarmId}/secrets")
 public class SecretController {
 
+    private final SecretCli secretCli;
+
     @Autowired
-    private SecretCli secretCli;
+    public SecretController(SecretCli secretCli) {
+        this.secretCli = secretCli;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})

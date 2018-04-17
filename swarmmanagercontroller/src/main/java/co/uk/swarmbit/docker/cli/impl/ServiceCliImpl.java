@@ -7,10 +7,7 @@ import co.uk.swarmbit.docker.api.common.json.inner.VersionJson;
 import co.uk.swarmbit.docker.api.common.util.DockerDateFormatter;
 import co.uk.swarmbit.docker.api.nodes.NodesApi;
 import co.uk.swarmbit.docker.api.services.ServicesApi;
-import co.uk.swarmbit.docker.api.services.parameters.ServiceCreateParameters;
-import co.uk.swarmbit.docker.api.services.parameters.ServiceLogsParameters;
-import co.uk.swarmbit.docker.api.services.parameters.ServiceUpdateParameters;
-import co.uk.swarmbit.docker.api.services.parameters.ServicesListParameters;
+import co.uk.swarmbit.docker.api.services.parameters.*;
 import co.uk.swarmbit.docker.api.tasks.TasksApi;
 import co.uk.swarmbit.docker.api.tasks.parameters.TasksFilters;
 import co.uk.swarmbit.docker.api.tasks.parameters.TasksListParameters;
@@ -49,21 +46,26 @@ public class ServiceCliImpl implements ServiceCli {
 
     private static final int MAX_LOGS = 10000;
 
-    @Autowired
-    private ServicesApi servicesApi;
+    private final ServicesApi servicesApi;
+
+    private final TasksApi tasksApi;
+
+    private final NodesApi nodesApi;
+
+    private final RegistryUserRepository registryUserRepository;
 
     @Autowired
-    private TasksApi tasksApi;
-
-    @Autowired
-    private NodesApi nodesApi;
-
-    @Autowired
-    private RegistryUserRepository registryUserRepository;
+    public ServiceCliImpl(ServicesApi servicesApi, TasksApi tasksApi, NodesApi nodesApi, RegistryUserRepository registryUserRepository) {
+        this.servicesApi = servicesApi;
+        this.tasksApi = tasksApi;
+        this.nodesApi = nodesApi;
+        this.registryUserRepository = registryUserRepository;
+    }
 
     @Override
     public Service inspectService(String swarmId, String serviceId) {
-        ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId);
+        ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId,
+                new ServiceInspectParameters().setInsertDefaultsQueryParam(true));
         return ServiceConverter.newServiceConverter(serviceJson).getService();
     }
 
@@ -106,7 +108,8 @@ public class ServiceCliImpl implements ServiceCli {
 
     @Override
     public State servicePs(String swarmId, String serviceId) {
-        ServiceJson service = servicesApi.inspectService(swarmId, serviceId);
+        ServiceJson service = servicesApi.inspectService(swarmId, serviceId,
+                new ServiceInspectParameters().setInsertDefaultsQueryParam(true));
         State state =  new State();
         if (service != null) {
             TasksListParameters tasksListParameters = new TasksListParameters();
@@ -151,7 +154,8 @@ public class ServiceCliImpl implements ServiceCli {
     @Override
     public void serviceUpdate(String swarmId, String serviceId, Service service) {
         ServiceUpdateParameters updateParameters = new ServiceUpdateParameters();
-        ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId);
+        ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId,
+                new ServiceInspectParameters().setInsertDefaultsQueryParam(true));
         VersionJson versionJson = serviceJson.getVersion();
         updateParameters.setVersionQueryParam(versionJson.getIndex());
         updateParameters.setRollback(service.getRollback());

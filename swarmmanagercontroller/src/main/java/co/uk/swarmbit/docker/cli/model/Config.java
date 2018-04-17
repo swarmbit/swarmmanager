@@ -19,6 +19,10 @@ public class Config {
 
     private String data;
 
+    private String templatingName;
+
+    private Map<String, String> templatingOptions;
+
     public String getId() {
         return id;
     }
@@ -65,5 +69,21 @@ public class Config {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getTemplatingName() {
+        return templatingName;
+    }
+
+    public void setTemplatingName(String templatingName) {
+        this.templatingName = templatingName;
+    }
+
+    public Map<String, String> getTemplatingOptions() {
+        return templatingOptions;
+    }
+
+    public void setTemplatingOptions(Map<String, String> templatingOptions) {
+        this.templatingOptions = templatingOptions;
     }
 }

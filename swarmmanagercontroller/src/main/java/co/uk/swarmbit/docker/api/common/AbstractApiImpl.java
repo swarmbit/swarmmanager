@@ -28,12 +28,21 @@ public abstract class AbstractApiImpl {
         return new ArrayList<>();
     }
 
-    protected <E> E inspectObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, String id) {
+    protected <E> E inspectObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, String id, QueryParameters queryParameters) {
         String path = id != null ? apiPath + "/" + id : apiPath;
         RestParameters restParameters = new RestParameters(dockerWebClient.getBaseResource(swarmId))
-                .setPath(path)
-                        .addQueryParam(new QueryParam("insertDefaults", true));
+                .setPath(path);
+        if (queryParameters != null) {
+            List<QueryParam> queryParams = queryParameters.getQueryParams();
+            for (QueryParam queryParam : queryParams) {
+                restParameters = restParameters.addQueryParam(queryParam);
+            }
+        }
         return RestExecutorFactory.createRestExecutor(RestMethod.GET).execute(restParameters, restResponseType);
+    }
+
+    protected <E> E inspectObject(String apiPath, String swarmId, RestResponseType<E> restResponseType, String id) {
+        return inspectObject(apiPath, swarmId, restResponseType, id, null);
     }
 
     protected <E> E inspectObject(String apiPath, String swarmId, RestResponseType<E> restResponseType) {

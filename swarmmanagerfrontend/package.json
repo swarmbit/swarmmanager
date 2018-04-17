@@ -1,6 +1,6 @@
 {
   "name": "swarmmanagerfrontend",
-  "version": "0.0.1-beta",
+  "version": "0.0.2-beta",
   "license": "GNU GENERAL PUBLIC LICENSE",
   "scripts": {
     "ng": "ng",

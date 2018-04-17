@@ -4,27 +4,6 @@ import co.uk.swarmbit.docker.api.common.AbstractFilters;
 import co.uk.swarmbit.docker.api.common.annotation.DockerRemoteApiMinVersion;
 
 public class NetworkFilters extends AbstractFilters {
-    public static enum Type {
-        CUSTOM,
-        BUILTIN;
-
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
-
-    }
-
-    public static enum Scope {
-        SWARM,
-        GLOBAL,
-        LOCAL;
-
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
-    }
 
     public NetworkFilters setId(String id) {
         addFilter("id", id);

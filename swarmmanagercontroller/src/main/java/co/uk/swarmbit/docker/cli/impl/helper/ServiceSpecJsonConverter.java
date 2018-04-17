@@ -4,6 +4,7 @@ import co.uk.swarmbit.docker.api.common.json.ServiceSpecJson;
 import co.uk.swarmbit.docker.api.common.json.inner.*;
 import co.uk.swarmbit.docker.cli.model.Mount;
 import co.uk.swarmbit.docker.cli.model.Port;
+import co.uk.swarmbit.docker.cli.model.ServiceSecretAndConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -126,12 +127,17 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setConfigs(List<String> configs) {
+    public ServiceSpecJsonConverter setConfigs(List<ServiceSecretAndConfig> configs) {
         if (configs != null) {
             List<ConfigReferenceJson> configsJson = new ArrayList<>();
-            for (String config : configs) {
+            for (ServiceSecretAndConfig config : configs) {
                 ConfigReferenceJson configReferenceJson = new ConfigReferenceJson();
-                configReferenceJson.setConfigName(config);
+                configReferenceJson.setConfigName(config.getName());
+                ConfigReferenceFileTargetJson file = new ConfigReferenceFileTargetJson();
+                file.setName(config.getFileName());
+                file.setGid(config.getFileGID());
+                file.setMode(config.getFileMode());
+                file.setUid(config.getFileUID());
                 configsJson.add(configReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setConfigs(configsJson.toArray(new ConfigReferenceJson[0]));
@@ -139,12 +145,17 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setSecrets(List<String> secrets) {
+    public ServiceSpecJsonConverter setSecrets(List<ServiceSecretAndConfig> secrets) {
         if (secrets != null) {
             List<SecretReferenceJson> secretsJson = new ArrayList<>();
-            for (String secret : secrets) {
+            for (ServiceSecretAndConfig secret : secrets) {
                 SecretReferenceJson secretReferenceJson = new SecretReferenceJson();
-                secretReferenceJson.setSecretName(secret);
+                secretReferenceJson.setSecretName(secret.getName());
+                SecretReferenceFileTargetJson file = new SecretReferenceFileTargetJson();
+                file.setName(secret.getFileName());
+                file.setGid(secret.getFileGID());
+                file.setMode(secret.getFileMode());
+                file.setUid(secret.getFileUID());
                 secretsJson.add(secretReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setSecrets(secretsJson.toArray(new SecretReferenceJson[0]));

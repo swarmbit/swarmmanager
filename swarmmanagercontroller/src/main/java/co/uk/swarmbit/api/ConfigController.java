@@ -15,8 +15,12 @@ import java.util.List;
 @RequestMapping("/api/swarms/{swarmId}/configs")
 public class ConfigController {
 
+    private final ConfigCli configCli;
+
     @Autowired
-    private ConfigCli configCli;
+    public ConfigController(ConfigCli configCli) {
+        this.configCli = configCli;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})

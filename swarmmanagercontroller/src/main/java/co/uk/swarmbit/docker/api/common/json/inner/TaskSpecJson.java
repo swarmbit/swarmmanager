@@ -33,6 +33,15 @@ public class TaskSpecJson {
     @JsonProperty("ForceUpdate")
     private Long forceUpdate;
 
+    @DockerRemoteApiMinVersion("v1.30")
+    @JsonProperty("Runtime")
+    private String runtime;
+
+    @DockerRemoteApiMinVersion("v1.31")
+    @JsonProperty("PluginSpec")
+    private PluginSpecJson pluginSpec;
+
+
     public ContainerSpecJson getContainerSpec() {
         return containerSpec;
     }
@@ -89,6 +98,22 @@ public class TaskSpecJson {
         this.forceUpdate = forceUpdate;
     }
 
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(String runtime) {
+        this.runtime = runtime;
+    }
+
+    public PluginSpecJson getPluginSpec() {
+        return pluginSpec;
+    }
+
+    public void setPluginSpec(PluginSpecJson pluginSpec) {
+        this.pluginSpec = pluginSpec;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("TaskSpecJson{");
@@ -99,6 +124,8 @@ public class TaskSpecJson {
         sb.append(", networks=").append(Arrays.toString(networks));
         sb.append(", logDriver=").append(logDriver);
         sb.append(", forceUpdate=").append(forceUpdate);
+        sb.append(", runtime='").append(runtime).append('\'');
+        sb.append(", pluginSpec=").append(pluginSpec);
         sb.append('}');
         return sb.toString();
     }
