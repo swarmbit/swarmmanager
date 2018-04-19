@@ -20,6 +20,8 @@ import { LoginGuard } from '../../guards/login.guard';
 import { CreateUserView } from '../../views/create.user/create.user.view';
 import { NotFoundView } from '../../views/not.found/not.found.view';
 import { ForgotView } from '../../views/forgot/forgot.view';
+import {ConfigsSecretsView} from '../../views/configs.secrets/configs.secrets.view';
+import {ManageConfigSecretView} from '../../views/configs.secrets/manage/manage.config.secret.view';
 
 const appRoutes: Routes = [
   {
@@ -62,6 +64,42 @@ const appRoutes: Routes = [
         data: {
           title: 'Create Service',
           action: 'create'
+        }
+      },
+      {
+        path: 'configs',
+        component: ConfigsSecretsView,
+        canActivate: [AuthGuard, VisitorGuard],
+        data: {
+          title: 'Configs',
+          type: 'config'
+        }
+      },
+      {
+        path: 'configs/create',
+        component: ManageConfigSecretView,
+        canActivate: [AuthGuard, VisitorGuard],
+        data: {
+          title: 'Create Config',
+          type: 'config'
+        }
+      },
+      {
+        path: 'secrets',
+        component: ConfigsSecretsView,
+        canActivate: [AuthGuard, VisitorGuard],
+        data: {
+          title: 'Secrets',
+          type: 'secret'
+        }
+      },
+      {
+        path: 'secrets/create',
+        component: ManageConfigSecretView,
+        canActivate: [AuthGuard, VisitorGuard],
+        data: {
+          title: 'Create Secret',
+          type: 'secret'
         }
       },
       {

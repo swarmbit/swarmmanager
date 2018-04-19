@@ -48,7 +48,6 @@ import { ProfileView } from './views/profile/profile.view';
 import { BrowserService } from './services/utils/browser.service';
 import { UserManagementView } from './views/user.management/user.management.view';
 import { UsersService } from './services/users/users.service';
-import { TitleCasePipe } from '@angular/common';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { VisitorGuard } from './guards/visitor.guard';
@@ -57,6 +56,10 @@ import { LoginGuard } from './guards/login.guard';
 import { ResetKeyDialogComponent } from './views/create.user/reset.key.dialog/reset.key.dialog.component';
 import { NotFoundView } from './views/not.found/not.found.view';
 import { ForgotView } from './views/forgot/forgot.view';
+import {ConfigsSecretsView} from './views/configs.secrets/configs.secrets.view';
+import {DockerConfigService} from './services/docker/configs/docker.configs.service';
+import {DockerSecretsService} from './services/docker/secrets/docker.secrets.service';
+import {ManageConfigSecretView} from './views/configs.secrets/manage/manage.config.secret.view';
 
 declare const Hammer: any;
 
@@ -91,7 +94,9 @@ export class HammerConfig extends HammerGestureConfig  {
     CreateUserView,
     ResetKeyDialogComponent,
     NotFoundView,
-    ForgotView
+    ForgotView,
+    ConfigsSecretsView,
+    ManageConfigSecretView
   ],
   imports: [
     BrowserModule,
@@ -117,6 +122,8 @@ export class HammerConfig extends HammerGestureConfig  {
     DockerServicesService,
     DockerServiceResolver,
     DockerServiceLogsResolver,
+    DockerConfigService,
+    DockerSecretsService,
     FormsService,
     DockerNetworksService,
     DockerNodesService,

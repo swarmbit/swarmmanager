@@ -1,6 +1,6 @@
 <app-list-control-bar>
   <div class="service">
-    <button routerLink="/services/create" mat-raised-button color="accent" *ngIf="user.isAdmin()">Create Service</button>
+    <button routerLink="/services/create" mat-raised-button color="accent" *ngIf="user.isUser()">Create Service</button>
     <button mat-raised-button color="accent" (click)="refreshNetworks()">Refresh Services List</button>
   </div>
   <div class="list">

@@ -13,7 +13,6 @@ import co.uk.swarmbit.docker.api.secrets.parameters.SecretsListParameters;
 import co.uk.swarmbit.docker.cli.SecretCli;
 import co.uk.swarmbit.docker.cli.model.Secret;
 import co.uk.swarmbit.util.EncoderDecoder;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +35,7 @@ public class SecretCliImpl implements SecretCli {
         SecretSpecJson secretSpecJson = new SecretSpecJson();
         secretSpecJson.setName(secret.getName());
         secretSpecJson.setLabels(secret.getLabels());
-        secretSpecJson.setData(EncoderDecoder.base64URLEncode(secret.getData()));
+        secretSpecJson.setData(EncoderDecoder.base64Encode(secret.getData()));
         DriverJson templating = new DriverJson();
         templating.setName(secret.getTemplatingName());
         templating.setOptions(secret.getTemplatingOptions());

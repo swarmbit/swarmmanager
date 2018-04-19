@@ -723,7 +723,7 @@
     </div>
   </mat-expansion-panel>
   <div class="sm-form-row">
-    <div class="sm-form-field big sm-form-submit">
+    <div class="sm-form-field extra-big sm-form-submit">
       <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
       <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
       <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
