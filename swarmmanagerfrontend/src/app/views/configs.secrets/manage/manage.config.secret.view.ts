@@ -102,6 +102,20 @@ export class ManageConfigSecretView extends BaseView {
     }
   }
 
+  importData(data): void {
+    this.form.get('data').setValue(data);
+  }
+
+  exportData(): void {
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(this.form.get('data').value));
+    element.setAttribute('download', this.objectName + '.data');
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
   create(): void {
     if (this.form.valid) {
       this.formInvalid = false;

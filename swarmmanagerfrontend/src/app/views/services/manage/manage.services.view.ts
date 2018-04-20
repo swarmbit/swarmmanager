@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../../services/user/user.service';
@@ -59,9 +59,6 @@ export class ManageServicesView extends BaseView implements OnInit {
     limitMemoryUnit: 'Bytes',
     sizeUnit: 'Bytes'
   };
-
-  @ViewChild('importInput')
-  importInput: ElementRef;
 
   constructor(headerService: HeaderService,
               public swarmService: DockerSwarmService,
@@ -705,27 +702,14 @@ export class ManageServicesView extends BaseView implements OnInit {
     document.body.removeChild(element);
   }
 
-  importService(): void {
-    this.importInput.nativeElement.click();
-  }
-
   loadJsonService(event: any): void {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const serviceJsonFile = files[ 0 ];
-      const fr = new FileReader();
-      fr.onload = (e: any) => {
-        const lines = e.target.result;
-        try {
-          const dockerService = JSON.parse(lines);
-          this.initCreateForm(dockerService);
-          this.snackbarService.showSuccess('Loaded service from file');
-        } catch (err) {
-          this.snackbarService.showError('Invalid services file')
-        }
-      };
-      fr.readAsText(serviceJsonFile);
-    }
+      try {
+        const dockerService = JSON.parse(event);
+        this.initCreateForm(dockerService);
+        this.snackbarService.showSuccess('Loaded service from file');
+      } catch (err) {
+        this.snackbarService.showError('Invalid services file')
+      }
   }
 
   getCleanedObject(fields: Set<string>, include: boolean, object: any) {

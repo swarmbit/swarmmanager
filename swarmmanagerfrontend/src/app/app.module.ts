@@ -58,6 +58,7 @@ import { DockerSecretsService } from './services/docker/secrets/docker.secrets.s
 import { ManageConfigSecretView } from './views/configs.secrets/manage/manage.config.secret.view';
 import { DockerSecretsResolver } from './resolvers/docker/secrets/docker.secrets.resolver';
 import { DockerConfigsResolver } from './resolvers/docker/configs/docker.configs.resolver';
+import { ImportButtonComponent } from './components/import.button/import.button.component';
 
 declare const Hammer: any;
 
@@ -94,7 +95,8 @@ export class HammerConfig extends HammerGestureConfig  {
     NotFoundView,
     ForgotView,
     ConfigsSecretsView,
-    ManageConfigSecretView
+    ManageConfigSecretView,
+    ImportButtonComponent
   ],
   imports: [
     BrowserModule,
