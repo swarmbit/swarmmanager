@@ -5,7 +5,7 @@
     <mat-icon>keyboard_arrow_downn</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/user/profile">
+    <button mat-menu-item routerLink="/user/profile" (click)="clickMenu()">
       <span>Profile</span>
     </button>
     <button mat-menu-item (click)="logout()">

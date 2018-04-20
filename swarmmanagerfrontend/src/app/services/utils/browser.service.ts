@@ -31,11 +31,15 @@ export class BrowserService {
   }
 
   isEmpty(): boolean {
-    return this.history.length == 0;
+    return this.history.length == 1;
   }
 
   getBackUrl(): string {
     return this.backUrl;
+  }
+
+  getCurrentUrl(): string {
+    return this.currentUrl;
   }
 
   reset(): void {

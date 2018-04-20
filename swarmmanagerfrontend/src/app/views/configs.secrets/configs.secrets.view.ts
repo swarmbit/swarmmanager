@@ -1,15 +1,16 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { BaseView } from '../base.view';
 import { HeaderService } from '../../services/header/header.service';
 import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../services/user/user.service';
 import { ViewUtils } from '../view.utils';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BrowserService } from '../../services/utils/browser.service';
 import {DockerConfig} from '../../services/docker/configs/docker.config';
-import {DockerConfigService} from '../../services/docker/configs/docker.configs.service';
+import {DockerConfigsService} from '../../services/docker/configs/docker.configs.service';
 import {DockerSecretsService} from '../../services/docker/secrets/docker.secrets.service';
 import {DockerSecret} from '../../services/docker/secrets/docker.secret';
+import { SnackbarService } from '../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-configs',
@@ -28,12 +29,23 @@ export class ConfigsSecretsView extends BaseView {
               private swarmService: DockerSwarmService,
               private userService: UserService,
               private route: ActivatedRoute,
-              private configService: DockerConfigService,
+              private configService: DockerConfigsService,
               private secretsService: DockerSecretsService,
-              private browserService: BrowserService
+              private browserService: BrowserService,
+              private router: Router,
+              private snackbar: SnackbarService
               ) {
     super(headerService, route, swarmService, userService, browserService);
     this.isConfig = route.snapshot.data[ 'type' ] === 'config';
+    super.addSubscription(this.swarmService.onSwarmChange().subscribe(() => {
+      if (this.isConfig && !this.swarmService.equalsOrGreaterThenVersion30()) {
+        this.router.navigate(['']);
+        this.snackbar.showError('Selected swarm does not support docker configs')
+      } else if (!this.swarmService.equalsOrGreaterThenVersion25()) {
+        this.router.navigate(['']);
+        this.snackbar.showError('Selected swarm does not support docker secrets')
+      }
+    }));
     if (this.isConfig) {
       this.refreshFunction = this.refreshConfigs;
       this.refreshConfigs(true);

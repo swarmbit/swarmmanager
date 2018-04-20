@@ -47,7 +47,7 @@ export class DockerServiceLogsResolver implements Resolve<DockerServiceLogs> {
         );
       } else {
         observer.complete();
-        const backUrl = this.browserService.getBackUrl();
+        const backUrl = this.browserService.getCurrentUrl();
         if (backUrl) {
           this.router.navigate([backUrl]);
         } else {

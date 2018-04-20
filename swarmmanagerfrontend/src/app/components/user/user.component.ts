@@ -1,9 +1,8 @@
 
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserService } from '../../services/user/user.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -16,7 +15,11 @@ export class UserComponent implements OnInit, OnDestroy {
 
   subs: Subscription[] = [];
 
+  @Output()
+  menuClick: EventEmitter <boolean>;
+
   constructor(private userService: UserService, private authService: AuthService) {
+    this.menuClick = new EventEmitter();
   }
 
   ngOnInit(): void {
@@ -25,6 +28,10 @@ export class UserComponent implements OnInit, OnDestroy {
         this.displayName = user.displayName;
       }
     ));
+  }
+
+  clickMenu() {
+    this.menuClick.emit(true);
   }
 
   logout() {

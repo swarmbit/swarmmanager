@@ -13,7 +13,7 @@ import { DockerIpamConfig } from '../../../services/docker/networks/docker.ipam.
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsService } from '../../../services/utils/forms.service';
 import { BrowserService } from '../../../services/utils/browser.service';
-import {DockerConfigService} from '../../../services/docker/configs/docker.configs.service';
+import {DockerConfigsService} from '../../../services/docker/configs/docker.configs.service';
 import {DockerSecret} from '../../../services/docker/secrets/docker.secret';
 import {DockerSecretsService} from '../../../services/docker/secrets/docker.secrets.service';
 import {DockerConfig} from '../../../services/docker/configs/docker.config';
@@ -34,7 +34,7 @@ export class ManageConfigSecretView extends BaseView {
   constructor(headerService: HeaderService,
               public swarmService: DockerSwarmService,
               private userService: UserService,
-              private configService: DockerConfigService,
+              private configService: DockerConfigsService,
               private secretService: DockerSecretsService,
               private router: Router,
               private route: ActivatedRoute,

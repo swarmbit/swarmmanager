@@ -22,11 +22,7 @@ import { RoutingModule } from './modules/routing/routing.module';
 import { NetworksView } from './views/networks/networks.view';
 import { NodesView } from './views/nodes/nodes.view';
 import 'hammerjs';
-
-import {
-  HammerGestureConfig,
-  HAMMER_GESTURE_CONFIG,
-} from '@angular/platform-browser';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { DockerNetworksService } from './services/docker/networks/docker.networks.service';
 import { SnackbarService } from './services/snackbar/snackbar.service';
 import { ListControlBarComponent } from './components/list.control.bar/list.control.bar.component';
@@ -56,10 +52,12 @@ import { LoginGuard } from './guards/login.guard';
 import { ResetKeyDialogComponent } from './views/create.user/reset.key.dialog/reset.key.dialog.component';
 import { NotFoundView } from './views/not.found/not.found.view';
 import { ForgotView } from './views/forgot/forgot.view';
-import {ConfigsSecretsView} from './views/configs.secrets/configs.secrets.view';
-import {DockerConfigService} from './services/docker/configs/docker.configs.service';
-import {DockerSecretsService} from './services/docker/secrets/docker.secrets.service';
-import {ManageConfigSecretView} from './views/configs.secrets/manage/manage.config.secret.view';
+import { ConfigsSecretsView } from './views/configs.secrets/configs.secrets.view';
+import { DockerConfigsService } from './services/docker/configs/docker.configs.service';
+import { DockerSecretsService } from './services/docker/secrets/docker.secrets.service';
+import { ManageConfigSecretView } from './views/configs.secrets/manage/manage.config.secret.view';
+import { DockerSecretsResolver } from './resolvers/docker/secrets/docker.secrets.resolver';
+import { DockerConfigsResolver } from './resolvers/docker/configs/docker.configs.resolver';
 
 declare const Hammer: any;
 
@@ -122,12 +120,14 @@ export class HammerConfig extends HammerGestureConfig  {
     DockerServicesService,
     DockerServiceResolver,
     DockerServiceLogsResolver,
-    DockerConfigService,
+    DockerConfigsService,
     DockerSecretsService,
     FormsService,
     DockerNetworksService,
     DockerNodesService,
     DockerNetworkResolver,
+    DockerSecretsResolver,
+    DockerConfigsResolver,
     BrowserService,
     UsersService,
     {

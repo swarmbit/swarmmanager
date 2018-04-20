@@ -83,14 +83,18 @@
   }
 
   .sm-form .sm-form-row .sm-form-field {
-    width: 80%;
+    width: 65%;
   }
 
   .sm-form .sm-form-row .sm-form-field.big {
-    width: 100%;
+    width: 65%;
   }
 
   .sm-form .sm-form-card .sm-field-pair .sm-form-field {
     width: 35%;
+  }
+
+  .sm-form .sm-form-row .sm-form-field.small {
+    width: 25%;
   }
 }

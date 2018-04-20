@@ -724,13 +724,15 @@
   </mat-expansion-panel>
   <div class="sm-form-row">
     <div class="sm-form-field extra-big sm-form-submit">
-      <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+      <div class="manage-service-buttons">
+        <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+      </div>
       <div class="sm-form-error">
         <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
       </div>

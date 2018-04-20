@@ -8,9 +8,9 @@ import 'rxjs/add/operator/first';
 import { DockerConfig } from './docker.config';
 
 @Injectable()
-export class DockerConfigService extends DockerBaseService {
+export class DockerConfigsService extends DockerBaseService {
 
-  private dockerConfigsUrl = '/configs.secrets';
+  private dockerConfigsUrl = '/configs';
 
   constructor (private http: HttpClient,
                private swarmsService: DockerSwarmService,

@@ -716,9 +716,13 @@ export class ManageServicesView extends BaseView implements OnInit {
       const fr = new FileReader();
       fr.onload = (e: any) => {
         const lines = e.target.result;
-        const dockerService = JSON.parse(lines);
-        this.initCreateForm(dockerService);
-        this.snackbarService.showSuccess('Loaded service from file!');
+        try {
+          const dockerService = JSON.parse(lines);
+          this.initCreateForm(dockerService);
+          this.snackbarService.showSuccess('Loaded service from file');
+        } catch (err) {
+          this.snackbarService.showError('Invalid services file')
+        }
       };
       fr.readAsText(serviceJsonFile);
     }
