@@ -45,15 +45,10 @@ export class UserService {
           }
         ).catch(
           (err) => {
-            console.log(err);
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 401 || err.status === 403) {
-                this.router.navigate(['/login']);
-              }
-            } else {
+            if (err.status != 401 && err.status != 403) {
               this.snackbarService.showError('Error loading user data, if the problem persists please contact the administrator.');
             }
-            reject();
+            reject(err);
           }
         );
       } else {
@@ -142,9 +137,10 @@ export class UserService {
             user.roles = data.roles;
             resolve(user);
           },
-          (err: HttpErrorResponse) => {
-            this.snackbarService.showError('Error loading user data, if the problem persists please contact the administrator');
-            console.log('Error fetching user data: ' + err.message);
+          (err: any) => {
+            if (err) {
+              console.log('Error fetching user data: ' + err.message);
+            }
             reject(err);
           }
         );

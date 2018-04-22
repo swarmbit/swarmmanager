@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { Injectable } from '@angular/core';
@@ -16,13 +16,11 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     return next.handle(req).catch(
       err => {
-      if (err instanceof HttpErrorResponse) {
         if (err.status === 401 || err.status === 403) {
           AuthService.removeToken();
           this.router.navigate(['/login']);
         }
         return Observable.throw(err);
-      }
     });
   }
 }

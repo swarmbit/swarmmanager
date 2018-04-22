@@ -7,6 +7,7 @@ import co.uk.swarmbit.repository.model.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +85,7 @@ public class TokenAuthenticationService {
                     User user = userRepository.findByUsername(username);
                     return new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
                 }
-            } catch (ExpiredJwtException e) {
+            } catch (ExpiredJwtException | SignatureException e) {
                 return null;
             } catch (IllegalArgumentException e) {
                 if (!StringUtils.equals(e.getMessage(), "A signing key must be specified if the specified JWT is digitally signed.")) {
