@@ -13,7 +13,7 @@ var isHttps = process.env.HTTPS;
 var port = process.env.PORT || 3080;
 var httpsPort = process.env.HTTPSPORT || 3443;
 
-app.use("/api/*", proxy('localhost:8080', {
+app.use("/api/*", proxy('127.0.0.1:8080', {
     proxyReqPathResolver: function (req, res) {
         return require('url').parse(req.baseUrl).path;
     }

@@ -19,7 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401 || err.status === 403) {
           AuthService.removeToken();
-          this.router.navigate(['']);
+          this.router.navigate(['/login']);
         }
         return Observable.throw(err);
       }

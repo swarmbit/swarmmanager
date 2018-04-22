@@ -17,6 +17,6 @@ COPY --from=swarmmanagerfrontend /swarmmanagerfrontend/dist /swarmmanagerfronten
 COPY --from=swarmmanagercontroller /swarmmanagercontroller/target/swarmmanagercontroller.jar /swarmmanagercontroller/swarmmanagercontroller.jar
 COPY ./mongo/createSwarmManagerDB.js /scripts/createSwarmManagerDB.js
 COPY imageScripts/start-swarmmanager.sh start-swarmmanager.sh
-RUN mkdir /swarmmanagercontroller/data && mkdir /swarmmanagercontroller/log
+RUN mkdir /data && mkdir /log
 
 ENTRYPOINT ./start-swarmmanager.sh $DBPASS
