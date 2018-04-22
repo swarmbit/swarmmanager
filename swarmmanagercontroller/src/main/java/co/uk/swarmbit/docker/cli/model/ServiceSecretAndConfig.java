@@ -12,7 +12,7 @@ public class ServiceSecretAndConfig {
 
     private String fileGID;
 
-    private String fileMode;
+    private Integer fileMode;
 
 
     public String getId() {
@@ -55,11 +55,24 @@ public class ServiceSecretAndConfig {
         this.fileGID = fileGID;
     }
 
-    public String getFileMode() {
+    public Integer getFileMode() {
         return fileMode;
     }
 
-    public void setFileMode(String fileMode) {
+    public void setFileMode(Integer fileMode) {
         this.fileMode = fileMode;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ServiceSecretAndConfig{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", fileName='").append(fileName).append('\'');
+        sb.append(", fileUID='").append(fileUID).append('\'');
+        sb.append(", fileGID='").append(fileGID).append('\'');
+        sb.append(", fileMode=").append(fileMode);
+        sb.append('}');
+        return sb.toString();
     }
 }

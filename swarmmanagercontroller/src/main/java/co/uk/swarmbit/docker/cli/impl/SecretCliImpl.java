@@ -13,6 +13,7 @@ import co.uk.swarmbit.docker.api.secrets.parameters.SecretsListParameters;
 import co.uk.swarmbit.docker.cli.SecretCli;
 import co.uk.swarmbit.docker.cli.model.Secret;
 import co.uk.swarmbit.util.EncoderDecoder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,14 +37,18 @@ public class SecretCliImpl implements SecretCli {
         secretSpecJson.setName(secret.getName());
         secretSpecJson.setLabels(secret.getLabels());
         secretSpecJson.setData(EncoderDecoder.base64Encode(secret.getData()));
-        DriverJson templating = new DriverJson();
-        templating.setName(secret.getTemplatingName());
-        templating.setOptions(secret.getTemplatingOptions());
-        secretSpecJson.setTemplating(templating);
-        DriverJson driver = new DriverJson();
-        driver.setName(secret.getDriverName());
-        driver.setOptions(secret.getDriverOptions());
-        secretSpecJson.setTemplating(driver);
+        if (StringUtils.isNotEmpty(secret.getTemplatingName())) {
+            DriverJson templating = new DriverJson();
+            templating.setName(secret.getTemplatingName());
+            templating.setOptions(secret.getTemplatingOptions());
+            secretSpecJson.setTemplating(templating);
+        }
+        if (StringUtils.isNotEmpty(secret.getTemplatingName())) {
+            DriverJson driver = new DriverJson();
+            driver.setName(secret.getDriverName());
+            driver.setOptions(secret.getDriverOptions());
+            secretSpecJson.setDriver(driver);
+        }
         SecretCreateResponseJson response = secretsApi.createSecret(swarmId, new SecretCreateParameters()
                 .setSecret(secretSpecJson));
         secret.setId(response.getId());

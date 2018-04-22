@@ -132,12 +132,22 @@ public class ServiceSpecJsonConverter {
             List<ConfigReferenceJson> configsJson = new ArrayList<>();
             for (ServiceSecretAndConfig config : configs) {
                 ConfigReferenceJson configReferenceJson = new ConfigReferenceJson();
+                configReferenceJson.setConfigID(config.getId());
                 configReferenceJson.setConfigName(config.getName());
                 ConfigReferenceFileTargetJson file = new ConfigReferenceFileTargetJson();
-                file.setName(config.getFileName());
-                file.setGid(config.getFileGID());
-                file.setMode(config.getFileMode());
-                file.setUid(config.getFileUID());
+                if (StringUtils.isNotEmpty(config.getFileName())) {
+                    file.setName(config.getFileName());
+                } else {
+                    file.setName(config.getName());
+                }
+
+                // UID:  "0",
+                // GID:  "0",
+                // Mode: 0444,
+                file.setGid(StringUtils.isNotEmpty(config.getFileGID()) ? config.getFileGID() :  "0");
+                file.setUid(StringUtils.isNotEmpty(config.getFileUID()) ? config.getFileUID() :  "0");
+                file.setMode((config.getFileMode() != null) ? config.getFileMode() : new Integer(0444));
+                configReferenceJson.setFile(file);
                 configsJson.add(configReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setConfigs(configsJson.toArray(new ConfigReferenceJson[0]));
@@ -150,12 +160,18 @@ public class ServiceSpecJsonConverter {
             List<SecretReferenceJson> secretsJson = new ArrayList<>();
             for (ServiceSecretAndConfig secret : secrets) {
                 SecretReferenceJson secretReferenceJson = new SecretReferenceJson();
+                secretReferenceJson.setSecretID(secret.getId());
                 secretReferenceJson.setSecretName(secret.getName());
                 SecretReferenceFileTargetJson file = new SecretReferenceFileTargetJson();
-                file.setName(secret.getFileName());
+                if (StringUtils.isNotEmpty(secret.getFileName())) {
+                    file.setName(secret.getFileName());
+                } else {
+                    file.setName(secret.getName());
+                }
                 file.setGid(secret.getFileGID());
                 file.setMode(secret.getFileMode());
                 file.setUid(secret.getFileUID());
+                secretReferenceJson.setFile(file);
                 secretsJson.add(secretReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setSecrets(secretsJson.toArray(new SecretReferenceJson[0]));

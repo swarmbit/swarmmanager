@@ -17,12 +17,14 @@ import { DockerNetworksService } from '../../../services/docker/networks/docker.
 import { DockerNetworkSummary } from '../../../services/docker/networks/docker.network.summary';
 import { ManageServiceConfirmation } from './manage.service.confirmation';
 import { isNumber } from 'util';
-import {
-  BindMountOptions, DockerServiceMount,
-  DockerTmpfsMountOptions, DockerVolumeMountOptions
-} from '../../../services/docker/services/docker.service.mount';
+import { BindMountOptions, DockerServiceMount, DockerTmpfsMountOptions, DockerVolumeMountOptions } from '../../../services/docker/services/docker.service.mount';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { BrowserService } from '../../../services/utils/browser.service';
+import { DockerConfigsService } from '../../../services/docker/configs/docker.configs.service';
+import { DockerConfig } from '../../../services/docker/configs/docker.config';
+import { DockerSecret } from '../../../services/docker/secrets/docker.secret';
+import { DockerServiceSecretAndConfig } from '../../../services/docker/services/docker.service.secrect.and.config';
+import { DockerSecretsService } from '../../../services/docker/secrets/docker.secrets.service';
 
 @Component({
   selector: 'app-manage-service',
@@ -39,6 +41,8 @@ export class ManageServicesView extends BaseView implements OnInit {
   serviceName: string;
   isGlobalService: boolean;
   networks: DockerNetworkSummary[] = [];
+  configs: DockerConfig[] = [];
+  secrets: DockerSecret[] = [];
   service: DockerService;
 
   previousTimeFields = {
@@ -69,6 +73,8 @@ export class ManageServicesView extends BaseView implements OnInit {
               public dialog: MatDialog,
               public formsService: FormsService,
               private networkService: DockerNetworksService,
+              private configsService: DockerConfigsService,
+              private secretsService: DockerSecretsService,
               private snackbarService: SnackbarService,
               private browserService: BrowserService
   ) {
@@ -80,15 +86,38 @@ export class ManageServicesView extends BaseView implements OnInit {
 
   ngOnInit(): void {
     this.initCreateForm();
-    this.networkService.getNetworksList(true).subscribe(
-      networks => {
-        for (const network of networks) {
-          if (network.name != 'ingress') {
-            this.networks.push(network);
+    this.subscriptions.push(this.swarmService.onSwarmChange().subscribe(() => {
+      this.networkService.getNetworksList(true).subscribe(
+        networks => {
+          this.networks = [];
+          for (const network of networks) {
+            if (network.name != 'ingress') {
+              this.networks.push(network);
+            }
           }
         }
+      );
+      if (this.swarmService.equalsOrGreaterThenVersion25()) {
+        this.secretsService.getSecretsList(true).subscribe(
+          secrets => {
+            this.secrets = [];
+            for (const secret of secrets) {
+              this.secrets.push(secret);
+            }
+          }
+        );
       }
-    );
+      if (this.swarmService.equalsOrGreaterThenVersion30()) {
+        this.configsService.getConfigsList(true).subscribe(
+          configs => {
+            this.configs = [];
+            for (const config of configs) {
+              this.configs.push(config);
+            }
+          }
+        );
+      }
+    }));
   }
 
   loadService() {
@@ -253,8 +282,12 @@ export class ManageServicesView extends BaseView implements OnInit {
       'readOnly': new FormControl({ value: dockerService.readOnly, disabled:  this.isDisabled() }),
       'logDriver': new FormControl({ value: dockerService.logDriver, disabled:  this.isDisabled() }),
       'logOptions': new FormArray([]),
-      'mounts': new FormArray([])
+      'mounts': new FormArray([]),
+      'configs': new FormArray([]),
+      'secrets': new FormArray([]),
     });
+    this.addConfigsOrSecrets(dockerService, true);
+    this.addConfigsOrSecrets(dockerService, false);
     this.addMounts(dockerService);
     this.addPorts(dockerService);
     this.addEnv(dockerService);
@@ -281,6 +314,36 @@ export class ManageServicesView extends BaseView implements OnInit {
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'groups', true, this.isDisabled(), 'group');
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'logOptions', true, this.isDisabled(), 'option', 'value');
+  }
+
+  private addConfigsOrSecrets(dockerService: DockerService, isConfigs: boolean) {
+    let field = 'configs';
+    if (!isConfigs) {
+      field = 'secrets';
+    }
+    if (dockerService[field] && dockerService[field].length > 0) {
+      for (const object of dockerService[field]) {
+        this.addConfigOrSecret(this.serviceForm, isConfigs, object, this.isDisabled());
+      }
+    }
+    this.addConfigOrSecret(this.serviceForm, isConfigs, new DockerServiceSecretAndConfig(), this.isDisabled());
+  }
+
+  private addConfigOrSecret(formGroup: FormGroup, isConfigs: boolean, object?: DockerServiceSecretAndConfig, isDisabled?: boolean) {
+    let field = 'configs';
+    if (!isConfigs) {
+      field = 'secrets';
+    }
+
+    let fileMode = this.formsService.getValue(object, 'fileMode');
+    const group = new FormGroup({
+      'name': new FormControl({ value: this.formsService.getValue(object, 'name'), disabled: isDisabled }),
+      'fileName': new FormControl({ value: this.formsService.getValue(object, 'fileName'), disabled: isDisabled }),
+      'fileUID': new FormControl({ value: this.formsService.getValue(object, 'fileUID'), disabled: isDisabled }),
+      'fileGID': new FormControl({ value: this.formsService.getValue(object, 'fileGID'), disabled: isDisabled }),
+      'fileMode': new FormControl({ value: '0' + parseInt(fileMode).toString(8), disabled: isDisabled })
+    });
+    (<FormArray>formGroup.get(field)).push(group);
   }
 
   private addMounts(dockerService: DockerService) {
@@ -551,7 +614,45 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.formsService.parseOptionsToObjectField(dockerService, values, 'logOptions', 'option', 'value');
 
     this.parseMounts(dockerService, values);
+    this.parseConfigsOrSecrets(dockerService, values, true);
+    this.parseConfigsOrSecrets(dockerService, values, false);
     return dockerService;
+  }
+
+  parseConfigsOrSecrets(dockerService: DockerService, values, isConfigs: boolean) {
+    let field = 'configs';
+    if (!isConfigs) {
+      field = 'secrets';
+    }
+    const objectsArr = values[field];
+    const objects = [];
+    for (const object of objectsArr) {
+      if (object['name'] != '') {
+        let dockerObject = new DockerServiceSecretAndConfig();
+        dockerObject.id = this.getConfigOrSecretId(object['name'], isConfigs);
+        dockerObject.name = object['name'];
+        dockerObject.fileName = object['fileName'];
+        dockerObject.fileMode = parseInt(object['fileMode'], 8);
+        dockerObject.fileGID = object['fileGID'];
+        dockerObject.fileUID = object['fileUID'];
+        objects.push(dockerObject);
+      }
+
+    }
+    dockerService[field] = objects
+  }
+
+  getConfigOrSecretId(name: string, isConfigs: boolean): string {
+      let arr = this.configs;
+      if (!isConfigs) {
+        arr = this.secrets;
+      }
+      for (const obj of arr) {
+        if (name === obj.name) {
+          return obj.id;
+        }
+      }
+      return null;
   }
 
   parseMounts(dockerService: DockerService, values) {

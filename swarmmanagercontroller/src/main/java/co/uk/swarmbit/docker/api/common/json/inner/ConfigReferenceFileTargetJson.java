@@ -18,7 +18,7 @@ public class ConfigReferenceFileTargetJson {
     private String gid;
 
     @JsonProperty("Mode")
-    private String mode;
+    private Integer mode;
 
     public String getName() {
         return name;
@@ -44,11 +44,11 @@ public class ConfigReferenceFileTargetJson {
         this.gid = gid;
     }
 
-    public String getMode() {
+    public Integer getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
+    public void setMode(Integer mode) {
         this.mode = mode;
     }
 
