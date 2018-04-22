@@ -2,7 +2,7 @@ docker:
    swarms:
        - id: swarm
          name: Swarm
-         apiVersion: v1.30
+         apiVersion: v1.37
          description: Swarm
          client:
             protocol: unix

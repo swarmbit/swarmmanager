@@ -17,8 +17,12 @@ import java.util.List;
 @RequestMapping("/api/swarms/{swarmId}/networks")
 public class NetworkController {
 
+    private final NetworkCli networkCli;
+
     @Autowired
-    private NetworkCli networkCli;
+    public NetworkController(NetworkCli networkCli) {
+        this.networkCli = networkCli;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})

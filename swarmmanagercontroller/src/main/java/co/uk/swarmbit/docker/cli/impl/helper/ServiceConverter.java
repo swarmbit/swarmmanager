@@ -76,17 +76,37 @@ public class ServiceConverter {
                 }
                 ConfigReferenceJson[] configReferenceJsons = containerSpecJson.getConfigs();
                 if (configReferenceJsons != null) {
-                    List<String> configs = new ArrayList<>();
+                    List<ServiceSecretAndConfig> configs = new ArrayList<>();
                     for (ConfigReferenceJson configReferenceJson : configReferenceJsons) {
-                        configs.add(configReferenceJson.getConfigName());
+                        ServiceSecretAndConfig config = new ServiceSecretAndConfig();
+                        config.setName(configReferenceJson.getConfigName());
+                        config.setId(configReferenceJson.getConfigID());
+                        ConfigReferenceFileTargetJson file = configReferenceJson.getFile();
+                        if (file != null) {
+                            config.setFileGID(file.getGid());
+                            config.setFileMode(file.getMode());
+                            config.setFileUID(file.getUid());
+                            config.setFileName(file.getName());
+                        }
+                        configs.add(config);
                     }
                     service.setConfigs(configs);
                 }
                 SecretReferenceJson[] secretReferenceJsons = containerSpecJson.getSecrets();
                 if (secretReferenceJsons != null) {
-                    List<String> secrets = new ArrayList<>();
+                    List<ServiceSecretAndConfig> secrets = new ArrayList<>();
                     for (SecretReferenceJson secretReferenceJson : secretReferenceJsons) {
-                        secrets.add(secretReferenceJson.getSecretName());
+                        ServiceSecretAndConfig secret = new ServiceSecretAndConfig();
+                        secret.setName(secretReferenceJson.getSecretName());
+                        secret.setId(secretReferenceJson.getSecretID());
+                        SecretReferenceFileTargetJson file = secretReferenceJson.getFile();
+                        if (file != null) {
+                            secret.setFileGID(file.getGid());
+                            secret.setFileMode(file.getMode());
+                            secret.setFileUID(file.getUid());
+                            secret.setFileName(file.getName());
+                        }
+                        secrets.add(secret);
                     }
                     service.setSecrets(secrets);
                 }
@@ -361,7 +381,6 @@ public class ServiceConverter {
                 for (PortConfigJson portConfig : portConfigs) {
                     if (portConfig != null) {
                         Port port = new Port();
-                        System.out.println(portConfig.getProtocol());
                         port.setProtocol(Port.Protocol.getProtocol(portConfig.getProtocol()));
                         port.setPublished(portConfig.getPublishedPort());
                         port.setTarget(portConfig.getTargetPort());

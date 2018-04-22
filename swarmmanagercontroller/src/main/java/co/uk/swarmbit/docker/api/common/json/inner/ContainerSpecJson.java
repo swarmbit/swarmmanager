@@ -76,6 +76,10 @@ public class ContainerSpecJson {
     @JsonProperty("ReadOnly")
     private Boolean readOnly;
 
+    @DockerRemoteApiMinVersion("v1.35")
+    @JsonProperty("Isolation")
+    private String isolation;
+
     public String getImage() {
         return image;
     }
@@ -236,6 +240,14 @@ public class ContainerSpecJson {
         this.stopSignal = stopSignal;
     }
 
+    public String getIsolation() {
+        return isolation;
+    }
+
+    public void setIsolation(String isolation) {
+        this.isolation = isolation;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ContainerSpecJson{");
@@ -251,7 +263,7 @@ public class ContainerSpecJson {
         sb.append(", tty=").append(tty);
         sb.append(", openStdin=").append(openStdin);
         sb.append(", mounts=").append(Arrays.toString(mounts));
-        sb.append(", stopGracePeriod='").append(stopGracePeriod).append('\'');
+        sb.append(", stopGracePeriod=").append(stopGracePeriod);
         sb.append(", stopSignal='").append(stopSignal).append('\'');
         sb.append(", healthConfig=").append(healthConfig);
         sb.append(", hosts=").append(Arrays.toString(hosts));
@@ -259,6 +271,7 @@ public class ContainerSpecJson {
         sb.append(", secrets=").append(Arrays.toString(secrets));
         sb.append(", configs=").append(Arrays.toString(configs));
         sb.append(", readOnly=").append(readOnly);
+        sb.append(", isolation='").append(isolation).append('\'');
         sb.append('}');
         return sb.toString();
     }

@@ -14,7 +14,7 @@ public class ConfigReferenceJson {
     @JsonProperty("ConfigID")
     private String configID;
 
-    @JsonProperty("configName")
+    @JsonProperty("ConfigName")
     private String configName;
 
     public ConfigReferenceFileTargetJson getFile() {

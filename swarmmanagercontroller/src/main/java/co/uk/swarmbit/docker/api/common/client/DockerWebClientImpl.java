@@ -31,10 +31,14 @@ public class DockerWebClientImpl implements DockerWebClient {
 
     private final Logger LOGGER = LoggerFactory.getLogger(DockerWebClientImpl.class.getName());
 
-    @Autowired
-    private DockerConfig dockerConfig;
+    private final DockerConfig dockerConfig;
 
     private List<DockerSwarmWebTarget> dockerSwarmWebTargetList;
+
+    @Autowired
+    public DockerWebClientImpl(DockerConfig dockerConfig) {
+        this.dockerConfig = dockerConfig;
+    }
 
     @PostConstruct
     public void InitDockerWebClient() throws UnsupportedConfiguration {

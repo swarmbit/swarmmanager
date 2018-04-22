@@ -3,6 +3,7 @@ package co.uk.swarmbit.docker.cli.impl;
 import co.uk.swarmbit.docker.api.common.json.NetworkJson;
 import co.uk.swarmbit.docker.api.networks.NetworksApi;
 import co.uk.swarmbit.docker.api.networks.parameters.NetworkFilters;
+import co.uk.swarmbit.docker.api.networks.parameters.NetworkInspectParameters;
 import co.uk.swarmbit.docker.api.networks.parameters.NetworkListParameters;
 import co.uk.swarmbit.docker.cli.model.IpamConfig;
 import co.uk.swarmbit.docker.cli.model.NetworkSummary;
@@ -23,8 +24,12 @@ import static co.uk.swarmbit.docker.api.common.util.DockerDateFormatter.fromDate
 @Component
 public class NetworkCliImpl implements NetworkCli {
 
+    private final NetworksApi networksApi;
+
     @Autowired
-    private NetworksApi networksApi;
+    public NetworkCliImpl(NetworksApi networksApi) {
+        this.networksApi = networksApi;
+    }
 
     @Override
     public Network create(String swarmId, Network network) {
@@ -79,7 +84,7 @@ public class NetworkCliImpl implements NetworkCli {
 
     @Override
     public Network inspect(String swarmId, String networkId) {
-        NetworkJson networkJson = networksApi.inspectNetwork(swarmId, networkId);
+        NetworkJson networkJson = networksApi.inspectNetwork(swarmId, networkId, new NetworkInspectParameters());
         Network network = new Network();
         network.setId(networkJson.getId());
         network.setName(networkJson.getName());

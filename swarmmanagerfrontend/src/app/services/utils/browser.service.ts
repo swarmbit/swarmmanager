@@ -6,6 +6,7 @@ export class BrowserService {
 
   private history: string[] = [];
   private previousUrl: string;
+  private currentUrl: string;
   private backUrl: string;
 
   constructor(private router: Router) {
@@ -13,13 +14,14 @@ export class BrowserService {
       .subscribe(event => {
         if (event instanceof NavigationEnd) {
           // it does not add this url, otherwise it would be cyclic
+          this.previousUrl = event.url;
           if (this.previousUrl != this.backUrl) {
-            this.history.push(this.previousUrl);
+            this.history.push(this.currentUrl);
           } else if (this.previousUrl != null) {
             this.history.pop();
           }
 
-          this.previousUrl = event.url;
+          this.currentUrl = event.url;
           if (!this.isEmpty()) {
             // gets the latest url from the history
             this.backUrl = this.history[this.history.length - 1];
@@ -29,11 +31,15 @@ export class BrowserService {
   }
 
   isEmpty(): boolean {
-    return this.history.length == 0;
+    return this.history.length == 1;
   }
 
   getBackUrl(): string {
     return this.backUrl;
+  }
+
+  getCurrentUrl(): string {
+    return this.currentUrl;
   }
 
   reset(): void {

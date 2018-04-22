@@ -2,10 +2,7 @@ package co.uk.swarmbit.docker.api.services;
 
 import co.uk.swarmbit.docker.api.common.AbstractApiImpl;
 import co.uk.swarmbit.docker.api.common.json.ServiceJson;
-import co.uk.swarmbit.docker.api.services.parameters.ServiceCreateParameters;
-import co.uk.swarmbit.docker.api.services.parameters.ServiceLogsParameters;
-import co.uk.swarmbit.docker.api.services.parameters.ServiceUpdateParameters;
-import co.uk.swarmbit.docker.api.services.parameters.ServicesListParameters;
+import co.uk.swarmbit.docker.api.services.parameters.*;
 import co.uk.swarmbit.docker.api.common.json.ServiceGeneralResponseJson;
 import co.uk.swarmbit.rest.RestResponseType;
 import org.springframework.stereotype.Component;
@@ -29,8 +26,8 @@ public class ServicesApiImpl extends AbstractApiImpl implements ServicesApi {
     }
 
     @Override
-    public ServiceJson inspectService(String swarmId, String id) {
-        return inspectObject(SERVICES_PATH, swarmId, new RestResponseType<ServiceJson>() {}, id);
+    public ServiceJson inspectService(String swarmId, String id, ServiceInspectParameters parameters) {
+        return inspectObject(SERVICES_PATH, swarmId, new RestResponseType<ServiceJson>() {}, id, parameters);
     }
 
     @Override

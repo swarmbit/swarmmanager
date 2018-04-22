@@ -9,6 +9,18 @@ input[type="file"].import {
   z-index: -1;
 }
 
+.manage-service-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.manage-service-buttons button {
+  margin-bottom: 1rem;
+}
+
+
+
 @media (max-width: $min-With-media-query)
 {
   .sm-field.ports .sm-form-field {

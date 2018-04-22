@@ -17,8 +17,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/registriesUsers")
 public class RegistryController {
 
+    private final RegistryUserRepository registryUserRepository;
+
     @Autowired
-    private RegistryUserRepository registryUserRepository;
+    public RegistryController(RegistryUserRepository registryUserRepository) {
+        this.registryUserRepository = registryUserRepository;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_USER)
     @RequestMapping(method = RequestMethod.GET, value = "", produces = {MediaType.APPLICATION_JSON_VALUE})

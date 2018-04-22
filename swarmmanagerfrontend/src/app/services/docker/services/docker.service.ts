@@ -1,5 +1,6 @@
 import { DockerServicePort } from './docker.service.port';
 import { DockerServiceMount } from './docker.service.mount';
+import { DockerServiceSecretAndConfig } from './docker.service.secrect.and.config';
 
 export class DockerService {
   id: string;
@@ -11,8 +12,8 @@ export class DockerService {
   replicas = 1;
   ports: DockerServicePort[];
   env: string[];
-  configs: string[];
-  secrets: string[];
+  configs: DockerServiceSecretAndConfig[];
+  secrets: DockerServiceSecretAndConfig[];
   labels: any;
   containerLabels: any;
   constraints: any;

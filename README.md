@@ -10,7 +10,7 @@ Here you can find all the instructions needed to run the Swarm Manager developme
 ## Dependencies
 * Java 8
 * Maven
-* Docker CE **17.12** (support from 1.12)
+* Docker CE **18.03** (support from 1.12)
 * Node 8.9.3
 * Yarn
 

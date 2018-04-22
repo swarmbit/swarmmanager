@@ -20,8 +20,12 @@ import java.util.List;
 @Component
 public class SwarmCliImpl implements SwarmCli {
 
+    private final SwarmApi swarmApi;
+
     @Autowired
-    private SwarmApi swarmApi;
+    public SwarmCliImpl(SwarmApi swarmApi) {
+        this.swarmApi = swarmApi;
+    }
 
     @Override
     public void update(String swarmId, Swarm swarm) {

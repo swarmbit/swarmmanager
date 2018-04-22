@@ -23,14 +23,18 @@ import static co.uk.swarmbit.util.UserUtil.getCurrentUsername;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private UserDataRepository userDataRepository;
+    private final UserDataRepository userDataRepository;
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserController(UserDataRepository userDataRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userDataRepository = userDataRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_NONE)
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})

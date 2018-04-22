@@ -4,6 +4,7 @@ import co.uk.swarmbit.docker.api.common.json.ServiceSpecJson;
 import co.uk.swarmbit.docker.api.common.json.inner.*;
 import co.uk.swarmbit.docker.cli.model.Mount;
 import co.uk.swarmbit.docker.cli.model.Port;
+import co.uk.swarmbit.docker.cli.model.ServiceSecretAndConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -126,12 +127,27 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setConfigs(List<String> configs) {
+    public ServiceSpecJsonConverter setConfigs(List<ServiceSecretAndConfig> configs) {
         if (configs != null) {
             List<ConfigReferenceJson> configsJson = new ArrayList<>();
-            for (String config : configs) {
+            for (ServiceSecretAndConfig config : configs) {
                 ConfigReferenceJson configReferenceJson = new ConfigReferenceJson();
-                configReferenceJson.setConfigName(config);
+                configReferenceJson.setConfigID(config.getId());
+                configReferenceJson.setConfigName(config.getName());
+                ConfigReferenceFileTargetJson file = new ConfigReferenceFileTargetJson();
+                if (StringUtils.isNotEmpty(config.getFileName())) {
+                    file.setName(config.getFileName());
+                } else {
+                    file.setName(config.getName());
+                }
+
+                // UID:  "0",
+                // GID:  "0",
+                // Mode: 0444,
+                file.setGid(StringUtils.isNotEmpty(config.getFileGID()) ? config.getFileGID() :  "0");
+                file.setUid(StringUtils.isNotEmpty(config.getFileUID()) ? config.getFileUID() :  "0");
+                file.setMode((config.getFileMode() != null && config.getFileMode() > 0) ? config.getFileMode() : new Integer(0444));
+                configReferenceJson.setFile(file);
                 configsJson.add(configReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setConfigs(configsJson.toArray(new ConfigReferenceJson[0]));
@@ -139,12 +155,27 @@ public class ServiceSpecJsonConverter {
         return this;
     }
 
-    public ServiceSpecJsonConverter setSecrets(List<String> secrets) {
+    public ServiceSpecJsonConverter setSecrets(List<ServiceSecretAndConfig> secrets) {
         if (secrets != null) {
             List<SecretReferenceJson> secretsJson = new ArrayList<>();
-            for (String secret : secrets) {
+            for (ServiceSecretAndConfig secret : secrets) {
                 SecretReferenceJson secretReferenceJson = new SecretReferenceJson();
-                secretReferenceJson.setSecretName(secret);
+                secretReferenceJson.setSecretID(secret.getId());
+                secretReferenceJson.setSecretName(secret.getName());
+                SecretReferenceFileTargetJson file = new SecretReferenceFileTargetJson();
+                if (StringUtils.isNotEmpty(secret.getFileName())) {
+                    file.setName(secret.getFileName());
+                } else {
+                    file.setName(secret.getName());
+                }
+
+                // UID:  "0",
+                // GID:  "0",
+                // Mode: 0444,
+                file.setGid(StringUtils.isNotEmpty(secret.getFileGID()) ? secret.getFileGID() :  "0");
+                file.setUid(StringUtils.isNotEmpty(secret.getFileUID()) ? secret.getFileUID() :  "0");
+                file.setMode((secret.getFileMode() != null && secret.getFileMode() > 0) ? secret.getFileMode() : new Integer(0444));
+                secretReferenceJson.setFile(file);
                 secretsJson.add(secretReferenceJson);
             }
             serviceSpecJson.getTaskTemplate().getContainerSpec().setSecrets(secretsJson.toArray(new SecretReferenceJson[0]));

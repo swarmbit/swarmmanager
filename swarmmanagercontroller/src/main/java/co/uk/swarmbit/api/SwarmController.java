@@ -18,11 +18,15 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/api/swarms")
 public class SwarmController {
 
-    @Autowired
-    private DockerConfig dockerConfig;
+    private final DockerConfig dockerConfig;
+
+    private final SwarmCli swarmCli;
 
     @Autowired
-    private SwarmCli swarmCli;
+    public SwarmController(DockerConfig dockerConfig, SwarmCli swarmCli) {
+        this.dockerConfig = dockerConfig;
+        this.swarmCli = swarmCli;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_VISITOR)
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})

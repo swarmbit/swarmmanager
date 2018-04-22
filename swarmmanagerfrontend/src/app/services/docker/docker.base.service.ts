@@ -36,7 +36,7 @@ export class DockerBaseService {
 
   completeWithError(err: any, observer: Observer<any>, message: string) {
     let showedMessage = false;
-    if (err && err.error) {
+    if (err && err.error && err.error.errors) {
       const error = err.error.errors[ 0 ];
       if (error.code === 'docker') {
         this.snackbarService.showError(message + ' ' + error.message);

@@ -26,14 +26,18 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UsersController {
 
-    @Autowired
-    private UserDataRepository userDataRepository;
+    private final UserDataRepository userDataRepository;
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UsersController(UserDataRepository userDataRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userDataRepository = userDataRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PreAuthorize(RoleAuthorities.IS_ADMIN)
     @RequestMapping(path = "", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})

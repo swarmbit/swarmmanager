@@ -26,9 +26,9 @@ public class Service {
 
     private List<String> env;
 
-    private List<String> configs;
+    private List<ServiceSecretAndConfig> configs;
 
-    private List<String> secrets;
+    private List<ServiceSecretAndConfig> secrets;
 
     private Map<String, String> labels;
 
@@ -214,19 +214,19 @@ public class Service {
         this.registryName = registryName;
     }
 
-    public List<String> getConfigs() {
+    public List<ServiceSecretAndConfig> getConfigs() {
         return configs;
     }
 
-    public void setConfigs(List<String> configs) {
+    public void setConfigs(List<ServiceSecretAndConfig> configs) {
         this.configs = configs;
     }
 
-    public List<String> getSecrets() {
+    public List<ServiceSecretAndConfig> getSecrets() {
         return secrets;
     }
 
-    public void setSecrets(List<String> secrets) {
+    public void setSecrets(List<ServiceSecretAndConfig> secrets) {
         this.secrets = secrets;
     }
 

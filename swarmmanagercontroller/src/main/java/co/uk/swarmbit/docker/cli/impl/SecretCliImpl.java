@@ -3,6 +3,7 @@ package co.uk.swarmbit.docker.cli.impl;
 import co.uk.swarmbit.docker.api.common.json.SecretCreateResponseJson;
 import co.uk.swarmbit.docker.api.common.json.SecretJson;
 import co.uk.swarmbit.docker.api.common.json.SecretSpecJson;
+import co.uk.swarmbit.docker.api.common.json.inner.DriverJson;
 import co.uk.swarmbit.docker.api.common.json.inner.VersionJson;
 import co.uk.swarmbit.docker.api.common.util.DockerDateFormatter;
 import co.uk.swarmbit.docker.api.secrets.SecretsApi;
@@ -12,6 +13,7 @@ import co.uk.swarmbit.docker.api.secrets.parameters.SecretsListParameters;
 import co.uk.swarmbit.docker.cli.SecretCli;
 import co.uk.swarmbit.docker.cli.model.Secret;
 import co.uk.swarmbit.util.EncoderDecoder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,15 +24,31 @@ import java.util.List;
 @Component
 public class SecretCliImpl implements SecretCli {
 
+    private final SecretsApi secretsApi;
+
     @Autowired
-    private SecretsApi secretsApi;
+    public SecretCliImpl(SecretsApi secretsApi) {
+        this.secretsApi = secretsApi;
+    }
 
     @Override
     public Secret create(String swarmId, Secret secret) {
         SecretSpecJson secretSpecJson = new SecretSpecJson();
         secretSpecJson.setName(secret.getName());
         secretSpecJson.setLabels(secret.getLabels());
-        secretSpecJson.setData(EncoderDecoder.base64URLEncode(secret.getData()));
+        secretSpecJson.setData(EncoderDecoder.base64Encode(secret.getData()));
+        if (StringUtils.isNotEmpty(secret.getTemplatingName())) {
+            DriverJson templating = new DriverJson();
+            templating.setName(secret.getTemplatingName());
+            templating.setOptions(secret.getTemplatingOptions());
+            secretSpecJson.setTemplating(templating);
+        }
+        if (StringUtils.isNotEmpty(secret.getTemplatingName())) {
+            DriverJson driver = new DriverJson();
+            driver.setName(secret.getDriverName());
+            driver.setOptions(secret.getDriverOptions());
+            secretSpecJson.setDriver(driver);
+        }
         SecretCreateResponseJson response = secretsApi.createSecret(swarmId, new SecretCreateParameters()
                 .setSecret(secretSpecJson));
         secret.setId(response.getId());
@@ -79,6 +97,16 @@ public class SecretCliImpl implements SecretCli {
         secret.setName(secretJson.getSpec().getName());
         secret.setLabels(secretJson.getSpec().getLabels());
         secret.setData(EncoderDecoder.base64URLDecode(secretJson.getSpec().getData()));
+        DriverJson templating = secretJson.getSpec().getTemplating();
+        if (templating != null) {
+            secret.setTemplatingName(templating.getName());
+            secret.setTemplatingOptions(templating.getOptions());
+        }
+        DriverJson driver = secretJson.getSpec().getDriver();
+        if (driver != null) {
+            secret.setDriverName(driver.getName());
+            secret.setDriverOptions(driver.getOptions());
+        }
         return secret;
     }
 }

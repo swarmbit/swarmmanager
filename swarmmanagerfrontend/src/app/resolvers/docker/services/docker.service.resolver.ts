@@ -33,7 +33,7 @@ export class DockerServiceResolver implements Resolve<DockerService> {
         observer.next(dockerService);
         observer.complete();
       }, (err: any) => {
-        const backUrl = this.browserService.getBackUrl();
+        const backUrl = this.browserService.getCurrentUrl();
         if (backUrl) {
           this.router.navigate([backUrl]);
         } else {

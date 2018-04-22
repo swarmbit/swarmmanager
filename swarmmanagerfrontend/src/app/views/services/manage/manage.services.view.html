@@ -3,8 +3,7 @@
     <button mat-raised-button color="accent" (click)="exportService()" style="float: right" type="button">Export</button>
   </div>
   <div class="sm-form-row" *ngIf="!this.isDetails || this.editMode">
-    <input #importInput type="file" id="file" (change)="loadJsonService($event)" class="import">
-    <button mat-raised-button color="accent" (click)="importService()" style="float: right" type="button">Import</button>
+    <app-import-button style="float: right" (valueSelected)="loadJsonService($event)"></app-import-button>
   </div>
   <div class="sm-form-row">
     <mat-form-field class="sm-form-field big">
@@ -121,6 +120,98 @@
       <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'env').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'env', i)">
         <mat-icon>delete</mat-icon>
       </button>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Secrets
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="sm-form-card-block" [formGroup]="secretControl" *ngFor="let secretControl of formsService.getFormArray(serviceForm, 'secrets').controls; let i = index;">
+      <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'secrets').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'secrets', i)">delete</mat-icon>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <mat-select placeholder="Name" formControlName="name">
+            <mat-option [value]="secret.name" *ngFor="let secret of secrets">{{secret.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Name" formControlName="fileName" type="text">
+          <mat-error *ngIf="secretControl.get('fileName').invalid">File name field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Mode" formControlName="fileMode" type="number" min="0">
+          <mat-error *ngIf="secretControl.get('fileMode').invalid">File mode field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File UID" formControlName="fileUID" type="number" min="0">
+          <mat-error *ngIf="secretControl.get('fileUID').invalid">File UID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File GID" formControlName="fileGID" type="number" min="0">
+          <mat-error *ngIf="secretControl.get('fileGID').invalid">File GID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row" *ngIf="!isDetails || editMode">
+        <div class="sm-form-field big">
+          <button mat-raised-button color="accent" type="button" (click)="addConfigOrSecret(serviceForm, false)">New Secret</button>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion30()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Configs
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="sm-form-card-block" [formGroup]="configControl" *ngFor="let configControl of formsService.getFormArray(serviceForm, 'configs').controls; let i = index;">
+      <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'configs').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'configs', i)">delete</mat-icon>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <mat-select placeholder="Name" formControlName="name">
+            <mat-option [value]="config.name" *ngFor="let config of configs">{{config.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Name" formControlName="fileName" type="text">
+          <mat-error *ngIf="configControl.get('fileName').invalid">File name field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Mode" formControlName="fileMode" type="number" min="0">
+          <mat-error *ngIf="configControl.get('fileMode').invalid">File mode field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File UID" formControlName="fileUID" type="number" min="0">
+          <mat-error *ngIf="configControl.get('fileUID').invalid">File UID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File GID" formControlName="fileGID" type="number" min="0">
+          <mat-error *ngIf="configControl.get('fileGID').invalid">File GID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row" *ngIf="!isDetails || editMode">
+        <div class="sm-form-field big">
+          <button mat-raised-button color="accent" type="button" (click)="addConfigOrSecret(serviceForm, true)">New Config</button>
+        </div>
+      </div>
     </div>
   </mat-expansion-panel>
   <mat-expansion-panel class="sm-form-card">
@@ -723,14 +814,16 @@
     </div>
   </mat-expansion-panel>
   <div class="sm-form-row">
-    <div class="sm-form-field big sm-form-submit">
-      <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+    <div class="sm-form-field extra-big sm-form-submit">
+      <div class="manage-service-buttons">
+        <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
+        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+      </div>
       <div class="sm-form-error">
         <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
       </div>

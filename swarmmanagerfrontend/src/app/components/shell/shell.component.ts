@@ -51,12 +51,22 @@ export class ShellComponent implements OnInit, OnDestroy {
               this.selectedSwarm = this.swarms[0].id;
             }
         });
-        this.navigationItems.push(new NavigationItem('Services', '/services', 'cloud'));
-        this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
-        this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
-      }
-      if (user.isAdmin()) {
-        this.navigationItems.push(new NavigationItem('User Management', '/users', 'account_box'));
+        this.swarmService.onSwarmChange().subscribe(
+          () => {
+            this.navigationItems.push(new NavigationItem('Services', '/services', 'cloud'));
+
+            if (this.swarmService.equalsOrGreaterThenVersion25()) {
+              this.navigationItems.push(new NavigationItem('Secrets', '/secrets', 'lock'));
+            }
+            if (this.swarmService.equalsOrGreaterThenVersion30()) {
+              this.navigationItems.push(new NavigationItem('Configs', '/configs', 'description'));
+            }
+            this.navigationItems.push(new NavigationItem('Networks', '/networks', 'router'));
+            this.navigationItems.push(new NavigationItem('Nodes', '/nodes', 'device_hub'));
+            if (user.isAdmin()) {
+              this.navigationItems.push(new NavigationItem('User Management', '/users', 'account_box'));
+            }
+          });
       }
     });
     this.subscription = this.headerService.getHeaderInfo().subscribe(headerInfo => {

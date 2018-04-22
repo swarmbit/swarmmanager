@@ -1,6 +1,6 @@
 <app-list-control-bar>
   <div class="service">
-    <button routerLink="/services/create" mat-raised-button color="accent" *ngIf="user.isAdmin()">Create Service</button>
+    <button routerLink="/services/create" mat-raised-button color="accent" *ngIf="user.isUser()">Create Service</button>
     <button mat-raised-button color="accent" (click)="refreshNetworks()">Refresh Services List</button>
   </div>
   <div class="list">
@@ -23,7 +23,7 @@
           <td>{{service.id}}</td>
         </tr>
         <tr>
-          <td><strong>Running Replicas</strong></td>
+          <td><strong>Replicas</strong></td>
           <td>{{service.runningReplicas}} / {{service.replicas}} </td>
         </tr>
         <tr>
