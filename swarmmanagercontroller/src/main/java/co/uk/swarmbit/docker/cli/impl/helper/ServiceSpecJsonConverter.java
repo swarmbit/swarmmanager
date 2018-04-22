@@ -146,7 +146,7 @@ public class ServiceSpecJsonConverter {
                 // Mode: 0444,
                 file.setGid(StringUtils.isNotEmpty(config.getFileGID()) ? config.getFileGID() :  "0");
                 file.setUid(StringUtils.isNotEmpty(config.getFileUID()) ? config.getFileUID() :  "0");
-                file.setMode((config.getFileMode() != null) ? config.getFileMode() : new Integer(0444));
+                file.setMode((config.getFileMode() != null && config.getFileMode() > 0) ? config.getFileMode() : new Integer(0444));
                 configReferenceJson.setFile(file);
                 configsJson.add(configReferenceJson);
             }
@@ -168,9 +168,13 @@ public class ServiceSpecJsonConverter {
                 } else {
                     file.setName(secret.getName());
                 }
-                file.setGid(secret.getFileGID());
-                file.setMode(secret.getFileMode());
-                file.setUid(secret.getFileUID());
+
+                // UID:  "0",
+                // GID:  "0",
+                // Mode: 0444,
+                file.setGid(StringUtils.isNotEmpty(secret.getFileGID()) ? secret.getFileGID() :  "0");
+                file.setUid(StringUtils.isNotEmpty(secret.getFileUID()) ? secret.getFileUID() :  "0");
+                file.setMode((secret.getFileMode() != null && secret.getFileMode() > 0) ? secret.getFileMode() : new Integer(0444));
                 secretReferenceJson.setFile(file);
                 secretsJson.add(secretReferenceJson);
             }
