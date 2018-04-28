@@ -7,3 +7,10 @@ docker:
          client:
             protocol: unix
             unixSocketPath: /var/run/docker.sock
+       - id: swarmProd
+         name: Swarm Prod
+         apiVersion: v1.37
+         description: Swarm Prod
+         client:
+            protocol: unix
+            unixSocketPath: /var/run/docker.sock

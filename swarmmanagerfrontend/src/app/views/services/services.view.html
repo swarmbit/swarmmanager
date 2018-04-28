@@ -1,7 +1,7 @@
 <app-list-control-bar>
   <div class="service">
-    <button routerLink="/services/create" mat-raised-button color="accent" *ngIf="user.isUser()">Create Service</button>
-    <button mat-raised-button color="accent" (click)="refreshNetworks()">Refresh Services List</button>
+    <button routerLink="/services/create" mat-raised-button color="primary" *ngIf="user.isUser()">Create Service</button>
+    <button mat-raised-button color="primary" (click)="refreshNetworks()">Refresh Services List</button>
   </div>
   <div class="list">
     <mat-form-field class="filter">
@@ -15,8 +15,8 @@
 </app-list-control-bar>
 <app-list-container>
   <mat-card class="service-card" *ngFor="let service of getServices()">
-    <mat-card-title>{{service.name}}</mat-card-title>
     <mat-card-content>
+      <h3>{{service.name}}</h3>
       <table>
         <tr>
           <td><strong>Id</strong></td>
@@ -33,7 +33,10 @@
         </tr>
         <tr>
           <td><strong>Image</strong></td>
-          <td>{{service.image | cleanServiceImagePipe}}</td>
+          <td><span matTooltip="{{service.image | cleanServiceImagePipe}}">{{service.image | removeServiceImageRepositoryPipe}}</span>
+            <i class="material-icons icon image-copy" ngxClipboard [cbContent]="service.image | cleanServiceImagePipe"
+               (cbOnSuccess)="snackbarService.showSuccess('Copied to clipboard')">content_copy</i>
+          </td>
         </tr>
         <tr *ngIf="service.ports && service.ports.length > 0">
           <td><strong>Ports</strong></td>
@@ -47,10 +50,10 @@
     </mat-card-content>
     <div class="card-actions">
       <div class="card-buttons">
-        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isUser()">Manage</button>
-        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isUser()" class="service-button">Details</button>
-        <button mat-raised-button color="accent" routerLink="/services/{{service.name}}/logs" *ngIf="swarmService.equalsOrGreaterThenVersion29()" class="service-button">Logs</button>
-        <!--button mat-raised-button color="accent" class="service-button">State</button-->
+        <button mat-raised-button color="primary" routerLink="/services/{{service.name}}" *ngIf="user.isUser()">Manage</button>
+        <button mat-raised-button color="primary" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isUser()" class="service-button">Details</button>
+        <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/logs" *ngIf="swarmService.equalsOrGreaterThenVersion29()" class="service-button">Logs</button>
+        <!--button mat-raised-button color="primary" class="service-button">State</button-->
       </div>
     </div>
   </mat-card>

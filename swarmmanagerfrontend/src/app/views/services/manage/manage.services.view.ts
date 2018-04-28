@@ -120,9 +120,9 @@ export class ManageServicesView extends BaseView implements OnInit {
     }));
   }
 
-  loadService() {
+  loadService(noMessage?: boolean) {
     if (this.isDetails && this.serviceName) {
-      this.dockerServicesService.getService(this.serviceName)
+      this.dockerServicesService.getService(this.serviceName, noMessage)
         .subscribe(
           (dockerService: DockerService) => {
             this.initCreateForm(dockerService);
@@ -734,7 +734,7 @@ export class ManageServicesView extends BaseView implements OnInit {
               this.editMode = false;
               this.serviceForm.markAsUntouched();
               this.disableForm();
-              this.loadService();
+              this.loadService(true);
           }));
         }
       }));
@@ -761,7 +761,7 @@ export class ManageServicesView extends BaseView implements OnInit {
           dockerService.rollback = true;
           this.subscriptions.push(this.dockerServicesService.updateService(dockerService).subscribe(
             () => {
-              this.loadService();
+              this.loadService(true);
             }
           ));
         }
@@ -788,7 +788,7 @@ export class ManageServicesView extends BaseView implements OnInit {
 
 
   exportService(): void {
-    const cleanedDockerService = this.getCleanedObject(new Set([
+    const cleanedDockerService = ManageServicesView.getCleanedObject(new Set([
       'id',
       'createdAt',
       'updatedAt'
@@ -813,7 +813,7 @@ export class ManageServicesView extends BaseView implements OnInit {
       }
   }
 
-  getCleanedObject(fields: Set<string>, include: boolean, object: any) {
+  static getCleanedObject(fields: Set<string>, include: boolean, object: any) {
     const newObj = {};
     for (const field in object) {
       let add = !fields.has(field);

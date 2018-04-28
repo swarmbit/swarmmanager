@@ -5,7 +5,7 @@ import {
   MatIconModule, MatInputModule,
   MatMenuModule,
   MatProgressBarModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule,
-  MatToolbarModule
+  MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 
 @NgModule({
@@ -25,7 +25,8 @@ import {
     MatSlideToggleModule,
     MatExpansionModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   exports: [
     MatCardModule,
@@ -43,7 +44,8 @@ import {
     MatSlideToggleModule,
     MatExpansionModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTooltipModule
   ]
 })
 export class MaterialModule {

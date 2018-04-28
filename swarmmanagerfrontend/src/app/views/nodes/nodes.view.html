@@ -1,6 +1,6 @@
 <app-list-control-bar>
   <div class="node">
-    <button mat-raised-button color="accent" (click)="refreshNodes()">Refresh Nodes List</button>
+    <button mat-raised-button color="primary" (click)="refreshNodes()">Refresh Nodes List</button>
   </div>
   <div class="list">
     <mat-form-field class="filter">
@@ -14,8 +14,8 @@
 </app-list-control-bar>
 <app-list-container>
   <mat-card *ngFor="let node of getNodes()">
-    <mat-card-title>{{node.hostname}}</mat-card-title>
     <mat-card-content>
+      <h3>{{node.hostname}}</h3>
       <table>
         <tr>
           <td><strong>Id</strong></td>

@@ -20,6 +20,7 @@ export class VisitorGuard implements CanActivate {
             observer.complete();
           },
           () => {
+            observer.next(false);
             observer.complete();
           });
     });

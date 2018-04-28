@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DockerServicesSummary } from '../../services/docker/services/docker.services.summary';
 import { DockerServicesService } from '../../services/docker/services/docker.services.service';
 import { BrowserService } from '../../services/utils/browser.service';
+import { SnackbarService } from '../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-services',
@@ -24,7 +25,8 @@ export class ServicesView extends BaseView {
               private userService: UserService,
               private route: ActivatedRoute,
               private dockerServicesService: DockerServicesService,
-              private browserService: BrowserService
+              private browserService: BrowserService,
+              private snackbarService: SnackbarService
   ) {
     super(headerService, route, swarmService, userService, browserService);
     this.refreshFunction = this.refreshNetworks;

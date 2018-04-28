@@ -53,6 +53,7 @@ export class ShellComponent implements OnInit, OnDestroy {
         });
         this.swarmService.onSwarmChange().subscribe(
           () => {
+            this.navigationItems = [];
             this.navigationItems.push(new NavigationItem('Services', '/services', 'cloud'));
 
             if (this.swarmService.equalsOrGreaterThenVersion25()) {

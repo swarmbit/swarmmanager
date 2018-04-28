@@ -1,6 +1,6 @@
 <form class="sm-form" [formGroup]="serviceForm" (ngSubmit)="createService()">
   <div class="sm-form-row" *ngIf="this.isDetails && !this.editMode">
-    <button mat-raised-button color="accent" (click)="exportService()" style="float: right" type="button">Export</button>
+    <button mat-raised-button color="primary" (click)="exportService()" style="float: right" type="button">Export</button>
   </div>
   <div class="sm-form-row" *ngIf="!this.isDetails || this.editMode">
     <app-import-button style="float: right" (valueSelected)="loadJsonService($event)"></app-import-button>
@@ -45,10 +45,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Target" type="number" min="1" formControlName="target">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'ports').controls.length - 1)" (click)="addPort(null, false)">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'ports').controls.length - 1)" (click)="addPort(null, false)">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'ports').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'ports', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'ports').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'ports', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -66,10 +66,10 @@
             <mat-option [value]="network.id" *ngFor="let network of networks">{{network.name}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="addNetwork('', isDetails && !editMode)">
+        <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="addNetwork('', isDetails && !editMode)">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'networks', i)">
+        <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'networks', i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -93,10 +93,10 @@
       <input matInput placeholder="Host" formControlName="host">
         <mat-error *ngIf="hostControl.invalid">Host field is invalid</mat-error>
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'hosts', isDetails && !editMode, 'host')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'hosts', isDetails && !editMode, 'host')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'hosts', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'hosts', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -114,10 +114,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'env').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'env', isDetails && !editMode, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'env').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'env', isDetails && !editMode, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'env').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'env', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'env').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'env', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -163,7 +163,7 @@
       </div>
       <div class="sm-form-row" *ngIf="!isDetails || editMode">
         <div class="sm-form-field big">
-          <button mat-raised-button color="accent" type="button" (click)="addConfigOrSecret(serviceForm, false)">New Secret</button>
+          <button mat-raised-button color="primary" type="button" (click)="addConfigOrSecret(serviceForm, false)">New Secret</button>
         </div>
       </div>
     </div>
@@ -209,7 +209,7 @@
       </div>
       <div class="sm-form-row" *ngIf="!isDetails || editMode">
         <div class="sm-form-field big">
-          <button mat-raised-button color="accent" type="button" (click)="addConfigOrSecret(serviceForm, true)">New Config</button>
+          <button mat-raised-button color="primary" type="button" (click)="addConfigOrSecret(serviceForm, true)">New Config</button>
         </div>
       </div>
     </div>
@@ -528,10 +528,10 @@
           <mat-form-field class="sm-form-field">
             <input matInput placeholder="Value" formControlName="value">
           </mat-form-field>
-          <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(mountControl, 'labels').controls.length - 1)" (click)="formsService.addOption(mountControl, 'labels', isDetails, 'name', 'value')">
+          <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(mountControl, 'labels').controls.length - 1)" (click)="formsService.addOption(mountControl, 'labels', isDetails, 'name', 'value')">
             <mat-icon>add</mat-icon>
           </button>
-          <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(mountControl, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(mountControl, 'labels', i)">
+          <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(mountControl, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(mountControl, 'labels', i)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -540,10 +540,10 @@
             <input matInput placeholder="Option" formControlName="option">
             <mat-error *ngIf="optionsControl.invalid">Option field is invalid</mat-error>
           </mat-form-field>
-          <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(mountControl, 'options').controls.length - 1)" (click)="formsService.addOption(mountControl, 'options', isDetails && !editMode, 'option')">
+          <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(mountControl, 'options').controls.length - 1)" (click)="formsService.addOption(mountControl, 'options', isDetails && !editMode, 'option')">
             <mat-icon>add</mat-icon>
           </button>
-          <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(mountControl, 'options').controls.length - 1)" (click)="formsService.removeFromArray(mountControl, 'options', i)">
+          <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(mountControl, 'options').controls.length - 1)" (click)="formsService.removeFromArray(mountControl, 'options', i)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -584,7 +584,7 @@
     </div>
     <div class="sm-form-row" *ngIf="!isDetails || editMode">
       <div class="sm-form-field big">
-        <button mat-raised-button color="accent" type="button" (click)="addMount(serviceForm)">New Mount</button>
+        <button mat-raised-button color="primary" type="button" (click)="addMount(serviceForm)">New Mount</button>
       </div>
     </div>
   </mat-expansion-panel>
@@ -601,10 +601,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'labels').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'labels', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'labels').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'labels', isDetails, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'labels', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'labels', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -622,10 +622,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'containerLabels').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'containerLabels', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'containerLabels').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'containerLabels', isDetails, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'containerLabels').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'containerLabels', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'containerLabels').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'containerLabels', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -653,10 +653,10 @@
         <input matInput placeholder="Arg" formControlName="arg">
         <mat-error *ngIf="argsControl.invalid">Arg field is invalid</mat-error>
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'args').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'args', isDetails && !editMode, 'arg')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'args').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'args', isDetails && !editMode, 'arg')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'args').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'args', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'args').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'args', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -672,10 +672,10 @@
           <input matInput placeholder="Group" formControlName="group">
           <mat-error *ngIf="groupsControl.invalid">Group field is invalid</mat-error>
         </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'groups').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'groups', isDetails && !editMode, 'group')">
+        <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'groups').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'groups', isDetails && !editMode, 'group')">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'groups').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'groups', i)">
+        <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'groups').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'groups', i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -714,10 +714,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'constraints', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'constraints', isDetails, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'constraints', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'constraints', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -735,10 +735,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'placementPreferences').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'placementPreferences', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'placementPreferences').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'placementPreferences', isDetails, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'placementPreferences').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'placementPreferences', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'placementPreferences').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'placementPreferences', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -754,10 +754,10 @@
         <input matInput placeholder="Dns Server" formControlName="dnsServer">
         <mat-error *ngIf="dnsServersControl.invalid">DNS Server field is invalid</mat-error>
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsServers').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsServers', isDetails && !editMode, 'dnsServer')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsServers').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsServers', isDetails && !editMode, 'dnsServer')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsServers').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsServers', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsServers').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsServers', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -766,10 +766,10 @@
         <input matInput placeholder="Dns Option" formControlName="dnsOption">
         <mat-error *ngIf="dnsOptionsControl.invalid">DNS Option field is invalid</mat-error>
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsOptions').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsOptions', isDetails && !editMode, 'dnsOption')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsOptions').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsOptions', isDetails && !editMode, 'dnsOption')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsOptions').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsOptions', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsOptions').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsOptions', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -778,10 +778,10 @@
         <input matInput placeholder="Dns Search" formControlName="dnsSearch">
         <mat-error *ngIf="dnsSearchesControl.invalid">DNS Search field is invalid</mat-error>
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsSearches').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsSearches', isDetails && !editMode, 'dnsSearch')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsSearches').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsSearches', isDetails && !editMode, 'dnsSearch')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsSearches').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsSearches', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsSearches').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsSearches', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -805,10 +805,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'logOptions').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'logOptions', isDetails, 'option', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'logOptions').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'logOptions', isDetails, 'option', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'logOptions').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'logOptions', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'logOptions').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'logOptions', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -816,13 +816,13 @@
   <div class="sm-form-row">
     <div class="sm-form-field extra-big sm-form-submit">
       <div class="manage-service-buttons">
-        <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
-        <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+        <button mat-raised-button color="primary" *ngIf="!isDetails && user.isUser()">Create</button>
+        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
+        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
+        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
+        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
       </div>
       <div class="sm-form-error">
         <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>

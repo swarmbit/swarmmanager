@@ -11,8 +11,8 @@
 </app-list-control-bar>
 <app-list-container>
   <mat-card *ngFor="let user1 of getUsers()">
-    <mat-card-title>{{user1.username}}</mat-card-title>
     <mat-card-content>
+      <h3>{{user1.username}}</h3>
       <table>
         <tr>
           <td><strong>Display Name</strong></td>
@@ -31,8 +31,8 @@
       </table>
       <div class="card-actions">
         <div class="card-buttons">
-          <button mat-raised-button color="accent" (click)="saveRole(user1.username)" *ngIf="user.username !== user1.username">Save Role</button>
-          <button mat-raised-button color="accent" (click)="openDialog(user1.username)" *ngIf="user.username !== user1.username">Remove</button>
+          <button mat-raised-button color="primary" (click)="saveRole(user1.username)" *ngIf="user.username !== user1.username">Save Role</button>
+          <button mat-raised-button color="primary" (click)="openDialog(user1.username)" *ngIf="user.username !== user1.username">Remove</button>
         </div>
       </div>
     </mat-card-content>

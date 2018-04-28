@@ -41,12 +41,12 @@ Login with username *admin* and password *administrator*.
 Available tags can be found here: https://hub.docker.com/r/swarmbit/swarmmanager/tags/
 * Star swarm manager, this command does not persist data.
 ```
-$ docker run --name swarmmanager -p 3000:3080 -v /var/run/docker.sock:/var/run/docker.sock -d swarmbit/swarmmanager:0.0.4-beta
+$ docker run --name swarmmanager -p 3000:3080 -v /var/run/docker.sock:/var/run/docker.sock -d swarmbit/swarmmanager:0.0.5-beta
 ```
 
 * Start swarm manage with configuration and data directory.
 ```
-$ docker run --name swarmmanager -p 80:3080 -p 443:3443 -e HTTPS=true -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/data:/data -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanager:0.0.4-beta
+$ docker run --name swarmmanager -p 80:3080 -p 443:3443 -e HTTPS=true -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/data:/data -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanager:0.0.5-beta
 ```
   * Swarm manager stores data /swarmmanagercontroller/data and reads the configuration from /config.
     * Hosts directories can be mounted to persist data and to add configuration to swarm manager.
@@ -68,16 +68,12 @@ spring.data.mongodb.database=swarmmanager
 ```
 * Run light image
 ```
-$ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanagerlight:0.0.4-beta
+$ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanagerlight:0.0.5-beta
 ```
 
 ## Project Maintainers
 * Bruno Vale
 * Flávia Penim
-
-## Contributing
-* Writing tests //TODO
-* Code review //TODO
 
 ## License
 For more information and licensing details please see [License](LICENSE.md).

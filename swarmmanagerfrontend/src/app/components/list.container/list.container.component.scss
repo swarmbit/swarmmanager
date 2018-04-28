@@ -1,13 +1,27 @@
 @import '../../../styles/common';
 
+.list-centred {
+  width: 100%;
+}
+
 .list-container {
+  width: 100%;
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
+.list-container:after {
+  flex: 0 1 32%;
+  min-width: 15rem;
+  content: "";
+}
+
 /deep/ .list-container > mat-card {
-  margin: 1rem;
-  min-width: 26rem;
+  flex: 0 1 32%;
+  min-width: 20rem;
+  box-sizing: border-box;
+  margin: 1rem 0;
   display: flex;
   flex-direction: column;
 }
@@ -37,16 +51,20 @@
   padding-right: 1rem;
 }
 
-@media (max-width: $min-With-media-query)
+@media (max-width: 1600px)
 {
-  /deep/ .list-container {
-    width: 100%;
-  }
 
   /deep/ .list-container > mat-card {
-    min-width: 0;
-    width: 100%;
-    margin: 0 0 1rem 0;
+    flex: 0 1 48%;
+  }
+
+}
+
+@media (max-width: 1200px)
+{
+
+  /deep/ .list-container > mat-card {
+    flex: 0 1 100%;
   }
 
 }

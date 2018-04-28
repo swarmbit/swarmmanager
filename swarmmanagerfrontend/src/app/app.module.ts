@@ -35,6 +35,7 @@ import { ServicesView } from './views/services/services.view';
 import { ManageServicesView } from './views/services/manage/manage.services.view';
 import { DockerServicesService } from './services/docker/services/docker.services.service';
 import { CleanServiceImagePipe } from './pipes/clean.service.image.pipe';
+import { RemoveServiceImageRepositoryPipe } from './pipes/remove.service.image.repository.pipe';
 import { DockerServiceResolver } from './resolvers/docker/services/docker.service.resolver';
 import { FormsService } from './services/utils/forms.service';
 import { ManageServiceConfirmation } from './views/services/manage/manage.service.confirmation';
@@ -59,6 +60,7 @@ import { ManageConfigSecretView } from './views/configs.secrets/manage/manage.co
 import { DockerSecretsResolver } from './resolvers/docker/secrets/docker.secrets.resolver';
 import { DockerConfigsResolver } from './resolvers/docker/configs/docker.configs.resolver';
 import { ImportButtonComponent } from './components/import.button/import.button.component';
+import { ClipboardModule } from 'ngx-clipboard';
 
 declare const Hammer: any;
 
@@ -80,6 +82,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ListContainerComponent,
     ConfirmationDialogComponent,
     CleanServiceImagePipe,
+    RemoveServiceImageRepositoryPipe,
     LoginView,
     NetworksView,
     ManageNetworkView,
@@ -105,7 +108,8 @@ export class HammerConfig extends HammerGestureConfig  {
     ReactiveFormsModule,
     MaterialModule,
     HttpClientModule,
-    RoutingModule
+    RoutingModule,
+    ClipboardModule
   ],
   providers: [
     AuthService,

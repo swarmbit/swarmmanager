@@ -46,17 +46,17 @@
         <mat-form-field class="sm-form-field">
           <input matInput placeholder="IP Address" formControlName="ipAddress">
         </mat-form-field>
-        <button mat-mini-fab type="button" *ngIf="!isDetails && j == (formsService.getFormArray(ipamConfigControl, 'auxAddress').controls.length - 1)" (click)="formsService.addOption(ipamConfigControl, 'auxAddress', isDetails, 'deviceName', 'ipAddress')">
+        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && j == (formsService.getFormArray(ipamConfigControl, 'auxAddress').controls.length - 1)" (click)="formsService.addOption(ipamConfigControl, 'auxAddress', isDetails, 'deviceName', 'ipAddress')">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && j < (formsService.getFormArray(ipamConfigControl, 'auxAddress').controls.length - 1)" (click)="formsService.removeFromArray(ipamConfigControl, 'auxAddress', j)">
+        <button mat-mini-fab type="button" color="warn" *ngIf="!isDetails && j < (formsService.getFormArray(ipamConfigControl, 'auxAddress').controls.length - 1)" (click)="formsService.removeFromArray(ipamConfigControl, 'auxAddress', j)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
     </div>
     <div class="sm-form-row" *ngIf="!isDetails">
       <div class="sm-form-field big">
-        <button mat-raised-button color="accent" type="button" (click)="addIpamConfig(networkForm)">New Config</button>
+        <button mat-raised-button color="primary" type="button" (click)="addIpamConfig(networkForm)">New Config</button>
       </div>
     </div>
   </mat-expansion-panel>
@@ -73,10 +73,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="!isDetails && i == (formsService.getFormArray(networkForm, 'ipamOptions').controls.length - 1)" (click)="formsService.addOption(networkForm, 'ipamOptions', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i == (formsService.getFormArray(networkForm, 'ipamOptions').controls.length - 1)" (click)="formsService.addOption(networkForm, 'ipamOptions', isDetails, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (formsService.getFormArray(networkForm, 'ipamOptions').controls.length - 1)" (click)="formsService.removeFromArray(networkForm, 'ipamOptions', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="!isDetails && i < (formsService.getFormArray(networkForm, 'ipamOptions').controls.length - 1)" (click)="formsService.removeFromArray(networkForm, 'ipamOptions', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -94,10 +94,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="!isDetails && i == (formsService.getFormArray(networkForm, 'labels').controls.length - 1)" (click)="formsService.addOption(networkForm, 'labels', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i == (formsService.getFormArray(networkForm, 'labels').controls.length - 1)" (click)="formsService.addOption(networkForm, 'labels', isDetails, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (formsService.getFormArray(networkForm, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(networkForm, 'labels', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="!isDetails && i < (formsService.getFormArray(networkForm, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(networkForm, 'labels', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -115,10 +115,10 @@
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" *ngIf="!isDetails && i == (formsService.getFormArray(networkForm, 'options').controls.length - 1)" (click)="formsService.addOption(networkForm, 'options', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i == (formsService.getFormArray(networkForm, 'options').controls.length - 1)" (click)="formsService.addOption(networkForm, 'options', isDetails, 'name', 'value')">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-mini-fab type="button" color="primary" *ngIf="!isDetails && i < (formsService.getFormArray(networkForm, 'options').controls.length - 1)" (click)="formsService.removeFromArray(networkForm, 'options', i)">
+      <button mat-mini-fab type="button" color="warn" *ngIf="!isDetails && i < (formsService.getFormArray(networkForm, 'options').controls.length - 1)" (click)="formsService.removeFromArray(networkForm, 'options', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -140,8 +140,8 @@
   </div>
   <div class="sm-form-row">
     <div class="sm-form-field extra-big sm-form-submit">
-      <button mat-raised-button color="accent" *ngIf="!isDetails && user.isUser()">Create</button>
-      <button mat-raised-button color="accent" *ngIf="isDetails && user.isUser()" type="button" (click)="openDialog()">Remove</button>
+      <button mat-raised-button color="primary" *ngIf="!isDetails && user.isUser()">Create</button>
+      <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser()" type="button" (click)="openDialog()">Remove</button>
       <div class="sm-form-error">
         <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
       </div>

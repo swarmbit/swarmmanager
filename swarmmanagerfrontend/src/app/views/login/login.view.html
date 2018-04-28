@@ -12,7 +12,7 @@
         <input matInput [(ngModel)]="password" placeholder="Password" type="password" (keydown)="onKeydown($event)">
       </mat-form-field>
       <mat-error>{{currentErrorMessage}}</mat-error>
-        <button class="login-button" mat-raised-button color="accent" (click)="login()">Log in</button>
+        <button class="login-button" mat-raised-button color="primary" (click)="login()">Log in</button>
         <div style="margin-top: 1rem">
           <span><a class="login-link" href="javascript:void(0)" routerLink="/createUser">Create User</a></span>
           <span style="margin-left: 0.5rem"><a class="login-link" href="javascript:void(0)" routerLink="/forgot">Forgot Password</a></span>
