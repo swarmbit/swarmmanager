@@ -28,7 +28,7 @@ export class DockerSwarmService {
   }
 
   getSwarms(): Observable<DockerSwarm[]> {
-    if (this.swarms.length == 0) {
+    if (this.swarms.length === 0) {
       return Observable.create(observer => {
         this.fetchSwarms().subscribe(
           (swarms: DockerSwarm[]) => {
@@ -72,7 +72,7 @@ export class DockerSwarmService {
 
   selectSwarm(id: string) {
     for (const swarm of this.swarms) {
-      if (id == swarm.id) {
+      if (id === swarm.id) {
         this.selectedSwarm = swarm;
         for (const observer of this.selectedSwarmObservers) {
           observer.next(this.selectedSwarm);

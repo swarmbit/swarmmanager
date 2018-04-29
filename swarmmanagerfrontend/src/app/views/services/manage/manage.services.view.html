@@ -6,13 +6,13 @@
     <app-import-button style="float: right" (valueSelected)="loadJsonService($event)"></app-import-button>
   </div>
   <div class="sm-form-row">
-    <mat-form-field class="sm-form-field big">
+    <mat-form-field class="sm-form-field extra-big">
       <input matInput placeholder="Name" formControlName="name" [required]="!isDetails">
       <mat-error *ngIf="serviceForm.get('name').invalid">Name field is invalid</mat-error>
     </mat-form-field>
   </div>
   <div class="sm-form-row">
-    <mat-form-field class="sm-form-field big">
+    <mat-form-field class="sm-form-field extra-big">
       <input matInput placeholder="Image" formControlName="image" [required]="!isDetails">
       <mat-error *ngIf="serviceForm.get('image').invalid">Image field is invalid</mat-error>
     </mat-form-field>

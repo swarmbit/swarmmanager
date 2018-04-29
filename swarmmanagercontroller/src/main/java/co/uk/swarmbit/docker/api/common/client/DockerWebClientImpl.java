@@ -104,7 +104,7 @@ public class DockerWebClientImpl implements DockerWebClient {
             }
         }
         if (baseResource == null) {
-            throw new SwarmNotFound();
+            throw new SwarmNotFound("not-found", "Swarm not found");
         }
         return baseResource;
     }

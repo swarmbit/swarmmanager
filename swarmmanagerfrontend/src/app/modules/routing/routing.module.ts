@@ -1,3 +1,5 @@
+import { StateView } from './../../views/services/state/state.view';
+import { DockerServiceTask } from './../../services/docker/services/docker.service.task';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NodesView } from '../../views/nodes/nodes.view';
@@ -24,6 +26,7 @@ import { ConfigsSecretsView } from '../../views/configs.secrets/configs.secrets.
 import { ManageConfigSecretView } from '../../views/configs.secrets/manage/manage.config.secret.view';
 import { DockerConfigsResolver } from '../../resolvers/docker/configs/docker.configs.resolver';
 import { DockerSecretsResolver } from '../../resolvers/docker/secrets/docker.secrets.resolver';
+import { DockerServiceStateResolver } from '../../resolvers/docker/services/docker.service.state.resolver';
 
 const appRoutes: Routes = [
   {
@@ -148,6 +151,17 @@ const appRoutes: Routes = [
         },
         resolve: {
           dockerServiceLogs: DockerServiceLogsResolver
+        }
+      },
+      {
+        path: 'services/:name/state',
+        component: StateView,
+        canActivate: [AuthGuard, VisitorGuard],
+        data: {
+          title: 'ServiceSstate',
+        },
+        resolve: {
+          dockerServiceState: DockerServiceStateResolver
         }
       },
       {

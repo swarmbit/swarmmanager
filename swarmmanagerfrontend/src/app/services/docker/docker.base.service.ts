@@ -1,6 +1,6 @@
 import { DockerSwarm } from './swarms/docker.swarm';
 import { DockerSwarmService } from './swarms/docker.swarms.service';
-import { Observer } from 'rxjs';
+import { Observer } from 'rxjs/Observer';
 
 import { SnackbarService } from '../snackbar/snackbar.service';
 
@@ -39,7 +39,7 @@ export class DockerBaseService {
     if (err && err.error && err.error.errors) {
       const error = err.error.errors[ 0 ];
       if (error.code === 'docker') {
-        this.snackbarService.showError(message + ' ' + error.message);
+        this.snackbarService.showError(message + '. ' + error.message);
         showedMessage = true;
       }
     }

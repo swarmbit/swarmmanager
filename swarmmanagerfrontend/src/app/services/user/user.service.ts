@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { User } from './user';
 import { SnackbarService } from '../snackbar/snackbar.service';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import { ApiUtils } from '../utils/api.utils';
+import { Observer } from 'rxjs/Observer';
 
 @Injectable()
 export class UserService {
@@ -45,7 +46,7 @@ export class UserService {
           }
         ).catch(
           (err) => {
-            if (err.status != 401 && err.status != 403) {
+            if (err.status !== 401 && err.status !== 403) {
               this.snackbarService.showError('Error loading user data, if the problem persists please contact the administrator.');
             }
             reject(err);

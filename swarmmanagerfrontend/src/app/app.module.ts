@@ -59,8 +59,11 @@ import { DockerSecretsService } from './services/docker/secrets/docker.secrets.s
 import { ManageConfigSecretView } from './views/configs.secrets/manage/manage.config.secret.view';
 import { DockerSecretsResolver } from './resolvers/docker/secrets/docker.secrets.resolver';
 import { DockerConfigsResolver } from './resolvers/docker/configs/docker.configs.resolver';
-import { ImportButtonComponent } from './components/import.button/import.button.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ImportButtonComponent } from './components/import.button/import.button.component';
+import { StateView } from './views/services/state/state.view';
+import { DockerServiceStateResolver } from './resolvers/docker/services/docker.service.state.resolver';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 declare const Hammer: any;
 
@@ -99,7 +102,9 @@ export class HammerConfig extends HammerGestureConfig  {
     ForgotView,
     ConfigsSecretsView,
     ManageConfigSecretView,
-    ImportButtonComponent
+    ImportButtonComponent,
+    StateView,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,
@@ -134,6 +139,7 @@ export class HammerConfig extends HammerGestureConfig  {
     DockerNetworkResolver,
     DockerSecretsResolver,
     DockerConfigsResolver,
+    DockerServiceStateResolver,
     BrowserService,
     UsersService,
     {

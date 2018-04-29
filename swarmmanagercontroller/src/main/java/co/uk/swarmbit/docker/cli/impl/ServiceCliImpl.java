@@ -213,8 +213,13 @@ public class ServiceCliImpl implements ServiceCli {
         });
         Logs logs = new Logs();
         Map<String, TaskJson> tasksById = new HashMap<>();
-        List<TaskJson> tasks = tasksApi.listTasks(swarmId, new TasksListParameters());
-        tasks.forEach(task -> tasksById.put(task.getId(), task));
+
+        TasksListParameters tasksListParameters = new TasksListParameters();
+        TasksFilters tasksFilters =  new TasksFilters();
+        tasksFilters.setService(serviceId);
+        tasksListParameters.setFilters(tasksFilters);
+        List<TaskJson> tasks = tasksApi.listTasks(swarmId, tasksListParameters);
+        tasks.forEach(task -> tasksById.put(StringUtils.substring(task.getId(), 0, 12), task));
 
         byte[] logBuf = servicesApi.getServiceLogs(swarmId, serviceId, parameters);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(logBuf);
@@ -264,7 +269,7 @@ public class ServiceCliImpl implements ServiceCli {
                         nodeId = detail.substring(NODE_DETAIL.length() + 1);
                     }
                     if (detail.startsWith(TASK_DETAIL)) {
-                        tasKId = detail.substring(TASK_DETAIL.length() + 1);
+                        tasKId = StringUtils.substring(detail.substring(TASK_DETAIL.length() + 1), 0, 12);
                         Long slot = tasksById.get(tasKId).getSlot();
                         replica = slot != null ? slot : 0;
                     }

@@ -17,7 +17,8 @@ import { DockerNetworksService } from '../../../services/docker/networks/docker.
 import { DockerNetworkSummary } from '../../../services/docker/networks/docker.network.summary';
 import { ManageServiceConfirmation } from './manage.service.confirmation';
 import { isNumber } from 'util';
-import { BindMountOptions, DockerServiceMount, DockerTmpfsMountOptions, DockerVolumeMountOptions } from '../../../services/docker/services/docker.service.mount';
+import { BindMountOptions, DockerServiceMount,
+  DockerTmpfsMountOptions, DockerVolumeMountOptions } from '../../../services/docker/services/docker.service.mount';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { BrowserService } from '../../../services/utils/browser.service';
 import { DockerConfigsService } from '../../../services/docker/configs/docker.configs.service';
@@ -84,6 +85,22 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.loadFunction = this.loadService;
   }
 
+  static getCleanedObject(fields: Set<string>, include: boolean, object: any) {
+    const newObj = {};
+    for (const field in object) {
+      if (object.hasOwnProperty(field)) {
+        let add = !fields.has(field);
+        if (include) {
+          add = fields.has(field);
+        }
+        if (add) {
+          newObj[field] = object[field];
+        }
+      }
+    }
+    return newObj;
+  }
+
   ngOnInit(): void {
     this.initCreateForm();
     this.subscriptions.push(this.swarmService.onSwarmChange().subscribe(() => {
@@ -91,7 +108,7 @@ export class ManageServicesView extends BaseView implements OnInit {
         networks => {
           this.networks = [];
           for (const network of networks) {
-            if (network.name != 'ingress') {
+            if (network.name !== 'ingress') {
               this.networks.push(network);
             }
           }
@@ -155,6 +172,7 @@ export class ManageServicesView extends BaseView implements OnInit {
 
   getDockerServiceWithDefaults(): DockerService {
     const dockerService = new DockerService();
+    dockerService.replicas = 1;
     dockerService.endpointMode = 'vip';
     dockerService.restartMaxAttempts = 0;
     dockerService.restartCondition = 'any';
@@ -335,13 +353,13 @@ export class ManageServicesView extends BaseView implements OnInit {
       field = 'secrets';
     }
 
-    let fileMode = this.formsService.getValue(object, 'fileMode');
+    const fileMode = this.formsService.getValue(object, 'fileMode');
     const group = new FormGroup({
       'name': new FormControl({ value: this.formsService.getValue(object, 'name'), disabled: isDisabled }),
       'fileName': new FormControl({ value: this.formsService.getValue(object, 'fileName'), disabled: isDisabled }),
       'fileUID': new FormControl({ value: this.formsService.getValue(object, 'fileUID'), disabled: isDisabled }),
       'fileGID': new FormControl({ value: this.formsService.getValue(object, 'fileGID'), disabled: isDisabled }),
-      'fileMode': new FormControl({ value: '0' + parseInt(fileMode).toString(8), disabled: isDisabled })
+      'fileMode': new FormControl({ value: '0' + parseInt(fileMode, 10).toString(8), disabled: isDisabled })
     });
     (<FormArray>formGroup.get(field)).push(group);
   }
@@ -401,7 +419,7 @@ export class ManageServicesView extends BaseView implements OnInit {
     if (dockerService.env && dockerService.env.length > 0) {
       for (const env of dockerService.env) {
         const envArr = env.split('=');
-        if (envArr.length == 2) {
+        if (envArr.length === 2) {
           this.formsService.addOption(this.serviceForm, 'env', this.isDisabled(), 'name', 'value', envArr[0], envArr[1]);
         } else if (env.startsWith('=')) {
           this.formsService.addOption(this.serviceForm, 'env', this.isDisabled(), 'name', 'value', '', env.substr(1));
@@ -627,8 +645,8 @@ export class ManageServicesView extends BaseView implements OnInit {
     const objectsArr = values[field];
     const objects = [];
     for (const object of objectsArr) {
-      if (object['name'] != '') {
-        let dockerObject = new DockerServiceSecretAndConfig();
+      if (object['name'] !== '') {
+        const dockerObject = new DockerServiceSecretAndConfig();
         dockerObject.id = this.getConfigOrSecretId(object['name'], isConfigs);
         dockerObject.name = object['name'];
         dockerObject.fileName = object['fileName'];
@@ -639,7 +657,7 @@ export class ManageServicesView extends BaseView implements OnInit {
       }
 
     }
-    dockerService[field] = objects
+    dockerService[field] = objects;
   }
 
   getConfigOrSecretId(name: string, isConfigs: boolean): string {
@@ -809,22 +827,7 @@ export class ManageServicesView extends BaseView implements OnInit {
         this.initCreateForm(dockerService);
         this.snackbarService.showSuccess('Loaded service from file');
       } catch (err) {
-        this.snackbarService.showError('Invalid services file')
+        this.snackbarService.showError('Invalid services file');
       }
   }
-
-  static getCleanedObject(fields: Set<string>, include: boolean, object: any) {
-    const newObj = {};
-    for (const field in object) {
-      let add = !fields.has(field);
-      if (include) {
-        add = fields.has(field);
-      }
-      if (add) {
-        newObj[field] = object[field];
-      }
-    }
-    return newObj;
-  }
-
 }

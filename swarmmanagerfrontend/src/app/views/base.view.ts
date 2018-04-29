@@ -1,3 +1,4 @@
+import { BrowserService } from './../services/utils/browser.service';
 import { HeaderService } from '../services/header/header.service';
 import { HeaderInfo } from '../services/header/header.info';
 import { BackArrow } from '../services/header/back.arrow';
@@ -5,9 +6,8 @@ import { User } from '../services/user/user';
 import { DockerSwarmService } from '../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../services/user/user.service';
 import { OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
-import { BrowserService } from '../services/utils/browser.service';
 import { browser } from 'protractor';
 
 export class BaseView implements OnDestroy {

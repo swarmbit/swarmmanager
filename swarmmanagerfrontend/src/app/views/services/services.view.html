@@ -52,8 +52,8 @@
       <div class="card-buttons">
         <button mat-raised-button color="primary" routerLink="/services/{{service.name}}" *ngIf="user.isUser()">Manage</button>
         <button mat-raised-button color="primary" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isUser()" class="service-button">Details</button>
+        <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/state" class="service-button">State</button>
         <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/logs" *ngIf="swarmService.equalsOrGreaterThenVersion29()" class="service-button">Logs</button>
-        <!--button mat-raised-button color="primary" class="service-button">State</button-->
       </div>
     </div>
   </mat-card>

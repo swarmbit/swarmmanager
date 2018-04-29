@@ -3,6 +3,7 @@ package co.uk.swarmbit.docker.cli.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,6 +28,8 @@ public class Task {
     private String state;
 
     private Duration lastStateChange;
+
+    private long lastStateChangeDate;
 
     private String errorMessage;
 
@@ -128,4 +131,11 @@ public class Task {
         this.ports = ports;
     }
 
+    public long getLastStateChangeDate() {
+        return lastStateChangeDate;
+    }
+
+    public void setLastStateChangeDate(long lastStateChangeDate) {
+        this.lastStateChangeDate = lastStateChangeDate;
+    }
 }

@@ -4,13 +4,16 @@ import co.uk.swarmbit.docker.api.common.json.inner.PortConfigJson;
 import co.uk.swarmbit.docker.api.common.json.inner.TaskStatusJson;
 import co.uk.swarmbit.docker.api.common.json.TaskJson;
 import co.uk.swarmbit.docker.api.common.json.inner.PortStatusJson;
+import co.uk.swarmbit.docker.api.tasks.parameters.TasksFilters;
 import co.uk.swarmbit.docker.cli.model.Port;
 import co.uk.swarmbit.docker.cli.model.Task;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static co.uk.swarmbit.docker.api.common.util.DockerDateFormatter.fromDateStringToDuration;
+import static co.uk.swarmbit.docker.api.common.util.DockerDateFormatter.fromDateStringToZonedDateTime;
 
 public class TaskJsonHelper {
 
@@ -18,7 +21,7 @@ public class TaskJsonHelper {
         List<Task> tasks = new ArrayList<>();
         for (TaskJson taskJson : tasksList) {
             Task task = new Task();
-            task.setId(taskJson.getId());
+            task.setId(StringUtils.substring(taskJson.getId(), 0, 12));
             if (taskJson.getSlot() != null) {
                 task.setReplica(taskJson.getSlot());
             }
@@ -38,6 +41,10 @@ public class TaskJsonHelper {
                 String timestamp = status.getTimestamp();
                 task.setLastStateChange(fromDateStringToDuration(timestamp));
 
+                ZonedDateTime lastStateChangeDate = fromDateStringToZonedDateTime(timestamp);
+                if (lastStateChangeDate != null) {
+                    task.setLastStateChangeDate(lastStateChangeDate.toInstant().toEpochMilli());
+                }
                 PortStatusJson portStatus = status.getPortStatus();
                 if (portStatus != null) {
                     PortConfigJson[] portConfigs = portStatus.getPorts();
@@ -76,6 +83,9 @@ public class TaskJsonHelper {
                 if (result != 0) {
                     return result.intValue();
                 }
+            }
+            if (task1.getDesiredState().equals(TasksFilters.RUNNING_STATE) && !task1.getDesiredState().equals(TasksFilters.RUNNING_STATE)) {
+                return 1;
             }
             return task1.getLastStateChange().compareTo(task2.getLastStateChange());
         });

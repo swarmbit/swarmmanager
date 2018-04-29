@@ -26,7 +26,7 @@ export class ServicesView extends BaseView {
               private route: ActivatedRoute,
               private dockerServicesService: DockerServicesService,
               private browserService: BrowserService,
-              private snackbarService: SnackbarService
+              public snackbarService: SnackbarService
   ) {
     super(headerService, route, swarmService, userService, browserService);
     this.refreshFunction = this.refreshNetworks;

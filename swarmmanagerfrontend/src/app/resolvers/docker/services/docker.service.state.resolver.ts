@@ -1,13 +1,13 @@
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
-import { DockerService } from '../../../services/docker/services/docker.service';
 import { DockerServicesService } from '../../../services/docker/services/docker.services.service';
 import { BrowserService } from '../../../services/utils/browser.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
+import { DockerServiceState } from '../../../services/docker/services/docker.service.state';
 
 @Injectable()
-export class DockerServiceResolver implements Resolve<DockerService> {
+export class DockerServiceStateResolver implements Resolve<DockerServiceState> {
 
   constructor(private dockerServicesService: DockerServicesService,
               private router: Router,
@@ -15,22 +15,23 @@ export class DockerServiceResolver implements Resolve<DockerService> {
               private swarmService: DockerSwarmService) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<DockerService> | Promise<DockerService> | DockerService {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+          Observable<DockerServiceState> | Promise<DockerServiceState> | DockerServiceState {
     return Observable.create( observer => {
       if (this.swarmService.isSwarmSelected()) {
-        this.getService(route, observer);
+        this.getServiceState(route, observer);
       } else {
         this.swarmService.getSwarms().subscribe(() => {
-          this.getService(route, observer);
+          this.getServiceState(route, observer);
         });
       }
     });
   }
 
-  private getService(route, observer): void {
-    this.dockerServicesService.getService(route.params['name'], true).subscribe(
-      (dockerService: DockerService) => {
-        observer.next(dockerService);
+  private getServiceState(route, observer): void {
+    this.dockerServicesService.getServiceState(route.params['name']).subscribe(
+      (state: DockerServiceState) => {
+        observer.next(state);
         observer.complete();
       }, (err: any) => {
         const backUrl = this.browserService.getCurrentUrl();

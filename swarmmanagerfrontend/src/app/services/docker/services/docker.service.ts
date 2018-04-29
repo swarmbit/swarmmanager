@@ -9,7 +9,7 @@ export class DockerService {
   image: string;
   global: boolean;
   name: string;
-  replicas = 1;
+  replicas: number;
   ports: DockerServicePort[];
   env: string[];
   configs: DockerServiceSecretAndConfig[];
