@@ -5,8 +5,6 @@
 
 The Swarm Manager is a web application to manage [docker swarms](https://docs.docker.com/engine/swarm/). The goal of this web app is to support all swarm configurations that the docker CLI supports and to add new functionalities like audit logs, user management and others.
 
-Try it on https://swarmmanager.swarmbit.co.uk . User *admin* and password *administrator* . The app restarts and cleans all data every 30 minutes.
-
 Here you can find all the instructions needed to run the Swarm Manager development environment.
 
 ## Dependencies
