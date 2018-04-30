@@ -1,4 +1,4 @@
-<app-list-control-bar>
+<app-control-bar>
   <div class="list">
     <mat-form-field class="filter">
       <input matInput type="text" placeholder="Filter" [(ngModel)]="filter"/>
@@ -8,7 +8,7 @@
       <mat-hint>Filter by username</mat-hint>
     </mat-form-field>
   </div>
-</app-list-control-bar>
+</app-control-bar>
 <app-list-container>
   <mat-card *ngFor="let user1 of getUsers()">
     <mat-card-content>

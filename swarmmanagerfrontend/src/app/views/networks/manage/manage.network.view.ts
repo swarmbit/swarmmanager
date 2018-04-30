@@ -1,4 +1,4 @@
-import {Component, NgZone} from '@angular/core';
+import { Component } from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../../services/user/user.service';
@@ -55,6 +55,7 @@ export class ManageNetworkView extends BaseView {
   }
 
   initCreateForm(dockerNetwork ?: DockerNetwork): void {
+    this.formInvalid = false;
     if (!dockerNetwork && this.isDetails) {
       this.subscriptions.push(this.route.data
         .subscribe(

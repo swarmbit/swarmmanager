@@ -27,7 +27,7 @@ export class ProfileView  extends BaseView implements OnInit {
               private browserService: BrowserService
   ) {
     super(headerService, route, swarmService, userService, browserService);
-    if (this.browserService.getBackUrl() === '/login') {
+    if (this.browserService.getPreviousUrl() === '/login') {
       this.browserService.reset();
     } else {
       this.enableBackArrow();

@@ -1,9 +1,27 @@
-<form class="sm-form" [formGroup]="serviceForm" (ngSubmit)="createService()">
-  <div class="sm-form-row" *ngIf="this.isDetails && !this.editMode">
-    <button mat-raised-button color="primary" (click)="exportService()" style="float: right" type="button">Export</button>
+<app-control-bar>
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" *ngIf="!isDetails && user.isUser()" (click)="createService()">Create</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Update</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+    <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/state" *ngIf="isDetails && !editMode" class="service-button">State</button>
+    <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/logs" *ngIf="isDetails && !editMode && swarmService.equalsOrGreaterThenVersion29()" class="service-button">Logs</button>
   </div>
-  <div class="sm-form-row" *ngIf="!this.isDetails || this.editMode">
-    <app-import-button style="float: right" (valueSelected)="loadJsonService($event)"></app-import-button>
+  <div>
+    <button *ngIf="this.isDetails && !this.editMode" mat-raised-button color="primary" (click)="exportService()" type="button">Export</button>
+    <app-import-button *ngIf="!this.isDetails || this.editMode" (valueSelected)="loadJsonService($event)"></app-import-button>
+  </div>
+</app-control-bar>
+<form class="sm-form" [formGroup]="serviceForm">
+  <div class="sm-form-row" *ngIf="formInvalid">
+    <div class="sm-form-field extra-big sm-form-submit">
+      <div class="sm-form-error">
+        <mat-error>{{formErrorMessage}}</mat-error>
+      </div>
+    </div>
   </div>
   <div class="sm-form-row">
     <mat-form-field class="sm-form-field extra-big">
@@ -813,20 +831,4 @@
       </button>
     </div>
   </mat-expansion-panel>
-  <div class="sm-form-row">
-    <div class="sm-form-field extra-big sm-form-submit">
-      <div class="manage-service-buttons">
-        <button mat-raised-button color="primary" *ngIf="!isDetails && user.isUser()">Create</button>
-        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
-        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Save</button>
-        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
-        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
-        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
-        <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
-      </div>
-      <div class="sm-form-error">
-        <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
-      </div>
-    </div>
-  </div>
 </form>

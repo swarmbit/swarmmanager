@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { DockerServiceTask } from './../../../services/docker/services/docker.service.task';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DockerServiceTask } from '../../../services/docker/services/docker.service.task';
 import { DockerServicesService } from '../../../services/docker/services/docker.services.service';
 import { BaseView } from '../../base.view';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
@@ -63,14 +63,16 @@ export class StateView extends BaseView implements OnInit, OnDestroy {
 
   getServiceState() {
     this.subs.push(this.swarmService.getSelectedSwarm().subscribe(() => {
-      this.dockerServicesService.getServiceState(this.id)
-        .subscribe(
-          state => {
-            this.initServiceState(state);
-          },
-          () => {
-            this.goBack(this.router, 'services');
-          });
+      if (this.id) {
+        this.dockerServicesService.getServiceState(this.id)
+          .subscribe(
+            state => {
+              this.initServiceState(state);
+            },
+            () => {
+              this.goBack(this.router, 'services');
+            });
+      }
     }));
   }
 

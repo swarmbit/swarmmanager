@@ -25,7 +25,7 @@ import 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { DockerNetworksService } from './services/docker/networks/docker.networks.service';
 import { SnackbarService } from './services/snackbar/snackbar.service';
-import { ListControlBarComponent } from './components/list.control.bar/list.control.bar.component';
+import { ControlBarComponent } from './components/control.bar/control.bar.component';
 import { ListContainerComponent } from './components/list.container/list.container.component';
 import { DockerNodesService } from './services/docker/nodes/docker.nodes.service';
 import { ManageNetworkView } from './views/networks/manage/manage.network.view';
@@ -81,7 +81,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ProgressBarComponent,
     ShellComponent,
     UserComponent,
-    ListControlBarComponent,
+    ControlBarComponent,
     ListContainerComponent,
     ConfirmationDialogComponent,
     CleanServiceImagePipe,

@@ -29,16 +29,16 @@ export class DockerServiceStateResolver implements Resolve<DockerServiceState> {
   }
 
   private getServiceState(route, observer): void {
-    this.dockerServicesService.getServiceState(route.params['name']).subscribe(
+    const name = route.params['name'];
+    this.dockerServicesService.getServiceState(name).subscribe(
       (state: DockerServiceState) => {
         observer.next(state);
         observer.complete();
       }, (err: any) => {
-        const backUrl = this.browserService.getCurrentUrl();
-        if (backUrl) {
-          this.router.navigate([backUrl]);
+        if (!this.browserService.cannotGoBack()) {
+          this.router.navigate([this.browserService.goBack()]);
         } else {
-          this.router.navigate(['services']);
+          this.router.navigate(['services/' + name]);
         }
         observer.complete();
       }

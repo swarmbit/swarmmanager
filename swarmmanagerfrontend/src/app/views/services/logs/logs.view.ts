@@ -76,7 +76,7 @@ export class LogsView extends BaseView implements OnInit, OnDestroy {
               this.initServiceLogs(logs);
             },
             () => {
-              this.goBack(this.router, 'services');
+              this.goBack(this.router, 'services/' + this.id);
             });
       }
 

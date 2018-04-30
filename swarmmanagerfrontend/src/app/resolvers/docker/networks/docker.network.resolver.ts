@@ -33,9 +33,8 @@ export class DockerNetworkResolver implements Resolve<DockerNetwork> {
         observer.next(dockerNetwork);
         observer.complete();
       }, (err: any) => {
-        const backUrl = this.browserService.getBackUrl();
-        if (backUrl) {
-          this.router.navigate([backUrl]);
+        if (!this.browserService.cannotGoBack()) {
+          this.router.navigate([this.browserService.goBack()]);
         } else {
           this.router.navigate(['networks']);
         }

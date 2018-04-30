@@ -5,6 +5,8 @@
 
 The Swarm Manager is a web application to manage [docker swarms](https://docs.docker.com/engine/swarm/). The goal of this web app is to support all swarm configurations that the docker CLI supports and to add new functionalities like audit logs, user management and others.
 
+Demo version running on https://swarmmanager.swarmbit.co.uk . The user is *admin* and password *administrator* .
+
 Here you can find all the instructions needed to run the Swarm Manager development environment.
 
 ## Dependencies
@@ -39,12 +41,12 @@ Login with username *admin* and password *administrator*.
 Available tags can be found here: https://hub.docker.com/r/swarmbit/swarmmanager/tags/
 * Star swarm manager, this command does not persist data.
 ```
-$ docker run --name swarmmanager -p 3000:3080 -v /var/run/docker.sock:/var/run/docker.sock -d swarmbit/swarmmanager:0.0.6-beta
+$ docker run --name swarmmanager -p 3000:3080 -v /var/run/docker.sock:/var/run/docker.sock -d swarmbit/swarmmanager:0.0.7-beta
 ```
 
 * Start swarm manage with configuration and data directory.
 ```
-$ docker run --name swarmmanager -p 80:3080 -p 443:3443 -e HTTPS=true -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/data:/data -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanager:0.0.6-beta
+$ docker run --name swarmmanager -p 80:3080 -p 443:3443 -e HTTPS=true -e DBPASS=password -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/data:/data -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanager:0.0.7-beta
 ```
   * Swarm manager stores data /swarmmanagercontroller/data and reads the configuration from /config.
     * Hosts directories can be mounted to persist data and to add configuration to swarm manager.
@@ -66,7 +68,7 @@ spring.data.mongodb.database=swarmmanager
 ```
 * Run light image
 ```
-$ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanagerlight:0.0.6-beta
+$ docker run --name swarmmanagerlight -p 80:3080 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/swarmmanager/config:/config -d swarmbit/swarmmanagerlight:0.0.7-beta
 ```
 
 ## Project Maintainers

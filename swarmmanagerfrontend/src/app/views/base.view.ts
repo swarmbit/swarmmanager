@@ -1,4 +1,4 @@
-import { BrowserService } from './../services/utils/browser.service';
+import { BrowserService } from '../services/utils/browser.service';
 import { HeaderService } from '../services/header/header.service';
 import { HeaderInfo } from '../services/header/header.info';
 import { BackArrow } from '../services/header/back.arrow';
@@ -8,7 +8,6 @@ import { UserService } from '../services/user/user.service';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
-import { browser } from 'protractor';
 
 export class BaseView implements OnDestroy {
 
@@ -77,9 +76,8 @@ export class BaseView implements OnDestroy {
   }
 
   goBack(router, page): void {
-    const backUrl = this.browser.getBackUrl;
-    if (backUrl) {
-      router.navigate([backUrl]);
+    if (!this.browser.cannotGoBack()) {
+      router.navigate([this.browser.goBack()]);
     } else {
       router.navigate([page]);
     }

@@ -1,42 +1,54 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Injectable()
 export class BrowserService {
 
-  private backUrl: string;
-  private currentUrl: string;
-  private backEnabled: boolean;
+  private goingBack = false;
+  private history = [];
 
   constructor(private router: Router) {
     this.router.events
       .subscribe(event => {
         if (event instanceof NavigationEnd) {
-          if (this.currentUrl != null) {
-            this.backUrl = this.currentUrl;
-            this.currentUrl = event.url;
+          if (!this.goingBack) {
+            this.history.push(event.url);
           } else {
-          this.currentUrl = event.url;
+            this.history.pop();
+            this.goingBack = false;
           }
         }
       });
   }
 
   cannotGoBack(): boolean {
-    return this.backUrl == null;
+    return this.history.length == 1;
   }
 
-  getBackUrl(): string {
-    return this.backUrl;
+  goBack(): string {
+    this.goingBack = true;
+    if (this.history.length > 1) {
+      return this.history[this.history.length - 2];
+    }
+    return null;
+  }
+
+  getPreviousUrl(): string {
+    if (this.history.length > 1) {
+      return this.history[this.history.length - 2];
+    }
+    return null;
   }
 
   getCurrentUrl(): string {
-    return this.currentUrl;
+    if (this.history.length > 0) {
+      return this.history[this.history.length - 1];
+    }
+    return null;
   }
 
   reset(): void {
-    this.currentUrl = null;
-    this.backUrl = null;
+    this.history = [];
   }
 
 }

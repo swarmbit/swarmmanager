@@ -114,7 +114,7 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   goBack() {
     if (this.headerInfo && this.headerInfo.backArrow) {
-      this.router.navigate([this.browserService.getBackUrl()]);
+      this.router.navigate([this.browserService.goBack()]);
     }
   }
 

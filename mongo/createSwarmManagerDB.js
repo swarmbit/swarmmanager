@@ -20,7 +20,7 @@ swarmmanagerDB.createUser(
 );
 
 swarmmanagerDB = conn.getDB("swarmmanager");
-swarmmanagerDB.auth("swarmmanager", "swarmmanager");
+swarmmanagerDB.auth("swarmmanager", "-DBPASS-");
 swarmmanagerDB.createCollection("users");
 swarmmanagerDB.createCollection("usersData");
 swarmmanagerDB.users.insert({  

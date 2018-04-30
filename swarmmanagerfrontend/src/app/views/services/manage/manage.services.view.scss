@@ -1,25 +1,20 @@
 @import '../../../../styles/common';
 
-input[type="file"].import {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-}
-
-.manage-service-buttons {
+.controls {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
 }
 
-.manage-service-buttons button {
-  margin-bottom: 1rem;
+.action-buttons {
+  flex-grow: 1;
 }
 
+.action-buttons button {
+  margin-right: 1rem;
+}
 
+form {
+  padding-top: 1rem;
+}
 
 @media (max-width: $min-With-media-query)
 {

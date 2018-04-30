@@ -1,4 +1,4 @@
-<app-list-control-bar>
+<app-control-bar>
   <div class="service">
     <button routerLink="/services/create" mat-raised-button color="primary" *ngIf="user.isUser()">Create Service</button>
     <button mat-raised-button color="primary" (click)="refreshNetworks()">Refresh Services List</button>
@@ -12,7 +12,7 @@
       <mat-hint>Filter by service name</mat-hint>
     </mat-form-field>
   </div>
-</app-list-control-bar>
+</app-control-bar>
 <app-list-container>
   <mat-card class="service-card" *ngFor="let service of getServices()">
     <mat-card-content>
@@ -52,8 +52,6 @@
       <div class="card-buttons">
         <button mat-raised-button color="primary" routerLink="/services/{{service.name}}" *ngIf="user.isUser()">Manage</button>
         <button mat-raised-button color="primary" routerLink="/services/{{service.name}}" *ngIf="user.isVisitor() && !user.isUser()" class="service-button">Details</button>
-        <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/state" class="service-button">State</button>
-        <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/logs" *ngIf="swarmService.equalsOrGreaterThenVersion29()" class="service-button">Logs</button>
       </div>
     </div>
   </mat-card>

@@ -1,4 +1,15 @@
-<form class="sm-form" [formGroup]="networkForm" (ngSubmit)="createNetwork()">
+<app-control-bar>
+  <button mat-raised-button color="primary" *ngIf="!isDetails && user.isUser()" (click)="createNetwork()">Create</button>
+  <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser()" type="button" (click)="openDialog()">Remove</button>
+</app-control-bar>
+<form class="sm-form"  style="padding-top: 1rem" [formGroup]="networkForm">
+  <div class="sm-form-row" *ngIf="formInvalid">
+    <div class="sm-form-field extra-big sm-form-submit">
+      <div class="sm-form-error">
+        <mat-error>{{formErrorMessage}}</mat-error>
+      </div>
+    </div>
+  </div>
   <div class="sm-form-row">
     <!-- Required -->
     <mat-form-field class="sm-form-field big">
@@ -136,15 +147,6 @@
   <div class="sm-form-row" *ngIf="swarmService.equalsOrGreaterThenVersion26()">
     <div class="sm-form-field big">
       <mat-slide-toggle formControlName="attachable">Attachable</mat-slide-toggle>
-    </div>
-  </div>
-  <div class="sm-form-row">
-    <div class="sm-form-field extra-big sm-form-submit">
-      <button mat-raised-button color="primary" *ngIf="!isDetails && user.isUser()">Create</button>
-      <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser()" type="button" (click)="openDialog()">Remove</button>
-      <div class="sm-form-error">
-        <mat-error *ngIf="formInvalid">{{formErrorMessage}}</mat-error>
-      </div>
     </div>
   </div>
 </form>

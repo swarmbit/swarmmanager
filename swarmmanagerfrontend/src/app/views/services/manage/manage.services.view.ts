@@ -151,6 +151,7 @@ export class ManageServicesView extends BaseView implements OnInit {
   }
 
   initCreateForm(dockerService ?: DockerService): void {
+    this.formInvalid = false;
     if (!dockerService && this.isDetails) {
       this.subscriptions.push(this.route.data
         .subscribe(

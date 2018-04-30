@@ -29,19 +29,20 @@ export class DockerServiceLogsResolver implements Resolve<DockerServiceLogs> {
   }
 
   getLogs(route, observer): void {
+    const name = route.params[ 'name' ];
     this.swarmService.getSelectedSwarm().toPromise().then(() => {
       if (this.swarmService.equalsOrGreaterThenVersion29()) {
-        this.dockerServicesService.getServiceLogs(route.params[ 'name' ]).subscribe(
+        this.dockerServicesService.getServiceLogs(name).subscribe(
           (dockerServiceLogs: DockerServiceLogs) => {
             observer.next(dockerServiceLogs);
             observer.complete();
           }, () => {
             observer.complete();
-            const backUrl = this.browserService.getBackUrl();
+            const backUrl = this.browserService.getCurrentUrl();
             if (backUrl) {
-              this.router.navigate([backUrl]);
+              this.router.navigate([this.browserService.getCurrentUrl()]);
             } else {
-              this.router.navigate(['services']);
+              this.router.navigate(['services/' + name]);
             }
           }
         );
@@ -49,9 +50,9 @@ export class DockerServiceLogsResolver implements Resolve<DockerServiceLogs> {
         observer.complete();
         const backUrl = this.browserService.getCurrentUrl();
         if (backUrl) {
-          this.router.navigate([backUrl]);
+          this.router.navigate([this.browserService.getCurrentUrl()]);
         } else {
-          this.router.navigate(['services']);
+          this.router.navigate(['services/' + name]);
         }
       }
     });
