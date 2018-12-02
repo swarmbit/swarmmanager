@@ -101,24 +101,16 @@ export class FormsService {
 
   addOption(formGroup: FormGroup, type: string, disabled: boolean,
             firstLabel?: string, secondLabel?: string, firstValue?: any, secondValue?: any): void {
-
     const formGroupObj = {};
-
     if (firstLabel) {
-      formGroupObj[firstLabel] = new FormControl({value: '', disabled: disabled});
-      if (firstValue) {
-        formGroupObj[firstLabel] = new FormControl({value: firstValue, disabled: disabled});
+      formGroupObj[firstLabel] = new FormControl({value: firstValue ? firstValue : '', disabled: disabled});
+      if (secondLabel) {
+        formGroupObj[secondLabel] = new FormControl({value: secondValue ? firstValue : '', disabled: disabled});
       }
+      (<FormArray>formGroup.get(type)).push(new FormGroup(formGroupObj));
+    } else {
+      (<FormArray>formGroup.get(type)).push(new FormControl({value: firstValue ? firstValue : '', disabled: disabled}));
     }
-
-    if (secondLabel) {
-      formGroupObj[secondLabel] = new FormControl({value: '', disabled: disabled});
-      if (secondValue) {
-        formGroupObj[secondLabel] = new FormControl({value: secondValue, disabled: disabled});
-      }
-    }
-
-    (<FormArray>formGroup.get(type)).push(new FormGroup(formGroupObj));
   }
   removeFromArray(formGroup: FormGroup, type: string, index: number): void {
     (<FormArray>formGroup.get(type)).removeAt(index);

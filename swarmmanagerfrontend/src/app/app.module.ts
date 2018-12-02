@@ -66,6 +66,7 @@ import { DockerServiceStateResolver } from './resolvers/docker/services/docker.s
 import { FormCardComponent } from './components/form.card/form.card.component';
 import { FormArrayComponent } from './components/form.array/form.array.component';
 import { PortsForm } from './views/services/manage/form/ports/ports.form';
+import { NetworksForm } from './views/services/manage/form/networks/networks.form';
 
 declare const Hammer: any;
 
@@ -109,7 +110,8 @@ export class HammerConfig extends HammerGestureConfig  {
     CleanServiceImagePipe,
     RemoveServiceImageRepositoryPipe,
     TimeAgoPipe,
-    PortsForm
+    PortsForm,
+    NetworksForm
   ],
   imports: [
     BrowserModule,

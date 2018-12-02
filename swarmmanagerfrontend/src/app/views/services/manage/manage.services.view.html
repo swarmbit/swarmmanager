@@ -46,50 +46,7 @@
   </div>
 
  <app-ports-form #portsForm class="sm-form-card" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [ports]="service.ports" [disabled]="isDisabled()"></app-ports-form>
-
- <app-form-card-component class="sm-form-card networks" title="Networks">
-    <div formArrayName="networks">
-      <div class="sm-form-row" [formGroup]="networkControl" *ngFor="let networkControl of formsService.getFormArray(serviceForm, 'networks').controls; let i = index;">
-        <mat-form-field class="sm-form-field big">
-          <mat-select placeholder="Network" formControlName="id">
-            <mat-option [value]="network.id" *ngFor="let network of networks">{{network.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="addNetwork('', isDetails && !editMode)">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'networks', i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-    <div class="sm-form-row">
-      <mat-form-field class="sm-form-field big">
-        <input matInput placeholder="Hostname" formControlName="hostname">
-        <mat-error *ngIf="serviceForm.get('hostname').invalid">Hostname field is invalid</mat-error>
-      </mat-form-field>
-    </div>
-    <div class="sm-form-row">
-      <mat-form-field class="sm-form-field big">
-        <mat-select placeholder="Endpoint Mode" formControlName="endpointMode">
-          <mat-option [value]="'vip'">vip</mat-option>
-          <mat-option [value]="'dnsrr'">dnsrr</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="sm-form-row"  [formGroup]="hostControl" *ngFor="let hostControl of formsService.getFormArray(serviceForm, 'hosts').controls; let i = index;">
-      <mat-form-field class="sm-form-field big">
-      <input matInput placeholder="Host" formControlName="host">
-        <mat-error *ngIf="hostControl.invalid">Host field is invalid</mat-error>
-      </mat-form-field>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'hosts', isDetails && !editMode, 'host')">
-        <mat-icon>add</mat-icon>
-      </button>
-      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'hosts', i)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </app-form-card-component>
+ <app-networks-form #networksForm class="sm-form-card networks" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [service]="service" [disabled]="isDisabled()"></app-networks-form>
 
   <app-form-card-component class="sm-form-card" title="Environment Variables" formArrayName="env">
     <div class="sm-field-pair" [formGroup]="envControl" *ngFor="let envControl of formsService.getFormArray(serviceForm, 'env').controls; let i = index;">

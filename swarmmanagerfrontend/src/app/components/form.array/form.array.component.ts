@@ -24,6 +24,9 @@ export class FormArrayComponent {
   public controlName;
 
   @Input()
+  public entryName;
+
+  @Input()
   public addNew;
 
   @Input()
@@ -47,7 +50,11 @@ export class FormArrayComponent {
   }
 
   add(): void {
-      this.addNew();
+      if (this.addNew) {
+        this.addNew();
+      } else {
+        this.formsService.addOption(this.form, this.controlName, this.isDetails && !this.editMode, this.entryName);
+      }
   }
 
   remove(i) {

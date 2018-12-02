@@ -35,8 +35,7 @@ export class PortsForm implements OnInit {
   }
 
   ngOnInit(): void {
-    const ports = new FormArray([]);
-    this.serviceForm.addControl(this.controlName, ports);
+    this.serviceForm.addControl(this.controlName, new FormArray([]));
     this.addPortsToForm(this.ports);
   }
 

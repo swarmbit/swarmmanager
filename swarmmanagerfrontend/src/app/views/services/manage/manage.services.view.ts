@@ -1,3 +1,4 @@
+import { NetworksForm } from './form/networks/networks.form';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
@@ -38,6 +39,9 @@ export class ManageServicesView extends BaseView implements OnInit {
   @ViewChild('portsForm')
   portsForm: PortsForm;
 
+  @ViewChild('networksForm')
+  networksForm: NetworksForm;
+
   formErrorMessage = 'Please check invalid fields!';
   formInvalid: boolean;
   isDetails: boolean;
@@ -45,7 +49,6 @@ export class ManageServicesView extends BaseView implements OnInit {
   serviceForm: FormGroup;
   serviceName: string;
   isGlobalService: boolean;
-  networks: DockerNetworkSummary[] = [];
   configs: DockerConfig[] = [];
   secrets: DockerSecret[] = [];
   service: DockerService;
@@ -117,16 +120,6 @@ export class ManageServicesView extends BaseView implements OnInit {
 
   initExternalDockerObjects(): void {
     this.subscriptions.push(this.swarmService.onSwarmChange().subscribe(() => {
-      this.networkService.getNetworksList(true).subscribe(
-        networks => {
-          this.networks = [];
-          for (const network of networks) {
-            if (network.name !== 'ingress') {
-              this.networks.push(network);
-            }
-          }
-        }
-      );
       if (this.swarmService.equalsOrGreaterThenVersion25()) {
         this.secretsService.getSecretsList(true).subscribe(
           secrets => {
@@ -186,6 +179,7 @@ export class ManageServicesView extends BaseView implements OnInit {
   }
 
   createService(): void {
+    console.log(this.serviceForm.value);
     if (this.serviceForm.valid) {
       this.formInvalid = false;
       const dialogRef = this.dialog.open(ManageServiceConfirmation, {
@@ -230,10 +224,6 @@ export class ManageServicesView extends BaseView implements OnInit {
       'replicas': new FormControl({ value: dockerService.replicas, disabled: this.isDisabled() || this.isGlobalService },
         [Validators.required, Validators.min(0)]),
       'env': new FormArray([]),
-      'networks':  new FormArray([]),
-      'hostname': new FormControl({ value: dockerService.hostname, disabled:  this.isDisabled() }),
-      'endpointMode': new FormControl({ value: dockerService.endpointMode, disabled:  this.isDisabled() }),
-      'hosts': new FormArray([]),
       'labels':  new FormArray([]),
       'containerLabels':  new FormArray([]),
       'constraints':  new FormArray([]),
@@ -300,7 +290,6 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.addConfigsOrSecrets(dockerService, false);
     this.addMounts(dockerService);
     this.addEnv(dockerService);
-    this.addNetworks(dockerService);
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'labels', true, this.isDisabled(), 'name', 'value');
     this.formsService
@@ -309,8 +298,6 @@ export class ManageServicesView extends BaseView implements OnInit {
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'constraints', true, this.isDisabled(), 'name', 'value');
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'placementPreferences', true, this.isDisabled(), 'name', 'value');
-    this.formsService
-      .parseObjectFieldToOptions(this.serviceForm, dockerService, 'hosts', true, this.isDisabled(), 'host');
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'dnsServers', true, this.isDisabled(), 'dnsServer');
     this.formsService
@@ -422,21 +409,6 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.formsService.addOption(this.serviceForm, 'env', this.isDisabled(), 'name', 'value');
   }
 
-  private addNetworks(dockerService: DockerService) {
-    if (dockerService.networks && dockerService.networks.length > 0) {
-      for (const network of dockerService.networks) {
-        this.addNetwork(network, this.isDisabled());
-      }
-    }
-    this.addNetwork('', this.isDisabled());
-  }
-
-  addNetwork(network: string, disabled: boolean): void {
-    const formGroupObj = {};
-    formGroupObj['id'] = new FormControl({value: network ? network : '', disabled: disabled});
-    (<FormArray>this.serviceForm.get('networks')).push(new FormGroup(formGroupObj));
-  }
-
   disableForm(): void {
     this.serviceForm.disable();
   }
@@ -501,7 +473,9 @@ export class ManageServicesView extends BaseView implements OnInit {
     dockerService.image = values['image'];
     dockerService.replicas = values['replicas'];
     dockerService.global = values['global'];
+
     this.portsForm.addPorts(dockerService);
+    this.networksForm.addNetworks(dockerService);
 
     const envValues = values['env'];
     const env = [];
@@ -514,24 +488,11 @@ export class ManageServicesView extends BaseView implements OnInit {
     }
     dockerService.env = env;
 
-    const networksValues = values['networks'];
-    const networks = [];
-    for (const networkValue of networksValues) {
-      const id = networkValue['id'];
-      if (id !== '') {
-        networks.push(id);
-      }
-    }
-    dockerService.networks = networks;
-
     this.formsService.parseOptionsToObjectField(dockerService, values, 'labels', 'name', 'value');
     this.formsService.parseOptionsToObjectField(dockerService, values, 'containerLabels', 'name', 'value');
     this.formsService.parseOptionsToObjectField(dockerService, values, 'constraints', 'name', 'value');
     this.formsService.parseOptionsToObjectField(dockerService, values, 'placementPreferences', 'name', 'value');
-    this.formsService.parseOptionsToObjectField(dockerService, values, 'hosts', 'host');
 
-    dockerService.hostname = values['hostname'];
-    dockerService.endpointMode = values['endpointMode'];
     dockerService.restartCondition = values['restartCondition'];
     dockerService.restartMaxAttempts = values['restartMaxAttempts'];
     dockerService.restartDelay = this.formsService.calculateTimeValue(values['restartDelay'],
