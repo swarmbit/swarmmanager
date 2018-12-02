@@ -501,7 +501,8 @@ export class ManageServicesView extends BaseView implements OnInit {
     dockerService.image = values['image'];
     dockerService.replicas = values['replicas'];
     dockerService.global = values['global'];
-    dockerService.ports = this.portsForm.getPorts();
+    this.portsForm.addPorts(dockerService);
+
     const envValues = values['env'];
     const env = [];
     for (const envValue of envValues) {

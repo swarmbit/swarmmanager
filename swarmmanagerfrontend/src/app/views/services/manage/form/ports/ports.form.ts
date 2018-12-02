@@ -2,6 +2,7 @@ import { DockerServicePort } from './../../../../../services/docker/services/doc
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { FormsService } from '../../../../../services/utils/forms.service';
+import { DockerService } from '../../../../../services/docker/services/docker.service';
 
 @Component({
   selector: 'app-ports-form',
@@ -26,16 +27,20 @@ export class PortsForm implements OnInit {
 
   public controlName = 'ports';
 
+  public add = () => {
+    this.addPort(null, false);
+  }
+
   constructor(public formsService: FormsService) {
   }
 
   ngOnInit(): void {
     const ports = new FormArray([]);
     this.serviceForm.addControl(this.controlName, ports);
-    this.addPorts(this.ports);
+    this.addPortsToForm(this.ports);
   }
 
-  getPorts() {
+  addPorts(service: DockerService) {
     const values = this.serviceForm.value;
     const portsValues = values['ports'];
     const ports = [];
@@ -51,32 +56,10 @@ export class PortsForm implements OnInit {
         ports.push(port);
       }
     }
-    return ports;
+    service.ports = ports;
   }
 
-  getControlArray() {
-    return this.formsService.getFormArray(this.serviceForm, this.controlName).controls;
-  }
-
-  showAdd(i): boolean {
-    return (!this.isDetails || this.editMode)
-      && i === (this.formsService.getFormArray(this.serviceForm, this.controlName).controls.length - 1);
-  }
-
-  showDelete(i): boolean {
-    return (!this.isDetails || this.editMode)
-      && i < (this.formsService.getFormArray(this.serviceForm, this.controlName).controls.length - 1);
-  }
-
-  add(): void {
-      this.addPort(null, false);
-  }
-
-  remove(i) {
-    this.formsService.removeFromArray(this.serviceForm, this.controlName, i);
-  }
-
-  private addPorts(ports: DockerServicePort[]) {
+  private addPortsToForm(ports: DockerServicePort[]) {
     if (ports && ports.length > 0) {
       for (const port of ports) {
         this.addPort(port, this.disabled);

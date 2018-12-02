@@ -64,6 +64,7 @@ import { ImportButtonComponent } from './components/import.button/import.button.
 import { StateView } from './views/services/state/state.view';
 import { DockerServiceStateResolver } from './resolvers/docker/services/docker.service.state.resolver';
 import { FormCardComponent } from './components/form.card/form.card.component';
+import { FormArrayComponent } from './components/form.array/form.array.component';
 import { PortsForm } from './views/services/manage/form/ports/ports.form';
 
 declare const Hammer: any;
@@ -104,6 +105,7 @@ export class HammerConfig extends HammerGestureConfig  {
     ConfirmationDialogComponent,
     ImportButtonComponent,
     FormCardComponent,
+    FormArrayComponent,
     CleanServiceImagePipe,
     RemoveServiceImageRepositoryPipe,
     TimeAgoPipe,

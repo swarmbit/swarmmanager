@@ -88,11 +88,11 @@ export class ManageNetworkView extends BaseView {
 
   createForm(dockerNetwork: DockerNetwork): void {
     let driver = 'overlay';
-    if (dockerNetwork.driver && dockerNetwork.driver != '') {
+    if (dockerNetwork.driver && dockerNetwork.driver !== '') {
       driver = dockerNetwork.driver;
     }
     let ipamDriver = 'default';
-    if (dockerNetwork.ipamDriver && dockerNetwork.ipamDriver != '') {
+    if (dockerNetwork.ipamDriver && dockerNetwork.ipamDriver !== '') {
       ipamDriver = dockerNetwork.ipamDriver;
     }
 
@@ -163,7 +163,7 @@ export class ManageNetworkView extends BaseView {
     const subnet = values['subnet'];
     const ipRange = values['ipRange'];
     const gateway = values['gateway'];
-    if (subnet && subnet != '' || ipRange && ipRange != '' || gateway && gateway != '') {
+    if (subnet && subnet !== '' || ipRange && ipRange !== '' || gateway && gateway !== '') {
       const ipamConfig = new DockerIpamConfig();
       ipamConfig.subnet = subnet;
       ipamConfig.ipRange = ipRange;
