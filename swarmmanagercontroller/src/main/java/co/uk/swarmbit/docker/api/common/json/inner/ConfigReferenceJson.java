@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ConfigReferenceJson {
 
     @JsonProperty("File")
-    private ConfigReferenceFileTargetJson file;
+    private SecretAndConfigReferenceFileTargetJson file;
 
     @JsonProperty("ConfigID")
     private String configID;
@@ -17,11 +17,11 @@ public class ConfigReferenceJson {
     @JsonProperty("ConfigName")
     private String configName;
 
-    public ConfigReferenceFileTargetJson getFile() {
+    public SecretAndConfigReferenceFileTargetJson getFile() {
         return file;
     }
 
-    public void setFile(ConfigReferenceFileTargetJson file) {
+    public void setFile(SecretAndConfigReferenceFileTargetJson file) {
         this.file = file;
     }
 

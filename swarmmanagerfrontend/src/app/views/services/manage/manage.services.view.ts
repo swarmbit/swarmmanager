@@ -17,8 +17,7 @@ import { DockerNetworksService } from '../../../services/docker/networks/docker.
 import { DockerNetworkSummary } from '../../../services/docker/networks/docker.network.summary';
 import { ManageServiceConfirmation } from './manage.service.confirmation';
 import { isNumber } from 'util';
-import { BindMountOptions, DockerServiceMount,
-  DockerTmpfsMountOptions, DockerVolumeMountOptions } from '../../../services/docker/services/docker.service.mount';
+import { BindMountOptions, DockerServiceMount, DockerTmpfsMountOptions, DockerVolumeMountOptions } from '../../../services/docker/services/docker.service.mount';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { BrowserService } from '../../../services/utils/browser.service';
 import { DockerConfigsService } from '../../../services/docker/configs/docker.configs.service';
@@ -66,18 +65,18 @@ export class ManageServicesView extends BaseView implements OnInit {
   };
 
   constructor(headerService: HeaderService,
+              private route: ActivatedRoute,
               public swarmService: DockerSwarmService,
               private userService: UserService,
+              private browserService: BrowserService,
               private dockerServicesService: DockerServicesService,
               private router: Router,
-              private route: ActivatedRoute,
               public dialog: MatDialog,
               public formsService: FormsService,
               private networkService: DockerNetworksService,
               private configsService: DockerConfigsService,
               private secretsService: DockerSecretsService,
-              private snackbarService: SnackbarService,
-              private browserService: BrowserService
+              private snackbarService: SnackbarService
   ) {
     super(headerService, route, swarmService, userService, browserService);
     super.enableBackArrow();
