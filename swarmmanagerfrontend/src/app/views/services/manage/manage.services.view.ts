@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
 import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../../../services/user/user.service';
@@ -17,7 +17,8 @@ import { DockerNetworksService } from '../../../services/docker/networks/docker.
 import { DockerNetworkSummary } from '../../../services/docker/networks/docker.network.summary';
 import { ManageServiceConfirmation } from './manage.service.confirmation';
 import { isNumber } from 'util';
-import { BindMountOptions, DockerServiceMount, DockerTmpfsMountOptions, DockerVolumeMountOptions } from '../../../services/docker/services/docker.service.mount';
+import { BindMountOptions, DockerServiceMount, DockerTmpfsMountOptions,
+  DockerVolumeMountOptions } from '../../../services/docker/services/docker.service.mount';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { BrowserService } from '../../../services/utils/browser.service';
 import { DockerConfigsService } from '../../../services/docker/configs/docker.configs.service';
@@ -25,6 +26,7 @@ import { DockerConfig } from '../../../services/docker/configs/docker.config';
 import { DockerSecret } from '../../../services/docker/secrets/docker.secret';
 import { DockerServiceSecretAndConfig } from '../../../services/docker/services/docker.service.secrect.and.config';
 import { DockerSecretsService } from '../../../services/docker/secrets/docker.secrets.service';
+import { PortsForm } from './form/ports/ports.form';
 
 @Component({
   selector: 'app-manage-service',
@@ -32,6 +34,9 @@ import { DockerSecretsService } from '../../../services/docker/secrets/docker.se
   templateUrl: 'manage.services.view.html'
 })
 export class ManageServicesView extends BaseView implements OnInit {
+
+  @ViewChild('portsForm')
+  portsForm: PortsForm;
 
   formErrorMessage = 'Please check invalid fields!';
   formInvalid: boolean;
@@ -84,24 +89,33 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.loadFunction = this.loadService;
   }
 
-  static getCleanedObject(fields: Set<string>, include: boolean, object: any) {
-    const newObj = {};
-    for (const field in object) {
-      if (object.hasOwnProperty(field)) {
-        let add = !fields.has(field);
-        if (include) {
-          add = fields.has(field);
-        }
-        if (add) {
-          newObj[field] = object[field];
-        }
-      }
-    }
-    return newObj;
-  }
-
   ngOnInit(): void {
     this.initCreateForm();
+    this.initExternalDockerObjects();
+  }
+
+  initCreateForm(dockerService ?: DockerService): void {
+    this.formInvalid = false;
+    if (!dockerService && this.isDetails) {
+      this.subscriptions.push(this.route.data
+        .subscribe(
+          (data: Data) => {
+            const dockerServiceData = data['dockerService'];
+            this.serviceName = dockerServiceData.name;
+            super.setViewName('Service ' + dockerServiceData.name);
+            this.isGlobalService = dockerServiceData.global;
+            this.createForm(dockerServiceData);
+          }
+        ));
+    } else if (dockerService) {
+      this.isGlobalService = dockerService.global;
+      this.createForm(dockerService);
+    } else {
+      this.createForm(this.getDockerServiceWithDefaults());
+    }
+  }
+
+  initExternalDockerObjects(): void {
     this.subscriptions.push(this.swarmService.onSwarmChange().subscribe(() => {
       this.networkService.getNetworksList(true).subscribe(
         networks => {
@@ -146,27 +160,6 @@ export class ManageServicesView extends BaseView implements OnInit {
           (err: HttpErrorResponse) => {
             this.goBack(this.router, 'services');
           });
-    }
-  }
-
-  initCreateForm(dockerService ?: DockerService): void {
-    this.formInvalid = false;
-    if (!dockerService && this.isDetails) {
-      this.subscriptions.push(this.route.data
-        .subscribe(
-          (data: Data) => {
-            const dockerServiceData = data['dockerService'];
-            this.serviceName = dockerServiceData.name;
-            super.setViewName('Service ' + dockerServiceData.name);
-            this.isGlobalService = dockerServiceData.global;
-            this.createForm(dockerServiceData);
-          }
-        ));
-    } else if (dockerService) {
-      this.isGlobalService = dockerService.global;
-      this.createForm(dockerService);
-    } else {
-      this.createForm(this.getDockerServiceWithDefaults());
     }
   }
 
@@ -236,7 +229,6 @@ export class ManageServicesView extends BaseView implements OnInit {
       'global': new FormControl({ value: dockerService.global, disabled:  this.isDetails }),
       'replicas': new FormControl({ value: dockerService.replicas, disabled: this.isDisabled() || this.isGlobalService },
         [Validators.required, Validators.min(0)]),
-      'ports': new FormArray([]),
       'env': new FormArray([]),
       'networks':  new FormArray([]),
       'hostname': new FormControl({ value: dockerService.hostname, disabled:  this.isDisabled() }),
@@ -307,7 +299,6 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.addConfigsOrSecrets(dockerService, true);
     this.addConfigsOrSecrets(dockerService, false);
     this.addMounts(dockerService);
-    this.addPorts(dockerService);
     this.addEnv(dockerService);
     this.addNetworks(dockerService);
     this.formsService
@@ -431,23 +422,6 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.formsService.addOption(this.serviceForm, 'env', this.isDisabled(), 'name', 'value');
   }
 
-  private addPorts(dockerService: DockerService) {
-    if (dockerService.ports && dockerService.ports.length > 0) {
-      for (const port of dockerService.ports) {
-        this.addPort(port, this.isDisabled());
-      }
-    }
-    this.addPort(new DockerServicePort(), this.isDisabled());
-  }
-
-  addPort(port: DockerServicePort, disabled: boolean): void {
-    const formGroupObj = {};
-    formGroupObj['protocol'] = new FormControl({value: port && port.protocol ? port.protocol : '', disabled: disabled});
-    formGroupObj['published'] = new FormControl({value: port && port.published ? port.published : '', disabled: disabled});
-    formGroupObj['target'] = new FormControl({value: port && port.target ? port.target : '', disabled: disabled});
-    (<FormArray>this.serviceForm.get('ports')).push(new FormGroup(formGroupObj));
-  }
-
   private addNetworks(dockerService: DockerService) {
     if (dockerService.networks && dockerService.networks.length > 0) {
       for (const network of dockerService.networks) {
@@ -527,21 +501,7 @@ export class ManageServicesView extends BaseView implements OnInit {
     dockerService.image = values['image'];
     dockerService.replicas = values['replicas'];
     dockerService.global = values['global'];
-    const portsValues = values['ports'];
-    const ports = [];
-    for (const portValue of portsValues) {
-      const protocol = portValue['protocol'];
-      const target = portValue['target'];
-      const published = portValue['published'];
-      if (protocol !== '' || target !== '' || published !== '') {
-        const port = new DockerServicePort();
-        port.protocol = protocol;
-        port.target = target;
-        port.published = published;
-        ports.push(port);
-      }
-    }
-    dockerService.ports = ports;
+    dockerService.ports = this.portsForm.getPorts();
     const envValues = values['env'];
     const env = [];
     for (const envValue of envValues) {
@@ -806,7 +766,7 @@ export class ManageServicesView extends BaseView implements OnInit {
 
 
   exportService(): void {
-    const cleanedDockerService = ManageServicesView.getCleanedObject(new Set([
+    const cleanedDockerService = this.getCleanedObject(new Set([
       'id',
       'createdAt',
       'updatedAt'
@@ -829,5 +789,21 @@ export class ManageServicesView extends BaseView implements OnInit {
       } catch (err) {
         this.snackbarService.showError('Invalid services file');
       }
+  }
+
+   getCleanedObject(fields: Set<string>, include: boolean, object: any) {
+    const newObj = {};
+    for (const field in object) {
+      if (object.hasOwnProperty(field)) {
+        let add = !fields.has(field);
+        if (include) {
+          add = fields.has(field);
+        }
+        if (add) {
+          newObj[field] = object[field];
+        }
+      }
+    }
+    return newObj;
   }
 }
