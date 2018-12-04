@@ -45,8 +45,8 @@
     </mat-form-field>
   </div>
 
- <app-ports-form #portsForm class="sm-form-card" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [ports]="service.ports" [disabled]="isDisabled()"></app-ports-form>
- <app-networks-form #networksForm class="sm-form-card networks" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [service]="service" [disabled]="isDisabled()"></app-networks-form>
+ <app-ports-form #portsForm class="sm-form-card" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-ports-form>
+ <app-networks-form #networksForm class="sm-form-card networks" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-networks-form>
 
   <app-form-card-component class="sm-form-card" title="Environment Variables" formArrayName="env">
     <div class="sm-field-pair" [formGroup]="envControl" *ngFor="let envControl of formsService.getFormArray(serviceForm, 'env').controls; let i = index;">
@@ -602,14 +602,20 @@
   </app-form-card-component>
 
   <app-form-card-component title="Placement Constraints" class="sm-form-card" formArrayName="constraints" *ngIf="formsService.getFormArray(serviceForm, 'constraints').controls.length > 0">
-    <div class="sm-field-pair" [formGroup]="constraintsControl" *ngFor="let constraintsControl of formsService.getFormArray(serviceForm, 'constraints').controls; let i = index;">
+    <div class="sm-form-row" [formGroup]="constraintsControl" *ngFor="let constraintsControl of formsService.getFormArray(serviceForm, 'constraints').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Name" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select formControlName="different">
+          <mat-option [value]="'=='">==</mat-option>
+          <mat-option [value]="'!='">!=</mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'constraints', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="addConstraint(serviceForm, null, isDetails)">
         <mat-icon>add</mat-icon>
       </button>
       <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'constraints', i)">

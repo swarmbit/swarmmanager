@@ -36,7 +36,11 @@ export class FormArrayComponent {
   }
 
   getControlArray() {
-    return this.formsService.getFormArray(this.form, this.controlName).controls;
+    const group = this.formsService.getFormArray(this.form, this.controlName);
+    if (group) {
+      return group.controls;
+    }
+    return [];
   }
 
   showAdd(i): boolean {

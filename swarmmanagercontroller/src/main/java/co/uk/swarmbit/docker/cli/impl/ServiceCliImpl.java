@@ -120,8 +120,10 @@ public class ServiceCliImpl implements ServiceCli {
             Map<String, List<Task>> tasksByService = new HashMap<>();
             tasks.forEach(task -> {
                 task.setServiceName(service.getSpec().getName());
-                List<Task> tasksAux = tasksByService.computeIfAbsent(task.getNodeId(), k -> new ArrayList<>());
-                tasksAux.add(task);
+                if (task.getNodeId() != null) {
+                    List<Task> tasksAux = tasksByService.computeIfAbsent(task.getNodeId(), k -> new ArrayList<>());
+                    tasksAux.add(task);
+                }
             });
             for (Map.Entry<String, List<Task>> entry : tasksByService.entrySet()) {
                 NodeJson nodeJson = nodesApi.inspectNode(swarmId, entry.getKey());

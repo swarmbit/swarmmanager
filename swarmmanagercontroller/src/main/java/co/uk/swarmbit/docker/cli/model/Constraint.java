@@ -8,6 +8,10 @@ public class Constraint {
 
     private boolean different;
 
+    public Constraint() {
+
+    }
+
     public Constraint(String name, String value, boolean different) {
         this.name = name;
         this.value = value;
@@ -24,6 +28,18 @@ public class Constraint {
 
     public boolean isDifferent() {
         return different;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setDifferent(boolean different) {
+        this.different = different;
     }
 
     @Override

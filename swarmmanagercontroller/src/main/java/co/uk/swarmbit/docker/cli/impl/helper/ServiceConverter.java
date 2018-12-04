@@ -338,7 +338,7 @@ public class ServiceConverter {
                             values = constraint.split(equals);
                         }
                         if (values.length == 2) {
-                            constraintsList.add(new Constraint(StringUtils.trim(values[0]), StringUtils.trim(values[0]), isDifferent));
+                            constraintsList.add(new Constraint(StringUtils.trim(values[0]), StringUtils.trim(values[1]), isDifferent));
                         }
                     }
                 }

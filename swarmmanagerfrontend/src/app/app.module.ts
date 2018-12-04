@@ -1,6 +1,6 @@
 import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TimeAgoPipe } from 'time-ago-pipe';
+import { TimeAgoPipe } from './pipes/time.ago.pipe';
 import { ClipboardModule } from 'ngx-clipboard';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -121,7 +121,7 @@ export class HammerConfig extends HammerGestureConfig  {
     MaterialModule,
     HttpClientModule,
     RoutingModule,
-    ClipboardModule
+    ClipboardModule,
   ],
   providers: [
     AuthService,

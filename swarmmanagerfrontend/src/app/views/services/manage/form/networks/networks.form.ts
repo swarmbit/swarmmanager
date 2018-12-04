@@ -1,11 +1,11 @@
 import { DockerNetworkSummary } from './../../../../../services/docker/networks/docker.network.summary';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { FormsService } from '../../../../../services/utils/forms.service';
-import { DockerService } from '../../../../../services/docker/services/docker.service';
 import { DockerSwarmService } from '../../../../../services/docker/swarms/docker.swarms.service';
 import { DockerNetworksService } from '../../../../../services/docker/networks/docker.networks.service';
 import { Subscription } from 'rxjs/Subscription';
+import { NetworkFormUtil } from './network.form.util';
 
 @Component({
   selector: 'app-networks-form',
@@ -25,25 +25,22 @@ export class NetworksForm implements OnInit, OnDestroy {
   @Input()
   public serviceForm: FormGroup;
 
-  @Input()
-  public service: DockerService;
+  public networksControlName = NetworkFormUtil.networksControlName;
 
-  public networksControlName = 'networks';
+  public endpointControlName = NetworkFormUtil.endpointControlName;
 
-  public endpointControlName = 'endpointMode';
+  public hostsControlName = NetworkFormUtil.hostsControlName;
 
-  public hostsControlName = 'hosts';
+  public hostsEntryName = NetworkFormUtil.hostsEntryName;
 
-  public hostsEntryName = 'host';
-
-  public hostnameControlName = 'hostname';
+  public hostnameControlName = NetworkFormUtil.hostnameControlName;
 
   networks: DockerNetworkSummary[] = [];
 
   subscriptions: Subscription[] = [];
 
   public addNetwork = () => {
-    this.addNetworkToForm('', this.isDetails && !this.editMode);
+    NetworkFormUtil.addNetworkToForm(this.serviceForm, '', this.isDetails && !this.editMode);
   }
 
   constructor(public formsService: FormsService,
@@ -65,49 +62,12 @@ export class NetworksForm implements OnInit, OnDestroy {
         }
       );
     }));
-    this.serviceForm.addControl(this.networksControlName,  new FormArray([]));
-    this.serviceForm.addControl(this.hostnameControlName, new FormControl({ value: this.service.hostname, disabled: this.disabled }));
-    this.serviceForm.addControl(this.endpointControlName, new FormControl({ value: this.service.endpointMode, disabled: this.disabled }));
-    this.serviceForm.addControl(this.hostsControlName, new FormArray([]));
-    this.addNetworksToForm(this.service);
-    this.formsService
-        .parseObjectFieldToOptions(this.serviceForm, this.service, this.hostsControlName, true, this.disabled, this.hostsEntryName);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
   }
 
-  addNetworks(service: DockerService) {
-    const values = this.serviceForm.value;
-    const networksValues = values[this.networksControlName];
-    const networks = [];
-    for (const networkValue of networksValues) {
-      const id = networkValue['id'];
-      if (id !== '') {
-        networks.push(id);
-      }
-    }
-    service.networks = networks;
-    service.hostname = values[this.hostnameControlName];
-    service.endpointMode = values[this.endpointControlName];
-    this.formsService.parseOptionsToObjectField(service, values, this.hostsControlName, 'host');
-  }
-
-  private addNetworksToForm(service: DockerService) {
-    if (service.networks && service.networks.length > 0) {
-      for (const network of service.networks) {
-        this.addNetworkToForm(network, this.disabled);
-      }
-    }
-    this.addNetworkToForm('', this.disabled);
-  }
-
-  addNetworkToForm(network: string, disabled: boolean): void {
-    const formGroupObj = {};
-    formGroupObj['id'] = new FormControl({value: network ? network : '', disabled: disabled});
-    (<FormArray>this.serviceForm.get(this.networksControlName)).push(new FormGroup(formGroupObj));
-  }
 }

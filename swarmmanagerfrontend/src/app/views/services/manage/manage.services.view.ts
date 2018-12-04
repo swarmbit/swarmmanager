@@ -1,3 +1,5 @@
+import { NetworkFormUtil } from './form/networks/network.form.util';
+import { PortsFormUtil } from './form/ports/ports.form.util';
 import { NetworksForm } from './form/networks/networks.form';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderService } from '../../../services/header/header.service';
@@ -12,10 +14,8 @@ import { DockerServicesService } from '../../../services/docker/services/docker.
 import { DockerService } from '../../../services/docker/services/docker.service';
 import { CleanServiceImagePipe } from '../../../pipes/clean.service.image.pipe';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DockerServicePort } from '../../../services/docker/services/docker.service.port';
 import { FormsService } from '../../../services/utils/forms.service';
 import { DockerNetworksService } from '../../../services/docker/networks/docker.networks.service';
-import { DockerNetworkSummary } from '../../../services/docker/networks/docker.network.summary';
 import { ManageServiceConfirmation } from './manage.service.confirmation';
 import { isNumber } from 'util';
 import { BindMountOptions, DockerServiceMount, DockerTmpfsMountOptions,
@@ -27,7 +27,6 @@ import { DockerConfig } from '../../../services/docker/configs/docker.config';
 import { DockerSecret } from '../../../services/docker/secrets/docker.secret';
 import { DockerServiceSecretAndConfig } from '../../../services/docker/services/docker.service.secrect.and.config';
 import { DockerSecretsService } from '../../../services/docker/secrets/docker.secrets.service';
-import { PortsForm } from './form/ports/ports.form';
 
 @Component({
   selector: 'app-manage-service',
@@ -35,9 +34,6 @@ import { PortsForm } from './form/ports/ports.form';
   templateUrl: 'manage.services.view.html'
 })
 export class ManageServicesView extends BaseView implements OnInit {
-
-  @ViewChild('portsForm')
-  portsForm: PortsForm;
 
   @ViewChild('networksForm')
   networksForm: NetworksForm;
@@ -179,7 +175,6 @@ export class ManageServicesView extends BaseView implements OnInit {
   }
 
   createService(): void {
-    console.log(this.serviceForm.value);
     if (this.serviceForm.valid) {
       this.formInvalid = false;
       const dialogRef = this.dialog.open(ManageServiceConfirmation, {
@@ -288,14 +283,13 @@ export class ManageServicesView extends BaseView implements OnInit {
     });
     this.addConfigsOrSecrets(dockerService, true);
     this.addConfigsOrSecrets(dockerService, false);
+    this.addConstraints(dockerService);
     this.addMounts(dockerService);
     this.addEnv(dockerService);
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'labels', true, this.isDisabled(), 'name', 'value');
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'containerLabels', true, this.isDisabled(), 'name', 'value');
-    this.formsService
-      .parseObjectFieldToOptions(this.serviceForm, dockerService, 'constraints', true, this.isDisabled(), 'name', 'value');
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'placementPreferences', true, this.isDisabled(), 'name', 'value');
     this.formsService
@@ -310,6 +304,30 @@ export class ManageServicesView extends BaseView implements OnInit {
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'groups', true, this.isDisabled(), 'group');
     this.formsService
       .parseObjectFieldToOptions(this.serviceForm, dockerService, 'logOptions', true, this.isDisabled(), 'option', 'value');
+
+    PortsFormUtil.initPortsForm(this.serviceForm, dockerService.ports, this.isDisabled());
+    NetworkFormUtil.initNetworkForm(this.serviceForm, this.formsService, dockerService, this.isDisabled());
+  }
+
+  private addConstraints(dockerService: DockerService) {
+    if (dockerService && dockerService.constraints) {
+      for (const constraint of dockerService.constraints) {
+        this.addConstraint(this.serviceForm, constraint, this.isDisabled());
+      }
+    }
+    this.addConstraint(this.serviceForm, null, this.isDisabled());
+  }
+
+  private addConstraint(formGroup: FormGroup, object?: any, isDisabled?: boolean) {
+    const name = this.formsService.getValue(object, 'name');
+    const value = this.formsService.getValue(object, 'value');
+    const different = this.formsService.getValue(object, 'different');
+    const constraint = new FormGroup({
+      'name': new FormControl({ value: name, disabled: isDisabled }),
+      'value': new FormControl({ value: value, disabled: isDisabled }),
+      'different': new FormControl({ value: different ? '!=' : '==', disabled: isDisabled }),
+    });
+    (<FormArray>formGroup.get('constraints')).push(constraint);
   }
 
   private addConfigsOrSecrets(dockerService: DockerService, isConfigs: boolean) {
@@ -474,8 +492,8 @@ export class ManageServicesView extends BaseView implements OnInit {
     dockerService.replicas = values['replicas'];
     dockerService.global = values['global'];
 
-    this.portsForm.addPorts(dockerService);
-    this.networksForm.addNetworks(dockerService);
+    PortsFormUtil.addPorts(this.serviceForm, dockerService);
+    NetworkFormUtil.addNetworks(this.serviceForm, this.formsService, dockerService);
 
     const envValues = values['env'];
     const env = [];
@@ -490,7 +508,6 @@ export class ManageServicesView extends BaseView implements OnInit {
 
     this.formsService.parseOptionsToObjectField(dockerService, values, 'labels', 'name', 'value');
     this.formsService.parseOptionsToObjectField(dockerService, values, 'containerLabels', 'name', 'value');
-    this.formsService.parseOptionsToObjectField(dockerService, values, 'constraints', 'name', 'value');
     this.formsService.parseOptionsToObjectField(dockerService, values, 'placementPreferences', 'name', 'value');
 
     dockerService.restartCondition = values['restartCondition'];
@@ -556,7 +573,25 @@ export class ManageServicesView extends BaseView implements OnInit {
     this.parseMounts(dockerService, values);
     this.parseConfigsOrSecrets(dockerService, values, true);
     this.parseConfigsOrSecrets(dockerService, values, false);
+    this.parseConstraints(dockerService, values);
+    console.log(dockerService);
     return dockerService;
+  }
+
+  parseConstraints(dockerService: DockerService, values) {
+    const constraintsArr = values['constraints'];
+    const constraints = [];
+    for (const constraintObj of constraintsArr) {
+      if (constraintObj.name.trim() !== '' && constraintObj.value.trim() !== '') {
+        const constraint: any = {
+          name: constraintObj.name,
+          value: constraintObj.value
+        };
+        constraint.different = (constraintObj.different === '!=');
+        constraints.push(constraint);
+      }
+    }
+    dockerService.constraints = constraints;
   }
 
   parseConfigsOrSecrets(dockerService: DockerService, values, isConfigs: boolean) {
