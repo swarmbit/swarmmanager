@@ -1,13 +1,16 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { TimeAgoPipe } from './pipes/time.ago.pipe';
+import { ClipboardModule } from 'ngx-clipboard';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import 'hammerjs';
 
 import { AppComponent } from './app.component';
 import { MaterialModule } from './modules/material/material.module';
 import { LoginView } from './views/login/login.view';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './services/auth/auth.service';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProgressBarService } from './services/progress.bar/progress.bar.service';
 import { ProgressBarComponent } from './components/progress.bar/progress.bar.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -21,8 +24,6 @@ import { DockerSwarmService } from './services/docker/swarms/docker.swarms.servi
 import { RoutingModule } from './modules/routing/routing.module';
 import { NetworksView } from './views/networks/networks.view';
 import { NodesView } from './views/nodes/nodes.view';
-import 'hammerjs';
-import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { DockerNetworksService } from './services/docker/networks/docker.networks.service';
 import { SnackbarService } from './services/snackbar/snackbar.service';
 import { ControlBarComponent } from './components/control.bar/control.bar.component';
@@ -59,11 +60,13 @@ import { DockerSecretsService } from './services/docker/secrets/docker.secrets.s
 import { ManageConfigSecretView } from './views/configs.secrets/manage/manage.config.secret.view';
 import { DockerSecretsResolver } from './resolvers/docker/secrets/docker.secrets.resolver';
 import { DockerConfigsResolver } from './resolvers/docker/configs/docker.configs.resolver';
-import { ClipboardModule } from 'ngx-clipboard';
 import { ImportButtonComponent } from './components/import.button/import.button.component';
 import { StateView } from './views/services/state/state.view';
 import { DockerServiceStateResolver } from './resolvers/docker/services/docker.service.state.resolver';
-import { TimeAgoPipe } from 'time-ago-pipe';
+import { FormCardComponent } from './components/form.card/form.card.component';
+import { FormArrayComponent } from './components/form.array/form.array.component';
+import { PortsForm } from './views/services/manage/form/ports/ports.form';
+import { NetworksForm } from './views/services/manage/form/networks/networks.form';
 
 declare const Hammer: any;
 
@@ -78,33 +81,37 @@ export class HammerConfig extends HammerGestureConfig  {
 @NgModule({
   declarations: [
     AppComponent,
+    LoginView,
+    ProfileView,
+    ServicesView,
+    NetworksView,
+    ManageNetworkView,
+    ManageServicesView,
+    ManageServiceConfirmation,
+    NotFoundView,
+    ForgotView,
+    LogsView,
+    NodesView,
+    UserManagementView,
+    CreateUserView,
+    ConfigsSecretsView,
+    ManageConfigSecretView,
+    StateView,
     ProgressBarComponent,
     ShellComponent,
     UserComponent,
     ControlBarComponent,
     ListContainerComponent,
+    ResetKeyDialogComponent,
     ConfirmationDialogComponent,
+    ImportButtonComponent,
+    FormCardComponent,
+    FormArrayComponent,
     CleanServiceImagePipe,
     RemoveServiceImageRepositoryPipe,
-    LoginView,
-    NetworksView,
-    ManageNetworkView,
-    ServicesView,
-    ManageServicesView,
-    ManageServiceConfirmation,
-    LogsView,
-    NodesView,
-    ProfileView,
-    UserManagementView,
-    CreateUserView,
-    ResetKeyDialogComponent,
-    NotFoundView,
-    ForgotView,
-    ConfigsSecretsView,
-    ManageConfigSecretView,
-    ImportButtonComponent,
-    StateView,
-    TimeAgoPipe
+    TimeAgoPipe,
+    PortsForm,
+    NetworksForm
   ],
   imports: [
     BrowserModule,
@@ -114,7 +121,7 @@ export class HammerConfig extends HammerGestureConfig  {
     MaterialModule,
     HttpClientModule,
     RoutingModule,
-    ClipboardModule
+    ClipboardModule,
   ],
   providers: [
     AuthService,

@@ -16,7 +16,7 @@ export class DockerService {
   secrets: DockerServiceSecretAndConfig[];
   labels: any;
   containerLabels: any;
-  constraints: any;
+  constraints: any[];
   placementPreferences: any;
 
   workDir: string;

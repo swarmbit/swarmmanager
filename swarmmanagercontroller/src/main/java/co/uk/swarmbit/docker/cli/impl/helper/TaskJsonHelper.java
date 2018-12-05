@@ -84,8 +84,13 @@ public class TaskJsonHelper {
                     return result.intValue();
                 }
             }
-            if (task1.getDesiredState().equals(TasksFilters.RUNNING_STATE) && !task1.getDesiredState().equals(TasksFilters.RUNNING_STATE)) {
-                return 1;
+            boolean task1DesiredState = task1.getDesiredState().equals(task1.getState());
+            boolean task2DesiredState = task2.getDesiredState().equals(task2.getState());
+            if (!task1DesiredState && task2DesiredState) {
+                return -1;
+            }
+            if (task1.getDesiredState().equals(TasksFilters.RUNNING_STATE) && !task2.getDesiredState().equals(TasksFilters.RUNNING_STATE)) {
+                return -1;
             }
             return task1.getLastStateChange().compareTo(task2.getLastStateChange());
         });

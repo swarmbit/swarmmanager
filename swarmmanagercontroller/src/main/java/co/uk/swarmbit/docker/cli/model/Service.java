@@ -32,7 +32,7 @@ public class Service {
 
     private Map<String, String> labels;
 
-    private Map<String, String> constraints;
+    private List<Constraint> constraints;
 
     private Map<String, String> placementPreferences;
 
@@ -246,11 +246,11 @@ public class Service {
         this.containerLabels = containerLabels;
     }
 
-    public Map<String, String> getConstraints() {
+    public List<Constraint> getConstraints() {
         return constraints;
     }
 
-    public void setConstraints(Map<String, String> constraints) {
+    public void setConstraints(List<Constraint> constraints) {
         this.constraints = constraints;
     }
 

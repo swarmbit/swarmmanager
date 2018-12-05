@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SecretReferenceFileTargetJson {
+public class SecretAndConfigReferenceFileTargetJson {
 
     @JsonProperty("Name")
     private String name;
@@ -54,7 +54,7 @@ public class SecretReferenceFileTargetJson {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("SecretReferenceFileTargetJson{");
+        final StringBuilder sb = new StringBuilder("SecretAndConfigReferenceFileTargetJson{");
         sb.append("name='").append(name).append('\'');
         sb.append(", uid='").append(uid).append('\'');
         sb.append(", gid='").append(gid).append('\'');

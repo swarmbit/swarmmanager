@@ -44,87 +44,11 @@
       <mat-error *ngIf="serviceForm.get('replicas').invalid">Replicas field is invalid</mat-error>
     </mat-form-field>
   </div>
-  <mat-expansion-panel class="sm-form-card" formArrayName="ports">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Ports
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="sm-field ports" [formGroup]="portControl" *ngFor="let portControl of formsService.getFormArray(serviceForm, 'ports').controls; let i = index;">
-      <mat-form-field class="sm-form-field port-margin-right">
-        <mat-select placeholder="Protocol" formControlName="protocol">
-          <mat-option [value]="'tcp'">tcp</mat-option>
-          <mat-option [value]="'udp'">udp</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="sm-form-field">
-        <input matInput placeholder="Published" type="number" min="1" formControlName="published">
-      </mat-form-field>
-      <mat-form-field class="sm-form-field">
-        <input matInput placeholder="Target" type="number" min="1" formControlName="target">
-      </mat-form-field>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'ports').controls.length - 1)" (click)="addPort(null, false)">
-        <mat-icon>add</mat-icon>
-      </button>
-      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'ports').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'ports', i)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card networks">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Networks
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div formArrayName="networks">
-      <div class="sm-form-row" [formGroup]="networkControl" *ngFor="let networkControl of formsService.getFormArray(serviceForm, 'networks').controls; let i = index;">
-        <mat-form-field class="sm-form-field big">
-          <mat-select placeholder="Network" formControlName="id">
-            <mat-option [value]="network.id" *ngFor="let network of networks">{{network.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="addNetwork('', isDetails && !editMode)">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'networks').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'networks', i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-    <div class="sm-form-row">
-      <mat-form-field class="sm-form-field big">
-        <input matInput placeholder="Hostname" formControlName="hostname">
-        <mat-error *ngIf="serviceForm.get('hostname').invalid">Hostname field is invalid</mat-error>
-      </mat-form-field>
-    </div>
-    <div class="sm-form-row">
-      <mat-form-field class="sm-form-field big">
-        <mat-select placeholder="Endpoint Mode" formControlName="endpointMode">
-          <mat-option [value]="'vip'">vip</mat-option>
-          <mat-option [value]="'dnsrr'">dnsrr</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="sm-form-row"  [formGroup]="hostControl" *ngFor="let hostControl of formsService.getFormArray(serviceForm, 'hosts').controls; let i = index;">
-      <mat-form-field class="sm-form-field big">
-      <input matInput placeholder="Host" formControlName="host">
-        <mat-error *ngIf="hostControl.invalid">Host field is invalid</mat-error>
-      </mat-form-field>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'hosts', isDetails && !editMode, 'host')">
-        <mat-icon>add</mat-icon>
-      </button>
-      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'hosts').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'hosts', i)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" formArrayName="env">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Environment Variables
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+
+ <app-ports-form #portsForm class="sm-form-card" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-ports-form>
+ <app-networks-form #networksForm class="sm-form-card networks" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-networks-form>
+
+  <app-form-card-component class="sm-form-card" title="Environment Variables" formArrayName="env">
     <div class="sm-field-pair" [formGroup]="envControl" *ngFor="let envControl of formsService.getFormArray(serviceForm, 'env').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Option" formControlName="name">
@@ -139,13 +63,9 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Secrets
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component class="sm-form-card" title="Secrets" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
     <div class="sm-form-card-block" [formGroup]="secretControl" *ngFor="let secretControl of formsService.getFormArray(serviceForm, 'secrets').controls; let i = index;">
       <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'secrets').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'secrets', i)">delete</mat-icon>
       <div class="sm-form-row">
@@ -185,13 +105,10 @@
         </div>
       </div>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion30()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Configs
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+
+  <app-form-card-component class="sm-form-card" title="Configs" *ngIf="swarmService.equalsOrGreaterThenVersion30()">
     <div class="sm-form-card-block" [formGroup]="configControl" *ngFor="let configControl of formsService.getFormArray(serviceForm, 'configs').controls; let i = index;">
       <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'configs').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'configs', i)">delete</mat-icon>
       <div class="sm-form-row">
@@ -231,13 +148,9 @@
         </div>
       </div>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Restarts
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Restarts" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <mat-select placeholder="Restart Condition" formControlName="restartCondition">
@@ -275,13 +188,9 @@
         </mat-select>
       </mat-form-field>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Health Check
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Health Check" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field extra-big">
          <textarea matInput placeholder="Cmd" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" formControlName="healthCmd"></textarea>
@@ -330,13 +239,9 @@
     <div class="sm-form-row" style="padding-bottom: 1rem">
       <mat-slide-toggle class="sm-form-field" formControlName="noHealthCheck">No Health Check</mat-slide-toggle>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Resources
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Resources" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Reserve Memory" formControlName="reserveMemory" type="number" min="0">
@@ -371,13 +276,9 @@
         <mat-error *ngIf="serviceForm.get('limitCpu').invalid">Limit CPU field is invalid</mat-error>
       </mat-form-field>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Update Config
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Update Config" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Delay" formControlName="updateDelay" type="number" min="0">
@@ -429,13 +330,9 @@
         <mat-error *ngIf="serviceForm.get('updateParallelism').invalid">Parallelism field is invalid</mat-error>
       </mat-form-field>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Rollback Config
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Rollback Config" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Delay" formControlName="rollbackDelay" type="number" min="0">
@@ -486,13 +383,9 @@
         <mat-error *ngIf="serviceForm.get('rollbackParallelism').invalid">Parallelism field is invalid</mat-error>
       </mat-form-field>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Mounts
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Mounts" class="sm-form-card">
     <div class="sm-form-card-block" [formGroup]="mountControl" *ngFor="let mountControl of formsService.getFormArray(serviceForm, 'mounts').controls; let i = index;">
       <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'mounts').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'mounts', i)">delete</mat-icon>
       <div class="sm-form-row">
@@ -605,13 +498,9 @@
         <button mat-raised-button color="primary" type="button" (click)="addMount(serviceForm)">New Mount</button>
       </div>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" formArrayName="labels" *ngIf="formsService.getFormArray(serviceForm, 'labels').controls.length > 0">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Labels
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Labels" class="sm-form-card" formArrayName="labels" *ngIf="formsService.getFormArray(serviceForm, 'labels').controls.length > 0">
     <div class="sm-field-pair" [formGroup]="labelControl" *ngFor="let labelControl of formsService.getFormArray(serviceForm, 'labels').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Label" formControlName="name">
@@ -626,13 +515,9 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" formArrayName="containerLabels" *ngIf="formsService.getFormArray(serviceForm, 'containerLabels').controls.length > 0">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Container Labels
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Container Labels" class="sm-form-card" formArrayName="containerLabels" *ngIf="formsService.getFormArray(serviceForm, 'containerLabels').controls.length > 0">
     <div class="sm-field-pair" [formGroup]="containerLabelControl" *ngFor="let containerLabelControl of formsService.getFormArray(serviceForm, 'containerLabels').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Label" formControlName="name">
@@ -647,13 +532,9 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        General Container
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="General Container" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field big">
         <input matInput placeholder="Work Dir" formControlName="workDir" type="text">
@@ -718,34 +599,32 @@
     <div class="sm-form-row" style="padding-bottom: 1rem" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
       <mat-slide-toggle class="sm-form-field" formControlName="readOnly">Read Only</mat-slide-toggle>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" formArrayName="constraints" *ngIf="formsService.getFormArray(serviceForm, 'constraints').controls.length > 0">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Placement Constraints
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="sm-field-pair" [formGroup]="constraintsControl" *ngFor="let constraintsControl of formsService.getFormArray(serviceForm, 'constraints').controls; let i = index;">
+  </app-form-card-component>
+
+  <app-form-card-component title="Placement Constraints" class="sm-form-card" formArrayName="constraints" *ngIf="formsService.getFormArray(serviceForm, 'constraints').controls.length > 0">
+    <div class="sm-form-row" [formGroup]="constraintsControl" *ngFor="let constraintsControl of formsService.getFormArray(serviceForm, 'constraints').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Name" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select formControlName="different">
+          <mat-option [value]="'=='">==</mat-option>
+          <mat-option [value]="'!='">!=</mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Value" formControlName="value">
       </mat-form-field>
-      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'constraints', isDetails, 'name', 'value')">
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="addConstraint(serviceForm, null, isDetails)">
         <mat-icon>add</mat-icon>
       </button>
       <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'constraints', i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" formArrayName="placementPreferences" *ngIf="formsService.getFormArray(serviceForm, 'placementPreferences').controls.length > 0 && swarmService.equalsOrGreaterThenVersion28()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Placement Preferences
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Placement Preferences" class="sm-form-card" formArrayName="placementPreferences" *ngIf="formsService.getFormArray(serviceForm, 'placementPreferences').controls.length > 0 && swarmService.equalsOrGreaterThenVersion28()">
     <div class="sm-field-pair" [formGroup]="placementPreferencesControl" *ngFor="let placementPreferencesControl of formsService.getFormArray(serviceForm, 'placementPreferences').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Name" formControlName="name">
@@ -760,13 +639,9 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Dns
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Dns" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
     <div class="sm-form-row"  [formGroup]="dnsServersControl" *ngFor="let dnsServersControl of formsService.getFormArray(serviceForm, 'dnsServers').controls; let i = index;">
       <mat-form-field class="sm-form-field big">
         <input matInput placeholder="Dns Server" formControlName="dnsServer">
@@ -803,13 +678,9 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel class="sm-form-card">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Logs
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+  </app-form-card-component>
+
+  <app-form-card-component title="Logs" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field big">
         <input matInput placeholder="Log Driver" formControlName="logDriver" type="text">
@@ -830,5 +701,6 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-  </mat-expansion-panel>
+  </app-form-card-component>
+
 </form>

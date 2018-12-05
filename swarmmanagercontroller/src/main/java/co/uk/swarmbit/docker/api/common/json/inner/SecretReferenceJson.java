@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SecretReferenceJson {
 
     @JsonProperty("File")
-    private SecretReferenceFileTargetJson file;
+    private SecretAndConfigReferenceFileTargetJson file;
 
     @JsonProperty("SecretID")
     private String secretID;
@@ -17,11 +17,11 @@ public class SecretReferenceJson {
     @JsonProperty("SecretName")
     private String secretName;
 
-    public SecretReferenceFileTargetJson getFile() {
+    public SecretAndConfigReferenceFileTargetJson getFile() {
         return file;
     }
 
-    public void setFile(SecretReferenceFileTargetJson file) {
+    public void setFile(SecretAndConfigReferenceFileTargetJson file) {
         this.file = file;
     }
 

@@ -66,7 +66,7 @@ public class ServiceCliImpl implements ServiceCli {
     public Service inspectService(String swarmId, String serviceId) {
         ServiceJson serviceJson = servicesApi.inspectService(swarmId, serviceId,
                 new ServiceInspectParameters().setInsertDefaultsQueryParam(true));
-        return ServiceConverter.newServiceConverter(serviceJson).getService();
+        return new ServiceConverter(serviceJson).getService();
     }
 
     @Override
@@ -120,8 +120,10 @@ public class ServiceCliImpl implements ServiceCli {
             Map<String, List<Task>> tasksByService = new HashMap<>();
             tasks.forEach(task -> {
                 task.setServiceName(service.getSpec().getName());
-                List<Task> tasksAux = tasksByService.computeIfAbsent(task.getNodeId(), k -> new ArrayList<>());
-                tasksAux.add(task);
+                if (task.getNodeId() != null) {
+                    List<Task> tasksAux = tasksByService.computeIfAbsent(task.getNodeId(), k -> new ArrayList<>());
+                    tasksAux.add(task);
+                }
             });
             for (Map.Entry<String, List<Task>> entry : tasksByService.entrySet()) {
                 NodeJson nodeJson = nodesApi.inspectNode(swarmId, entry.getKey());
@@ -307,67 +309,7 @@ public class ServiceCliImpl implements ServiceCli {
     }
 
     private ServiceSpecJson getServiceSpecJson(ServiceSpecJson serviceSpecJson, Service service, boolean create) {
-        ServiceSpecJsonConverter helper = ServiceSpecJsonConverter.createNewConverter(serviceSpecJson);
-        if (create) {
-            helper.setName(service.getName());
-            helper.setMode(service.isGlobal());
-        }
-        helper.setReplicas(service.getReplicas())
-                .setPorts(service.getPorts())
-                .setEnvs(service.getEnv())
-                .setImage(service.getImage())
-                .setConfigs(service.getConfigs())
-                .setSecrets(service.getSecrets())
-                .setArgs(service.getArgs())
-                .setConstraints(service.getConstraints())
-                .setContainerLabels(service.getContainerLabels())
-                .setLabels(service.getLabels())
-                .setDnsOptions(service.getDnsOptions())
-                .setDnsSearches(service.getDnsSearches())
-                .setDnsServers(service.getDnsServers())
-                .setEndpointMode(service.getEndpointMode())
-                .setEntrypoint(service.getEntrypoint())
-                .setForceUpdate(service.getForceUpdate())
-                .setGroups(service.getGroups())
-                .setUser(service.getUser())
-                .setWorkDir(service.getWorkDir())
-                .setHostname(service.getHostname())
-                .setHosts(service.getHosts())
-                .setStopGracePeriod(service.getStopGracePeriod())
-                .setLogDriver(service.getLogDriver())
-                .setLogOptions(service.getLogOptions())
-                .setMounts(service.getMounts())
-                .setNetworks(service.getNetworks())
-                .setHealthCmd(service.getHealthCmd())
-                .setHealthInterval(service.getHealthInterval())
-                .setHealthRetries(service.getHealthRetries())
-                .setHealthStartPeriod(service.getHealthStartPeriod())
-                .setHealthTimeout(service.getHealthTimeout())
-                .setNoHealthCheck(service.getNoHealthCheck())
-                .setPlacementPreferences(service.getPlacementPreferences())
-                .setReadOnly(service.getReadOnly())
-                .setStopSignal(service.getStopSignal())
-                .setResourcesCpu(service.getLimitCpu(), true)
-                .setResourcesCpu(service.getReserveCpu(), false)
-                .setResourcesMemory(service.getLimitMemory(), true)
-                .setResourcesMemory(service.getReserveMemory(), false)
-                .setRestartCondition(service.getRestartCondition())
-                .setRestartDelay(service.getRestartDelay())
-                .setRestartMaxAttempts(service.getRestartMaxAttempts())
-                .setRestartWindow(service.getRestartWindow())
-                .setConfigDelay(service.getUpdateDelay(), false)
-                .setConfigFailureAction(service.getUpdateFailureAction(), false)
-                .setConfigFailureRatio(service.getUpdateMaxFailureRatio(), false)
-                .setConfigMonitor(service.getUpdateMonitor(), false)
-                .setConfigOrder(service.getUpdateOrder(), false)
-                .setConfigParallelism(service.getUpdateParallelism(), false)
-                .setConfigDelay(service.getRollbackDelay(), true)
-                .setConfigFailureAction(service.getRollbackFailureAction(), true)
-                .setConfigFailureRatio(service.getRollbackMaxFailureRatio(), true)
-                .setConfigMonitor(service.getRollbackMonitor(), true)
-                .setConfigOrder(service.getRollbackOrder(), true)
-                .setConfigParallelism(service.getRollbackParallelism(), true);
-        return helper.getServiceSpecJson();
+        return new ServiceSpecJsonConverter(serviceSpecJson, service, create).getServiceSpecJson();
     }
 
 }
