@@ -414,8 +414,10 @@ export class ManageServicesView extends BaseView implements OnInit {
   private addEnv(dockerService: DockerService) {
     if (dockerService.env && dockerService.env.length > 0) {
       for (const env of dockerService.env) {
+        console.log(env);
         const envArr = env.split('=');
         if (envArr.length === 2) {
+          console.log(envArr);
           this.formsService.addOption(this.serviceForm, 'env', this.isDisabled(), 'name', 'value', envArr[0], envArr[1]);
         } else if (env.startsWith('=')) {
           this.formsService.addOption(this.serviceForm, 'env', this.isDisabled(), 'name', 'value', '', env.substr(1));

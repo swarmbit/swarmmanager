@@ -105,11 +105,9 @@ export class FormsService {
     if (firstLabel) {
       formGroupObj[firstLabel] = new FormControl({value: firstValue ? firstValue : '', disabled: disabled});
       if (secondLabel) {
-        formGroupObj[secondLabel] = new FormControl({value: secondValue ? firstValue : '', disabled: disabled});
+        formGroupObj[secondLabel] = new FormControl({value: secondValue ? secondValue : '', disabled: disabled});
       }
       (<FormArray>formGroup.get(type)).push(new FormGroup(formGroupObj));
-    } else {
-      (<FormArray>formGroup.get(type)).push(new FormControl({value: firstValue ? firstValue : '', disabled: disabled}));
     }
   }
   removeFromArray(formGroup: FormGroup, type: string, index: number): void {

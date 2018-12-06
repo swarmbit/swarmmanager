@@ -45,10 +45,10 @@
     </mat-form-field>
   </div>
 
- <app-ports-form #portsForm class="sm-form-card" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-ports-form>
- <app-networks-form #networksForm class="sm-form-card networks" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-networks-form>
+ <app-ports-form #portsForm [expanded]="isDetails" class="sm-form-card" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-ports-form>
+ <app-networks-form #networksForm [expanded]="isDetails" class="sm-form-card networks" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-networks-form>
 
-  <app-form-card-component class="sm-form-card" title="Environment Variables" formArrayName="env">
+  <app-form-card-component [expanded]="isDetails"  class="sm-form-card" title="Environment Variables" formArrayName="env">
     <div class="sm-field-pair" [formGroup]="envControl" *ngFor="let envControl of formsService.getFormArray(serviceForm, 'env').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Option" formControlName="name">
@@ -65,7 +65,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component class="sm-form-card" title="Secrets" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+  <app-form-card-component [expanded]="isDetails"  class="sm-form-card" title="Secrets" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
     <div class="sm-form-card-block" [formGroup]="secretControl" *ngFor="let secretControl of formsService.getFormArray(serviceForm, 'secrets').controls; let i = index;">
       <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'secrets').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'secrets', i)">delete</mat-icon>
       <div class="sm-form-row">
@@ -108,7 +108,7 @@
   </app-form-card-component>
 
 
-  <app-form-card-component class="sm-form-card" title="Configs" *ngIf="swarmService.equalsOrGreaterThenVersion30()">
+  <app-form-card-component [expanded]="isDetails"  class="sm-form-card" title="Configs" *ngIf="swarmService.equalsOrGreaterThenVersion30()">
     <div class="sm-form-card-block" [formGroup]="configControl" *ngFor="let configControl of formsService.getFormArray(serviceForm, 'configs').controls; let i = index;">
       <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'configs').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'configs', i)">delete</mat-icon>
       <div class="sm-form-row">
@@ -150,7 +150,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Restarts" class="sm-form-card">
+  <app-form-card-component [expanded]="isDetails"  title="Restarts" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <mat-select placeholder="Restart Condition" formControlName="restartCondition">
@@ -190,7 +190,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Health Check" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+  <app-form-card-component [expanded]="isDetails"  title="Health Check" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field extra-big">
          <textarea matInput placeholder="Cmd" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" formControlName="healthCmd"></textarea>
@@ -241,7 +241,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Resources" class="sm-form-card">
+  <app-form-card-component [expanded]="isDetails"  title="Resources" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Reserve Memory" formControlName="reserveMemory" type="number" min="0">
@@ -278,7 +278,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Update Config" class="sm-form-card">
+  <app-form-card-component [expanded]="isDetails"  title="Update Config" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Delay" formControlName="updateDelay" type="number" min="0">
@@ -332,7 +332,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Rollback Config" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
+  <app-form-card-component [expanded]="isDetails" title="Rollback Config" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Delay" formControlName="rollbackDelay" type="number" min="0">
@@ -385,7 +385,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Mounts" class="sm-form-card">
+  <app-form-card-component [expanded]="isDetails"  title="Mounts" class="sm-form-card">
     <div class="sm-form-card-block" [formGroup]="mountControl" *ngFor="let mountControl of formsService.getFormArray(serviceForm, 'mounts').controls; let i = index;">
       <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'mounts').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'mounts', i)">delete</mat-icon>
       <div class="sm-form-row">
@@ -500,7 +500,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Labels" class="sm-form-card" formArrayName="labels" *ngIf="formsService.getFormArray(serviceForm, 'labels').controls.length > 0">
+  <app-form-card-component [expanded]="isDetails"  title="Labels" class="sm-form-card" formArrayName="labels" *ngIf="formsService.getFormArray(serviceForm, 'labels').controls.length > 0">
     <div class="sm-field-pair" [formGroup]="labelControl" *ngFor="let labelControl of formsService.getFormArray(serviceForm, 'labels').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Label" formControlName="name">
@@ -517,7 +517,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Container Labels" class="sm-form-card" formArrayName="containerLabels" *ngIf="formsService.getFormArray(serviceForm, 'containerLabels').controls.length > 0">
+  <app-form-card-component [expanded]="isDetails"  title="Container Labels" class="sm-form-card" formArrayName="containerLabels" *ngIf="formsService.getFormArray(serviceForm, 'containerLabels').controls.length > 0">
     <div class="sm-field-pair" [formGroup]="containerLabelControl" *ngFor="let containerLabelControl of formsService.getFormArray(serviceForm, 'containerLabels').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Label" formControlName="name">
@@ -534,7 +534,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="General Container" class="sm-form-card">
+  <app-form-card-component [expanded]="isDetails"  title="General Container" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field big">
         <input matInput placeholder="Work Dir" formControlName="workDir" type="text">
@@ -601,7 +601,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Placement Constraints" class="sm-form-card" formArrayName="constraints" *ngIf="formsService.getFormArray(serviceForm, 'constraints').controls.length > 0">
+  <app-form-card-component [expanded]="isDetails"  title="Placement Constraints" class="sm-form-card" formArrayName="constraints" *ngIf="formsService.getFormArray(serviceForm, 'constraints').controls.length > 0">
     <div class="sm-form-row" [formGroup]="constraintsControl" *ngFor="let constraintsControl of formsService.getFormArray(serviceForm, 'constraints').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Name" formControlName="name">
@@ -624,7 +624,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Placement Preferences" class="sm-form-card" formArrayName="placementPreferences" *ngIf="formsService.getFormArray(serviceForm, 'placementPreferences').controls.length > 0 && swarmService.equalsOrGreaterThenVersion28()">
+  <app-form-card-component [expanded]="isDetails"  title="Placement Preferences" class="sm-form-card" formArrayName="placementPreferences" *ngIf="formsService.getFormArray(serviceForm, 'placementPreferences').controls.length > 0 && swarmService.equalsOrGreaterThenVersion28()">
     <div class="sm-field-pair" [formGroup]="placementPreferencesControl" *ngFor="let placementPreferencesControl of formsService.getFormArray(serviceForm, 'placementPreferences').controls; let i = index;">
       <mat-form-field class="sm-form-field">
         <input matInput placeholder="Name" formControlName="name">
@@ -641,7 +641,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Dns" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+  <app-form-card-component [expanded]="isDetails"  title="Dns" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
     <div class="sm-form-row"  [formGroup]="dnsServersControl" *ngFor="let dnsServersControl of formsService.getFormArray(serviceForm, 'dnsServers').controls; let i = index;">
       <mat-form-field class="sm-form-field big">
         <input matInput placeholder="Dns Server" formControlName="dnsServer">
@@ -680,7 +680,7 @@
     </div>
   </app-form-card-component>
 
-  <app-form-card-component title="Logs" class="sm-form-card">
+  <app-form-card-component [expanded]="isDetails" title="Logs" class="sm-form-card">
     <div class="sm-form-row">
       <mat-form-field class="sm-form-field big">
         <input matInput placeholder="Log Driver" formControlName="logDriver" type="text">

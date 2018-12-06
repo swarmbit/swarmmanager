@@ -1,5 +1,5 @@
 <form [formGroup]="serviceForm">
-  <app-form-card-component title="Ports" formArrayName="ports">
+  <app-form-card-component [expanded]="expanded" title="Ports" formArrayName="ports">
     <ng-template #formRowTemplate  let-group="control">
       <ng-container [formGroup]="group">
         <mat-form-field class="sm-form-field port-margin-right">
