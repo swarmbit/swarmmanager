@@ -1,12 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import { DockerNodeSummary } from './docker.node.summary';
 import 'rxjs/add/operator/first';
-
+import 'rxjs/add/operator/takeUntil';
 
 @Injectable()
 export class DockerNodesService extends DockerBaseService {
@@ -24,6 +24,7 @@ export class DockerNodesService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNodeSummary[]>(this.dockerSwarmUrl + this.dockerNodesUrl)
           .first()
+          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (nodes: DockerNodeSummary[]) => {
               this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' nodes', nodes, noMessage);

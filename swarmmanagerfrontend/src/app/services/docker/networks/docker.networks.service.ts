@@ -2,10 +2,11 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Injectable } from '@angular/core';
 import { DockerNetworkSummary } from './docker.network.summary';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/takeUntil';
 import { DockerNetwork } from './docker.network';
 
 @Injectable()
@@ -24,12 +25,13 @@ export class DockerNetworksService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNetworkSummary[]>(this.dockerSwarmUrl + this.dockerNetworksUrl)
           .first()
+          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (networks: DockerNetworkSummary[]) => {
               const networksReturn: DockerNetworkSummary[] = [];
               if (networks) {
                 for (const network of networks) {
-                  if (network.scope == 'swarm') {
+                  if (network.scope === 'swarm') {
                     networksReturn.push(network);
                   }
                 }
@@ -48,6 +50,7 @@ export class DockerNetworksService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNetwork>(this.dockerSwarmUrl + this.dockerNetworksUrl + '/' + name)
           .first()
+          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (network: DockerNetwork) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' network', network, noMessage);
@@ -65,7 +68,9 @@ export class DockerNetworksService extends DockerBaseService {
         this.http.delete(this.dockerSwarmUrl + this.dockerNetworksUrl + '/' + name, {
           observe: 'response',
           responseType: 'text'
-        }).subscribe(
+        })
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, 'Removed ' + name + ' network', null);
           },
@@ -81,6 +86,7 @@ export class DockerNetworksService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.post<DockerNetwork>(this.dockerSwarmUrl + this.dockerNetworksUrl, dockerNetwork)
+          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (returnedNetwork: DockerNetwork) => {
               this.completeWithSuccess(observer, 'Created ' + name + ' network', returnedNetwork);

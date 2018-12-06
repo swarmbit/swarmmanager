@@ -5,7 +5,7 @@
 
 	<groupId>co.uk.swarmbit</groupId>
 	<artifactId>swarmmanagercontroller</artifactId>
-	<version>0.0.8-beta</version>
+	<version>0.0.9-beta</version>
 	<packaging>jar</packaging>
 
 	<name>Swarm Manager Controller</name>
