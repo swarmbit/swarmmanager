@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { BaseView } from '../base.view';
 import { HeaderService } from '../../services/header/header.service';
 import { DockerNetworksService } from '../../services/docker/networks/docker.networks.service';
@@ -8,6 +8,7 @@ import { UserService } from '../../services/user/user.service';
 import { ViewUtils } from '../view.utils';
 import { ActivatedRoute } from '@angular/router';
 import { BrowserService } from '../../services/utils/browser.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-networks',
@@ -18,6 +19,7 @@ export class NetworksView extends BaseView {
 
   networks: DockerNetworkSummary[] = [];
   filter = '';
+  refreshSub: Subscription;
 
   constructor(headerService: HeaderService,
               private swarmService: DockerSwarmService,
@@ -32,12 +34,16 @@ export class NetworksView extends BaseView {
   }
 
   refreshNetworks(noMessage?: boolean): void {
-    super.addSubscription(this.networksService.getNetworksList(noMessage).subscribe(
+    if (this.refreshSub) {
+      this.refreshSub.unsubscribe();
+      this.refreshSub = null;
+    }
+    this.refreshSub = this.networksService.getNetworksList(noMessage).subscribe(
       (networks: DockerNetworkSummary[]) => {
         this.networks = networks;
         this.networks.sort(ViewUtils.sortByName);
       }
-    ));
+    );
   }
 
   getNetworks(): DockerNetworkSummary[] {

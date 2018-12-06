@@ -1,5 +1,5 @@
 <form [formGroup]="serviceForm">
-  <app-form-card-component class="sm-form-card networks" title="Networks">
+  <app-form-card-component [expanded]="expanded" class="sm-form-card networks" title="Networks">
       <div formArrayName="networks" class="sm-form-row">
         <ng-template #formNetworkTemplate  let-group="control">
           <ng-container [formGroup]="group">

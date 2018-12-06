@@ -1,10 +1,11 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/takeUntil';
 import { DockerConfig } from './docker.config';
 
 @Injectable()
@@ -56,7 +57,8 @@ export class DockerConfigsService extends DockerBaseService {
         this.http.delete(this.dockerSwarmUrl + this.dockerConfigsUrl + '/' + name, {
           observe: 'response',
           responseType: 'text'
-        }).subscribe(
+        })
+        .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, 'Removed ' + name + ' config', null);
           },
@@ -72,7 +74,7 @@ export class DockerConfigsService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.post<DockerConfig>(this.dockerSwarmUrl + this.dockerConfigsUrl, dockerConfig)
-          .subscribe(
+        .subscribe(
             (returnedConfig: DockerConfig) => {
               this.completeWithSuccess(observer, 'Created ' + name + ' config', returnedConfig);
             },

@@ -21,6 +21,9 @@ export class PortsForm {
   @Input()
   public serviceForm: FormGroup;
 
+  @Input()
+  public expanded: boolean;
+
   public controlName = PortsFormUtil.controlName;
 
   public add = () => {

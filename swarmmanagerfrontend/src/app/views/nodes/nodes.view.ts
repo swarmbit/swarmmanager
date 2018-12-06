@@ -9,6 +9,7 @@ import { DockerNodeSummary } from '../../services/docker/nodes/docker.node.summa
 import { DockerNodesService } from '../../services/docker/nodes/docker.nodes.service';
 import { ActivatedRoute } from '@angular/router';
 import { BrowserService } from '../../services/utils/browser.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-nodes',
@@ -19,6 +20,7 @@ export class NodesView extends BaseView {
 
   nodes: DockerNodeSummary[] = [];
   filter = '';
+  refreshSub: Subscription;
 
   constructor(headerService: HeaderService,
               private swarmService: DockerSwarmService,
@@ -33,7 +35,11 @@ export class NodesView extends BaseView {
   }
 
   refreshNodes(noMessage?: boolean): void {
-    super.addSubscription(this.nodesService.getNodesList(noMessage).subscribe(
+    if (this.refreshSub) {
+      this.refreshSub.unsubscribe();
+      this.refreshSub = null;
+    }
+    this.refreshSub = this.nodesService.getNodesList(noMessage).subscribe(
       (nodes: DockerNodeSummary[]) => {
         this.nodes = nodes;
         this.nodes.sort((value1, value2) => {
@@ -46,7 +52,7 @@ export class NodesView extends BaseView {
           return 0;
         });
       }
-    ));
+    );
   }
 
   getNodes(): DockerNodeSummary[] {

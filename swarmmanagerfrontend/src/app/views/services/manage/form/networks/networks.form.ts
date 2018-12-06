@@ -25,6 +25,9 @@ export class NetworksForm implements OnInit, OnDestroy {
   @Input()
   public serviceForm: FormGroup;
 
+  @Input()
+  public expanded: boolean;
+
   public networksControlName = NetworkFormUtil.networksControlName;
 
   public endpointControlName = NetworkFormUtil.endpointControlName;

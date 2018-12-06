@@ -22,7 +22,7 @@ export class BrowserService {
   }
 
   cannotGoBack(): boolean {
-    return this.history.length == 1;
+    return this.history.length === 1;
   }
 
   goBack(): string {

@@ -16,6 +16,7 @@ export class DockerBaseService {
     this.afterDockerSwarmSelected = new Promise((resolve) => {
       resolveAfterDockerSwarmSelected = resolve;
     });
+
     swarmsService.onSwarmChange().subscribe(
       (dockerSwarm: DockerSwarm) => {
         if (dockerSwarm.id) {

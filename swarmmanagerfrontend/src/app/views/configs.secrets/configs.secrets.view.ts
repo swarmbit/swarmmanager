@@ -11,6 +11,7 @@ import {DockerConfigsService} from '../../services/docker/configs/docker.configs
 import {DockerSecretsService} from '../../services/docker/secrets/docker.secrets.service';
 import {DockerSecret} from '../../services/docker/secrets/docker.secret';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-configs',
@@ -24,6 +25,7 @@ export class ConfigsSecretsView extends BaseView {
 
   filter = '';
   isConfig: boolean;
+  refreshSub: Subscription;
 
   constructor(headerService: HeaderService,
               private swarmService: DockerSwarmService,
@@ -40,10 +42,10 @@ export class ConfigsSecretsView extends BaseView {
     super.addSubscription(this.swarmService.onSwarmChange().subscribe(() => {
       if (this.isConfig && !this.swarmService.equalsOrGreaterThenVersion30()) {
         this.router.navigate(['']);
-        this.snackbar.showError('Selected swarm does not support docker configs')
+        this.snackbar.showError('Selected swarm does not support docker configs');
       } else if (!this.swarmService.equalsOrGreaterThenVersion25()) {
         this.router.navigate(['']);
-        this.snackbar.showError('Selected swarm does not support docker secrets')
+        this.snackbar.showError('Selected swarm does not support docker secrets');
       }
     }));
     if (this.isConfig) {
@@ -59,7 +61,7 @@ export class ConfigsSecretsView extends BaseView {
     if (this.isConfig) {
       return 'Create Config';
     } else {
-      return 'Create Secret'
+      return 'Create Secret';
     }
   }
 
@@ -73,26 +75,34 @@ export class ConfigsSecretsView extends BaseView {
 
   getFilterMessage(): string {
     if (this.isConfig) {
-      return 'Filter by config name'
+      return 'Filter by config name';
     } else {
-      return 'Filter by secret name'
+      return 'Filter by secret name';
     }
   }
 
   refreshConfigs(noMessage?: boolean): void {
-    super.addSubscription(this.configService.getConfigsList(noMessage).subscribe(
+    if (this.refreshSub) {
+      this.refreshSub.unsubscribe();
+      this.refreshSub = null;
+    }
+    this.refreshSub = this.configService.getConfigsList(noMessage).subscribe(
       (configs: DockerConfig[]) => {
         this.configs = configs;
       }
-    ));
+    );
   }
 
   refreshSecrets(noMessage?: boolean): void {
-    super.addSubscription(this.secretsService.getSecretsList(noMessage).subscribe(
+    if (this.refreshSub) {
+      this.refreshSub.unsubscribe();
+      this.refreshSub = null;
+    }
+    this.refreshSub = this.secretsService.getSecretsList(noMessage).subscribe(
       (secrets: DockerSecret[]) => {
         this.secrets = secrets;
       }
-    ));
+    );
   }
 
   getObjects(): any[] {

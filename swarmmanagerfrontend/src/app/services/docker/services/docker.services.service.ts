@@ -60,7 +60,8 @@ export class DockerServicesService extends DockerBaseService {
         this.http.delete(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + name, {
           observe: 'response',
           responseType: 'text'
-        }).subscribe(
+        })
+        .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, null, null);
           },
@@ -76,7 +77,7 @@ export class DockerServicesService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.post<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl, dockerService)
-          .subscribe(
+        .subscribe(
             (returnedService: DockerService) => {
               this.completeWithSuccess(observer, 'Created ' + returnedService.name + ' service', returnedService);
             },

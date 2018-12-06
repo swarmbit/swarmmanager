@@ -2,10 +2,11 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Injectable } from '@angular/core';
 import { DockerNetworkSummary } from './docker.network.summary';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/takeUntil';
 import { DockerNetwork } from './docker.network';
 
 @Injectable()
@@ -29,7 +30,7 @@ export class DockerNetworksService extends DockerBaseService {
               const networksReturn: DockerNetworkSummary[] = [];
               if (networks) {
                 for (const network of networks) {
-                  if (network.scope == 'swarm') {
+                  if (network.scope === 'swarm') {
                     networksReturn.push(network);
                   }
                 }
@@ -65,7 +66,8 @@ export class DockerNetworksService extends DockerBaseService {
         this.http.delete(this.dockerSwarmUrl + this.dockerNetworksUrl + '/' + name, {
           observe: 'response',
           responseType: 'text'
-        }).subscribe(
+        })
+        .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, 'Removed ' + name + ' network', null);
           },

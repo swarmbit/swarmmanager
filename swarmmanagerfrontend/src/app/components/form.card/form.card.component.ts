@@ -7,4 +7,8 @@ import { Component, Input } from '@angular/core';
 export class FormCardComponent {
   @Input()
   public title: string;
+
+  @Input()
+  public expanded: boolean;
+
 }
