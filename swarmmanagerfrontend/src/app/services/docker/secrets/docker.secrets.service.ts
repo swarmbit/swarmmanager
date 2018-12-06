@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
-import 'rxjs/add/operator/takeUntil';
 
 import {DockerSecret} from './docker.secret';
 
@@ -25,7 +24,6 @@ export class DockerSecretsService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerSecret[]>(this.dockerSwarmUrl + this.dockerSecretsUrl)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (configs: DockerSecret[]) => {
               this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' secrets', configs, noMessage);
@@ -42,7 +40,6 @@ export class DockerSecretsService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerSecret>(this.dockerSwarmUrl + this.dockerSecretsUrl + '/' + name)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (config: DockerSecret) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' secret', config, noMessage);
@@ -61,7 +58,6 @@ export class DockerSecretsService extends DockerBaseService {
           observe: 'response',
           responseType: 'text'
         })
-        .takeUntil(this.ngUnsubscribe)
         .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, 'Removed ' + name + ' secret', null);
@@ -78,7 +74,6 @@ export class DockerSecretsService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.post<DockerSecret>(this.dockerSwarmUrl + this.dockerSecretsUrl, dockerSecret)
-        .takeUntil(this.ngUnsubscribe)
         .subscribe(
             (returnedConfig: DockerSecret) => {
               this.completeWithSuccess(observer, 'Created ' + name + ' secret', returnedConfig);

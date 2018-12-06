@@ -7,7 +7,6 @@ import { Observable } from 'rxjs/Observable';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
 import 'rxjs/add/operator/first';
-import 'rxjs/add/operator/takeUntil';
 import { DockerService } from './docker.service';
 import { DockerServiceLogs } from './docker.service.logs';
 import { DockerServiceState } from './docker.service.state';
@@ -28,7 +27,6 @@ export class DockerServicesService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerServicesSummary[]>(this.dockerSwarmUrl + this.dockerServicesUrl)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (services: DockerServicesSummary[]) => {
               this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' services', services, noMessage);
@@ -45,7 +43,6 @@ export class DockerServicesService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + name)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (service: DockerService) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' service', service, noMessage);
@@ -64,7 +61,6 @@ export class DockerServicesService extends DockerBaseService {
           observe: 'response',
           responseType: 'text'
         })
-        .takeUntil(this.ngUnsubscribe)
         .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, null, null);
@@ -81,7 +77,6 @@ export class DockerServicesService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.post<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl, dockerService)
-        .takeUntil(this.ngUnsubscribe)
         .subscribe(
             (returnedService: DockerService) => {
               this.completeWithSuccess(observer, 'Created ' + returnedService.name + ' service', returnedService);
@@ -97,7 +92,6 @@ export class DockerServicesService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.put<DockerService>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + dockerService.name, dockerService)
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (returnedService: DockerService) => {
               this.completeWithSuccess(observer, 'Updated ' + returnedService.name + ' service', returnedService);
@@ -113,7 +107,6 @@ export class DockerServicesService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerServiceLogs>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + name + '/logs')
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (dockerServiceLogs: DockerServiceLogs) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' service logs', dockerServiceLogs);
@@ -129,7 +122,6 @@ export class DockerServicesService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerServiceState>(this.dockerSwarmUrl + this.dockerServicesUrl + '/' + name + '/ps')
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (state: DockerServiceState) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' service state', state);

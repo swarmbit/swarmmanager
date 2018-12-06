@@ -25,7 +25,6 @@ export class DockerNetworksService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNetworkSummary[]>(this.dockerSwarmUrl + this.dockerNetworksUrl)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (networks: DockerNetworkSummary[]) => {
               const networksReturn: DockerNetworkSummary[] = [];
@@ -50,7 +49,6 @@ export class DockerNetworksService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerNetwork>(this.dockerSwarmUrl + this.dockerNetworksUrl + '/' + name)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (network: DockerNetwork) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' network', network, noMessage);
@@ -69,7 +67,6 @@ export class DockerNetworksService extends DockerBaseService {
           observe: 'response',
           responseType: 'text'
         })
-        .takeUntil(this.ngUnsubscribe)
         .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, 'Removed ' + name + ' network', null);
@@ -86,7 +83,6 @@ export class DockerNetworksService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.post<DockerNetwork>(this.dockerSwarmUrl + this.dockerNetworksUrl, dockerNetwork)
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (returnedNetwork: DockerNetwork) => {
               this.completeWithSuccess(observer, 'Created ' + name + ' network', returnedNetwork);

@@ -1,14 +1,10 @@
 import { DockerSwarm } from './swarms/docker.swarm';
 import { DockerSwarmService } from './swarms/docker.swarms.service';
 import { Observer } from 'rxjs/Observer';
-import { Subject } from 'rxjs/Subject';
 
 import { SnackbarService } from '../snackbar/snackbar.service';
-import { OnDestroy } from '@angular/core';
 
-export class DockerBaseService implements OnDestroy {
-
-  protected ngUnsubscribe: Subject<void> = new Subject<void>();
+export class DockerBaseService {
 
   public dockerSwarmUrl: string;
   public dockerSwarmName: string;
@@ -20,6 +16,7 @@ export class DockerBaseService implements OnDestroy {
     this.afterDockerSwarmSelected = new Promise((resolve) => {
       resolveAfterDockerSwarmSelected = resolve;
     });
+
     swarmsService.onSwarmChange().subscribe(
       (dockerSwarm: DockerSwarm) => {
         if (dockerSwarm.id) {
@@ -53,10 +50,5 @@ export class DockerBaseService implements OnDestroy {
     observer.error(err);
     observer.complete();
   }
-
-  public ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-}
 
 }

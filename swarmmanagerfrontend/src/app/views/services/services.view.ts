@@ -9,6 +9,7 @@ import { DockerServicesSummary } from '../../services/docker/services/docker.ser
 import { DockerServicesService } from '../../services/docker/services/docker.services.service';
 import { BrowserService } from '../../services/utils/browser.service';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-services',
@@ -19,6 +20,7 @@ export class ServicesView extends BaseView {
 
   services: DockerServicesSummary[] = [];
   filter = '';
+  refreshSub: Subscription;
 
   constructor(headerService: HeaderService,
               public swarmService: DockerSwarmService,
@@ -34,12 +36,16 @@ export class ServicesView extends BaseView {
   }
 
   refreshNetworks(noMessage?: boolean): void {
-    super.addSubscription(this.dockerServicesService.getServicesList(noMessage).subscribe(
+    if (this.refreshSub) {
+      this.refreshSub.unsubscribe();
+      this.refreshSub = null;
+    }
+    this.refreshSub = this.dockerServicesService.getServicesList(noMessage).subscribe(
       (services: DockerServicesSummary[]) => {
         this.services = services;
         this.services.sort(ViewUtils.sortByName);
       }
-    ));
+    );
   }
 
   getServices(): DockerServicesSummary[] {

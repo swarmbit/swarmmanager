@@ -24,7 +24,6 @@ export class DockerConfigsService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerConfig[]>(this.dockerSwarmUrl + this.dockerConfigsUrl)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (configs: DockerConfig[]) => {
               this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' configs', configs, noMessage);
@@ -41,7 +40,6 @@ export class DockerConfigsService extends DockerBaseService {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerConfig>(this.dockerSwarmUrl + this.dockerConfigsUrl + '/' + name)
           .first()
-          .takeUntil(this.ngUnsubscribe)
           .subscribe(
             (config: DockerConfig) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' config', config, noMessage);
@@ -60,7 +58,6 @@ export class DockerConfigsService extends DockerBaseService {
           observe: 'response',
           responseType: 'text'
         })
-        .takeUntil(this.ngUnsubscribe)
         .subscribe(
           (resp: HttpResponse<any>) => {
             this.completeWithSuccess(observer, 'Removed ' + name + ' config', null);
@@ -77,7 +74,6 @@ export class DockerConfigsService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.post<DockerConfig>(this.dockerSwarmUrl + this.dockerConfigsUrl, dockerConfig)
-        .takeUntil(this.ngUnsubscribe)
         .subscribe(
             (returnedConfig: DockerConfig) => {
               this.completeWithSuccess(observer, 'Created ' + name + ' config', returnedConfig);
