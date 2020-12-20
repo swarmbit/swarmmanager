@@ -17,8 +17,7 @@
   content: "";
 }
 
-/*
-/deep/ .list-container > mat-card {
+::ng-deep .list-container > mat-card {
   flex: 0 1 32%;
   min-width: 20rem;
   box-sizing: border-box;
@@ -27,35 +26,35 @@
   flex-direction: column;
 }
 
-/deep/ .list-container > mat-card .card-actions {
+::ng-deep .list-container > mat-card .card-actions {
   flex-grow: 1;
   display: flex;
 }
 
-/deep/ .list-container > mat-card .card-buttons {
+::ng-deep .list-container > mat-card .card-buttons {
   align-self: flex-end;
 }
 
-/deep/ .list-container > mat-card .card-buttons > button {
+::ng-deep .list-container > mat-card .card-buttons > button {
   margin-right: 1rem;
 }
 
-/deep/ .list-container > mat-card {
+::ng-deep .list-container > mat-card {
   user-select: text;
 }
 
-/deep/ .list-container > mat-card table {
+::ng-deep .list-container > mat-card table {
   margin-bottom: 1rem;
 }
 
-/deep/ .list-container > mat-card table tr td {
+::ng-deep .list-container > mat-card table tr td {
   padding-right: 1rem;
 }
 
 @media (max-width: 1600px)
 {
 
-  /deep/ .list-container > mat-card {
+ ::ng-deep .list-container > mat-card {
     flex: 0 1 48%;
   }
 
@@ -64,9 +63,8 @@
 @media (max-width: 1200px)
 {
 
-  /deep/ .list-container > mat-card {
+  ::ng-deep .list-container > mat-card {
     flex: 0 1 100%;
   }
 
 }
-*/
