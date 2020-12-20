@@ -8,7 +8,7 @@ import { UserService } from '../../services/user/user.service';
 import { ViewUtils } from '../view.utils';
 import { ActivatedRoute } from '@angular/router';
 import { BrowserService } from '../../services/utils/browser.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-networks',

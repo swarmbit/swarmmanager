@@ -8,7 +8,7 @@ import { UserService } from '../../../services/user/user.service';
 import { BaseView } from '../../base.view';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Data, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../components/confirmation.dialog/confirmation.dialog.component';
 import { DockerServicesService } from '../../../services/docker/services/docker.services.service';
 import { DockerService } from '../../../services/docker/services/docker.service';

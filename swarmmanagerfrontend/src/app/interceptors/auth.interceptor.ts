@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -14,13 +15,13 @@ export class AuthInterceptor implements HttpInterceptor {
       req = req.clone({
         headers: req.headers.set(AuthService.AUTH_HEADER, localStorage.getItem(AuthService.AUTH_HEADER))});
     }
-    return next.handle(req).catch(
+    return next.handle(req).pipe(catchError(
       err => {
         if (err.status === 401 || err.status === 403) {
           AuthService.removeToken();
           this.router.navigate(['/login']);
         }
         return Observable.throw(err);
-    });
+    }));
   }
 }

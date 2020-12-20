@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
-import 'rxjs/add/operator/first';
+import { first } from 'rxjs/operators';;
 
 import {DockerSecret} from './docker.secret';
 
@@ -23,7 +23,7 @@ export class DockerSecretsService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerSecret[]>(this.dockerSwarmUrl + this.dockerSecretsUrl)
-          .first()
+          .pipe(first())
           .subscribe(
             (configs: DockerSecret[]) => {
               this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' secrets', configs, noMessage);
@@ -39,7 +39,7 @@ export class DockerSecretsService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerSecret>(this.dockerSwarmUrl + this.dockerSecretsUrl + '/' + name)
-          .first()
+          .pipe(first())
           .subscribe(
             (config: DockerSecret) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' secret', config, noMessage);

@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../services/users/users.service';
 import { CreateUserResponse } from '../../services/users/create.user.response';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ResetKeyDialogComponent } from './reset.key.dialog/reset.key.dialog.component';
 import { ApiUtils } from '../../services/utils/api.utils';
 import { Router } from '@angular/router';
