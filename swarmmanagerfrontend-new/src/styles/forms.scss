@@ -1,0 +1,95 @@
+@import 'common';
+
+.sm-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sm-form .sm-form-row {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  width: 80%;
+}
+
+.sm-form .sm-form-field {
+  padding-right: 0.5rem;
+}
+
+.sm-form .sm-form-row .sm-form-field.extra-big {
+  width: 80%;
+}
+
+.sm-form .sm-form-row .sm-form-field.big {
+  width: 45%;
+}
+
+.sm-form .sm-form-row .sm-form-field.small {
+  width: 10%;
+}
+
+.sm-form .sm-form-row .sm-form-field.after-toggle {
+  margin-top: 1rem;
+}
+
+.sm-form .sm-form-card {
+  width: 80%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sm-form .sm-form-card .sm-form-card-block {
+  border: 0.05rem solid #bdbdbd;
+  border-radius: 0.15rem;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sm-form .sm-form-card .sm-form-card-block .sm-form-card-block-remove {
+  float: right;
+  cursor: pointer;
+  color: #bdbdbd;
+}
+
+.sm-form .sm-form-card .sm-field-pair .sm-form-field {
+  width: 45%;
+}
+
+.sm-form .sm-form-submit {
+  margin-bottom: 2rem;
+  padding-top: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.sm-form .sm-form-submit button {
+  margin-right: 1rem;
+}
+
+@media (max-width: $min-With-media-query)
+{
+  .sm-form .sm-form-row {
+    width: 90%;
+  }
+
+  .sm-form .sm-form-card {
+    width: 90%;
+  }
+
+  .sm-form .sm-form-row .sm-form-field {
+    width: 65%;
+  }
+
+  .sm-form .sm-form-row .sm-form-field.big {
+    width: 65%;
+  }
+
+  .sm-form .sm-form-card .sm-field-pair .sm-form-field {
+    width: 35%;
+  }
+
+  .sm-form .sm-form-row .sm-form-field.small {
+    width: 25%;
+  }
+}

@@ -1,0 +1,57 @@
+<app-control-bar>
+  <div class="node">
+    <button mat-raised-button color="primary" (click)="refreshNodes()">Refresh Nodes List</button>
+  </div>
+  <div class="list">
+    <mat-form-field class="filter">
+      <input matInput type="text" placeholder="Filter" [(ngModel)]="filter"/>
+      <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-hint>Filter by node hostname</mat-hint>
+    </mat-form-field>
+  </div>
+</app-control-bar>
+<app-list-container>
+  <mat-card *ngFor="let node of getNodes()">
+    <mat-card-content>
+      <h3>{{node.hostname}}</h3>
+      <table>
+        <tr>
+          <td><strong>Id</strong></td>
+          <td>{{node.id}}</td>
+        </tr>
+        <tr>
+          <td><strong>Status</strong></td>
+          <td>
+            <span *ngIf="node.status == 'ready'" class="label green">Ready</span>
+            <span *ngIf="node.status == 'pending'" class="label amber">Pending</span>
+            <span *ngIf="node.status == 'down'" class="label red">Down</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Availability</strong></td>
+          <td>
+            <span *ngIf="node.availability == 'active'" class="label green">Active</span>
+            <span *ngIf="node.availability == 'pause'" class="label amber">Pause</span>
+            <span *ngIf="node.availability == 'drain'" class="label red">Drain</span>
+          </td>
+        </tr>
+        <tr *ngIf="node.manager == true">
+          <td><strong>Manager Status</strong></td>
+          <td>
+            <span *ngIf="node.leader">Leader</span>
+            <span *ngIf="!node.leader && node.managerReachability == 'reachable'">Reachable</span>
+            <span *ngIf="!node.leader && node.managerReachability == 'unavailable'">Unavailable</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Running Tasks</strong></td>
+          <td>{{node.numberOfRunningTasks}}</td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</app-list-container>
+
+

@@ -1,0 +1,24 @@
+@import '../../../styles/common';
+
+.control-bar-container {
+  margin: 1rem 0 1rem 0;
+}
+
+.control-bar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.control-bar.mat-card {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+@media (max-width: $min-With-media-query)
+{
+
+  .control-bar-container {
+    width: 100%;
+    margin: 0 0 1rem 0;
+  }
+}

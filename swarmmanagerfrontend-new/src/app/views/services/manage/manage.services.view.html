@@ -1,0 +1,706 @@
+<app-control-bar>
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" *ngIf="!isDetails && user.isUser()" (click)="createService()">Create</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="setEditMode()">Edit</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="openSaveDialog()">Update</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && editMode" type="button" (click)="cancelEdit()">Cancel</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion26()" type="button" (click)="forceUpdate()">Force Update</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode && swarmService.equalsOrGreaterThenVersion31()" type="button" (click)="openRollbackDialog()">Rollback</button>
+    <button mat-raised-button color="primary" *ngIf="isDetails && user.isUser() && !editMode" type="button" (click)="openRemoveDialog()">Remove</button>
+    <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/state" *ngIf="isDetails && !editMode" class="service-button">State</button>
+    <button mat-raised-button color="primary" routerLink="/services/{{service.name}}/logs" *ngIf="isDetails && !editMode && swarmService.equalsOrGreaterThenVersion29()" class="service-button">Logs</button>
+  </div>
+  <div>
+    <button *ngIf="this.isDetails && !this.editMode" mat-raised-button color="primary" (click)="exportService()" type="button">Export</button>
+    <app-import-button *ngIf="!this.isDetails || this.editMode" (valueSelected)="loadJsonService($event)"></app-import-button>
+  </div>
+</app-control-bar>
+<form class="sm-form" [formGroup]="serviceForm">
+  <div class="sm-form-row" *ngIf="formInvalid">
+    <div class="sm-form-field extra-big sm-form-submit">
+      <div class="sm-form-error">
+        <mat-error>{{formErrorMessage}}</mat-error>
+      </div>
+    </div>
+  </div>
+  <div class="sm-form-row">
+    <mat-form-field class="sm-form-field extra-big">
+      <input matInput placeholder="Name" formControlName="name" [required]="!isDetails">
+      <mat-error *ngIf="serviceForm.get('name').invalid">Name field is invalid</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="sm-form-row">
+    <mat-form-field class="sm-form-field extra-big">
+      <input matInput placeholder="Image" formControlName="image" [required]="!isDetails">
+      <mat-error *ngIf="serviceForm.get('image').invalid">Image field is invalid</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="sm-form-row">
+      <mat-slide-toggle class="sm-form-field padding-bottom-toggle" formControlName="global" (click)="toggleGlobal()">Global</mat-slide-toggle>
+  </div>
+  <div class="sm-form-row" *ngIf="!isDetails  || !isGlobalService">
+    <mat-form-field class="sm-form-field after-toggle">
+      <input matInput placeholder="Replicas" formControlName="replicas" type="number" min="0" [required]="!isDetails">
+      <mat-error *ngIf="serviceForm.get('replicas').invalid">Replicas field is invalid</mat-error>
+    </mat-form-field>
+  </div>
+
+ <app-ports-form #portsForm [expanded]="isDetails" class="sm-form-card" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-ports-form>
+ <app-networks-form #networksForm [expanded]="isDetails" class="sm-form-card networks" [isDetails]="isDetails" [editMode]="editMode" [serviceForm]="serviceForm" [disabled]="isDisabled()"></app-networks-form>
+
+  <app-form-card-component [expanded]="isDetails"  class="sm-form-card" title="Environment Variables" formArrayName="env">
+    <div class="sm-field-pair" [formGroup]="envControl" *ngFor="let envControl of formsService.getFormArray(serviceForm, 'env').controls; let i = index;">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Option" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Value" formControlName="value">
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'env').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'env', isDetails && !editMode, 'name', 'value')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'env').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'env', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  class="sm-form-card" title="Secrets" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+    <div class="sm-form-card-block" [formGroup]="secretControl" *ngFor="let secretControl of formsService.getFormArray(serviceForm, 'secrets').controls; let i = index;">
+      <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'secrets').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'secrets', i)">delete</mat-icon>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <mat-select placeholder="Name" formControlName="name">
+            <mat-option [value]="secret.name" *ngFor="let secret of secrets">{{secret.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Name" formControlName="fileName" type="text">
+          <mat-error *ngIf="secretControl.get('fileName').invalid">File name field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Mode" formControlName="fileMode" type="number" min="0">
+          <mat-error *ngIf="secretControl.get('fileMode').invalid">File mode field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File UID" formControlName="fileUID" type="number" min="0">
+          <mat-error *ngIf="secretControl.get('fileUID').invalid">File UID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File GID" formControlName="fileGID" type="number" min="0">
+          <mat-error *ngIf="secretControl.get('fileGID').invalid">File GID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row" *ngIf="!isDetails || editMode">
+        <div class="sm-form-field big">
+          <button mat-raised-button color="primary" type="button" (click)="addConfigOrSecret(serviceForm, false)">New Secret</button>
+        </div>
+      </div>
+    </div>
+  </app-form-card-component>
+
+
+  <app-form-card-component [expanded]="isDetails"  class="sm-form-card" title="Configs" *ngIf="swarmService.equalsOrGreaterThenVersion30()">
+    <div class="sm-form-card-block" [formGroup]="configControl" *ngFor="let configControl of formsService.getFormArray(serviceForm, 'configs').controls; let i = index;">
+      <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'configs').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'configs', i)">delete</mat-icon>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <mat-select placeholder="Name" formControlName="name">
+            <mat-option [value]="config.name" *ngFor="let config of configs">{{config.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Name" formControlName="fileName" type="text">
+          <mat-error *ngIf="configControl.get('fileName').invalid">File name field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File Mode" formControlName="fileMode" type="number" min="0">
+          <mat-error *ngIf="configControl.get('fileMode').invalid">File mode field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File UID" formControlName="fileUID" type="number" min="0">
+          <mat-error *ngIf="configControl.get('fileUID').invalid">File UID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="File GID" formControlName="fileGID" type="number" min="0">
+          <mat-error *ngIf="configControl.get('fileGID').invalid">File GID field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row" *ngIf="!isDetails || editMode">
+        <div class="sm-form-field big">
+          <button mat-raised-button color="primary" type="button" (click)="addConfigOrSecret(serviceForm, true)">New Config</button>
+        </div>
+      </div>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Restarts" class="sm-form-card">
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <mat-select placeholder="Restart Condition" formControlName="restartCondition">
+          <mat-option [value]="'none'">None</mat-option>
+          <mat-option [value]="'on-failure'">On Failure</mat-option>
+          <mat-option [value]="'any'">Any</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Max Attempts" formControlName="restartMaxAttempts" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('restartMaxAttempts').invalid">Max attempts field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Restart Delay" formControlName="restartDelay" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('restartDelay').invalid">Restart delay field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="restartDelayUnit" (selectionChange)="changeTimeUnit($event, 'restartDelay')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Restart Window" formControlName="restartWindow" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('restartWindow').invalid">Restart window field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="restartWindowUnit" (selectionChange)="changeTimeUnit($event, 'restartWindow')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Health Check" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field extra-big">
+         <textarea matInput placeholder="Cmd" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" formControlName="healthCmd"></textarea>
+        <mat-error *ngIf="serviceForm.get('healthCmd').invalid">Cmd field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Retries" formControlName="healthRetries" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('healthRetries').invalid">Retries field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Interval" formControlName="healthInterval" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('healthInterval').invalid">Interval field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="healthIntervalUnit" (selectionChange)="changeTimeUnit($event, 'healthInterval')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Timeout" formControlName="healthTimeout" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('healthTimeout').invalid">Timeout field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="healthTimeoutUnit" (selectionChange)="changeTimeUnit($event, 'healthTimeout')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row" *ngIf="swarmService.equalsOrGreaterThenVersion29()">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Start Period" formControlName="healthStartPeriod" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('healthStartPeriod').invalid">Start period field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="healthStartPeriodUnit" (selectionChange)="changeTimeUnit($event, 'healthStartPeriod')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row" style="padding-bottom: 1rem">
+      <mat-slide-toggle class="sm-form-field" formControlName="noHealthCheck">No Health Check</mat-slide-toggle>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Resources" class="sm-form-card">
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Reserve Memory" formControlName="reserveMemory" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('reserveMemory').invalid">Reserve memory field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="reserveMemoryUnit" (selectionChange)="changeMemoryUnit($event, 'reserveMemory')">
+          <mat-option [value]="unit" *ngFor="let unit of getMemoryUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Reserve CPU" formControlName="reserveCpu" type="number" min="0" max="1" step="1">
+        <mat-error *ngIf="serviceForm.get('reserveCpu').invalid">Reserve CPU field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Limit Memory" formControlName="limitMemory" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('limitMemory').invalid">Limit memory field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="limitMemoryUnit" (selectionChange)="changeMemoryUnit($event, 'limitMemory')">
+          <mat-option [value]="unit" *ngFor="let unit of getMemoryUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Limit CPU" formControlName="limitCpu" type="number" min="0" max="1" step="1">
+        <mat-error *ngIf="serviceForm.get('limitCpu').invalid">Limit CPU field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Update Config" class="sm-form-card">
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Delay" formControlName="updateDelay" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('updateDelay').invalid">Delay field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="updateDelayUnit" (selectionChange)="changeTimeUnit($event, 'updateDelay')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <mat-select placeholder="Failure Action" formControlName="updateFailureAction">
+          <mat-option [value]="'pause'">Pause</mat-option>
+          <mat-option [value]="'continue'">Continue</mat-option>
+          <mat-option [value]="'rollback'">Rollback</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Max Failure Ratio" formControlName="updateMaxFailureRatio" type="number" min="0" max="1" step="0.1">
+        <mat-error *ngIf="serviceForm.get('updateMaxFailureRatio').invalid">Max failure ratio field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Monitor" formControlName="updateMonitor" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('updateMonitor').invalid">Monitor field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="updateMonitorUnit" (selectionChange)="changeTimeUnit($event, 'updateMonitor')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row" *ngIf="swarmService.equalsOrGreaterThenVersion29()">
+      <mat-form-field class="sm-form-field">
+        <mat-select placeholder="Order" formControlName="updateOrder">
+          <mat-option [value]="'start-first'">Start First</mat-option>
+          <mat-option [value]="'stop-first'">Stop First</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Parallelism" formControlName="updateParallelism" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('updateParallelism').invalid">Parallelism field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails" title="Rollback Config" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Delay" formControlName="rollbackDelay" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('rollbackDelay').invalid">Delay field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="rollbackDelayUnit" (selectionChange)="changeTimeUnit($event, 'rollbackDelay')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <mat-select placeholder="Failure Action" formControlName="rollbackFailureAction">
+          <mat-option [value]="'pause'">Pause</mat-option>
+          <mat-option [value]="'continue'">Continue</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Max Failure Ratio" formControlName="rollbackMaxFailureRatio" type="number" min="0" max="1" step="0.1">
+        <mat-error *ngIf="serviceForm.get('rollbackMaxFailureRatio').invalid">Max Failure ratio field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Monitor" formControlName="rollbackMonitor" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('rollbackMonitor').invalid">Monitor field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="rollbackMonitorUnit" (selectionChange)="changeTimeUnit($event, 'rollbackMonitor')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row" *ngIf="swarmService.equalsOrGreaterThenVersion29()">
+      <mat-form-field class="sm-form-field">
+        <mat-select placeholder="Order" formControlName="rollbackOrder">
+          <mat-option [value]="'start-first'">Start First</mat-option>
+          <mat-option [value]="'stop-first'">Stop First</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Parallelism" formControlName="rollbackParallelism" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('rollbackParallelism').invalid">Parallelism field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Mounts" class="sm-form-card">
+    <div class="sm-form-card-block" [formGroup]="mountControl" *ngFor="let mountControl of formsService.getFormArray(serviceForm, 'mounts').controls; let i = index;">
+      <mat-icon class="sm-form-card-block-remove" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'mounts').controls.length - 1)" (click)="formsService.removeFromArray(this.serviceForm, 'mounts', i)">delete</mat-icon>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <mat-select placeholder="Type" formControlName="type">
+            <mat-option [value]="'volume'">Volume</mat-option>
+            <mat-option [value]="'bind'">Bind</mat-option>
+            <mat-option [value]="'tmpfs'">Tmpfs</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row" *ngIf="mountControl.get('type').value === 'bind'">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="Source" formControlName="source" type="text">
+          <mat-error *ngIf="mountControl.get('source').invalid">Source field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="Destination" formControlName="destination" type="text">
+          <mat-error *ngIf="mountControl.get('destination').invalid">Source field is invalid</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row">
+        <mat-form-field class="sm-form-field big">
+          <mat-select placeholder="Consistency" formControlName="consistency">
+            <mat-option [value]="'default'">Default</mat-option>
+            <mat-option [value]="'consistent'">Consistent</mat-option>
+            <mat-option [value]="'cached'">Cached</mat-option>
+            <mat-option [value]="'delegated'">Delegated</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="sm-form-row" style="padding-bottom: 1rem" *ngIf="mountControl.get('type').value === 'volume' || mountControl.get('type').value === 'bind'">
+        <mat-slide-toggle class="sm-form-field" formControlName="readOnly">Read Only</mat-slide-toggle>
+      </div>
+      <div *ngIf="mountControl.get('type').value === 'volume'">
+        <div class="sm-form-row">
+          <mat-form-field class="sm-form-field">
+            <input matInput placeholder="Driver" formControlName="driver" type="text">
+            <mat-error *ngIf="mountControl.get('driver').invalid">Driver field is invalid</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="sm-form-row" style="padding-bottom: 1rem">
+          <mat-slide-toggle class="sm-form-field" formControlName="noCopy">No Copy</mat-slide-toggle>
+        </div>
+        <div class="sm-field-pair" [formGroup]="labelControl" *ngFor="let labelControl of formsService.getFormArray(mountControl, 'labels').controls; let i = index;">
+          <mat-form-field class="sm-form-field">
+            <input matInput placeholder="Label" formControlName="name">
+          </mat-form-field>
+          <mat-form-field class="sm-form-field">
+            <input matInput placeholder="Value" formControlName="value">
+          </mat-form-field>
+          <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(mountControl, 'labels').controls.length - 1)" (click)="formsService.addOption(mountControl, 'labels', isDetails, 'name', 'value')">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(mountControl, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(mountControl, 'labels', i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="sm-form-row"  [formGroup]="optionsControl" *ngFor="let optionsControl of formsService.getFormArray(mountControl, 'options').controls; let i = index;">
+          <mat-form-field class="sm-form-field big">
+            <input matInput placeholder="Option" formControlName="option">
+            <mat-error *ngIf="optionsControl.invalid">Option field is invalid</mat-error>
+          </mat-form-field>
+          <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(mountControl, 'options').controls.length - 1)" (click)="formsService.addOption(mountControl, 'options', isDetails && !editMode, 'option')">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(mountControl, 'options').controls.length - 1)" (click)="formsService.removeFromArray(mountControl, 'options', i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="mountControl.get('type').value === 'bind'">
+        <div class="sm-form-row">
+          <mat-form-field class="sm-form-field big">
+            <mat-select placeholder="Propagation" formControlName="propagation">
+              <mat-option [value]="'shared'">shared</mat-option>
+              <mat-option [value]="'slave'">slave</mat-option>
+              <mat-option [value]="'private'">private</mat-option>
+              <mat-option [value]="'rshared'">rshared</mat-option>
+              <mat-option [value]="'rslave'">rslave</mat-option>
+              <mat-option [value]="'rprivate'">rprivate</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="mountControl.get('type').value === 'tmpfs'">
+        <div class="sm-form-row">
+          <mat-form-field class="sm-form-field">
+            <input matInput placeholder="Size" formControlName="size" type="number" min="0">
+            <mat-error *ngIf="mountControl.get('size').invalid">Size field is invalid</mat-error>
+          </mat-form-field>
+          <mat-form-field class="sm-form-field small">
+            <mat-select placeholder="Unit" formControlName="sizeUnit" (selectionChange)="changeMemoryUnit($event, 'size')">
+              <mat-option [value]="unit" *ngFor="let unit of getMemoryUnits()">{{unit}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="sm-form-row">
+          <mat-form-field class="sm-form-field">
+            <input matInput placeholder="Mode" formControlName="mode" type="number" min="0">
+            <mat-error *ngIf="mountControl.get('mode').invalid">Mode field is invalid</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="sm-form-row" *ngIf="!isDetails || editMode">
+      <div class="sm-form-field big">
+        <button mat-raised-button color="primary" type="button" (click)="addMount(serviceForm)">New Mount</button>
+      </div>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Labels" class="sm-form-card" formArrayName="labels" *ngIf="formsService.getFormArray(serviceForm, 'labels').controls.length > 0">
+    <div class="sm-field-pair" [formGroup]="labelControl" *ngFor="let labelControl of formsService.getFormArray(serviceForm, 'labels').controls; let i = index;">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Label" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Value" formControlName="value">
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'labels').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'labels', isDetails, 'name', 'value')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'labels').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'labels', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Container Labels" class="sm-form-card" formArrayName="containerLabels" *ngIf="formsService.getFormArray(serviceForm, 'containerLabels').controls.length > 0">
+    <div class="sm-field-pair" [formGroup]="containerLabelControl" *ngFor="let containerLabelControl of formsService.getFormArray(serviceForm, 'containerLabels').controls; let i = index;">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Label" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Value" formControlName="value">
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'containerLabels').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'containerLabels', isDetails, 'name', 'value')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'containerLabels').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'containerLabels', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="General Container" class="sm-form-card">
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="Work Dir" formControlName="workDir" type="text">
+        <mat-error *ngIf="serviceForm.get('workDir').invalid">Work Dir field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="Entrypoint" formControlName="entrypoint" type="text">
+        <mat-error *ngIf="serviceForm.get('entrypoint').invalid">Entrypoint field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row"  [formGroup]="argsControl" *ngFor="let argsControl of formsService.getFormArray(serviceForm, 'args').controls; let i = index;">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="Arg" formControlName="arg">
+        <mat-error *ngIf="argsControl.invalid">Arg field is invalid</mat-error>
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'args').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'args', isDetails && !editMode, 'arg')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'args').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'args', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="User" formControlName="user" type="text">
+        <mat-error *ngIf="serviceForm.get('user').invalid">User field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+      <div class="sm-form-row"  [formGroup]="groupsControl" *ngFor="let groupsControl of formsService.getFormArray(serviceForm, 'groups').controls; let i = index;">
+        <mat-form-field class="sm-form-field big">
+          <input matInput placeholder="Group" formControlName="group">
+          <mat-error *ngIf="groupsControl.invalid">Group field is invalid</mat-error>
+        </mat-form-field>
+        <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'groups').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'groups', isDetails && !editMode, 'group')">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'groups').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'groups', i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field big" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
+        <input matInput placeholder="Stop Signal" formControlName="stopSignal" type="text">
+        <mat-error *ngIf="serviceForm.get('stopSignal').invalid">Stop signal field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Stop Grace Period" formControlName="stopGracePeriod" type="number" min="0">
+        <mat-error *ngIf="serviceForm.get('stopGracePeriod').invalid">Stop grace period field is invalid</mat-error>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select placeholder="Unit" formControlName="stopGracePeriodUnit" (selectionChange)="changeTimeUnit($event, 'stopGracePeriod')">
+          <mat-option [value]="unit" *ngFor="let unit of getTimeUnits()">{{unit}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="sm-form-row" style="padding-bottom: 1rem" *ngIf="swarmService.equalsOrGreaterThenVersion28()">
+      <mat-slide-toggle class="sm-form-field" formControlName="readOnly">Read Only</mat-slide-toggle>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Placement Constraints" class="sm-form-card" formArrayName="constraints" *ngIf="formsService.getFormArray(serviceForm, 'constraints').controls.length > 0">
+    <div class="sm-form-row" [formGroup]="constraintsControl" *ngFor="let constraintsControl of formsService.getFormArray(serviceForm, 'constraints').controls; let i = index;">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Name" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field small">
+        <mat-select formControlName="different">
+          <mat-option [value]="'=='">==</mat-option>
+          <mat-option [value]="'!='">!=</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Value" formControlName="value">
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="addConstraint(serviceForm, null, isDetails)">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'constraints').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'constraints', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Placement Preferences" class="sm-form-card" formArrayName="placementPreferences" *ngIf="formsService.getFormArray(serviceForm, 'placementPreferences').controls.length > 0 && swarmService.equalsOrGreaterThenVersion28()">
+    <div class="sm-field-pair" [formGroup]="placementPreferencesControl" *ngFor="let placementPreferencesControl of formsService.getFormArray(serviceForm, 'placementPreferences').controls; let i = index;">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Name" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Value" formControlName="value">
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'placementPreferences').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'placementPreferences', isDetails, 'name', 'value')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'placementPreferences').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'placementPreferences', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails"  title="Dns" class="sm-form-card" *ngIf="swarmService.equalsOrGreaterThenVersion25()">
+    <div class="sm-form-row"  [formGroup]="dnsServersControl" *ngFor="let dnsServersControl of formsService.getFormArray(serviceForm, 'dnsServers').controls; let i = index;">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="Dns Server" formControlName="dnsServer">
+        <mat-error *ngIf="dnsServersControl.invalid">DNS Server field is invalid</mat-error>
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsServers').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsServers', isDetails && !editMode, 'dnsServer')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsServers').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsServers', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="sm-form-row"  [formGroup]="dnsOptionsControl" *ngFor="let dnsOptionsControl of formsService.getFormArray(serviceForm, 'dnsOptions').controls; let i = index;">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="Dns Option" formControlName="dnsOption">
+        <mat-error *ngIf="dnsOptionsControl.invalid">DNS Option field is invalid</mat-error>
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsOptions').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsOptions', isDetails && !editMode, 'dnsOption')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsOptions').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsOptions', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="sm-form-row"  [formGroup]="dnsSearchesControl" *ngFor="let dnsSearchesControl of formsService.getFormArray(serviceForm, 'dnsSearches').controls; let i = index;">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="Dns Search" formControlName="dnsSearch">
+        <mat-error *ngIf="dnsSearchesControl.invalid">DNS Search field is invalid</mat-error>
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'dnsSearches').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'dnsSearches', isDetails && !editMode, 'dnsSearch')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode)  && i < (formsService.getFormArray(serviceForm, 'dnsSearches').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'dnsSearches', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-form-card-component>
+
+  <app-form-card-component [expanded]="isDetails" title="Logs" class="sm-form-card">
+    <div class="sm-form-row">
+      <mat-form-field class="sm-form-field big">
+        <input matInput placeholder="Log Driver" formControlName="logDriver" type="text">
+        <mat-error *ngIf="serviceForm.get('logDriver').invalid">Log driver field is invalid</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="sm-field-pair" [formGroup]="logOptionsControl" *ngFor="let logOptionsControl of formsService.getFormArray(serviceForm, 'logOptions').controls; let i = index;">
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Option" formControlName="option">
+      </mat-form-field>
+      <mat-form-field class="sm-form-field">
+        <input matInput placeholder="Value" formControlName="value">
+      </mat-form-field>
+      <button mat-mini-fab type="button" color="primary" *ngIf="(!isDetails || editMode) && i == (formsService.getFormArray(serviceForm, 'logOptions').controls.length - 1)" (click)="formsService.addOption(serviceForm, 'logOptions', isDetails, 'option', 'value')">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-mini-fab type="button" color="warn" *ngIf="(!isDetails || editMode) && i < (formsService.getFormArray(serviceForm, 'logOptions').controls.length - 1)" (click)="formsService.removeFromArray(serviceForm, 'logOptions', i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-form-card-component>
+
+</form>

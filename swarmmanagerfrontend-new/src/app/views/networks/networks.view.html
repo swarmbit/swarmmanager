@@ -1,0 +1,34 @@
+<app-control-bar>
+  <div class="network">
+    <button routerLink="/networks/create" mat-raised-button color="primary" *ngIf="user.isUser()">Create Network</button>
+    <button mat-raised-button color="primary" (click)="refreshNetworks()">Refresh Networks List</button>
+  </div>
+  <div class="list">
+    <mat-form-field class="filter">
+      <input matInput type="text" placeholder="Filter" [(ngModel)]="filter"/>
+      <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-hint>Filter by network name</mat-hint>
+    </mat-form-field>
+  </div>
+</app-control-bar>
+<app-list-container>
+  <mat-card class="network-card" *ngFor="let network of getNetworks()">
+    <mat-card-content>
+      <h3>{{network.name}}</h3>
+      <table>
+        <tr>
+          <td><strong>Id</strong></td>
+          <td>{{network.id}}</td>
+        </tr>
+        <tr>
+          <td><strong>Driver</strong></td>
+          <td>{{network.driver}}</td>
+        </tr>
+      </table>
+      <button mat-raised-button color="primary" routerLink="/networks/{{network.name}}" *ngIf="user.isUser()">Manage</button>
+      <button mat-raised-button color="primary" routerLink="/networks/{{network.name}}" *ngIf="user.isVisitor() && !user.isUser()">Details</button>
+    </mat-card-content>
+  </mat-card>
+</app-list-container>

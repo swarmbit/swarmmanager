@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-slide-toggle [(ngModel)]="privateRegisty">{{data.registryToggle}}</mat-slide-toggle>
+<div *ngIf="privateRegisty">
+  <mat-slide-toggle [(ngModel)]="dockerHubRegistry">Dockerhub Registry</mat-slide-toggle>
+  <mat-form-field>
+    <input matInput placeholder="Username" [(ngModel)]="username">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Password" type="password" [(ngModel)]="password">
+  </mat-form-field>
+</div>
+<div style="padding-top: 1rem">
+  <mat-dialog-content>Are you sure?</mat-dialog-content>
+</div>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>No</button>
+  <button mat-button [mat-dialog-close]="{ 'result': true, 'privateRegistry': privateRegisty,
+  'username': username, 'password': password, 'dockerHubRegistry': dockerHubRegistry}">Yes</button>
+</mat-dialog-actions>
