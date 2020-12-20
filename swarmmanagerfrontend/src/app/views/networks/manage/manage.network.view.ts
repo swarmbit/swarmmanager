@@ -7,7 +7,7 @@ import { BaseView } from '../../base.view';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DockerNetwork } from '../../../services/docker/networks/docker.network';
 import { ActivatedRoute, Data, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../components/confirmation.dialog/confirmation.dialog.component';
 import { DockerIpamConfig } from '../../../services/docker/networks/docker.ipam.config';
 import { HttpErrorResponse } from '@angular/common/http';

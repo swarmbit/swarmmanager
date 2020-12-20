@@ -6,7 +6,7 @@ import { DockerSwarmService } from '../../../services/docker/swarms/docker.swarm
 import { UserService } from '../../../services/user/user.service';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { HeaderService } from '../../../services/header/header.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { BrowserService } from '../../../services/utils/browser.service';
 import { DockerServiceState } from '../../../services/docker/services/docker.service.state';

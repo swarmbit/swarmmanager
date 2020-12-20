@@ -1,11 +1,11 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DockerSwarmService } from '../swarms/docker.swarms.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { DockerBaseService } from '../docker.base.service';
 import { SnackbarService } from '../../snackbar/snackbar.service';
-import 'rxjs/add/operator/first';
-import 'rxjs/add/operator/takeUntil';
+import { first } from 'rxjs/operators';
+
 import { DockerConfig } from './docker.config';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class DockerConfigsService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerConfig[]>(this.dockerSwarmUrl + this.dockerConfigsUrl)
-          .first()
+          .pipe(first())
           .subscribe(
             (configs: DockerConfig[]) => {
               this.completeWithSuccess(observer, 'Loaded ' + this.dockerSwarmName + ' configs', configs, noMessage);
@@ -39,7 +39,7 @@ export class DockerConfigsService extends DockerBaseService {
     return Observable.create(observer => {
       this.afterDockerSwarmSelected.then(() => {
         this.http.get<DockerConfig>(this.dockerSwarmUrl + this.dockerConfigsUrl + '/' + name)
-          .first()
+          .pipe(first())
           .subscribe(
             (config: DockerConfig) => {
               this.completeWithSuccess(observer, 'Loaded ' + name + ' config', config, noMessage);

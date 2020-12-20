@@ -5,11 +5,14 @@ import { BackArrow } from '../services/header/back.arrow';
 import { User } from '../services/user/user';
 import { DockerSwarmService } from '../services/docker/swarms/docker.swarms.service';
 import { UserService } from '../services/user/user.service';
-import { OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
-export class BaseView implements OnDestroy {
+@Component({
+  template: ''
+})
+export abstract class BaseView implements OnDestroy {
 
   headerService: HeaderService;
   headerInfo: HeaderInfo;

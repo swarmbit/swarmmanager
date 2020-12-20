@@ -9,7 +9,7 @@ import { DockerServicesSummary } from '../../services/docker/services/docker.ser
 import { DockerServicesService } from '../../services/docker/services/docker.services.service';
 import { BrowserService } from '../../services/utils/browser.service';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-services',

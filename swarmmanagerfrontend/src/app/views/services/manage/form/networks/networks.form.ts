@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { FormsService } from '../../../../../services/utils/forms.service';
 import { DockerSwarmService } from '../../../../../services/docker/swarms/docker.swarms.service';
 import { DockerNetworksService } from '../../../../../services/docker/networks/docker.networks.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { NetworkFormUtil } from './network.form.util';
 
 @Component({

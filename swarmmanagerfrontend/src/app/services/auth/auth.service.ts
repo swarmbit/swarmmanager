@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { UserCredentials } from './user.credentials';
-import 'rxjs/add/operator/catch';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AuthError } from './auth.error';
 import { UserService } from '../user/user.service';

@@ -1,5 +1,5 @@
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DockerService } from '../../../services/docker/services/docker.service';
 import { DockerServicesService } from '../../../services/docker/services/docker.services.service';

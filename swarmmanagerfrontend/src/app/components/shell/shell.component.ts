@@ -3,7 +3,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { ScreenService } from '../../services/screen/screen.service';
 import { NavigationItem } from './model/navigation.item';
 import { HeaderService } from '../../services/header/header.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { HeaderInfo } from '../../services/header/header.info';
 import { MatSidenav } from '@angular/material/sidenav';
 import { DockerSwarmService } from '../../services/docker/swarms/docker.swarms.service';

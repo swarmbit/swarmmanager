@@ -10,7 +10,7 @@ import { UsersService } from '../../services/users/users.service';
 import { ViewUtils } from '../view.utils';
 import { UsersRoles } from '../../services/users/users.roles';
 import { ConfirmationDialogComponent } from '../../components/confirmation.dialog/confirmation.dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import { TitleCasePipe } from '@angular/common';
 

@@ -9,7 +9,7 @@ import { DockerNodeSummary } from '../../services/docker/nodes/docker.node.summa
 import { DockerNodesService } from '../../services/docker/nodes/docker.nodes.service';
 import { ActivatedRoute } from '@angular/router';
 import { BrowserService } from '../../services/utils/browser.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nodes',

@@ -1,6 +1,6 @@
 import { DockerSwarm } from './swarms/docker.swarm';
 import { DockerSwarmService } from './swarms/docker.swarms.service';
-import { Observer } from 'rxjs/Observer';
+import { Observer } from 'rxjs';
 
 import { SnackbarService } from '../snackbar/snackbar.service';
 

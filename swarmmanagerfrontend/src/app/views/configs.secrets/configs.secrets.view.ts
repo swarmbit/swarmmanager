@@ -11,7 +11,7 @@ import {DockerConfigsService} from '../../services/docker/configs/docker.configs
 import {DockerSecretsService} from '../../services/docker/secrets/docker.secrets.service';
 import {DockerSecret} from '../../services/docker/secrets/docker.secret';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-configs',
