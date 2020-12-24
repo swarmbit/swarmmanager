@@ -1,3 +1,14 @@
 micronaut:
   application:
     name: swarmmanager
+
+docker:
+  swarms:
+    - id: swarm
+      name: Swarm
+      apiVersion: v1.41
+      description: Swarm
+    - id: swarmProd
+      name: Swarm Prod
+      apiVersion: v1.41
+      description: Swarm Prod

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 /*
 v1.40
-GET /networks now supports a dangling filter type. When set to true (or 1), the endpoint returns all networks that are not in use by a container. When set to false (or 0), only networks that are in use by one or more containers are returned.
+GET /networks now supports a dangling com.swarmbit.docker.api.client.jaxrs.filter type. When set to true (or 1), the endpoint returns all networks that are not in use by a container. When set to false (or 0), only networks that are in use by one or more containers are returned.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -32,6 +32,20 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("javax.annotation:javax.annotation-api")
     implementation("io.micronaut:micronaut-http-client")
+
+    implementation("com.kohlschutter.junixsocket:junixsocket-common:2.0.4")
+    implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.0.4")
+
+    implementation("com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.7")
+    implementation("org.glassfish.jersey.core:jersey-client:2.25.1")
+    implementation("org.glassfish.jersey.connectors:jersey-apache-connector:2.25.1")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.56")
+    implementation("org.bouncycastle:bcpkix-jdk15on:1.54")
+    implementation("org.apache.httpcomponents:httpcore:4.4.9")
+    implementation("org.apache.httpcomponents:httpclient:4.5.5")
+    implementation("commons-io:commons-io:2.5")
+
+    compileOnly("javax.json:javax.json-api:1.1")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
