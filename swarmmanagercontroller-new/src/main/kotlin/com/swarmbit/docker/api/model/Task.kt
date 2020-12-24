@@ -3,6 +3,7 @@ package com.swarmbit.docker.api.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.swarmbit.docker.api.annotation.DockerRemoteApiMinVersion
 import com.swarmbit.docker.api.model.common.*
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -29,7 +30,10 @@ data class Task(
         @JsonProperty("DesiredState")
         val desiredState: String? = null,
         @JsonProperty("NetworksAttachments")
-        val networksAttachments: List<NetworkAttachmentConfig>? = null
+        val networksAttachments: List<NetworkAttachmentConfig>? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("JobIteration")
+        val jobIteration: Version? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -53,8 +57,6 @@ data class TaskStatus(
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class TaskSpec(
-        @JsonProperty("ContainerSpec")
-        val containerSpec: ContainerSpec? = null,
         @JsonProperty("Resources")
         val resources: ResourceRequirements? = null,
         @JsonProperty("RestartPolicy")
@@ -69,6 +71,11 @@ data class TaskSpec(
         val forceUpdate: Long? = null,
         @JsonProperty("Runtime")
         val runtime: String? = null,
+        @JsonProperty("ContainerSpec")
+        val containerSpec: ContainerSpec? = null,
+        @DockerRemoteApiMinVersion("v1.39")
+        @JsonProperty("NetworkAttachmentSpec")
+        val networkAttachmentSpec: NetworkAttachmentSpec? = null,
         @JsonProperty("PluginSpec")
         val pluginSpec: PluginSpec? = null
 )
@@ -78,6 +85,14 @@ data class TaskSpec(
 data class PortStatus(
         @JsonProperty("Ports")
         val ports: List<PortConfig>? = null
+)
+
+@DockerRemoteApiMinVersion("v1.38")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class NetworkAttachmentSpec(
+        @JsonProperty("ContainerID")
+        val containerId: String? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -124,7 +139,71 @@ data class ContainerSpec(
         @JsonProperty("ReadOnly")
         val readOnly: Boolean? = null,
         @JsonProperty("Isolation")
-        val isolation: String? = null
+        val isolation: String? = null,
+        @DockerRemoteApiMinVersion("v1.40")
+        @JsonProperty("Sysctls")
+        val sysctls: Map<String, String>? = null,
+        @DockerRemoteApiMinVersion("v1.40")
+        @JsonProperty("Privileges")
+        val privileges: Privileges? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("CapabilityAdd")
+        val capabilityAdd: List<String>? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("CapabilityDrop")
+        val capabilityDrop: List<String>? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("Ulimits")
+        val ulimits: List<Ulimit>? = null
+)
+
+@DockerRemoteApiMinVersion("v1.41")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class Ulimit(
+        @JsonProperty("Name")
+        val name: String? = null,
+        @JsonProperty("Hard")
+        val hard: Long? = null,
+        @JsonProperty("Soft")
+        val soft: Long? = null
+)
+@DockerRemoteApiMinVersion("v1.40")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class Privileges(
+        @JsonProperty("CredentialSpec")
+        val credentialSpec: CredentialSpec? = null,
+        @JsonProperty("SELinuxContext")
+        val seLinuxContext: SELinuxContext? = null
+)
+
+@DockerRemoteApiMinVersion("v1.40")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class CredentialSpec(
+        @JsonProperty("Config")
+        val config: String? = null,
+        @JsonProperty("File")
+        val file: String? = null,
+        @JsonProperty("Registry")
+        val registry: String? = null,
+)
+
+@DockerRemoteApiMinVersion("v1.39")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class SELinuxContext(
+        @JsonProperty("Disable")
+        val disable: Boolean? = null,
+        @JsonProperty("User")
+        val user: String? = null,
+        @JsonProperty("Role")
+        val role: String? = null,
+        @JsonProperty("Type")
+        val type: String? = null,
+        @JsonProperty("Level")
+        val level: String? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -189,7 +268,10 @@ data class Mount(
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class BindOptions(
         @JsonProperty("Propagation")
-        val propagation: String? = null
+        val propagation: String? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("NonRecursive")
+        val nonRecursive: Boolean? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -244,7 +326,10 @@ data class Placement(
         @JsonProperty("Preferences")
         val preferences: List<PlacementPreference>? = null,
         @JsonProperty("Platforms")
-        val platforms: List<Platform>? = null
+        val platforms: List<Platform>? = null,
+        @DockerRemoteApiMinVersion("v1.40")
+        @JsonProperty("MaxReplicas")
+        val maxReplicas: Long? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

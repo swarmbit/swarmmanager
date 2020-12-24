@@ -8,6 +8,10 @@ import com.swarmbit.docker.api.model.common.Resources
 import com.swarmbit.docker.api.model.common.TLSInfo
 import com.swarmbit.docker.api.model.common.Version
 
+/*
+v1.40
+GET /nodes now supports a filter type node.label filter to filter nodes based on the node.label. The format of the label filter is node.label=<key>/node.label=<key>=<value> to return those with the specified labels, or node.label!=<key>/node.label!=<key>=<value> to return those without the specified labels.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Node(

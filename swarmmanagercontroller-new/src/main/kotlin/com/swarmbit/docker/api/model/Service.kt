@@ -3,10 +3,15 @@ package com.swarmbit.docker.api.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.swarmbit.docker.api.annotation.DockerRemoteApiMinVersion
 import com.swarmbit.docker.api.model.common.Endpoint
 import com.swarmbit.docker.api.model.common.EndpointSpec
 import com.swarmbit.docker.api.model.common.Version
 
+/*
+ * v1.41
+ * GET /services now accepts query parameter status. When set true, services returned will include ServiceStatus, which provides Desired, Running, and Completed task counts for the service.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Service(
@@ -25,7 +30,10 @@ data class Service(
         @JsonProperty("Endpoint")
         val endpoint: Endpoint? = null,
         @JsonProperty("UpdateStatus")
-        val updateStatus: UpdateStatus? = null
+        val updateStatus: UpdateStatus? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("JobStatus")
+        val jobStatus: JobStatus? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -85,7 +93,13 @@ data class ServiceMode(
         @JsonProperty("Replicated")
         val replicated: ReplicatedService? = null,
         @JsonProperty("Global")
-        val global: GlobalService? = null
+        val global: GlobalService? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("ReplicatedJob")
+        val replicatedJob: ReplicatedJob? = null,
+        @DockerRemoteApiMinVersion("v1.41")
+        @JsonProperty("GlobalJob")
+        val globalJob: GlobalJob? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -99,6 +113,30 @@ data class ReplicatedService(
         val replicas: Long? = null
 )
 
+@DockerRemoteApiMinVersion("v1.41")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+class GlobalJob
+
+@DockerRemoteApiMinVersion("v1.41")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class ReplicatedJob(
+        @JsonProperty("MaxConcurrent")
+        val maxConcurrent: Long? = null,
+        @JsonProperty("TotalCompletions")
+        val totalCompletions: Long? = null
+)
+
+@DockerRemoteApiMinVersion("v1.41")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class JobStatus(
+        @JsonProperty("JobIteration")
+        val jobIteration: Version? = null,
+        @JsonProperty("LastExecution")
+        val LastExecution: String? = null
+)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ServiceGeneralResponse(

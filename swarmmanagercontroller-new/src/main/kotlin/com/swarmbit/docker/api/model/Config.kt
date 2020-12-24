@@ -44,11 +44,19 @@ data class ConfigSpec(
 data class ConfigReference(
         @JsonProperty("File")
         val file: SecretAndConfigReferenceFileTarget? = null,
+        @DockerRemoteApiMinVersion("v1.40")
+        @JsonProperty("Runtime")
+        val runtime: ConfigReferenceRuntimeTarget? = null,
         @JsonProperty("ConfigID")
         val configID: String? = null,
         @JsonProperty("ConfigName")
         val configName: String? = null
 )
+
+@DockerRemoteApiMinVersion("v1.40")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+class ConfigReferenceRuntimeTarget
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)

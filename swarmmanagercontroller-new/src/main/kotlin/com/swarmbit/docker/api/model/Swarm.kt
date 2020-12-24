@@ -3,6 +3,7 @@ package com.swarmbit.docker.api.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.swarmbit.docker.api.annotation.DockerRemoteApiMinVersion
 import com.swarmbit.docker.api.model.common.Driver
 import com.swarmbit.docker.api.model.common.TLSInfo
 import com.swarmbit.docker.api.model.common.Version
@@ -10,6 +11,15 @@ import com.swarmbit.docker.api.model.common.Version
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Swarm(
+        @JsonProperty("ClusterInfo")
+        val clusterInfo: ClusterInfo? = null,
+        @JsonProperty("JoinTokens")
+        val joinTokens: JoinTokens? = null
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class ClusterInfo(
         @JsonProperty("ID")
         val id: String? = null,
         @JsonProperty("Version")
@@ -20,12 +30,13 @@ data class Swarm(
         val updatedAt: String? = null,
         @JsonProperty("Spec")
         val spec: SwarmSpec? = null,
-        @JsonProperty("JoinTokens")
-        val joinTokens: JoinTokens? = null,
         @JsonProperty("RootRotationInProgress")
         val isRootRotationInProgress: Boolean? = null,
         @JsonProperty("TLSInfo")
         val tlsInfo: TLSInfo? = null,
+        @DockerRemoteApiMinVersion("v1.40")
+        @JsonProperty("DataPathPort")
+        val dataPathPort: Int? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
