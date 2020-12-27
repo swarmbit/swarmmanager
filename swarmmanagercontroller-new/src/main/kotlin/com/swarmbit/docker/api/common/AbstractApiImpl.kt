@@ -20,8 +20,8 @@ abstract class AbstractApiImpl(private val dockerWebClient: DockerWebClient) {
             filtersParameters: FiltersParameters? = null
     ): List<E> {
         val restParameters: Parameters = Parameters(dockerWebClient.getBaseResource(swarmId)).setPath(apiPath)
-        if (filtersParameters != null) {
-            restParameters.addQueryParam(filtersParameters.filters)
+        filtersParameters?.filters?.let {
+            restParameters.addQueryParam(it)
         }
         return RestExecutorFactory.createRestExecutor(Method.GET).execute(restParameters, responseType) ?: emptyList()
     }
@@ -50,7 +50,7 @@ abstract class AbstractApiImpl(private val dockerWebClient: DockerWebClient) {
             swarmId: String,
             responseType: ResponseType<E>,
             requestBodyParameter: RequestBodyParameter,
-            headerParameters: HeaderParameters?
+            headerParameters: HeaderParameters? = null
     ): E? {
         val parameter: Parameters = createRestParameters(apiPath, swarmId, requestBodyParameter, headerParameters, null)
         return RestExecutorFactory.createRestExecutor(Method.POST).execute(parameter, responseType)
@@ -90,9 +90,9 @@ abstract class AbstractApiImpl(private val dockerWebClient: DockerWebClient) {
     private fun createRestParameters(
             apiPath: String,
             swarmId: String,
-            requestBodyParameter: RequestBodyParameter?,
-            headerParameters: HeaderParameters?,
-            queryParameters: QueryParameters?
+            requestBodyParameter: RequestBodyParameter? = null,
+            headerParameters: HeaderParameters? = null,
+            queryParameters: QueryParameters? = null
     ): Parameters {
         val parameters: Parameters = Parameters(dockerWebClient.getBaseResource(swarmId)).setPath(apiPath)
         if (requestBodyParameter?.requestBody != null) {
