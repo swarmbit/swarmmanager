@@ -25,7 +25,7 @@ class NodesApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerWeb
     }
 
     override fun updateNode(swarmId: String, id: String, parameters: NodesUpdateParameters) {
-        updateObject("$NODES_PATH/$id", swarmId, object : ResponseType<Void>() {}, parameters)
+        updateObject("$NODES_PATH/$id", swarmId, object : ResponseType<Void>() {}, parameters, parameters)
                 ?: throw IllegalArgumentException("No node found for swarmId ($swarmId) and nodeId (${id})")
     }
 

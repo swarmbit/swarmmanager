@@ -37,7 +37,7 @@ class SecretsApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWe
     }
 
     override fun updateSecret(swarmId: String, id: String, parameters: SecretsUpdateParameters) {
-        updateObject("$SECRETS_PATH/$id$UPDATE_PATH", swarmId, object : ResponseType<Void>() {}, parameters)
+        updateObject("$SECRETS_PATH/$id$UPDATE_PATH", swarmId, object : ResponseType<Void>() {}, parameters, parameters)
 
     }
 

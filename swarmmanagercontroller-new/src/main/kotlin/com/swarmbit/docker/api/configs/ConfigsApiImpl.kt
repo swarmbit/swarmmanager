@@ -37,7 +37,7 @@ class ConfigsApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWe
     }
 
     override fun updateConfig(swarmId: String, id: String, parameters: ConfigsUpdateParameters) {
-        updateObject("$CONFIGS_PATH/$id$UPDATE_PATH", swarmId, object : ResponseType<Void>() {}, parameters)
+        updateObject("$CONFIGS_PATH/$id$UPDATE_PATH", swarmId, object : ResponseType<Void>() {}, parameters, parameters)
 
     }
 
