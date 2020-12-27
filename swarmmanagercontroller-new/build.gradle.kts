@@ -48,6 +48,7 @@ dependencies {
 
     compileOnly("javax.json:javax.json-api:1.1")
     runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.glassfish:javax.json:1.1")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 

@@ -1,6 +1,7 @@
 package com.swarmbit.docker.api.nodes.parameters
 
 import com.swarmbit.docker.api.common.AbstractFilters
+import com.swarmbit.docker.api.common.annotation.DockerRemoteApiMinVersion
 
 class NodesFilters : AbstractFilters() {
 
@@ -26,6 +27,12 @@ class NodesFilters : AbstractFilters() {
 
     fun setRole(role: NodeRole): NodesFilters {
         addFilter("role", role.toString().toLowerCase())
+        return this
+    }
+
+    @DockerRemoteApiMinVersion("v1.40")
+    fun setNodeLabel(nodeLabel: String, equals: Boolean = true): NodesFilters {
+        addFilter("node.label", nodeLabel, equals)
         return this
     }
 }

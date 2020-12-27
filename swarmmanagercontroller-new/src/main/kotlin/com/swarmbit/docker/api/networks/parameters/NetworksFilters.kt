@@ -34,4 +34,10 @@ class NetworksFilters : AbstractFilters() {
         addFilter("scope", scope.toString())
         return this
     }
+
+    @DockerRemoteApiMinVersion("v1.40")
+    fun setDangling(dangling: Boolean): NetworksFilters {
+        addFilter("dangling", dangling.toString())
+        return this
+    }
 }

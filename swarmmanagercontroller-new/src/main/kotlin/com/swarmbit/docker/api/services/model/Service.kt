@@ -10,10 +10,6 @@ import com.swarmbit.docker.api.common.model.Version
 import com.swarmbit.docker.api.tasks.model.TaskSpec
 import com.swarmbit.docker.api.networks.model.NetworkAttachmentConfig
 
-/*
- * v1.41
- * GET /services now accepts query parameter status. When set true, services returned will include ServiceStatus, which provides Desired, Running, and Completed task counts for the service.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Service(
