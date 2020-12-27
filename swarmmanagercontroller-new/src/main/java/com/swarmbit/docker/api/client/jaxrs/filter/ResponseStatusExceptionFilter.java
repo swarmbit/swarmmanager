@@ -2,7 +2,7 @@ package com.swarmbit.docker.api.client.jaxrs.filter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swarmbit.docker.api.exception.DockerRemoteApiException;
+import com.swarmbit.docker.api.common.exception.DockerRemoteApiException;
 import org.apache.commons.io.IOUtils;
 
 import javax.ws.rs.client.ClientRequestContext;
