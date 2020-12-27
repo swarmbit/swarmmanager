@@ -7,7 +7,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 
 @Controller("configs")
-class DockerController(private val configsApi: ConfigsApi) {
+class ConfigsController(private val configsApi: ConfigsApi) {
 
     @Get
     fun getConfigs(): List<Config> {

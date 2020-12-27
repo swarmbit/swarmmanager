@@ -44,6 +44,7 @@ dependencies {
     implementation("org.apache.httpcomponents:httpcore:4.4.9")
     implementation("org.apache.httpcomponents:httpclient:4.5.5")
     implementation("commons-io:commons-io:2.5")
+    implementation("io.github.microutils:kotlin-logging:1.12.0")
 
     compileOnly("javax.json:javax.json-api:1.1")
     runtimeOnly("ch.qos.logback:logback-classic")

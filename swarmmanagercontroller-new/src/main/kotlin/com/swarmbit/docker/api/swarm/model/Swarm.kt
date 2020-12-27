@@ -11,15 +11,6 @@ import com.swarmbit.docker.api.common.model.Version
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Swarm(
-        @JsonProperty("ClusterInfo")
-        val clusterInfo: ClusterInfo? = null,
-        @JsonProperty("JoinTokens")
-        val joinTokens: JoinTokens? = null
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class ClusterInfo(
         @JsonProperty("ID")
         val id: String? = null,
         @JsonProperty("Version")
@@ -37,6 +28,8 @@ data class ClusterInfo(
         @DockerRemoteApiMinVersion("v1.40")
         @JsonProperty("DataPathPort")
         val dataPathPort: Int? = null,
+        @JsonProperty("JoinTokens")
+        val joinTokens: JoinTokens? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
