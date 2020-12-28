@@ -8,58 +8,58 @@ import com.swarmbit.docker.api.common.annotation.DockerRemoteApiMinVersion
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ResourceRequirements(
-        @JsonProperty("Limits")
-        val limits: Limit? = null,
-        @JsonProperty("Reservations")
-        val reservations: Resources? = null
+    @JsonProperty("Limits")
+    val limits: Limit? = null,
+    @JsonProperty("Reservations")
+    val reservations: Resources? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Limit(
-        @JsonProperty("NanoCPUs")
-        val nanoCPUs: Long? = null,
-        @JsonProperty("MemoryBytes")
-        val memoryBytes: Long? = null,
-        @DockerRemoteApiMinVersion("v1.41")
-        @JsonProperty("Pids")
-        val pids: Long? = null
+    @JsonProperty("NanoCPUs")
+    val nanoCPUs: Long? = null,
+    @JsonProperty("MemoryBytes")
+    val memoryBytes: Long? = null,
+    @DockerRemoteApiMinVersion("v1.41")
+    @JsonProperty("Pids")
+    val pids: Long? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Resources(
-        @JsonProperty("NanoCPUs")
-        val nanoCPUs: Long? = null,
-        @JsonProperty("MemoryBytes")
-        val memoryBytes: Long? = null,
-        @JsonProperty("GenericResources")
-        val genericResources: List<GenericResources>? = null
+    @JsonProperty("NanoCPUs")
+    val nanoCPUs: Long? = null,
+    @JsonProperty("MemoryBytes")
+    val memoryBytes: Long? = null,
+    @JsonProperty("GenericResources")
+    val genericResources: List<GenericResources>? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class GenericResources(
-        @JsonProperty("NamedGenericResource")
-        val namedGenericResource: NamedGenericResource? = null,
-        @JsonProperty("DiscreteGenericResource")
-        val discreteGenericResource: DiscreteGenericResource? = null
+    @JsonProperty("NamedGenericResource")
+    val namedGenericResource: NamedGenericResource? = null,
+    @JsonProperty("DiscreteGenericResource")
+    val discreteGenericResource: DiscreteGenericResource? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class NamedGenericResource(
-        @JsonProperty("Kind")
-        val kind: String? = null,
-        @JsonProperty("Value")
-        val value: String? = null
+    @JsonProperty("Kind")
+    val kind: String? = null,
+    @JsonProperty("Value")
+    val value: String? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class DiscreteGenericResource(
-        @JsonProperty("Kind")
-        val kind: String? = null,
-        @JsonProperty("Value")
-        val value: String? = null
+    @JsonProperty("Kind")
+    val kind: String? = null,
+    @JsonProperty("Value")
+    val value: String? = null
 )

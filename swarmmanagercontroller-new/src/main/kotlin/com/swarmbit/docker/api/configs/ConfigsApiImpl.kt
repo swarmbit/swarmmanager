@@ -11,7 +11,7 @@ import com.swarmbit.docker.api.configs.parameters.ConfigsUpdateParameters
 import io.micronaut.context.annotation.Context
 
 @Context
-class ConfigsApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWebClient), ConfigsApi {
+class ConfigsApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerWebClient), ConfigsApi {
 
     companion object {
         private const val CONFIGS_PATH = "/configs"
@@ -25,7 +25,7 @@ class ConfigsApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWe
 
     override fun inspectConfig(swarmId: String, id: String): Config {
         return inspectObject(CONFIGS_PATH, swarmId, object : ResponseType<Config>() {}, id)
-                ?: throw IllegalArgumentException("No config found for swarmId ($swarmId) and configId (${id})")
+            ?: throw IllegalArgumentException("No config found for swarmId ($swarmId) and configId (${id})")
     }
 
     override fun createConfig(swarmId: String, parameters: ConfigsCreateParameters): ConfigCreateResponse {

@@ -2,7 +2,7 @@ package com.swarmbit.docker.api.secrets.parameters
 
 import com.swarmbit.docker.api.common.AbstractFilters
 
-class SecretsFilters: AbstractFilters() {
+class SecretsFilters : AbstractFilters() {
 
     fun setId(id: String): SecretsFilters {
         addFilter("id", id)

@@ -3,7 +3,7 @@ package com.swarmbit.docker.api.networks.parameters
 import com.swarmbit.docker.api.common.parameters.RequestBodyParameter
 import com.swarmbit.docker.api.networks.model.Network
 
-class NetworksCreateParameters: RequestBodyParameter {
+class NetworksCreateParameters : RequestBodyParameter {
 
     private var network: Network = Network()
 

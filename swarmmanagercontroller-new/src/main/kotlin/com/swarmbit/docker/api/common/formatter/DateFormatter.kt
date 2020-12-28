@@ -1,6 +1,5 @@
 package com.swarmbit.docker.api.common.formatter
 
-import java.lang.IllegalStateException
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -17,16 +16,18 @@ private val formatter3 = DateTimeFormatter.ofPattern(DOCKER_DATE_FORMAT_3)
 fun String.dockerDateToDuration(): Duration = Duration.between(LocalDateTime.parse(this, formatter), LocalDateTime.now())
 
 fun String.dockerDateToZonedDateTime(): ZonedDateTime =
+    try {
+        ZonedDateTime.parse(this, formatter)
+    } catch (exception: DateTimeParseException) {
         try {
-            ZonedDateTime.parse(this, formatter)
-        } catch (exception: DateTimeParseException) {
+            ZonedDateTime.parse(this, formatter2)
+        } catch (exception2: DateTimeParseException) {
             try {
-                ZonedDateTime.parse(this, formatter2)
-            } catch (exception2: DateTimeParseException) {
-                try {
-                    ZonedDateTime.parse(this, formatter3)
-                } catch (e: Exception) {
-                    throw IllegalStateException()
-                }
+                ZonedDateTime.parse(this, formatter3)
+            } catch (e: Exception) {
+                throw IllegalStateException()
             }
         }
+    }
+
+fun String.dockerToEpochMillis(): Long = this.dockerDateToZonedDateTime().toInstant().toEpochMilli()

@@ -5,7 +5,7 @@ import com.swarmbit.docker.api.common.parameters.RequestBodyParameter
 import com.swarmbit.docker.api.common.rest.model.QueryParam
 import com.swarmbit.docker.api.swarm.model.SwarmSpec
 
-class SwarmUpdateParameters: RequestBodyParameter, QueryParameters {
+class SwarmUpdateParameters : RequestBodyParameter, QueryParameters {
 
     companion object {
         private const val VERSION_NAME = "version"
@@ -55,10 +55,10 @@ class SwarmUpdateParameters: RequestBodyParameter, QueryParameters {
     override val queryParams: List<QueryParam>
         get() {
             return listOf(
-                    versionQueryParam,
-                    rotateWorkerTokenQueryParam,
-                    rotateManagerTokenQueryParam,
-                    rotateManagerUnlockKeyQueryParam
+                versionQueryParam,
+                rotateWorkerTokenQueryParam,
+                rotateManagerTokenQueryParam,
+                rotateManagerUnlockKeyQueryParam
             )
         }
 

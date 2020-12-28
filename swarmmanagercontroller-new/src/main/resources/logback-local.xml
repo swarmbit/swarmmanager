@@ -10,7 +10,11 @@
         </encoder>
     </appender>
 
-    <root level="info">
+    <logger name="com.swarmbit" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

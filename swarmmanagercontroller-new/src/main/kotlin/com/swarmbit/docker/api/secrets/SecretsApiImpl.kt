@@ -11,7 +11,7 @@ import com.swarmbit.docker.api.secrets.parameters.SecretsUpdateParameters
 import io.micronaut.context.annotation.Context
 
 @Context
-class SecretsApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWebClient), SecretsApi {
+class SecretsApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerWebClient), SecretsApi {
 
     companion object {
         private const val SECRETS_PATH = "/secrets"
@@ -25,7 +25,7 @@ class SecretsApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWe
 
     override fun inspectSecret(swarmId: String, id: String): Secret {
         return inspectObject(SECRETS_PATH, swarmId, object : ResponseType<Secret>() {}, id)
-                ?: throw IllegalArgumentException("No secret found for swarmId ($swarmId) and configId (${id})")
+            ?: throw IllegalArgumentException("No secret found for swarmId ($swarmId) and configId (${id})")
     }
 
     override fun createSecret(swarmId: String, parameters: SecretsCreateParameters): SecretCreateResponse {

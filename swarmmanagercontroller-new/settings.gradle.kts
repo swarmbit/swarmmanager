@@ -1,1 +1,1 @@
-rootProject.name="swarmmanagercontroller"
+rootProject.name = "swarmmanagercontroller"

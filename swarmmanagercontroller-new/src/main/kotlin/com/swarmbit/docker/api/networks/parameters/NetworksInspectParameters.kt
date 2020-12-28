@@ -3,7 +3,7 @@ package com.swarmbit.docker.api.networks.parameters
 import com.swarmbit.docker.api.common.parameters.QueryParameters
 import com.swarmbit.docker.api.common.rest.model.QueryParam
 
-class NetworksInspectParameters: QueryParameters {
+class NetworksInspectParameters : QueryParameters {
     companion object {
         private const val VERBOSE = "insertDefaults"
         private const val SCOPE = "scopeQueryParam"

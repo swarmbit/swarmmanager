@@ -1,7 +1,7 @@
 package com.swarmbit.extensions
 
 import java.net.URLEncoder
-import java.util.Base64
+import java.util.*
 
 fun String.urlEncode(): String = URLEncoder.encode(this, "UTF-8")
 

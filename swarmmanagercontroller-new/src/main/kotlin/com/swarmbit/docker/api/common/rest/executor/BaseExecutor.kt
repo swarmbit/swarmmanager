@@ -5,7 +5,7 @@ import com.swarmbit.docker.api.common.rest.model.ResponseType
 import javax.ws.rs.client.Invocation
 import javax.ws.rs.client.WebTarget
 
-abstract class BaseExecutor: RestExecutor {
+abstract class BaseExecutor : RestExecutor {
 
     override fun <E> execute(parameters: Parameters, responseType: ResponseType<E>): E? {
         var webTarget: WebTarget = parameters.baseRequest

@@ -9,7 +9,7 @@ import com.swarmbit.docker.api.tasks.parameters.TasksListParameters
 import io.micronaut.context.annotation.Context
 
 @Context
-class TasksApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWebClient), TasksApi {
+class TasksApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerWebClient), TasksApi {
 
     companion object {
         private const val TASKS_PATH = "/tasks"
@@ -22,7 +22,7 @@ class TasksApiImpl(dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWebC
 
     override fun inspectTask(swarmId: String, id: String): Task {
         return inspectObject(TASKS_PATH, swarmId, object : ResponseType<Task>() {}, id)
-                ?: throw IllegalArgumentException("No task found for swarmId ($swarmId) and taskId (${id})")
+            ?: throw IllegalArgumentException("No task found for swarmId ($swarmId) and taskId (${id})")
     }
 
     override fun getTaskLogs(swarmId: String, id: String, parameters: ServicesLogsParameters): ByteArray {

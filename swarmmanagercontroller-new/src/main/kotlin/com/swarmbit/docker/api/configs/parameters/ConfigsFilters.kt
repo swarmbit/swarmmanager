@@ -2,7 +2,7 @@ package com.swarmbit.docker.api.configs.parameters
 
 import com.swarmbit.docker.api.common.AbstractFilters
 
-class ConfigsFilters: AbstractFilters() {
+class ConfigsFilters : AbstractFilters() {
 
     fun setId(id: String): ConfigsFilters {
         addFilter("id", id)

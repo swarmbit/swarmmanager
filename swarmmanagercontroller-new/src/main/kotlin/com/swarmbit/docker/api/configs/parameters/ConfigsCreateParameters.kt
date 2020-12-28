@@ -3,7 +3,7 @@ package com.swarmbit.docker.api.configs.parameters
 import com.swarmbit.docker.api.common.parameters.RequestBodyParameter
 import com.swarmbit.docker.api.configs.model.ConfigSpec
 
-class ConfigsCreateParameters: RequestBodyParameter {
+class ConfigsCreateParameters : RequestBodyParameter {
 
     private var config: ConfigSpec = ConfigSpec()
 

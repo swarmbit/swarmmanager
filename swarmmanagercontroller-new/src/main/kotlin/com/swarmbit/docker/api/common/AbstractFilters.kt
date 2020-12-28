@@ -2,11 +2,8 @@ package com.swarmbit.docker.api.common
 
 import com.swarmbit.extensions.urlEncode
 import javax.json.Json
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
 
 abstract class AbstractFilters : Filters {
     private val filterParameters: MutableMap<String, MutableList<Filter>> = mutableMapOf()

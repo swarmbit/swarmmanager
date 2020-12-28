@@ -12,7 +12,7 @@ import com.swarmbit.docker.api.swarm.parameters.SwarmUpdateParameters
 import io.micronaut.context.annotation.Context
 
 @Context
-class SwarmApiImpl(private val dockerWebClient: DockerWebClient): AbstractApiImpl(dockerWebClient), SwarmApi {
+class SwarmApiImpl(private val dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerWebClient), SwarmApi {
 
     companion object {
         private const val SWARM_PATH = "/swarm"
@@ -22,7 +22,7 @@ class SwarmApiImpl(private val dockerWebClient: DockerWebClient): AbstractApiImp
 
     override fun inspectSwarm(swarmId: String): Swarm {
         return inspectObject(SWARM_PATH, swarmId, object : ResponseType<Swarm>() {})
-                ?: throw IllegalArgumentException("Swarm not found for swarmId ($swarmId)")
+            ?: throw IllegalArgumentException("Swarm not found for swarmId ($swarmId)")
     }
 
     override fun updateSwarm(swarmId: String, parameters: SwarmUpdateParameters) {

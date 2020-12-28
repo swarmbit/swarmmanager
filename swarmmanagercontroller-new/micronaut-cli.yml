@@ -3,4 +3,4 @@ defaultPackage: com.swarmbit
 testFramework: kotest
 sourceLanguage: kotlin
 buildTool: gradle_kotlin
-features: [annotation-api, app-name, gradle, http-client, kotest, kotlin, kotlin-application, logback, netty-server, readme, shade, yaml]
+features: [ annotation-api, app-name, gradle, http-client, kotest, kotlin, kotlin-application, logback, netty-server, readme, shade, yaml ]

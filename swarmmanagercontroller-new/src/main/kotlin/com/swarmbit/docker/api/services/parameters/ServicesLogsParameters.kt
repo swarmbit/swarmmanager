@@ -77,10 +77,10 @@ class ServicesLogsParameters : QueryParameters {
     override val queryParams: List<QueryParam>
         get() {
             val queryParams = mutableListOf(
-                    stdoutQueryParam,
-                    stderrQueryParam,
-                    detailsQueryParam,
-                    timestampsQueryParam
+                stdoutQueryParam,
+                stderrQueryParam,
+                detailsQueryParam,
+                timestampsQueryParam
             )
 
             sinceQueryParam?.let {

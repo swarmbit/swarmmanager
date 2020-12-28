@@ -1,9 +1,9 @@
 package com.swarmbit.docker.api.common.client
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider
-import com.swarmbit.docker.api.client.jaxrs.filter.JsonClientFilter
-import com.swarmbit.docker.api.client.jaxrs.filter.ResponseStatusExceptionFilter
-import com.swarmbit.docker.api.client.jaxrs.filter.SelectiveLoggingFilter
+import com.swarmbit.docker.api.common.client.jaxrs.filter.CustomLoggingFilter
+import com.swarmbit.docker.api.common.client.jaxrs.filter.JsonClientFilter
+import com.swarmbit.docker.api.common.client.jaxrs.filter.ResponseStatusExceptionFilter
 import com.swarmbit.docker.api.common.config.DockerClientConfig
 import com.swarmbit.docker.api.common.config.DockerConfig
 import com.swarmbit.docker.api.common.config.DockerSwarmConfig
@@ -16,15 +16,12 @@ import org.glassfish.jersey.apache.connector.ApacheClientProperties
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider
 import org.glassfish.jersey.client.ClientConfig
 import org.glassfish.jersey.client.ClientProperties
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.util.function.Consumer
 import javax.ws.rs.client.ClientBuilder
 import javax.ws.rs.client.WebTarget
 
 @Context
-class DockerWebClientImpl(dockerConfig: DockerConfig): DockerWebClient {
-    private val logger: Logger = LoggerFactory.getLogger(DockerWebClientImpl::class.java.name)
+class DockerWebClientImpl(dockerConfig: DockerConfig) : DockerWebClient {
 
     private var dockerSwarmWebTargetList: MutableList<DockerSwarmWebTarget> = mutableListOf()
 
@@ -41,7 +38,7 @@ class DockerWebClientImpl(dockerConfig: DockerConfig): DockerWebClient {
             clientConfig.register(ResponseStatusExceptionFilter::class.java)
             clientConfig.register(JsonClientFilter::class.java)
             clientConfig.register(JacksonJsonProvider::class.java)
-            clientConfig.register(SelectiveLoggingFilter(logger, true))
+            clientConfig.register(CustomLoggingFilter::class.java)
             if (dockerClientConfig.readTimeout != null) {
                 clientConfig.property(ClientProperties.READ_TIMEOUT, dockerClientConfig.readTimeout)
             }
@@ -50,7 +47,7 @@ class DockerWebClientImpl(dockerConfig: DockerConfig): DockerWebClient {
             }
             if (dockerClientConfig.connectionRequestTimeout != null) {
                 clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
-                        .setConnectionRequestTimeout(dockerClientConfig.connectionRequestTimeout).build())
+                    .setConnectionRequestTimeout(dockerClientConfig.connectionRequestTimeout).build())
             }
             val protocol: DockerWebClientProtocol = DockerWebClientProtocol.getDockerWebClientProtocol(dockerClientConfig.protocol)
             protocol.setProtocolSpecificConfiguration(clientConfig, dockerClientConfig)
@@ -58,8 +55,8 @@ class DockerWebClientImpl(dockerConfig: DockerConfig): DockerWebClient {
             val clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig)
             val client = clientBuilder.build()
             val dockerSwarmWebTarget = DockerSwarmWebTarget(
-                    swarm.id,
-                    client.target(protocol.getUrlForProtocol(dockerClientConfig)).path(swarm.apiVersion)
+                swarm.id,
+                client.target(protocol.getUrlForProtocol(dockerClientConfig)).path(swarm.apiVersion)
             )
             dockerSwarmWebTargetList.add(dockerSwarmWebTarget)
         })
@@ -69,6 +66,7 @@ class DockerWebClientImpl(dockerConfig: DockerConfig): DockerWebClient {
         return dockerSwarmWebTargetList[0].baseResource
 
     }
+
     override fun getBaseResource(id: String): WebTarget {
         var baseResource: WebTarget? = null
         for (dockerSwarmWebTarget in dockerSwarmWebTargetList) {
@@ -84,6 +82,6 @@ class DockerWebClientImpl(dockerConfig: DockerConfig): DockerWebClient {
 }
 
 private data class DockerSwarmWebTarget(
-        val id: String,
-        val baseResource: WebTarget
+    val id: String,
+    val baseResource: WebTarget
 )

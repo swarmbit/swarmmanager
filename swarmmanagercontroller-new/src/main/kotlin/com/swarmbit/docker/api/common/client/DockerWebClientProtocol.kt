@@ -2,7 +2,7 @@ package com.swarmbit.docker.api.common.client
 
 import com.swarmbit.docker.api.common.client.jaxrs.CustomPoolingHttpClientConnectionManager
 import com.swarmbit.docker.api.common.client.jaxrs.SSLContextFactory
-import com.swarmbit.docker.api.client.jaxrs.unixsocket.UnixConnectionSocketFactory
+import com.swarmbit.docker.api.common.client.jaxrs.unixsocket.UnixConnectionSocketFactory
 import com.swarmbit.docker.api.common.config.DockerClientConfig
 import com.swarmbit.docker.api.common.exception.UnsupportedConfiguration
 import org.apache.http.config.Registry

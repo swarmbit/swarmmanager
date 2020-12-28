@@ -3,7 +3,7 @@ package com.swarmbit.docker.api.services.parameters
 import com.swarmbit.docker.api.common.AbstractFilters
 import com.swarmbit.docker.api.common.annotation.DockerRemoteApiMinVersion
 
-class ServicesFilters: AbstractFilters() {
+class ServicesFilters : AbstractFilters() {
     enum class Mode {
         REPLICATED, GLOBAL;
     }

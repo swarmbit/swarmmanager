@@ -14,7 +14,12 @@ import java.io.StringReader
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.security.*
+import java.security.KeyFactory
+import java.security.KeyStore
+import java.security.KeyStoreException
+import java.security.NoSuchAlgorithmException
+import java.security.PrivateKey
+import java.security.Security
 import java.security.cert.Certificate
 import java.security.cert.CertificateException
 import java.security.spec.InvalidKeySpecException
@@ -34,8 +39,8 @@ object SSLContextFactory {
                 TLSAuth.TLS_AUTHENTICATE_CLIENT -> return createAuthClientSSLContext(config.tlsCert.orEmpty(), config.tlsKey.orEmpty())
                 TLSAuth.TLS_AUTHENTICATE_SERVER -> return createAuthServerSSLContext(config.tlsCacert.orEmpty())
                 TLSAuth.TLS_AUTHENTICATE_SERVER_CLIENT -> return createAuthServerClientSSLContext(config.tlsCert.orEmpty(),
-                        config.tlsKey.orEmpty(),
-                        config.tlsCacert.orEmpty())
+                    config.tlsKey.orEmpty(),
+                    config.tlsCacert.orEmpty())
                 else -> SSLContext.getDefault()
             }
         } catch (e: Exception) {
@@ -81,9 +86,9 @@ object SSLContextFactory {
         val keyStore = KeyStore.getInstance("JKS")
         keyStore.load(null)
         keyStore.setKeyEntry(INTERNAL_KEYSTORE_PASS,
-                privateKey,
-                INTERNAL_KEYSTORE_PASS.toCharArray(),
-                privateCertificates.toTypedArray()
+            privateKey,
+            INTERNAL_KEYSTORE_PASS.toCharArray(),
+            privateCertificates.toTypedArray()
         )
         return keyStore
     }
@@ -127,7 +132,7 @@ object SSLContextFactory {
                 PEMParser(reader).use { pemParser ->
                     val certificates: MutableList<Certificate> = ArrayList()
                     val certificateConverter: JcaX509CertificateConverter = JcaX509CertificateConverter()
-                            .setProvider(BouncyCastleProvider.PROVIDER_NAME)
+                        .setProvider(BouncyCastleProvider.PROVIDER_NAME)
                     val certObj: Any = pemParser.readObject()
                     if (certObj is X509CertificateHolder) {
                         val certificateHolder: X509CertificateHolder = certObj
@@ -167,8 +172,8 @@ object SSLContextFactory {
                     var pemCert: Any?
                     while (pemParser.readObject().also { pemCert = it } != null) {
                         val caCertificate: Certificate = JcaX509CertificateConverter()
-                                .setProvider(BouncyCastleProvider.PROVIDER_NAME)
-                                .getCertificate(pemCert as X509CertificateHolder?)
+                            .setProvider(BouncyCastleProvider.PROVIDER_NAME)
+                            .getCertificate(pemCert as X509CertificateHolder?)
                         trustStore.setCertificateEntry("ca-$index", caCertificate)
                         index++
                     }

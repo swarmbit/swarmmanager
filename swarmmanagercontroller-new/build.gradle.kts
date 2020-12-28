@@ -45,6 +45,7 @@ dependencies {
     implementation("org.apache.httpcomponents:httpclient:4.5.5")
     implementation("commons-io:commons-io:2.5")
     implementation("io.github.microutils:kotlin-logging:1.12.0")
+    implementation("org.slf4j:log4j-over-slf4j:1.7.30")
 
     compileOnly("javax.json:javax.json-api:1.1")
     runtimeOnly("ch.qos.logback:logback-classic")
@@ -73,6 +74,19 @@ tasks {
         }
     }
 
+}
 
+tasks.withType<JavaExec> {
+    systemProperties(
+        "micronaut.environments" to "local",
+        "logback.configurationFile" to "src/main/resources/logback-local.xml"
+    )
+    if (gradle.startParameter.isContinuous) {
+        systemProperties(
+            "micronaut.io.watch.restart" to "true",
+            "micronaut.io.watch.enabled" to "true",
+            "micronaut.io.watch.paths" to "src/main"
+        )
+    }
 }
 

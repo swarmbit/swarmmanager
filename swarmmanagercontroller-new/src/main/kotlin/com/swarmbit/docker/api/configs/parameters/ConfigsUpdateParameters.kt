@@ -5,7 +5,7 @@ import com.swarmbit.docker.api.common.parameters.RequestBodyParameter
 import com.swarmbit.docker.api.common.rest.model.QueryParam
 import com.swarmbit.docker.api.configs.model.ConfigSpec
 
-class ConfigsUpdateParameters: RequestBodyParameter, QueryParameters {
+class ConfigsUpdateParameters : RequestBodyParameter, QueryParameters {
     companion object {
         private const val VERSION_NAME = "version"
     }

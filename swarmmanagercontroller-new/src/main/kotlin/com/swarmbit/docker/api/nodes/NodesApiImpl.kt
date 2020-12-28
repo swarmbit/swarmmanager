@@ -21,12 +21,12 @@ class NodesApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerWeb
 
     override fun inspectNode(swarmId: String, id: String): Node {
         return inspectObject(NODES_PATH, swarmId, object : ResponseType<Node>() {}, id)
-                ?: throw IllegalArgumentException("No node found for swarmId ($swarmId) and nodeId (${id})")
+            ?: throw IllegalArgumentException("No node found for swarmId ($swarmId) and nodeId (${id})")
     }
 
     override fun updateNode(swarmId: String, id: String, parameters: NodesUpdateParameters) {
         updateObject("$NODES_PATH/$id", swarmId, object : ResponseType<Void>() {}, parameters, parameters)
-                ?: throw IllegalArgumentException("No node found for swarmId ($swarmId) and nodeId (${id})")
+            ?: throw IllegalArgumentException("No node found for swarmId ($swarmId) and nodeId (${id})")
     }
 
     override fun deleteNode(swarmId: String, id: String, parameters: NodesDeleteParameters) {
