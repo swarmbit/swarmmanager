@@ -61,7 +61,6 @@ data class TaskStatus(
     val portStatus: PortStatus? = null
 )
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class TaskSpec(

@@ -30,5 +30,4 @@ class ConfigsUpdateParameters : RequestBodyParameter, QueryParameters {
 
     override val requestBody: Any
         get() = config
-
 }

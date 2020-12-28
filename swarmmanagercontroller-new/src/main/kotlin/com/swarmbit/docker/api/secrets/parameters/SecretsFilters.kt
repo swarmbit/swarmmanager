@@ -18,5 +18,4 @@ class SecretsFilters : AbstractFilters() {
         addFilter("label", label)
         return this
     }
-
 }

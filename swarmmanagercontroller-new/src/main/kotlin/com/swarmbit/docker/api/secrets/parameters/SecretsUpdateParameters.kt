@@ -30,5 +30,4 @@ class SecretsUpdateParameters : RequestBodyParameter, QueryParameters {
 
     override val requestBody: Any
         get() = secret
-
 }

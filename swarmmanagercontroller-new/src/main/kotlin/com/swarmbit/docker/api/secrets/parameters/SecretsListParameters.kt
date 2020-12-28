@@ -17,5 +17,4 @@ class SecretsListParameters : FiltersParameters {
 
     override val filters: QueryParam?
         get() = innerFilters
-
 }

@@ -14,5 +14,4 @@ class ConfigsCreateParameters : RequestBodyParameter {
 
     override val requestBody: Any
         get() = config
-
 }

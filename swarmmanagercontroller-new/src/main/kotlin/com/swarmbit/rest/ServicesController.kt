@@ -13,5 +13,4 @@ class ServicesController(private val servicesApi: ServicesApi) {
     fun getServices(): List<Service> {
         return servicesApi.listServices("swarm", ServicesListParameters())
     }
-
 }

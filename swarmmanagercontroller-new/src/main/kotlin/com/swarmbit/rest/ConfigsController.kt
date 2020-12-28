@@ -43,5 +43,4 @@ class ConfigsController(private val dockerConfigService: DockerConfigService) {
     fun deleteConfig(@PathVariable swarmId: String, @PathVariable configId: String) {
         dockerConfigService.rm(swarmId, configId)
     }
-
 }

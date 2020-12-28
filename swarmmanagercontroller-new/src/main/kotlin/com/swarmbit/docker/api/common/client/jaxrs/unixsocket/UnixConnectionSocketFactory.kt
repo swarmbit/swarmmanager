@@ -26,8 +26,14 @@ class UnixConnectionSocketFactory(socketPath: String) : ConnectionSocketFactory 
     }
 
     @Throws(IOException::class)
-    override fun connectSocket(connectTimeout: Int, socket: Socket, host: HttpHost,
-                               remoteAddress: InetSocketAddress, localAddress: InetSocketAddress?, context: HttpContext): Socket {
+    override fun connectSocket(
+        connectTimeout: Int,
+        socket: Socket,
+        host: HttpHost,
+        remoteAddress: InetSocketAddress,
+        localAddress: InetSocketAddress?,
+        context: HttpContext
+    ): Socket {
         try {
             socket.connect(AFUNIXSocketAddress(socketFile), connectTimeout)
         } catch (e: SocketTimeoutException) {
@@ -35,5 +41,4 @@ class UnixConnectionSocketFactory(socketPath: String) : ConnectionSocketFactory 
         }
         return socket
     }
-
 }

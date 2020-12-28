@@ -17,5 +17,4 @@ class NetworksListParameters : FiltersParameters {
 
     override val filters: QueryParam?
         get() = innerFilters
-
 }

@@ -33,5 +33,4 @@ class SwarmApiImpl(private val dockerWebClient: DockerWebClient) : AbstractApiIm
         val restParameters: Parameters = Parameters(dockerWebClient.getBaseResource(swarmId)).setPath(SWARM_PATH + UNLOCK_PATH)
         return RestExecutorFactory.createRestExecutor(Method.POST).execute(restParameters, object : ResponseType<UnlockKey>() {})!!
     }
-
 }

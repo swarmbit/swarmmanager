@@ -5,7 +5,6 @@ import javax.ws.rs.client.Entity
 import javax.ws.rs.client.Invocation
 import javax.ws.rs.core.MediaType
 
-
 class PostExecutor : BaseExecutor() {
     override fun <E> execute(requestBody: Any?, requestBuilder: Invocation.Builder, responseType: ResponseType<E>): E? {
         val response = requestBuilder

@@ -13,5 +13,4 @@ class NodesController(private val nodesApi: NodesApi) {
     fun getNodes(): List<Node> {
         return nodesApi.listNodes("swarm", NodesListParameters())
     }
-
 }

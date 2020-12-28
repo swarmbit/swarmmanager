@@ -25,7 +25,6 @@ abstract class AbstractFilters : Filters {
         values.add(Filter(value, equals))
         return this
     }
-
 }
 
 private data class Filter(val value: String, val equals: Boolean)

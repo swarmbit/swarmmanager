@@ -30,5 +30,4 @@ class NodesUpdateParameters : RequestBodyParameter, QueryParameters {
         get() {
             return listOf(versionQueryParam)
         }
-
 }

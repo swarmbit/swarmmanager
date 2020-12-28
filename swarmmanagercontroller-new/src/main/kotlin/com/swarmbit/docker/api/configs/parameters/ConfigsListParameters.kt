@@ -17,5 +17,4 @@ class ConfigsListParameters : FiltersParameters {
 
     override val filters: QueryParam?
         get() = innerFilters
-
 }

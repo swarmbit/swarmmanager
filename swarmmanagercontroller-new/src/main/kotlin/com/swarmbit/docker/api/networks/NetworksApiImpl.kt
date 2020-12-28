@@ -23,7 +23,7 @@ class NetworksApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(docker
 
     override fun inspectNetwork(swarmId: String, id: String, parameters: NetworksInspectParameters): Network {
         return inspectObject(NETWORKS_PATH, swarmId, object : ResponseType<Network>() {}, id, parameters)
-            ?: throw IllegalArgumentException("No network found for swarmId ($swarmId) and networkId (${id})")
+            ?: throw IllegalArgumentException("No network found for swarmId ($swarmId) and networkId ($id)")
     }
 
     override fun createNetwork(swarmId: String, parameters: NetworksCreateParameters): NetworkCreateResponse {
@@ -33,5 +33,4 @@ class NetworksApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(docker
     override fun deleteNetwork(swarmId: String, id: String) {
         deleteObject("$NETWORKS_PATH/$id", swarmId, object : ResponseType<Void>() {})
     }
-
 }

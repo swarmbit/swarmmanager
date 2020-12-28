@@ -24,7 +24,6 @@ import java.security.cert.Certificate
 import java.security.cert.CertificateException
 import java.security.spec.InvalidKeySpecException
 import java.security.spec.PKCS8EncodedKeySpec
-import java.util.*
 import javax.net.ssl.SSLContext
 
 object SSLContextFactory {
@@ -38,9 +37,11 @@ object SSLContextFactory {
             when (tlsAuth) {
                 TLSAuth.TLS_AUTHENTICATE_CLIENT -> return createAuthClientSSLContext(config.tlsCert.orEmpty(), config.tlsKey.orEmpty())
                 TLSAuth.TLS_AUTHENTICATE_SERVER -> return createAuthServerSSLContext(config.tlsCacert.orEmpty())
-                TLSAuth.TLS_AUTHENTICATE_SERVER_CLIENT -> return createAuthServerClientSSLContext(config.tlsCert.orEmpty(),
+                TLSAuth.TLS_AUTHENTICATE_SERVER_CLIENT -> return createAuthServerClientSSLContext(
+                    config.tlsCert.orEmpty(),
                     config.tlsKey.orEmpty(),
-                    config.tlsCacert.orEmpty())
+                    config.tlsCacert.orEmpty()
+                )
                 else -> SSLContext.getDefault()
             }
         } catch (e: Exception) {
@@ -85,7 +86,8 @@ object SSLContextFactory {
         val privateCertificates = loadCertificates(Paths.get(certPath))
         val keyStore = KeyStore.getInstance("JKS")
         keyStore.load(null)
-        keyStore.setKeyEntry(INTERNAL_KEYSTORE_PASS,
+        keyStore.setKeyEntry(
+            INTERNAL_KEYSTORE_PASS,
             privateKey,
             INTERNAL_KEYSTORE_PASS.toCharArray(),
             privateCertificates.toTypedArray()
@@ -148,7 +150,7 @@ object SSLContextFactory {
 
     @Throws(NoSuchAlgorithmException::class)
     private fun guessKey(encodedKey: ByteArray): PrivateKey? {
-        //no way to know, so iterate
+        // no way to know, so iterate
         for (guessFactory in arrayOf("RSA", "ECDSA")) {
             try {
                 val factory = KeyFactory.getInstance(guessFactory)

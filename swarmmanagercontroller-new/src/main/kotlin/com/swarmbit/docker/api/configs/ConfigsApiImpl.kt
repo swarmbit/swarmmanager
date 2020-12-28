@@ -25,7 +25,7 @@ class ConfigsApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerW
 
     override fun inspectConfig(swarmId: String, id: String): Config {
         return inspectObject(CONFIGS_PATH, swarmId, object : ResponseType<Config>() {}, id)
-            ?: throw IllegalArgumentException("No config found for swarmId ($swarmId) and configId (${id})")
+            ?: throw IllegalArgumentException("No config found for swarmId ($swarmId) and configId ($id)")
     }
 
     override fun createConfig(swarmId: String, parameters: ConfigsCreateParameters): ConfigCreateResponse {
@@ -38,7 +38,5 @@ class ConfigsApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerW
 
     override fun updateConfig(swarmId: String, id: String, parameters: ConfigsUpdateParameters) {
         updateObject("$CONFIGS_PATH/$id$UPDATE_PATH", swarmId, object : ResponseType<Void>() {}, parameters, parameters)
-
     }
-
 }

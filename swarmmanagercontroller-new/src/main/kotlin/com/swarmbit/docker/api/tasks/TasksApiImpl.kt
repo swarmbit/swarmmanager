@@ -22,11 +22,10 @@ class TasksApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerWeb
 
     override fun inspectTask(swarmId: String, id: String): Task {
         return inspectObject(TASKS_PATH, swarmId, object : ResponseType<Task>() {}, id)
-            ?: throw IllegalArgumentException("No task found for swarmId ($swarmId) and taskId (${id})")
+            ?: throw IllegalArgumentException("No task found for swarmId ($swarmId) and taskId ($id)")
     }
 
     override fun getTaskLogs(swarmId: String, id: String, parameters: ServicesLogsParameters): ByteArray {
         return getObjectLogs("$TASKS_PATH/$id$LOGS_PATH", swarmId, parameters) ?: ByteArray(0)
     }
-
 }

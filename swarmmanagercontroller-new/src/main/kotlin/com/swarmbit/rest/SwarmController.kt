@@ -12,5 +12,4 @@ class SwarmController(private val swarmApi: SwarmApi) {
     fun getSwarm(): Swarm {
         return swarmApi.inspectSwarm("swarm")
     }
-
 }

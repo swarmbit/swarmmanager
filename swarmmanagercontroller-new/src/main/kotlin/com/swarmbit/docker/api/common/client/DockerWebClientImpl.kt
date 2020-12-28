@@ -30,41 +30,45 @@ class DockerWebClientImpl(dockerConfig: DockerConfig) : DockerWebClient {
         if (swarms.isEmpty()) {
             throw UnsupportedConfiguration("Requires at least one swarm")
         }
-        swarms.forEach(Consumer { swarm: DockerSwarmConfig ->
-            val dockerClientConfig: DockerClientConfig = swarm.client
-            val clientConfig = ClientConfig()
-            clientConfig.connectorProvider(ApacheConnectorProvider())
-            clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true)
-            clientConfig.register(ResponseStatusExceptionFilter::class.java)
-            clientConfig.register(JsonClientFilter::class.java)
-            clientConfig.register(JacksonJsonProvider::class.java)
-            clientConfig.register(CustomLoggingFilter::class.java)
-            if (dockerClientConfig.readTimeout != null) {
-                clientConfig.property(ClientProperties.READ_TIMEOUT, dockerClientConfig.readTimeout)
+        swarms.forEach(
+            Consumer { swarm: DockerSwarmConfig ->
+                val dockerClientConfig: DockerClientConfig = swarm.client
+                val clientConfig = ClientConfig()
+                clientConfig.connectorProvider(ApacheConnectorProvider())
+                clientConfig.property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE, true)
+                clientConfig.register(ResponseStatusExceptionFilter::class.java)
+                clientConfig.register(JsonClientFilter::class.java)
+                clientConfig.register(JacksonJsonProvider::class.java)
+                clientConfig.register(CustomLoggingFilter::class.java)
+                if (dockerClientConfig.readTimeout != null) {
+                    clientConfig.property(ClientProperties.READ_TIMEOUT, dockerClientConfig.readTimeout)
+                }
+                if (dockerClientConfig.connectTimeout != null) {
+                    clientConfig.property(ClientProperties.CONNECT_TIMEOUT, dockerClientConfig.connectTimeout)
+                }
+                if (dockerClientConfig.connectionRequestTimeout != null) {
+                    clientConfig.property(
+                        ApacheClientProperties.REQUEST_CONFIG,
+                        RequestConfig.custom()
+                            .setConnectionRequestTimeout(dockerClientConfig.connectionRequestTimeout).build()
+                    )
+                }
+                val protocol: DockerWebClientProtocol = DockerWebClientProtocol.getDockerWebClientProtocol(dockerClientConfig.protocol)
+                protocol.setProtocolSpecificConfiguration(clientConfig, dockerClientConfig)
+                clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, protocol.getConnectionManagerForProtocol(dockerClientConfig))
+                val clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig)
+                val client = clientBuilder.build()
+                val dockerSwarmWebTarget = DockerSwarmWebTarget(
+                    swarm.id,
+                    client.target(protocol.getUrlForProtocol(dockerClientConfig)).path(swarm.apiVersion)
+                )
+                dockerSwarmWebTargetList.add(dockerSwarmWebTarget)
             }
-            if (dockerClientConfig.connectTimeout != null) {
-                clientConfig.property(ClientProperties.CONNECT_TIMEOUT, dockerClientConfig.connectTimeout)
-            }
-            if (dockerClientConfig.connectionRequestTimeout != null) {
-                clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
-                    .setConnectionRequestTimeout(dockerClientConfig.connectionRequestTimeout).build())
-            }
-            val protocol: DockerWebClientProtocol = DockerWebClientProtocol.getDockerWebClientProtocol(dockerClientConfig.protocol)
-            protocol.setProtocolSpecificConfiguration(clientConfig, dockerClientConfig)
-            clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, protocol.getConnectionManagerForProtocol(dockerClientConfig))
-            val clientBuilder = ClientBuilder.newBuilder().withConfig(clientConfig)
-            val client = clientBuilder.build()
-            val dockerSwarmWebTarget = DockerSwarmWebTarget(
-                swarm.id,
-                client.target(protocol.getUrlForProtocol(dockerClientConfig)).path(swarm.apiVersion)
-            )
-            dockerSwarmWebTargetList.add(dockerSwarmWebTarget)
-        })
+        )
     }
 
     override fun getBaseResource(): WebTarget {
         return dockerSwarmWebTargetList[0].baseResource
-
     }
 
     override fun getBaseResource(id: String): WebTarget {

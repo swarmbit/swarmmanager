@@ -6,8 +6,8 @@ import org.apache.http.conn.socket.ConnectionSocketFactory
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager
 
 class CustomPoolingHttpClientConnectionManager(
-        config: DockerClientConfig,
-        registry: Registry<ConnectionSocketFactory>
+    config: DockerClientConfig,
+    registry: Registry<ConnectionSocketFactory>
 ) : PoolingHttpClientConnectionManager(registry) {
 
     override fun close() {

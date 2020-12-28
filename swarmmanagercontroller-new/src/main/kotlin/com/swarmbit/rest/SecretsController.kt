@@ -13,5 +13,4 @@ class SecretsController(private val secretsApi: SecretsApi) {
     fun getSecrets(): List<Secret> {
         return secretsApi.listSecrets("swarm", SecretsListParameters())
     }
-
 }

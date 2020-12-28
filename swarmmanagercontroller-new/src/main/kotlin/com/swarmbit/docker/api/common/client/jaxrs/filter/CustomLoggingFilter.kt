@@ -29,5 +29,4 @@ class CustomLoggingFilter : ClientRequestFilter, ClientResponseFilter {
         logger.debug { " - Method: " + requestContext.method }
         if (responseContext.hasEntity()) logger.debug { " - Entity: ${readEntity(responseContext)}" }
     }
-
 }

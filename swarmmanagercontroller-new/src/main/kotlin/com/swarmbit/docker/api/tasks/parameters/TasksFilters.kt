@@ -39,5 +39,4 @@ class TasksFilters : AbstractFilters() {
         addFilter("service", service)
         return this
     }
-
 }

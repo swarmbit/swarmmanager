@@ -29,7 +29,8 @@ import java.net.Socket
 import java.net.SocketAddress
 import java.net.SocketException
 import java.nio.channels.SocketChannel
-import java.util.*
+import java.util.ArrayDeque
+import java.util.Queue
 
 /**
  * Provides a socket that wraps an org.newsclub.net.unix.AFUNIXSocket and delays setting options until the socket is connected. This is
@@ -118,12 +119,14 @@ class ApacheUnixSocket : Socket() {
 
     @Throws(SocketException::class)
     override fun setTcpNoDelay(on: Boolean) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.tcpNoDelay = on
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.tcpNoDelay = on
+                }
             }
-        })
+        )
     }
 
     @Throws(SocketException::class)
@@ -133,12 +136,14 @@ class ApacheUnixSocket : Socket() {
 
     @Throws(SocketException::class)
     override fun setSoLinger(on: Boolean, linger: Int) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.setSoLinger(on, linger)
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.setSoLinger(on, linger)
+                }
             }
-        })
+        )
     }
 
     @Throws(SocketException::class)
@@ -153,12 +158,14 @@ class ApacheUnixSocket : Socket() {
 
     @Throws(SocketException::class)
     override fun setOOBInline(on: Boolean) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.oobInline = on
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.oobInline = on
+                }
             }
-        })
+        )
     }
 
     @Throws(SocketException::class)
@@ -169,12 +176,14 @@ class ApacheUnixSocket : Socket() {
     @Synchronized
     @Throws(SocketException::class)
     override fun setSoTimeout(timeout: Int) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.soTimeout = timeout
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.soTimeout = timeout
+                }
             }
-        })
+        )
     }
 
     @Synchronized
@@ -186,12 +195,14 @@ class ApacheUnixSocket : Socket() {
     @Synchronized
     @Throws(SocketException::class)
     override fun setSendBufferSize(size: Int) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.sendBufferSize = size
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.sendBufferSize = size
+                }
             }
-        })
+        )
     }
 
     @Synchronized
@@ -203,12 +214,14 @@ class ApacheUnixSocket : Socket() {
     @Synchronized
     @Throws(SocketException::class)
     override fun setReceiveBufferSize(size: Int) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.receiveBufferSize = size
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.receiveBufferSize = size
+                }
             }
-        })
+        )
     }
 
     @Synchronized
@@ -219,12 +232,14 @@ class ApacheUnixSocket : Socket() {
 
     @Throws(SocketException::class)
     override fun setKeepAlive(on: Boolean) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.keepAlive = on
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.keepAlive = on
+                }
             }
-        })
+        )
     }
 
     @Throws(SocketException::class)
@@ -234,12 +249,14 @@ class ApacheUnixSocket : Socket() {
 
     @Throws(SocketException::class)
     override fun setTrafficClass(tc: Int) {
-        setSocketOption(object : SocketOptionSetter {
-            @Throws(SocketException::class)
-            override fun run() {
-                inner.trafficClass = tc
+        setSocketOption(
+            object : SocketOptionSetter {
+                @Throws(SocketException::class)
+                override fun run() {
+                    inner.trafficClass = tc
+                }
             }
-        })
+        )
     }
 
     @Throws(SocketException::class)
@@ -305,5 +322,4 @@ class ApacheUnixSocket : Socket() {
         @Throws(SocketException::class)
         fun run()
     }
-
 }

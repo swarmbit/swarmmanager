@@ -13,5 +13,4 @@ class TasksController(private val tasksApi: TasksApi) {
     fun getTasks(): List<Task> {
         return tasksApi.listTasks("swarm", TasksListParameters())
     }
-
 }

@@ -14,5 +14,4 @@ class NetworksCreateParameters : RequestBodyParameter {
 
     override val requestBody: Any
         get() = network
-
 }

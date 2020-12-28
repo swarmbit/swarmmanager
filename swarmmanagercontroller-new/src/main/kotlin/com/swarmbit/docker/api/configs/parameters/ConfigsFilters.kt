@@ -18,5 +18,4 @@ class ConfigsFilters : AbstractFilters() {
         addFilter("label", label)
         return this
     }
-
 }

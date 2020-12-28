@@ -43,5 +43,4 @@ class DockerConfigServiceImpl(
                     .setConfig(swarmConfigUpdate.toConfigSpec(it.spec ?: ConfigSpec()))
             )
         }
-
 }

@@ -22,7 +22,6 @@ class ServicesUpdateParameters : RequestBodyParameter, HeaderParameters, QueryPa
     private var rollbackQueryParam: QueryParam? = null
     private var registryAuthFromQueryParam: QueryParam? = null
 
-
     fun setService(service: ServiceSpec): ServicesUpdateParameters {
         this.service = service
         return this
@@ -74,5 +73,4 @@ class ServicesUpdateParameters : RequestBodyParameter, HeaderParameters, QueryPa
             }
             return headerParams
         }
-
 }

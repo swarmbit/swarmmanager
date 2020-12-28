@@ -7,5 +7,4 @@ interface DockerWebClient {
     fun getBaseResource(): WebTarget
 
     fun getBaseResource(id: String): WebTarget
-
 }

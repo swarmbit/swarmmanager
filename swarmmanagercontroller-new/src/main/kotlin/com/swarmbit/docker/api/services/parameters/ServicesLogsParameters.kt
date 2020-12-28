@@ -91,5 +91,4 @@ class ServicesLogsParameters : QueryParameters {
             }
             return queryParams
         }
-
 }

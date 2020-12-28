@@ -17,5 +17,4 @@ class NodesListParameters : FiltersParameters {
 
     override val filters: QueryParam?
         get() = innerFilters
-
 }

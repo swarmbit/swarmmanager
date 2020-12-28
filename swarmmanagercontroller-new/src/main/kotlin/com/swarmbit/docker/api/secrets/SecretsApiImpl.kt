@@ -25,7 +25,7 @@ class SecretsApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerW
 
     override fun inspectSecret(swarmId: String, id: String): Secret {
         return inspectObject(SECRETS_PATH, swarmId, object : ResponseType<Secret>() {}, id)
-            ?: throw IllegalArgumentException("No secret found for swarmId ($swarmId) and configId (${id})")
+            ?: throw IllegalArgumentException("No secret found for swarmId ($swarmId) and configId ($id)")
     }
 
     override fun createSecret(swarmId: String, parameters: SecretsCreateParameters): SecretCreateResponse {
@@ -38,7 +38,5 @@ class SecretsApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(dockerW
 
     override fun updateSecret(swarmId: String, id: String, parameters: SecretsUpdateParameters) {
         updateObject("$SECRETS_PATH/$id$UPDATE_PATH", swarmId, object : ResponseType<Void>() {}, parameters, parameters)
-
     }
-
 }

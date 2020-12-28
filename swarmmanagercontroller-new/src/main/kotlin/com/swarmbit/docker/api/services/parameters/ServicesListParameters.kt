@@ -26,5 +26,4 @@ class ServicesListParameters : FiltersParameters {
 
     override val filters: QueryParam?
         get() = innerFilters
-
 }

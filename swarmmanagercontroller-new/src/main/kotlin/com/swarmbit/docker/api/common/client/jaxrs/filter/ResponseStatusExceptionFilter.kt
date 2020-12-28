@@ -31,5 +31,4 @@ class ResponseStatusExceptionFilter : ClientResponseFilter {
             throw DockerRemoteApiException(errorString, status)
         }
     }
-
 }

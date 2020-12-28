@@ -14,5 +14,4 @@ class SecretsCreateParameters : RequestBodyParameter {
 
     override val requestBody: Any
         get() = secret
-
 }

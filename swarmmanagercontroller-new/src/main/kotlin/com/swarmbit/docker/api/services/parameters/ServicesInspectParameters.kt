@@ -19,5 +19,4 @@ class ServicesInspectParameters : QueryParameters {
         get() {
             return mutableListOf(insertDefaultsQueryParam)
         }
-
 }

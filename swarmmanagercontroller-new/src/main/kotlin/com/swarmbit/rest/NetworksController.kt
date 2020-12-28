@@ -13,5 +13,4 @@ class NetworksController(private val networksApi: NetworksApi) {
     fun getNetworks(): List<Network> {
         return networksApi.listNetworks("swarm", NetworksListParameters())
     }
-
 }

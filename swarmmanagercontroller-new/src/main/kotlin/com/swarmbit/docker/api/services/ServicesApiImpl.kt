@@ -27,7 +27,7 @@ class ServicesApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(docker
 
     override fun inspectService(swarmId: String, id: String, parameters: ServicesInspectParameters): Service {
         return inspectObject(SERVICES_PATH, swarmId, object : ResponseType<Service>() {}, id, parameters)
-            ?: throw IllegalArgumentException("No service found for swarmId ($swarmId) and serviceId (${id})")
+            ?: throw IllegalArgumentException("No service found for swarmId ($swarmId) and serviceId ($id)")
     }
 
     override fun createService(swarmId: String, parameters: ServicesCreateParameters): ServiceGeneralResponse {
@@ -35,8 +35,14 @@ class ServicesApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(docker
     }
 
     override fun updateService(swarmId: String, id: String, parameters: ServicesUpdateParameters) {
-        updateObject("$SERVICES_PATH/$id$UPDATE_PATH", swarmId, object : ResponseType<ServiceGeneralResponse>() {},
-            parameters, parameters, parameters)
+        updateObject(
+            "$SERVICES_PATH/$id$UPDATE_PATH",
+            swarmId,
+            object : ResponseType<ServiceGeneralResponse>() {},
+            parameters,
+            parameters,
+            parameters
+        )
     }
 
     override fun deleteService(swarmId: String, id: String) {
@@ -46,5 +52,4 @@ class ServicesApiImpl(dockerWebClient: DockerWebClient) : AbstractApiImpl(docker
     override fun getServiceLogs(swarmId: String, id: String, parameters: ServicesLogsParameters): ByteArray {
         return getObjectLogs("$SERVICES_PATH/$id$LOGS_PATH", swarmId, parameters) ?: ByteArray(0)
     }
-
 }

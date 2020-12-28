@@ -106,5 +106,4 @@ abstract class AbstractApiImpl(private val dockerWebClient: DockerWebClient) {
         }
         return parameters
     }
-
 }

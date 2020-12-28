@@ -49,5 +49,4 @@ class Parameters(val baseRequest: WebTarget) {
     fun getHeaderParams(): List<HeaderParam> {
         return headerParams
     }
-
 }

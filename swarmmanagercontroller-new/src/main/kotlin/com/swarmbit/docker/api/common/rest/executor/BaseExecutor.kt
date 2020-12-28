@@ -24,5 +24,4 @@ abstract class BaseExecutor : RestExecutor {
     }
 
     abstract fun <E> execute(requestBody: Any?, requestBuilder: Invocation.Builder, responseType: ResponseType<E>): E?
-
 }
