@@ -1,13 +1,13 @@
-package com.swarmbit.services.docker.config.model
+package com.swarmbit.services.docker.secret.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.swarmbit.docker.api.common.formatter.dockerToEpochMillis
 import com.swarmbit.docker.api.common.model.Driver
-import com.swarmbit.docker.api.configs.model.Config
-import com.swarmbit.docker.api.configs.model.ConfigSpec
+import com.swarmbit.docker.api.secrets.model.Secret
+import com.swarmbit.docker.api.secrets.model.SecretSpec
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class DockerConfig(
+data class DockerSecret(
     val id: String,
     val createdAt: Long,
     val updatedAt: Long,
@@ -18,7 +18,7 @@ data class DockerConfig(
     val templatingOptions: Map<String, String>
 )
 
-data class DockerConfigCreate(
+data class DockerSecretCreate(
     val name: String? = null,
     val labels: Map<String, String>? = null,
     val data: String? = null,
@@ -26,12 +26,12 @@ data class DockerConfigCreate(
     val templatingOptions: Map<String, String>? = null
 )
 
-data class DockerConfigUpdate(
+data class DockerSecretUpdate(
     val labels: Map<String, String>
 )
 
-fun Config.toDockerConfig(): DockerConfig =
-    DockerConfig(
+fun Secret.toDockerSecret(): DockerSecret =
+    DockerSecret(
         id = this.id.orEmpty(),
         createdAt = this.createdAt?.dockerToEpochMillis() ?: 0L,
         updatedAt = this.updatedAt?.dockerToEpochMillis() ?: 0L,
@@ -42,8 +42,8 @@ fun Config.toDockerConfig(): DockerConfig =
         templatingOptions = this.spec?.templating?.options.orEmpty()
     )
 
-fun DockerConfigCreate.toConfigSpec(): ConfigSpec =
-    ConfigSpec(
+fun DockerSecretCreate.toSecretSpec(): SecretSpec =
+    SecretSpec(
         name = name,
         labels = labels,
         data = data,
@@ -53,4 +53,4 @@ fun DockerConfigCreate.toConfigSpec(): ConfigSpec =
         )
     )
 
-fun DockerConfigUpdate.toConfigSpec(configSpec: ConfigSpec): ConfigSpec = configSpec.copy(labels = labels)
+fun DockerSecretUpdate.toSecretSpec(secretSpec: SecretSpec): SecretSpec = secretSpec.copy(labels = labels)
