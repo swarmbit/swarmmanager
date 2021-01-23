@@ -6,7 +6,7 @@ import com.swarmbit.docker.api.services.parameters.ServicesListParameters
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 
-@Controller("services")
+@Controller("/api/swarms/{swarmId}/services")
 class ServicesController(private val servicesApi: ServicesApi) {
 
     @Get
