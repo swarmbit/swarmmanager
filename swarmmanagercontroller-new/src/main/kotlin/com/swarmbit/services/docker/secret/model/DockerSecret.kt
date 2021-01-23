@@ -27,7 +27,7 @@ data class DockerSecretCreate(
 )
 
 data class DockerSecretUpdate(
-    val labels: Map<String, String>
+    val labels: Map<String, String>? = null
 )
 
 fun Secret.toDockerSecret(): DockerSecret =
@@ -53,4 +53,4 @@ fun DockerSecretCreate.toSecretSpec(): SecretSpec =
         )
     )
 
-fun DockerSecretUpdate.toSecretSpec(secretSpec: SecretSpec): SecretSpec = secretSpec.copy(labels = labels)
+fun DockerSecretUpdate.toSecretSpec(secretSpec: SecretSpec): SecretSpec = secretSpec.copy(labels = labels ?: secretSpec.labels)

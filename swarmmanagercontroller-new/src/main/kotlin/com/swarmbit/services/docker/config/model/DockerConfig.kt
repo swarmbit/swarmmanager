@@ -27,7 +27,7 @@ data class DockerConfigCreate(
 )
 
 data class DockerConfigUpdate(
-    val labels: Map<String, String>
+    val labels: Map<String, String>? = null
 )
 
 fun Config.toDockerConfig(): DockerConfig =
@@ -53,4 +53,4 @@ fun DockerConfigCreate.toConfigSpec(): ConfigSpec =
         )
     )
 
-fun DockerConfigUpdate.toConfigSpec(configSpec: ConfigSpec): ConfigSpec = configSpec.copy(labels = labels)
+fun DockerConfigUpdate.toConfigSpec(configSpec: ConfigSpec): ConfigSpec = configSpec.copy(labels = labels ?: configSpec.labels)

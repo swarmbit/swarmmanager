@@ -10,6 +10,7 @@ data class DockerConfig @ConfigurationInject constructor(
 
 data class DockerSwarmConfig(
     val id: String,
+    val name: String,
     val apiVersion: String,
     val description: String,
     val client: DockerClientConfig = DockerClientConfig()

@@ -71,4 +71,4 @@ fun Node.toDockerNodeSummary(numberOfRunningTasks: Int): DockerNodeSummary =
     )
 
 fun DockerNodeUpdate.toNodeSpec(spec: NodeSpec): NodeSpec =
-    spec.copy(availability = availability, role = role, labels = labels)
+    spec.copy(availability = availability ?: spec.availability, role = role ?: spec.role, labels = labels ?: spec.labels)
