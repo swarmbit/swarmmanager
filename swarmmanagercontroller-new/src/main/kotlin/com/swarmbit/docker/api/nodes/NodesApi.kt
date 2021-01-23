@@ -6,7 +6,7 @@ import com.swarmbit.docker.api.nodes.parameters.NodesListParameters
 import com.swarmbit.docker.api.nodes.parameters.NodesUpdateParameters
 
 interface NodesApi {
-    fun listNodes(swarmId: String, parameters: NodesListParameters): List<Node>
+    fun listNodes(swarmId: String, parameters: NodesListParameters = NodesListParameters()): List<Node>
 
     fun inspectNode(swarmId: String, id: String): Node
 

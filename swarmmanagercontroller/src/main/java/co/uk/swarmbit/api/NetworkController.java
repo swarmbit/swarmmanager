@@ -4,7 +4,6 @@ import co.uk.swarmbit.auth.RoleAuthorities;
 import co.uk.swarmbit.docker.cli.NetworkCli;
 import co.uk.swarmbit.docker.cli.model.Network;
 import co.uk.swarmbit.docker.cli.model.NetworkSummary;
-import co.uk.swarmbit.docker.cli.model.NodeSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;

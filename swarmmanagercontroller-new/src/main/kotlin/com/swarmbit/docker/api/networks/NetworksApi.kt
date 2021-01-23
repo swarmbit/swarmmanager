@@ -8,9 +8,9 @@ import com.swarmbit.docker.api.networks.parameters.NetworksListParameters
 
 interface NetworksApi {
 
-    fun listNetworks(swarmId: String, parameters: NetworksListParameters): List<Network>
+    fun listNetworks(swarmId: String, parameters: NetworksListParameters = NetworksListParameters()): List<Network>
 
-    fun inspectNetwork(swarmId: String, id: String, parameters: NetworksInspectParameters): Network
+    fun inspectNetwork(swarmId: String, id: String, parameters: NetworksInspectParameters = NetworksInspectParameters()): Network
 
     fun createNetwork(swarmId: String, parameters: NetworksCreateParameters): NetworkCreateResponse
 

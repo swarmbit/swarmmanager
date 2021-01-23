@@ -11,8 +11,9 @@ class TasksListParameters : FiltersParameters {
 
     private var innerFilters: QueryParam? = null
 
-    fun setFilters(filters: TasksFilters) {
+    fun setFilters(filters: TasksFilters): TasksListParameters {
         this.innerFilters = QueryParam(FILTERS_NAME, filters.asUrlJson())
+        return this
     }
 
     override val filters: QueryParam?
