@@ -15,25 +15,25 @@ import com.swarmbit.docker.api.swarm.model.SwarmSpec
 data class DockerSwarm(
     val createdAt: Long,
     val updatedAt: Long,
-    val autoLock : Boolean,
-    val certExpiry : Long,
-    val dispatcherHeartBeat : Long,
-    val maxSnapshots : Long,
-    val snapshotInterval : Long,
-    val taskHistoryLimit : Long,
-    val workerToken : String,
-    val managerToken : String,
-    val rotateInProgress : Boolean,
+    val autoLock: Boolean,
+    val certExpiry: Long,
+    val dispatcherHeartBeat: Long,
+    val maxSnapshots: Long,
+    val snapshotInterval: Long,
+    val taskHistoryLimit: Long,
+    val workerToken: String,
+    val managerToken: String,
+    val rotateInProgress: Boolean,
     val externalCAs: List<DockerExternalCA>
 )
 
 data class DockerSwarmUpdate(
-    val autoLock : Boolean?,
-    val certExpiry : Long?,
-    val dispatcherHeartBeat : Long?,
-    val maxSnapshots : Long?,
-    val snapshotInterval : Long?,
-    val taskHistoryLimit : Long?,
+    val autoLock: Boolean?,
+    val certExpiry: Long?,
+    val dispatcherHeartBeat: Long?,
+    val maxSnapshots: Long?,
+    val snapshotInterval: Long?,
+    val taskHistoryLimit: Long?,
     val externalCAs: List<DockerExternalCA>?
 )
 
@@ -84,7 +84,7 @@ fun DockerSwarmUpdate.toSwarmSpec(spec: SwarmSpec): SwarmSpec =
             externalCAs = externalCAs?.map { it.toExternalCA() } ?: spec.caConfig.externalCAs
         ) ?: CAConfig(
             nodeCertExpiry = certExpiry,
-            externalCAs =  externalCAs?.map { it.toExternalCA() }
+            externalCAs = externalCAs?.map { it.toExternalCA() }
         ),
         dispatcher = spec.dispatcher?.copy(
             heartbeatPeriod = dispatcherHeartBeat ?: spec.dispatcher.heartbeatPeriod

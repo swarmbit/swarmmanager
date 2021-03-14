@@ -42,5 +42,4 @@ class DockerSwarmServiceImpl(
             .setVersionQueryParam(swarm.version?.index ?: 0 + 1L)
         swarmApi.updateSwarm(swarmId, parameters)
     }
-
 }

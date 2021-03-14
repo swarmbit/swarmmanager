@@ -17,5 +17,5 @@ data class DockerTask(
     val lastStateChange: Duration,
     val lastStateChangeDate: Long,
     val errorMessage: String,
-    val ports: List<Port>
+    val ports: List<DockerPort>
 )

@@ -1,12 +1,9 @@
 package com.swarmbit.services.docker.node.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.swarmbit.docker.api.networks.model.Network
 import com.swarmbit.docker.api.nodes.model.Node
 import com.swarmbit.docker.api.nodes.model.NodeSpec
 import com.swarmbit.docker.api.nodes.parameters.NodeRole
-import com.swarmbit.docker.api.tasks.model.NetworkAttachmentSpec
-import com.swarmbit.services.docker.network.model.DockerNetworkCreate
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class DockerNode(

@@ -33,7 +33,7 @@ class DockerNodeServiceImpl(
         return nodesApi.listNodes(swarmId).map {
             val numberOfRunningReplicas = tasks.filter { task ->
                 task.status?.taskState == TasksFilters.RUNNING_STATE &&
-                task.nodeId == it.id
+                    task.nodeId == it.id
             }.size
             it.toDockerNodeSummary(numberOfRunningReplicas)
         }
@@ -55,7 +55,8 @@ class DockerNodeServiceImpl(
     }
 
     override fun ps(swarmId: String, nodeId: String): DockerState {
-        val tasks = tasksApi.listTasks(swarmId,
+        val tasks = tasksApi.listTasks(
+            swarmId,
             TasksListParameters().setFilters(TasksFilters().setNode(nodeId))
         )
         val node = nodesApi.inspectNode(swarmId, nodeId)
@@ -64,5 +65,4 @@ class DockerNodeServiceImpl(
 
     override fun rm(swarmId: String, nodeId: String, force: Boolean) =
         nodesApi.deleteNode(swarmId, nodeId, NodesDeleteParameters().setForceQueryParam(force))
-
 }

@@ -53,5 +53,4 @@ class SwarmController(
     fun unlock(@PathVariable swarmId: String) {
         dockerSwarmService.unlock(swarmId)
     }
-
 }

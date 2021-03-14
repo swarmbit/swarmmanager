@@ -31,5 +31,4 @@ class DockerNetworkServiceImpl(
 
     override fun inspect(swarmId: String, networkId: String): DockerNetwork =
         networkApi.inspectNetwork(swarmId, networkId).toDockerNetwork()
-
 }
