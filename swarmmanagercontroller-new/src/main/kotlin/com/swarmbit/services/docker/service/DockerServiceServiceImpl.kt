@@ -22,9 +22,8 @@ class DockerServiceServiceImpl(
         TODO("Not yet implemented")
     }
 
-    override fun rm(swarmId: String, serviceId: String) {
-        TODO("Not yet implemented")
-    }
+    override fun rm(swarmId: String, serviceId: String) =
+        servicesApi.deleteService(swarmId, serviceId)
 
     override fun ls(swarmId: String): List<DockerServiceSummary> {
         return servicesApi

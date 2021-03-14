@@ -7,7 +7,6 @@ import com.swarmbit.docker.api.nodes.parameters.NodesUpdateParameters
 import com.swarmbit.docker.api.tasks.TasksApi
 import com.swarmbit.docker.api.tasks.parameters.TasksFilters
 import com.swarmbit.docker.api.tasks.parameters.TasksListParameters
-import com.swarmbit.services.docker.common.model.DockerState
 import com.swarmbit.services.docker.node.model.DockerNode
 import com.swarmbit.services.docker.node.model.DockerNodeSummary
 import com.swarmbit.services.docker.node.model.DockerNodeUpdate
@@ -52,15 +51,6 @@ class DockerNodeServiceImpl(
                     .setNode(dockerNodeUpdate.toNodeSpec(it.spec ?: NodeSpec()))
             )
         }
-    }
-
-    override fun ps(swarmId: String, nodeId: String): DockerState {
-        val tasks = tasksApi.listTasks(
-            swarmId,
-            TasksListParameters().setFilters(TasksFilters().setNode(nodeId))
-        )
-        val node = nodesApi.inspectNode(swarmId, nodeId)
-        TODO()
     }
 
     override fun rm(swarmId: String, nodeId: String, force: Boolean) =
